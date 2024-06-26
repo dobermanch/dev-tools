@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <Product>Development Tools</Product>
+    <Authors>Sergii Chevkota</Authors>
+    <Owners>Sergii Chevkota</Owners>
+    <Company>Sergii Chevkota</Company>
+    <Copyright>Sergii Chevkota</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <LangVersion>latest</LangVersion>
+    <RepositoryUrl>https://github.com/dobermanch/dev-tools</RepositoryUrl>
+  </PropertyGroup>
+</Project>

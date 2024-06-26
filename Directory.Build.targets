@@ -1,0 +1,35 @@
+<Project>  
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.79" />
+
+  <!-- Properties which should be set after the project has been evaluated -->
+  <PropertyGroup Condition=" '$(MSBuildProjectExtension)' == '.csproj' ">
+    <PackageId Condition=" '$(PackageId)' == '' ">$(AssemblyName)</PackageId>
+    <Description Condition=" '$(Description)' == ''">$(PackageId)</Description>
+    <IsPackable Condition=" '$(IsPackable)' == '' ">false</IsPackable>
+    <IsTestProject Condition=" '$(IsTestProject)' == '' ">false</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(IsPackable)' == 'true' ">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(ProjectName).Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
