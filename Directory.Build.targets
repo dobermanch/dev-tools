@@ -1,6 +1,4 @@
 <Project>  
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.79" />
-
   <!-- Properties which should be set after the project has been evaluated -->
   <PropertyGroup Condition=" '$(MSBuildProjectExtension)' == '.csproj' ">
     <PackageId Condition=" '$(PackageId)' == '' ">$(AssemblyName)</PackageId>
