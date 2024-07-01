@@ -47,7 +47,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
                 guids = Generate(args, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
                 break;
             case UuidType.V7:
-                long timestamp = (args.time ?? DateTimeOffset.UtcNow).ToUnixTimeMilliseconds();
+                long timestamp = (args.Time ?? DateTimeOffset.UtcNow).ToUnixTimeMilliseconds();
                 guids = Generate(args, _ => NewUuidV7(timestamp));
                 break;
             default:
@@ -60,8 +60,8 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
 
     private static Guid[] Generate(Args args, Func<long, Guid> getGuid)
     {
-        var guilds = new Guid[args.Count];
-        Parallel.For(0, guilds.Length <= 0 ? 1 : guilds.Length, index => guilds[index] = getGuid(index));
+        var guilds = new Guid[args.Count <= 0 ? 1 : args.Count];
+        Parallel.For(0, guilds.Length, index => guilds[index] = getGuid(index));
 
         return guilds;
     }
@@ -136,10 +136,10 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
         int Count = 1, 
         Guid? Namespace = null, 
         string? Name = null,
-        DateTimeOffset? time = null
+        DateTimeOffset? Time = null
     ) : ToolArgs;
 
-    public record Result(IReadOnlyCollection<Guid> Guilds) : ToolResult
+    public record Result(IReadOnlyCollection<Guid> Uuids) : ToolResult
     {
         public Result() : this([]) { }
     }

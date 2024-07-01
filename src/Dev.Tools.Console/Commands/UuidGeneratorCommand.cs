@@ -48,7 +48,7 @@ internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncComman
             return -1;
         }
 
-        foreach (var uuid in result.Guilds)
+        foreach (var uuid in result.Uuids)
         {
             AnsiConsole.WriteLine(uuid.ToString());
         }

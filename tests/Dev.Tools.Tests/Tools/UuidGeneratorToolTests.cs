@@ -15,8 +15,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().BeEmpty();
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().BeEmpty();
     }
 
     [Fact]
@@ -26,8 +26,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
-        result.Guilds.Should().AllBeEquivalentTo(Guid.Empty);
+        result.Uuids.Should().HaveCount(args.Count);
+        result.Uuids.Should().AllBeEquivalentTo(Guid.Empty);
     }
 
     [Fact]
@@ -37,8 +37,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().BeEmpty();
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().BeEmpty();
     }
 
     [Fact]
@@ -48,8 +48,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().BeEmpty();
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().BeEmpty();
     }
 
     // -------------------------------
@@ -62,8 +62,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -73,8 +73,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
-        result.Guilds.Should().AllBeEquivalentTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(args.Count);
+        result.Uuids.Should().AllBeEquivalentTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -84,8 +84,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1); 
-        result.Guilds.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1); 
+        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -95,8 +95,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     // -------------------------------
@@ -109,7 +109,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().BeEmpty();
+        result.Uuids.Should().BeEmpty();
         result.ErrorCodes.First().Code.Should().Be("NAMESPACE_EMPTY");
     }
 
@@ -120,8 +120,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBe(args.Namespace!.Value);
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -135,8 +135,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBe(args.Namespace!.Value);
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -151,7 +151,7 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Guilds.First().Should().Be(result2.Guilds.First());
+        result1.Uuids.First().Should().Be(result2.Uuids.First());
     }
 
     [Fact]
@@ -166,7 +166,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
+        result.Uuids.Should().HaveCount(args.Count);
     }
 
     // -------------------------------
@@ -179,9 +179,9 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBeEmpty();
-        result.Guilds.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBeEmpty();
+        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -191,8 +191,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
-        result.Guilds.Should().OnlyHaveUniqueItems();
+        result.Uuids.Should().HaveCount(args.Count);
+        result.Uuids.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
@@ -202,7 +202,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
+        result.Uuids.Should().HaveCount(1);
     }
 
     [Fact]
@@ -212,7 +212,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
+        result.Uuids.Should().HaveCount(1);
     }
 
     [Fact]
@@ -223,7 +223,7 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Guilds.First().Should().NotBe(result2.Guilds.First());
+        result1.Uuids.First().Should().NotBe(result2.Uuids.First());
     }
 
     // -------------------------------
@@ -236,7 +236,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().BeEmpty();
+        result.Uuids.Should().BeEmpty();
         result.ErrorCodes.First().Code.Should().Be("NAMESPACE_EMPTY");
     }
 
@@ -247,8 +247,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBe(args.Namespace!.Value);
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -262,8 +262,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBe(args.Namespace!.Value);
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -278,7 +278,7 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Guilds.First().Should().Be(result2.Guilds.First());
+        result1.Uuids.First().Should().Be(result2.Uuids.First());
     }
 
     [Fact]
@@ -293,7 +293,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
+        result.Uuids.Should().HaveCount(args.Count);
     }
 
     // -------------------------------
@@ -306,9 +306,9 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBeEmpty();
-        result.Guilds.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBeEmpty();
+        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -316,14 +316,14 @@ public class UuidGeneratorToolTests
     {
         var args = new UuidGeneratorTool.Args(
             UuidGeneratorTool.UuidType.V7,
-            time: DateTimeOffset.UtcNow
+            Time: DateTimeOffset.UtcNow
         );
 
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        byte[] bytes1 = result1.Guilds.First().ToByteArray()[..5];
-        byte[] bytes2 = result2.Guilds.First().ToByteArray()[..5];
+        byte[] bytes1 = result1.Uuids.First().ToByteArray()[..5];
+        byte[] bytes2 = result2.Uuids.First().ToByteArray()[..5];
 
         bytes1.Should().BeEquivalentTo(bytes2);
     }
@@ -333,14 +333,14 @@ public class UuidGeneratorToolTests
     {
         var args = new UuidGeneratorTool.Args(
             UuidGeneratorTool.UuidType.V7,
-            time: DateTimeOffset.UtcNow,
+            Time: DateTimeOffset.UtcNow,
             Count: 5
         );
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
-        result.Guilds.Should().OnlyHaveUniqueItems();
+        result.Uuids.Should().HaveCount(args.Count);
+        result.Uuids.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
@@ -350,7 +350,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(args.Count);
+        result.Uuids.Should().HaveCount(args.Count);
     }
 
     [Fact]
@@ -360,9 +360,9 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBeEmpty();
-        result.Guilds.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBeEmpty();
+        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -372,8 +372,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Guilds.Should().HaveCount(1);
-        result.Guilds.First().Should().NotBeEmpty();
-        result.Guilds.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Uuids.Should().HaveCount(1);
+        result.Uuids.First().Should().NotBeEmpty();
+        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 }
