@@ -1,2 +1,32 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Dev.Tools.Console.Core.DI;
+using Dev.Tools.Console.Commands;
+using Spectre.Console.Cli;
+using Microsoft.Extensions.DependencyInjection;
+using Dev.Tools.Tools;
+
+var services = new ServiceCollection();
+services
+    .AddTransient<Base64DecoderTool>()
+    .AddTransient<Base64EncoderTool>()
+    .AddTransient<UuidGeneratorTool>()
+    ;
+
+var registrar = new TypeRegistrar(services);
+var app = new CommandApp(registrar);
+
+app.Configure(config =>
+{
+    config
+        .AddCommand<Base64DecoderCommand>("base64-decoder")
+        .WithAlias("d64");
+
+    config
+        .AddCommand<Base64EncoderCommand>("base64-encoder")
+        .WithAlias("e64");
+
+    config
+        .AddCommand<UuidGeneratorCommand>("uuid-gen")
+        .WithAlias("ug");
+});
+
+return app.Run(args);

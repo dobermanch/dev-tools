@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dev.Tools.Analyzers\Dev.Tools.Analyzers.csproj" />
+    <ProjectReference Include="..\Dev.Tools.Core\Dev.Tools.Core.csproj" />
+  </ItemGroup>
+
 </Project>

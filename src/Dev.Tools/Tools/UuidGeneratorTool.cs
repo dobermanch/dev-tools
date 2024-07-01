@@ -61,7 +61,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
     private static Guid[] Generate(Args args, Func<long, Guid> getGuid)
     {
         var guilds = new Guid[args.Count];
-        Parallel.For(0, guilds.Length, index => guilds[index] = getGuid(index));
+        Parallel.For(0, guilds.Length <= 0 ? 1 : guilds.Length, index => guilds[index] = getGuid(index));
 
         return guilds;
     }
