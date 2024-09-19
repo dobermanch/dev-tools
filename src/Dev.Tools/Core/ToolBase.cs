@@ -1,9 +1,14 @@
 ﻿namespace Dev.Tools.Core;
 
-public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
+public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsync<TArgs, TResult>
     where TArgs : ToolArgs
     where TResult: ToolResult, new()
 {
+    public TResult Run(TArgs args)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<TResult> RunAsync(TArgs args, CancellationToken cancellationToken)
     {
         try
@@ -12,7 +17,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
         }
         catch (Exception ex)
         {
-            return Failed(new(ToolError.Unknown.Code, ex.Message));
+            return Failed(new(ToolConstants.Error.Unknown));
         }
     }
 
@@ -23,7 +28,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
 
     protected virtual TResult Execute(TArgs args) => new();
 
-    protected TResult Failed(ToolError code) => new()
+    protected TResult Failed(string code) => new ()
     {
         ErrorCodes = { code }
     };

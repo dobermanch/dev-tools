@@ -1,14 +1,11 @@
-﻿using Dev.Tools.Core;
-using System.Text;
-
-namespace Dev.Tools.Tools;
+﻿namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "base64-decoder",
-    Aliases = ["d64"],
+    Aliases = ["64d"],
     Keywords = [ToolConstants.Keyword.Base64, ToolConstants.Keyword.Decode, ToolConstants.Keyword.Url],
     Categories = [ToolConstants.Category.Converter],
-    ErrorCodes = [ToolConstants.Error.Unknown, "TEXT_EMPTY"]
+    ErrorCodes = [ToolConstants.Error.Unknown, ToolConstants.Error.TextEmpty]
 )]
 public class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64DecoderTool.Result>
 {
@@ -16,7 +13,7 @@ public class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64DecoderT
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed("TEXT_EMPTY");
+            return Failed(ToolConstants.Error.TextEmpty);
         }
 
         byte[] bytes = Convert.FromBase64String(args.Text);

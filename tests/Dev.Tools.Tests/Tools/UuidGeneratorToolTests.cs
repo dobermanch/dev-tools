@@ -110,7 +110,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Uuids.Should().BeEmpty();
-        result.ErrorCodes.First().Code.Should().Be("NAMESPACE_EMPTY");
+        result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
     }
 
     [Fact]
@@ -237,7 +237,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Uuids.Should().BeEmpty();
-        result.ErrorCodes.First().Code.Should().Be("NAMESPACE_EMPTY");
+        result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
     }
 
     [Fact]

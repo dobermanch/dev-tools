@@ -9,7 +9,6 @@ public interface IToolAsync<TArg, TResult> : ITool
     TResult Run(TArg args);
 }
 
-
 public interface ITool<TArg, TResult> : ITool
     where TArg : ToolArgs
     where TResult : ToolResult

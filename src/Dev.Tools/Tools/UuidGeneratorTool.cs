@@ -1,12 +1,10 @@
-﻿using Dev.Tools.Core;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "uuid-gen",
-    Aliases = ["ug"],
+    Aliases = ["uuid"],
     Keywords = [ToolConstants.Keyword.Uuid, ToolConstants.Keyword.Guid, ToolConstants.Keyword.Generate],
     Categories = [ToolConstants.Category.Converter],
     ErrorCodes = [ToolConstants.Error.Unknown, "NAMESAPCE_EMPTY"]
