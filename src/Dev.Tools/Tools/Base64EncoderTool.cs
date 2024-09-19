@@ -3,9 +3,9 @@
 [ToolDefinition(
     Name = "base64-encoder",
     Aliases = ["64e"],
-    Keywords = [ToolConstants.Keyword.Base64, ToolConstants.Keyword.Encode, ToolConstants.Keyword.Url],
-    Categories = [ToolConstants.Category.Converter],
-    ErrorCodes = [ToolConstants.Error.Unknown, ToolConstants.Error.TextEmpty]
+    Keywords = [Keyword.Base64, Keyword.Encode, Keyword.Url, Keyword.Text, Keyword.String],
+    Categories = [Category.Converter],
+    ErrorCodes = [Error.Unknown, Error.TextEmpty]
 )]
 public class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64EncoderTool.Result>
 {
@@ -13,7 +13,7 @@ public class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64EncoderT
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed(ToolConstants.Error.TextEmpty);
+            return Failed(Error.TextEmpty);
         }
 
         byte[] bytes = Encoding.UTF8.GetBytes(args.Text);

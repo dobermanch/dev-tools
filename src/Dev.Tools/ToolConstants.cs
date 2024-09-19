@@ -6,6 +6,7 @@ public readonly record struct ToolConstants
     {
         public const string Converter = nameof(Converter);
         public const string Text = nameof(Text);
+        public const string Crypto = nameof(Crypto);
         public const string Misc = nameof(Misc);
     }
 

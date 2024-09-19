@@ -5,9 +5,9 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "uuid-gen",
     Aliases = ["uuid"],
-    Keywords = [ToolConstants.Keyword.Uuid, ToolConstants.Keyword.Guid, ToolConstants.Keyword.Generate],
-    Categories = [ToolConstants.Category.Converter],
-    ErrorCodes = [ToolConstants.Error.Unknown, "NAMESAPCE_EMPTY"]
+    Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
+    Categories = [Category.Converter],
+    ErrorCodes = [Error.Unknown, "NAMESAPCE_EMPTY"]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
