@@ -3,13 +3,12 @@ using System.Text;
 
 namespace Dev.Tools.Tools;
 
-
 [ToolDefinition(
     Name = "base64-decoder",
-    Aliases = ["d64"]
-    // [ToolKeyword.Base64, ToolKeyword.Decode, ToolKeyword.Url]
-    // Categories = [ToolCategory.Converter],
-    // ErrorCodes = [ToolError.Unknown, "TEXT_EMPTY"]
+    Aliases = ["d64"],
+    Keywords = [ToolConstants.Keyword.Base64, ToolConstants.Keyword.Decode, ToolConstants.Keyword.Url],
+    Categories = [ToolConstants.Category.Converter],
+    ErrorCodes = [ToolConstants.Error.Unknown, "TEXT_EMPTY"]
 )]
 public class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64DecoderTool.Result>
 {

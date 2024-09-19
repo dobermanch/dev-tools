@@ -30,9 +30,9 @@ public class Base64DecoderEndpoint(Base64DecoderTool tool) : EndpointBase
             return Problem(type: result.ErrorCodes[0], statusCode: (int)HttpStatusCode.BadRequest);
         }
 
-        return Ok(new
+        return Ok(new ResponseDto
         {
-            result.Text
+            Text = result.Text
         });
     }
 

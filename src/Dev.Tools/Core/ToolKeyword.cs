@@ -2,15 +2,46 @@
 
 public readonly record struct ToolKeyword
 {
-    public static readonly ToolKeyword Convert = new();
-    public static readonly ToolKeyword String = new();
-    public static readonly ToolKeyword Text = new();
-    public static readonly ToolKeyword Decode = new();
-    public static readonly ToolKeyword Encode = new();
-    public static readonly ToolKeyword Base64 = new();
-    public static readonly ToolKeyword Misc = new();
-    public static readonly ToolKeyword Url = new();
-    public static readonly ToolKeyword Uuid = new();
-    public static readonly ToolKeyword Generate = new();
-    public static readonly ToolKeyword Guid = new();
+    public const string Convert = nameof(Convert);
+    public const string String = nameof(String);
+    public const string Text = nameof(Text);
+    public const string Decode = nameof(Decode);
+    public const string Encode = nameof(Encode);
+    public const string Base64 = nameof(Base64);
+    public const string Misc = nameof(Misc);
+    public const string Url = nameof(Url);
+    public const string Uuid = nameof(Uuid);
+    public const string Generate = nameof(Generate);
+    public const string Guid = nameof(Guid);
+}
+
+
+public readonly record struct ToolConstants
+{
+    public readonly record struct Category
+    {
+        public const string Converter = nameof(Converter);
+        public const string Text = nameof(Text);
+        public const string Misc = nameof(Misc);
+    }
+
+    public readonly record struct Keyword
+    {
+        public const string Convert = nameof(Convert);
+        public const string String = nameof(String);
+        public const string Text = nameof(Text);
+        public const string Decode = nameof(Decode);
+        public const string Encode = nameof(Encode);
+        public const string Base64 = nameof(Base64);
+        public const string Misc = nameof(Misc);
+        public const string Url = nameof(Url);
+        public const string Uuid = nameof(Uuid);
+        public const string Generate = nameof(Generate);
+        public const string Guid = nameof(Guid);
+    }
+
+    public readonly record struct Error
+    {
+        public const string Unknown = nameof(Unknown);
+    }
 }

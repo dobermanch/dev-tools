@@ -5,10 +5,10 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "base64-encoder",
-    Aliases = ["e64"]
-    // Keywords = [ToolKeyword.Base64, ToolKeyword.Encode, ToolKeyword.Url]
-    // Categories = [ToolCategory.Converter],
-    // ErrorCodes = [ToolError.Unknown, "TEXT_EMPTY"]
+    Aliases = ["e64"],
+    Keywords = [ToolConstants.Keyword.Base64, ToolConstants.Keyword.Encode, ToolConstants.Keyword.Url],
+    Categories = [ToolConstants.Category.Converter],
+    ErrorCodes = [ToolConstants.Error.Unknown, "TEXT_EMPTY"]
 )]
 public class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64EncoderTool.Result>
 {

@@ -1,9 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <DefineConstants>$(DefineConstants);ANALIZER</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Dev.Tools\Core\ToolArgs.cs" Link="Core\ToolArgs.cs" />
+    <Compile Include="..\Dev.Tools\Core\ToolDefinitionAttribute.cs" Link="Core\ToolDefinitionAttribute.cs" />
+    <Compile Include="..\Dev.Tools\Core\ToolResult.cs" Link="Core\ToolResult.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\" />
+  </ItemGroup>
 
 </Project>

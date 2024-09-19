@@ -6,10 +6,10 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "uuid-gen",
-    Aliases = ["ug"]
-// Keywords = [ToolKeyword.Uuid, ToolKeyword.Guid, ToolKeyword.Generate]
-// Categories = [ToolCategory.Converter],
-// ErrorCodes = [ToolError.Unknown, "NAMESAPCE_EMPTY"]
+    Aliases = ["ug"],
+    Keywords = [ToolConstants.Keyword.Uuid, ToolConstants.Keyword.Guid, ToolConstants.Keyword.Generate],
+    Categories = [ToolConstants.Category.Converter],
+    ErrorCodes = [ToolConstants.Error.Unknown, "NAMESAPCE_EMPTY"]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
@@ -82,7 +82,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
     {
         byte[] namespaceBytes = namespaceUuid.ToByteArray();
         byte[] nameBytes = Encoding.UTF8.GetBytes(name);
-        byte[] bytes = namespaceBytes.Concat(nameBytes).ToArray();
+        byte[] bytes = [.. namespaceBytes, .. nameBytes];
 
         byte[] hash = algorithm.ComputeHash(bytes);
         hash[6] = (byte)((hash[6] & 0x0F) | 0x50); // Set version to 5 (0b0101)
@@ -107,7 +107,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
 
         // Fill random part
         // bytes [7-15]: random part
-        Span<byte> random = bytes.AsSpan().Slice(6);
+        Span<byte> random = bytes.AsSpan()[6..];
         RandomNumberGenerator.Fill(random);
 
         // add mask to set guid version
@@ -132,9 +132,9 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sence to make separate tool for each type
     public record Args(
-        UuidType Type, 
-        int Count = 1, 
-        Guid? Namespace = null, 
+        UuidType Type,
+        int Count = 1,
+        Guid? Namespace = null,
         string? Name = null,
         DateTimeOffset? Time = null
     ) : ToolArgs;

@@ -1,7 +1,8 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Core;
+using Dev.Tools.Core.Localization;
+using Dev.Tools.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.ComponentModel;
 
 namespace Dev.Tools.Console.Commands;
 
@@ -9,23 +10,23 @@ internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncComman
 {
     public sealed class Settings : CommandSettings
     {
-        [Description("UUID version")]
+        [LocalizedDescription("UUID version")]
         [CommandArgument(0, "[type]")]
         public UuidGeneratorTool.UuidType Type { get; init; }
 
-        [Description("Number of UUID to generate")]
+        [LocalizedDescription("Number of UUID to generate")]
         [CommandOption("-c|--count <count>")]
         public int Count { get; init; } = 1;
 
-        [Description("Namespace for V3|V5 UUID version")]
+        [LocalizedDescription("Namespace for V3|V5 UUID version")]
         [CommandOption("-n|--namespace <namesapce>")]
         public Guid? Namespace { get; init; }
 
-        [Description("Name for V3|V5 UUID version")]
+        [LocalizedDescription("Name for V3|V5 UUID version")]
         [CommandOption("-N|--name <name>")]
         public string? Name { get; init; }
 
-        [Description("Timestamp (ISO 8601) for V7 UUID version")]
+        [LocalizedDescription("Timestamp (ISO 8601) for V7 UUID version")]
         [CommandOption("-t|--time <time>")]
         public DateTimeOffset? Time { get; init; }
     }

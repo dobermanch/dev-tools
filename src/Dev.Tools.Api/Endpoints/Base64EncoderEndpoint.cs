@@ -31,9 +31,9 @@ public class Base64EncoderEndpoint(Base64EncoderTool tool) : EndpointBase
             return Problem(type: result.ErrorCodes[0]);
         }
 
-        return Ok(new
+        return Ok(new ResponseDto
         {
-            result.Text
+            Text = result.Text
         });
     }
 

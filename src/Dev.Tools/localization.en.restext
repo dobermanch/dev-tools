@@ -1,0 +1,71 @@
+# Tools Categories
+#
+ToolCategory_Converter_Title = Converters
+ToolCategory_Converter_Description = 
+ToolCategory_Text_Title = Text
+ToolCategory_Text_Description = 
+ToolCategory_Misc_Title = Misc
+ToolCategory_Misc_Description = 
+
+# Tools Keywords
+#
+ToolKeyword_Convert = convert
+ToolKeyword_String = string
+ToolKeyword_Text = text
+ToolKeyword_Decode = decode
+ToolKeyword_Encode = encode
+ToolKeyword_Base64 = base64
+ToolKeyword_Misc = misc
+ToolKeyword_Url = url
+ToolKeyword_Uuid = uuid
+ToolKeyword_Guid = guid
+ToolKeyword_Generate = generate
+
+# Base64DecoderTool (base64-decoder)
+#
+Base64DecoderTool_Title = Base64 Decoder
+Base64DecoderTool_Description = 
+Base64DecoderTool_ErrorCodes_UNKNOWN = 
+Base64DecoderTool_ErrorCodes_TEXT_EMPTY =
+Base64DecoderTool_Args_Text_Title = Text
+Base64DecoderTool_Args_Text_Hint =
+
+# Base64EncoderTool (base64-encoder)
+#
+Base64EncoderTool_Title = Base64 Encoder
+Base64EncoderTool_Description = 
+Base64EncoderTool_ErrorCodes_UNKNOWN = 
+Base64EncoderTool_ErrorCodes_TEXT_EMPTY =
+Base64EncoderTool_Args_Text_Title = Text
+Base64EncoderTool_Args_Text_Hint =
+Base64EncoderTool_Args_InsertLineBreaks_Title = Insert Line Breaks
+Base64EncoderTool_Args_InsertLineBreaks_Hint =
+Base64EncoderTool_Args_UrlSafe_Title = Use Safe URL
+Base64EncoderTool_Args_UrlSafe_Hint =
+
+# UuidGeneratorTool (uuid-gen)
+#
+UuidGeneratorTool_Title = UUID Generator
+UuidGeneratorTool_Description = 
+UuidGeneratorTool_ErrorCodes_UNKNOWN = 
+UuidGeneratorTool_ErrorCodes_TEXT_EMPTY =
+UuidGeneratorTool_Args_Type_Title = UUID Version
+UuidGeneratorTool_Args_Type_Hint =
+UuidGeneratorTool_Args_Count_Title = Count
+UuidGeneratorTool_Args_Count_Hint =
+UuidGeneratorTool_Args_Namespace_Title = Namespace
+UuidGeneratorTool_Args_Namespace_Hint =
+UuidGeneratorTool_Args_Name_Title = Name
+UuidGeneratorTool_Args_Name_Hint =
+UuidGeneratorTool_UuidType_Nil_Title = Empty
+UuidGeneratorTool_UuidType_Nil_Description = 
+UuidGeneratorTool_UuidType_V3_Title = V3
+UuidGeneratorTool_UuidType_V3_Description = 
+UuidGeneratorTool_UuidType_V4_Title = V4
+UuidGeneratorTool_UuidType_V4_Description = 
+UuidGeneratorTool_UuidType_V5_Title = V5
+UuidGeneratorTool_UuidType_V5_Description = 
+UuidGeneratorTool_UuidType_V7_Title = V7
+UuidGeneratorTool_UuidType_V7_Description = 
+UuidGeneratorTool_UuidType_Max_Title = Max
+UuidGeneratorTool_UuidType_Max_Description = 

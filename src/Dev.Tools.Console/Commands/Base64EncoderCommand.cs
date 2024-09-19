@@ -1,7 +1,7 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Core.Localization;
+using Dev.Tools.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.ComponentModel;
 
 namespace Dev.Tools.Console.Commands;
 
@@ -9,15 +9,15 @@ internal sealed class Base64EncoderCommand(Base64EncoderTool tool) : AsyncComman
 {
     public sealed class Settings : CommandSettings
     {
-        [Description("Text to encode")]
+        [LocalizedDescription("Text to encode")]
         [CommandArgument(0, "[text]")]
         public string Text { get; init; } = default!;
 
-        [Description("Insert line breaks")]
+        [LocalizedDescription("Insert line breaks")]
         [CommandOption("-i|--insertLineBreaks")]
         public bool InsertLineBreaks { get; init; }
 
-        [Description("Encode URL safe")]
+        [LocalizedDescription("Encode URL safe")]
         [CommandOption("-u|--urlSafe")]
         public bool UrlSafe { get; init; }
     }

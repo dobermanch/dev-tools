@@ -11,3 +11,7 @@ indent_size = 2
 # JSON files
 [*.json]
 indent_size = 2
+
+# Proj files
+[*.csproj]
+indent_size = 2
