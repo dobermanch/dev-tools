@@ -53,6 +53,6 @@ public class Base64EncoderToolTests
         var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
 
         Assert.True(result.HasErrors);
-        Assert.Equal("TEXT_EMPTY", result.ErrorCodes[0]);
+        Assert.Equal(ToolConstants.Error.TextEmpty, result.ErrorCodes[0]);
     }
 }
