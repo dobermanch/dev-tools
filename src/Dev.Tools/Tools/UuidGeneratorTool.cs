@@ -3,10 +3,10 @@
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
-    Name = "uuid-gen",
-    Aliases = ["uuid"],
+    Name = "uuid",
+    Aliases = [],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
-    Categories = [Category.Converter],
+    Categories = [Category.Crypto],
     ErrorCodes = [Error.Unknown, "NAMESAPCE_EMPTY"]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
@@ -137,7 +137,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
         DateTimeOffset? Time = null
     ) : ToolArgs;
 
-    public record Result(IReadOnlyCollection<Guid> Uuids) : ToolResult
+    public record Result(IReadOnlyCollection<Guid> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

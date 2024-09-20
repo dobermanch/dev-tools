@@ -32,7 +32,7 @@ public class Base64DecoderEndpoint(Base64DecoderTool tool) : EndpointBase
 
         return Ok(new ResponseDto
         {
-            Text = result.Text
+            Text = result.Data
         });
     }
 

@@ -36,7 +36,7 @@ public class UuidGeneratorEndpoint(UuidGeneratorTool tool) : EndpointBase
 
         return Ok(new ResponseDto
         {
-            Uuids = result.Uuids
+            Uuids = result.Data
         });
     }
 

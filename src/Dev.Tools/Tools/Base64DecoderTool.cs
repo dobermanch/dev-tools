@@ -24,7 +24,7 @@ public class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64DecoderT
 
     public record Args(string Text) : ToolArgs;
 
-    public record Result(string Text) : ToolResult
+    public record Result(string Data) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

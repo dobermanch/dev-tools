@@ -15,19 +15,19 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().BeEmpty();
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().BeEmpty();
     }
 
     [Fact]
-    public async Task WhenTypeIsNilAndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsNilAndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(UuidGeneratorTool.UuidType.Nil, Count: 5);
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
-        result.Uuids.Should().AllBeEquivalentTo(Guid.Empty);
+        result.Data.Should().HaveCount(args.Count);
+        result.Data.Should().AllBeEquivalentTo(Guid.Empty);
     }
 
     [Fact]
@@ -37,8 +37,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().BeEmpty();
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().BeEmpty();
     }
 
     [Fact]
@@ -48,8 +48,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().BeEmpty();
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().BeEmpty();
     }
 
     // -------------------------------
@@ -62,19 +62,19 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
-    public async Task WhenTypeIsMaxAndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsMaxAndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(UuidGeneratorTool.UuidType.Max, Count: 5);
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
-        result.Uuids.Should().AllBeEquivalentTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(args.Count);
+        result.Data.Should().AllBeEquivalentTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -84,8 +84,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1); 
-        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1); 
+        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -95,8 +95,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     // -------------------------------
@@ -109,7 +109,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().BeEmpty();
+        result.Data.Should().BeEmpty();
         result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
     }
 
@@ -120,8 +120,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -135,8 +135,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -151,11 +151,11 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Uuids.First().Should().Be(result2.Uuids.First());
+        result1.Data.First().Should().Be(result2.Data.First());
     }
 
     [Fact]
-    public async Task WhenTypeIsV3AndNameAndNamespaceAndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsV3AndNameAndNamespaceAndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(
             UuidGeneratorTool.UuidType.V3,
@@ -166,7 +166,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
+        result.Data.Should().HaveCount(args.Count);
     }
 
     // -------------------------------
@@ -179,20 +179,20 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBeEmpty();
-        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBeEmpty();
+        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
-    public async Task WhenTypeIsV4AndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsV4AndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(UuidGeneratorTool.UuidType.V4, Count: 5);
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
-        result.Uuids.Should().OnlyHaveUniqueItems();
+        result.Data.Should().HaveCount(args.Count);
+        result.Data.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
@@ -202,7 +202,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
+        result.Data.Should().HaveCount(1);
     }
 
     [Fact]
@@ -212,18 +212,18 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
+        result.Data.Should().HaveCount(1);
     }
 
     [Fact]
-    public async Task WhenTypeIsV4_ShouldAlwaysReturnsUniqueUuids()
+    public async Task WhenTypeIsV4_ShouldAlwaysReturnsUniqueData()
     {
         var args = new UuidGeneratorTool.Args(UuidGeneratorTool.UuidType.V4, Namespace: Guid.NewGuid());
 
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Uuids.First().Should().NotBe(result2.Uuids.First());
+        result1.Data.First().Should().NotBe(result2.Data.First());
     }
 
     // -------------------------------
@@ -236,7 +236,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().BeEmpty();
+        result.Data.Should().BeEmpty();
         result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
     }
 
@@ -247,8 +247,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -262,8 +262,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBe(args.Namespace!.Value);
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBe(args.Namespace!.Value);
     }
 
     [Fact]
@@ -278,11 +278,11 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Uuids.First().Should().Be(result2.Uuids.First());
+        result1.Data.First().Should().Be(result2.Data.First());
     }
 
     [Fact]
-    public async Task WhenTypeIsV5AndNameAndNamespaceAndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsV5AndNameAndNamespaceAndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(
             UuidGeneratorTool.UuidType.V5,
@@ -293,7 +293,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
+        result.Data.Should().HaveCount(args.Count);
     }
 
     // -------------------------------
@@ -306,9 +306,9 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBeEmpty();
-        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBeEmpty();
+        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -322,8 +322,8 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        byte[] bytes1 = result1.Uuids.First().ToByteArray()[..5];
-        byte[] bytes2 = result2.Uuids.First().ToByteArray()[..5];
+        byte[] bytes1 = result1.Data.First().ToByteArray()[..5];
+        byte[] bytes2 = result2.Data.First().ToByteArray()[..5];
 
         bytes1.Should().BeEquivalentTo(bytes2);
     }
@@ -339,18 +339,18 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
-        result.Uuids.Should().OnlyHaveUniqueItems();
+        result.Data.Should().HaveCount(args.Count);
+        result.Data.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
-    public async Task WhenTypeIsV7AndCountProvided_ShoudGenerateRightAmountOfUuids()
+    public async Task WhenTypeIsV7AndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args(UuidGeneratorTool.UuidType.V7, Count: 5);
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(args.Count);
+        result.Data.Should().HaveCount(args.Count);
     }
 
     [Fact]
@@ -360,9 +360,9 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBeEmpty();
-        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBeEmpty();
+        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     [Fact]
@@ -372,8 +372,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Uuids.Should().HaveCount(1);
-        result.Uuids.First().Should().NotBeEmpty();
-        result.Uuids.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        result.Data.Should().HaveCount(1);
+        result.Data.First().Should().NotBeEmpty();
+        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 }

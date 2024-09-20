@@ -17,7 +17,7 @@ public class Base64DecoderToolTests
 
         var result = await new Base64DecoderTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedResult, result.Text);
+        Assert.Equal(expectedResult, result.Data);
     }
 
     [Fact]

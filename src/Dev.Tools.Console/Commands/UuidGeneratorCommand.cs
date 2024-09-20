@@ -49,7 +49,7 @@ internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncComman
             return -1;
         }
 
-        foreach (var uuid in result.Uuids)
+        foreach (var uuid in result.Data)
         {
             AnsiConsole.WriteLine(uuid.ToString());
         }
