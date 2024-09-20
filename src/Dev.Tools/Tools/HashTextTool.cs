@@ -5,8 +5,8 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "hash",
     Aliases = [],
-    Keywords = [Keyword.Generate, Keyword.Text, Keyword.String],
-    Categories = [Category.Text, Category.Crypto],
+    Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
+    Categories = [Category.Text, Category.Crypto, Category.Security],
     ErrorCodes = [Error.Unknown, Error.TextEmpty]
 )]
 public class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
