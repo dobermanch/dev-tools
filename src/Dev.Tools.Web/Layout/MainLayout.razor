@@ -1,19 +1,23 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @ref="_themeProvider" IsDarkMode="@IsDarkMode" ObserveSystemThemeChange="@ObserveSystemThemeChange" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
+        <MudText Typo="Typo.h5" Class="ml-3">Dev Tools</MudText>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" aria-label="github" />
+
+        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ChangeThemeModeAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
 
-    <MudDrawer Elevation="2" ClipMode="DrawerClipMode.Always" @bind-Open="@_drawerOpen">
+    <MudDrawer Elevation="2" ClipMode="DrawerClipMode.Always" Open="@IsDrawerOpen">
         <NavMenu/>
     </MudDrawer>
 
@@ -21,12 +25,3 @@
         @Body
     </MudMainContent>
 </MudLayout>
-
-@code {
-    bool _drawerOpen = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-}
