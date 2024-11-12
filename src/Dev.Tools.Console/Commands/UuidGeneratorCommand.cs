@@ -45,7 +45,7 @@ internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncComman
 
         if (result.HasErrors)
         {
-            AnsiConsole.WriteLine(result.ErrorCodes[0]);
+            AnsiConsole.WriteLine(result.ErrorCodes[0].ToString());
             return -1;
         }
 

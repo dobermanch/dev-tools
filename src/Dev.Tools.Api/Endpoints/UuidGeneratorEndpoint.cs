@@ -30,7 +30,7 @@ public class UuidGeneratorEndpoint(UuidGeneratorTool tool) : EndpointBase
 
         if (result.HasErrors)
         {
-            return Problem(type: result.ErrorCodes[0]);
+            return Problem(type: result.ErrorCodes[0].ToString());
         }
 
 

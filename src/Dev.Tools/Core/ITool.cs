@@ -2,14 +2,14 @@
 
 public interface ITool;
 
-public interface IToolAsync<TArg, TResult> : ITool
+public interface IToolAsync<in TArg, out TResult> : ITool
     where TArg : ToolArgs
     where TResult : ToolResult
 {
     TResult Run(TArg args);
 }
 
-public interface ITool<TArg, TResult> : ITool
+public interface ITool<in TArg, TResult> : ITool
     where TArg : ToolArgs
     where TResult : ToolResult
 {

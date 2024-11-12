@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Core;
+using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -28,6 +29,6 @@ public class Base64DecoderToolTests
         var result = await new Base64DecoderTool().RunAsync(args, CancellationToken.None);
 
         Assert.True(result.HasErrors);
-        Assert.Equal(ToolConstants.Error.TextEmpty, result.ErrorCodes[0]);
+        Assert.Equal(ErrorCodes.TextEmpty, result.ErrorCodes[0]);
     }
 }

@@ -17,7 +17,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
         }
         catch (Exception ex)
         {
-            return Failed(new(ToolConstants.Error.Unknown));
+            return Failed(ErrorCodes.Unknown);
         }
     }
 
@@ -28,7 +28,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
 
     protected virtual TResult Execute(TArgs args) => new();
 
-    protected TResult Failed(string code) => new ()
+    protected TResult Failed(ErrorCodes code) => new ()
     {
         ErrorCodes = { code }
     };

@@ -1,3 +1,4 @@
+using Dev.Tools;
 using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
 using Dev.Tools.Web.Services.Layout;
@@ -15,5 +16,6 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<ILayoutService, LayoutService>();
 builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 builder.Services.AddCoreComponents(builder.Configuration);
+builder.Services.AddTools();
 
 await builder.Build().RunAsync();

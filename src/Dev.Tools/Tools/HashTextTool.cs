@@ -5,17 +5,17 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "hash",
     Aliases = [],
-    Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
-    Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = [Error.Unknown, Error.TextEmpty]
+    Keywords = [Keywords.Generate, Keywords.Text, Keywords.String, Keywords.Hash],
+    Categories = [Categories.Text, Categories.Crypto, Categories.Security],
+    ErrorCodes = [ErrorCodes.Unknown, ErrorCodes.TextEmpty]
 )]
-public class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
+public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
     protected override Result Execute(Args args)
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed(Error.TextEmpty);
+            return Failed(ErrorCodes.TextEmpty);
         }
 
         var bytes = Encoding.UTF8.GetBytes(args.Text);

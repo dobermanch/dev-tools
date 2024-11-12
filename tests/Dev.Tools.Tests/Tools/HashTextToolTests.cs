@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Core;
+using Dev.Tools.Tools;
 using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;
@@ -23,7 +24,7 @@ public class HashTextToolTests
         var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
 
         result.HasErrors.Should().BeTrue();
-        result.ErrorCodes.Should().Contain(ToolConstants.Error.TextEmpty);
+        result.ErrorCodes.Should().Contain(ErrorCodes.TextEmpty);
     }
 
     [Theory]

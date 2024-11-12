@@ -6,9 +6,9 @@ public sealed class ToolDefinitionAttribute : Attribute
 
     public string[] Aliases { get; set; } = [];
 
-    public string[] Categories { get; set; } = [];
+    public Categories[] Categories { get; set; } = [];
 
-    public string[] Keywords { get; set; } = [];
+    public Keywords[] Keywords { get; set; } = [];
 
-    public string[] ErrorCodes { get; set; } = [];
+    public ErrorCodes[] ErrorCodes { get; set; } = [];
 }

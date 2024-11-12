@@ -27,7 +27,7 @@ public class Base64DecoderEndpoint(Base64DecoderTool tool) : EndpointBase
 
         if (result.HasErrors)
         {
-            return Problem(type: result.ErrorCodes[0], statusCode: (int)HttpStatusCode.BadRequest);
+            return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
         }
 
         return Ok(new ResponseDto

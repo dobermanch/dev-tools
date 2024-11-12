@@ -9,9 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Dev.Tools\Core\ToolArgs.cs" Link="Core\ToolArgs.cs" />
-    <Compile Include="..\Dev.Tools\Core\ToolDefinitionAttribute.cs" Link="Core\ToolDefinitionAttribute.cs" />
-    <Compile Include="..\Dev.Tools\Core\ToolResult.cs" Link="Core\ToolResult.cs" />
+    <Compile Include="..\Dev.Tools\Core\*.cs" Link="Core\*" />
   </ItemGroup>
 
   <ItemGroup>

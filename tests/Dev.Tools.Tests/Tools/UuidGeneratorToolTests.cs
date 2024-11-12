@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Core;
+using Dev.Tools.Tools;
 using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;
@@ -110,7 +111,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
+        result.ErrorCodes.First().Should().Be(ErrorCodes.NamespaceEmpty);
     }
 
     [Fact]
@@ -237,7 +238,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be("NAMESPACE_EMPTY");
+        result.ErrorCodes.First().Should().Be(ErrorCodes.NamespaceEmpty);
     }
 
     [Fact]

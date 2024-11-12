@@ -5,13 +5,13 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "uuid",
     Aliases = [],
-    Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
-    Categories = [Category.Crypto],
-    ErrorCodes = [Error.Unknown, "NAMESAPCE_EMPTY"]
+    Keywords = [Keywords.Uuid, Keywords.Guid, Keywords.Generate, Keywords.Text, Keywords.String],
+    Categories = [Categories.Crypto],
+    ErrorCodes = [ErrorCodes.Unknown, ErrorCodes.NamespaceEmpty]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
-    private readonly static Guid _max = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
+    private static readonly Guid Max = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
 
     protected override Result Execute(Args args)
     {
@@ -23,12 +23,12 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
                 guids = Generate(args, _ => Guid.Empty);
                 break;
             case UuidType.Max:
-                guids = Generate(args, _ => _max);
+                guids = Generate(args, _ => Max);
                 break;
             case UuidType.V3:
                 if (args.Namespace is null)
                 {
-                    return Failed("NAMESPACE_EMPTY");
+                    return Failed(ErrorCodes.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
@@ -39,7 +39,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
             case UuidType.V5:
                 if (args.Namespace is null)
                 {
-                    return Failed("NAMESPACE_EMPTY");
+                    return Failed(ErrorCodes.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
