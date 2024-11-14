@@ -1,0 +1,25 @@
+
+<MudToolBar Dense="true" Class="mt-10 mb-5">
+    <MudText Typo="Typo.h5">Tools List</MudText>
+    <MudSpacer/>
+    <MudToggleGroup T="string" Outlined="true" Delimiters="true" Size="Size.Small" Color="Color.Primary">
+        <MudToggleItem Value="@("category")">
+            <MudIcon Icon="@Icons.Material.Outlined.Category" />
+        </MudToggleItem>
+        <MudToggleItem Value="@("cards")">
+            <MudIcon Icon="@Icons.Material.Outlined.Apps" />
+        </MudToggleItem>
+    </MudToggleGroup>
+</MudToolBar>
+
+<MudGrid Spacing="5">
+    @foreach (var group in Tools)
+    {
+        @foreach (var tool in group)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
+                <ToolCard Tool="@tool" />
+            </MudItem>
+        }
+    }
+</MudGrid>

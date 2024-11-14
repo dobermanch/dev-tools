@@ -1,0 +1,24 @@
+<MudCard MauseOver>
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Primary">
+                <MudIcon Color="Color.Dark" Icon="@Icons.Material.Outlined.Construction" Size="Size.Medium" />
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText Typo="Typo.body1">@Tool.Name</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Material.Outlined.Favorite" Size="Size.Small" Color="Color.Default"/>
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent Class="d-flex align-content-space-between flex-wrap flex-grow-1">
+        <MudText GutterBottom="true" Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+        <MudStack Row="true" Spacing="0" Wrap="Wrap.Wrap">
+            @foreach (var keyword in Tool.Keywords.OrderBy(it => it))
+            {
+                <MudChip T="string" Color="Color.Dark" Size="Size.Small" Label="true" Text="@keyword.ToString()"/>
+            }
+        </MudStack>
+    </MudCardContent>
+</MudCard>
