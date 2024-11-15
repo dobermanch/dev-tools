@@ -9,7 +9,7 @@ namespace Dev.Tools.Web.Components.Tools;
 
 public partial class ToolsList : ComponentBase
 {
-    [Inject] private IToolsProvider ToolsProvider { get; set; }
+    [Inject] private IToolsProvider ToolsProvider { get; set; } = default!;
 
     private GroupedList<string, ToolDefinition> Tools { get; set; } = GroupedList<string, ToolDefinition>.Empty;
 

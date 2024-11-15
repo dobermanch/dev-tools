@@ -5,9 +5,9 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "hash",
     Aliases = [],
-    Keywords = [Keywords.Generate, Keywords.Text, Keywords.String, Keywords.Hash],
-    Categories = [Categories.Text, Categories.Crypto, Categories.Security],
-    ErrorCodes = [ErrorCodes.Unknown, ErrorCodes.TextEmpty]
+    Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
+    Categories = [Category.Text, Category.Crypto, Category.Security],
+    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty]
 )]
 public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
@@ -15,7 +15,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed(ErrorCodes.TextEmpty);
+            return Failed(ErrorCode.TextEmpty);
         }
 
         var bytes = Encoding.UTF8.GetBytes(args.Text);
@@ -27,12 +27,13 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
             HashAlgorithm.Sha256 => ComputeSha256(bytes),
             HashAlgorithm.Sha384 => ComputeSha384(bytes),
             HashAlgorithm.Sha512 => ComputeSha512(bytes),
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         var result = new StringBuilder();
-        for (int i = 0; i < data.Length; i++)
+        foreach (var ch in data)
         {
-            result.Append(data[i].ToString("x2"));
+            result.Append(ch.ToString("x2"));
         }
 
         return new Result(result.ToString());

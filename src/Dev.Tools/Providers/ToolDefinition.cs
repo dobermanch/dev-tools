@@ -4,8 +4,8 @@ public sealed record ToolDefinition
 (
     string Name,
     string[] Aliases,
-    Categories[] Categories,
-    Keywords[] Keywords,
-    ErrorCodes[] ErrorCodes,
+    string[] Categories,
+    string[] Keywords,
+    string[] ErrorCodes,
     Type ToolType
 );

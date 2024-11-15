@@ -1,4 +1,5 @@
-﻿namespace Dev.Tools.Core;
+﻿// ReSharper disable once CheckNamespace
+namespace Dev.Tools.Core;
 
 public interface ITool;
 

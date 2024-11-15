@@ -1,4 +1,5 @@
-﻿using Spectre.Console.Cli;
+﻿using System;
+using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Core.DI;
 

@@ -6,5 +6,5 @@ namespace Dev.Tools.Web.Components.Tools;
 public partial class ToolCard : ComponentBase
 {
     [Parameter]
-    public ToolDefinition Tool { get; set; } = default;
+    public ToolDefinition Tool { get; set; } = default!;
 }

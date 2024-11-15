@@ -5,9 +5,9 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "uuid",
     Aliases = [],
-    Keywords = [Keywords.Uuid, Keywords.Guid, Keywords.Generate, Keywords.Text, Keywords.String],
-    Categories = [Categories.Crypto],
-    ErrorCodes = [ErrorCodes.Unknown, ErrorCodes.NamespaceEmpty]
+    Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
+    Categories = [Category.Crypto],
+    ErrorCodes = [ErrorCode.Unknown, ErrorCode.NamespaceEmpty]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
@@ -28,7 +28,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
             case UuidType.V3:
                 if (args.Namespace is null)
                 {
-                    return Failed(ErrorCodes.NamespaceEmpty);
+                    return Failed(ErrorCode.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
@@ -39,7 +39,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
             case UuidType.V5:
                 if (args.Namespace is null)
                 {
-                    return Failed(ErrorCodes.NamespaceEmpty);
+                    return Failed(ErrorCode.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));

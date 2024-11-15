@@ -5,8 +5,8 @@ namespace Dev.Tools.Providers;
 public sealed class ToolsCollection : IEnumerable<ToolDefinition>
 {
     private readonly List<ToolDefinition> _tools;
-    private readonly Dictionary<Categories, ToolDefinition[]> _toolsByCategory;
-    private readonly Dictionary<Keywords, ToolDefinition[]> _toolsByKeyword;
+    private readonly Dictionary<string, ToolDefinition[]> _toolsByCategory;
+    private readonly Dictionary<string, ToolDefinition[]> _toolsByKeyword;
     private readonly Dictionary<string, ToolDefinition> _toolsByName;
 
     public ToolsCollection(IEnumerable<ToolDefinition> tools)
@@ -33,10 +33,10 @@ public sealed class ToolsCollection : IEnumerable<ToolDefinition>
     public ToolDefinition? this[string name]
         => _toolsByName.GetValueOrDefault(name);
 
-    public IReadOnlyCollection<ToolDefinition> this[Categories category]
+    public IReadOnlyCollection<ToolDefinition> this[Category category]
         => _toolsByCategory.GetValueOrDefault(category, []);
 
-    public IReadOnlyCollection<ToolDefinition> this[Keywords keyword]
+    public IReadOnlyCollection<ToolDefinition> this[Keyword keyword]
         => _toolsByKeyword.GetValueOrDefault(keyword, []);
 
     public IEnumerator<ToolDefinition> GetEnumerator()

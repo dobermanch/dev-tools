@@ -111,7 +111,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be(ErrorCodes.NamespaceEmpty);
+        result.ErrorCodes.First().Should().Be(ErrorCode.NamespaceEmpty);
     }
 
     [Fact]
@@ -238,7 +238,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
         result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be(ErrorCodes.NamespaceEmpty);
+        result.ErrorCodes.First().Should().Be(ErrorCode.NamespaceEmpty);
     }
 
     [Fact]

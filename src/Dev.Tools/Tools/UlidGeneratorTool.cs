@@ -3,8 +3,8 @@
 [ToolDefinition(
     Name = "ulid",
     Aliases = [],
-    Keywords = [Keywords.Uuid, Keywords.Guid, Keywords.Generate, Keywords.Text, Keywords.String],
-    Categories = [Categories.Crypto],
+    Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
+    Categories = [Category.Crypto],
     ErrorCodes = []
 )]
 public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGeneratorTool.Result>

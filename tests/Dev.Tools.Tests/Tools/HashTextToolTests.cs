@@ -24,7 +24,7 @@ public class HashTextToolTests
         var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
 
         result.HasErrors.Should().BeTrue();
-        result.ErrorCodes.Should().Contain(ErrorCodes.TextEmpty);
+        result.ErrorCodes.Should().Contain(ErrorCode.TextEmpty);
     }
 
     [Theory]
