@@ -15,9 +15,9 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
         {
             return await ExecuteAsync(args, cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Failed(ErrorCodes.Unknown);
+            return Failed(ErrorCode.Unknown);
         }
     }
 
@@ -28,7 +28,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
 
     protected virtual TResult Execute(TArgs args) => new();
 
-    protected TResult Failed(ErrorCodes code) => new ()
+    protected TResult Failed(ErrorCode code) => new ()
     {
         ErrorCodes = { code }
     };
