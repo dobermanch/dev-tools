@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Core;
 
-internal record TypeBaseInfo
+internal record TypeDeclaration
 {
     public TypeDeclarationSyntax Syntax { get; set; } = default!;
 

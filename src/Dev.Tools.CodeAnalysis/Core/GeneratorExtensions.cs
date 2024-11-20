@@ -13,22 +13,20 @@ internal static class GeneratorExtensions {
                    .Any(it => it.Name.ToString() == attributeName);
     }
     
-    
-    public static AttributeSyntax? GetAttributeSyntax(this SyntaxNode node, GeneratorSyntaxContext context, string attributeName)
+    public static AttributeSyntax? GetAttributeSyntax(this SyntaxNode node, SemanticModel model, string attributeName)
     {
-        var symbol = context.SemanticModel.GetDeclaredSymbol(node);
-
-        var attribute = symbol
+        var attribute = model
+            .GetDeclaredSymbol(node)
             ?.GetAttributes()
             .FirstOrDefault(it => it.AttributeClass?.ToString() == attributeName);
         
         return attribute?.ApplicationSyntaxReference?.GetSyntax() as AttributeSyntax;
     }
 
-    public static (TypeDeclarationSyntax, INamedTypeSymbol?) GetTypeNode(this GeneratorSyntaxContext context)
+    public static (TypeDeclarationSyntax?, INamedTypeSymbol?) GetTypeNode(this SyntaxNode node, SemanticModel model)
     {
-        var classDeclaration = (TypeDeclarationSyntax)context.Node;
-        if (context.SemanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
+        var classDeclaration = node as TypeDeclarationSyntax;
+        if (classDeclaration is null || model.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
         {
             return (classDeclaration, null);
         }

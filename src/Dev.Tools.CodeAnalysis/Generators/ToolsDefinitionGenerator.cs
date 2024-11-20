@@ -7,7 +7,7 @@ namespace Dev.Tools.CodeAnalysis.Generators;
 [Generator]
 public class ToolsDefinitionGenerator : IIncrementalGenerator
 {
-    private static readonly CodeBlock AttributeCode = new()
+    public static readonly CodeBlock Attribute = new()
     {
         Namespace = "Dev.Tools",
         TypeName = "ToolDefinitionAttribute",
@@ -25,11 +25,11 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
                   }
                   """
     };
-
+    
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(ctx =>
-            ctx.AddSource(AttributeCode.OutputFileName, AttributeCode)
+            ctx.AddSource(Attribute.OutputFileName, Attribute)
         );
 
         // Register a syntax receiver to filter syntax nodes
@@ -49,50 +49,36 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
         {
             var (_, classes) = source;
 
-           var types = classes
-               .Where(it => it != null)
-               .Select(it => it!)
-               .ToArray();
+            var types = classes
+                .Where(it => it != null)
+                .Select(it => it!)
+                .ToArray();
 
-           if (types.Length == 0)
-           {
-               return;
-           }
-
-            var notValid = types.Where(it => !it.IsPublic || !it.IsSealed).ToArray();
-            if (notValid.Length <= 0)
+            if (types.Length == 0)
             {
-                var codeBlock = GenerateGetValuesMethod(classes);
-                spc.AddSource(codeBlock.OutputFileName, codeBlock);
                 return;
             }
 
-            foreach (var info in notValid)
-            {
-                spc.ReportDiagnostic(
-                    Diagnostic.Create(Diagnostics.NotPublicRule,
-                        info.Location,
-                        info.TypeName,
-                        AttributeCode.TypeFullName));
-            }
+            var codeBlock = GenerateGetValuesMethod(classes);
+            spc.AddSource(codeBlock.OutputFileName, codeBlock);
         });
     }
 
     private static bool IsClassWithGenerateValuesAttribute(SyntaxNode node)
     {
         return node is ClassDeclarationSyntax definition 
-               && definition.HasAttribute(AttributeCode.SyntaxTypeName);
+               && definition.HasAttribute(Attribute.SyntaxTypeName);
     }
 
     private static TypeInfo? GetClassWithConstants(GeneratorSyntaxContext context)
     {
-        var (syntax, symbol) = context.GetTypeNode();
-        if (symbol is null)
+        var (syntax, symbol) = context.Node.GetTypeNode(context.SemanticModel);
+        if (syntax is null || symbol is null)
         {
             return null;
         }
         
-        var attribute = context.Node.GetAttributeSyntax(context, AttributeCode.TypeFullName);
+        var attribute = context.Node.GetAttributeSyntax(context.SemanticModel, Attribute.TypeFullName);
         Dictionary<string, ExpressionSyntax>? values =
             attribute
                 ?.ArgumentList
@@ -158,7 +144,7 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
         };
     }
 
-    private record TypeInfo : TypeBaseInfo
+    private record TypeInfo : TypeDeclaration
     {
         public string Name { get; set; } = default!;
         public string[] Aliases { get; set; } = [];

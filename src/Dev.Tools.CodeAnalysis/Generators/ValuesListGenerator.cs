@@ -7,6 +7,16 @@ namespace Dev.Tools.CodeAnalysis.Generators;
 [Generator]
 public class ValuesListGenerator : IIncrementalGenerator
 {
+    public static readonly DiagnosticDescriptor NotPartialRule = new(
+        "DT2001",
+        "Class should be partial",
+        "The '{0}' class marked with {1} attribute should be partial",
+        "Generation",
+        DiagnosticSeverity.Error,
+        description: "Class should be partial.",
+        isEnabledByDefault: true,
+        customTags: [WellKnownDiagnosticTags.CompilationEnd]);
+    
     private static readonly CodeBlock AttributeCode = new ()
     {
         Namespace = "Dev.Tools",
@@ -46,7 +56,7 @@ public class ValuesListGenerator : IIncrementalGenerator
                 {
                     spc.ReportDiagnostic(
                         Diagnostic.Create(
-                            Diagnostics.NotPartialRule,
+                            NotPartialRule,
                             info.Location,
                             info.TypeName,
                             AttributeCode.TypeName
@@ -68,8 +78,8 @@ public class ValuesListGenerator : IIncrementalGenerator
 
     private static TypeInfo? GetClassWithConstants(GeneratorSyntaxContext context)
     {
-        var (syntax, symbol) = context.GetTypeNode();
-        if (symbol is null)
+        var (syntax, symbol) = context.Node.GetTypeNode(context.SemanticModel);
+        if (syntax is null || symbol is null)
         {
             return null;
         }
@@ -125,7 +135,7 @@ public class ValuesListGenerator : IIncrementalGenerator
                       """
         };
 
-    private record TypeInfo : TypeBaseInfo
+    private record TypeInfo : TypeDeclaration
     {
         public List<string> Constants { get; set; }
     }
