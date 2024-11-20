@@ -34,11 +34,15 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Dev.Tools\Dev.Tools.csproj" />
+    <ProjectReference Include="..\..\src\Dev.Tools.CodeAnalysis\Dev.Tools.CodeAnalysis.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Generators\Snapshots\" />
   </ItemGroup>
 
 </Project>

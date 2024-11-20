@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dev.Tools.Generators\Dev.Tools.Generators.csproj" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\Dev.Tools.CodeAnalysis\Dev.Tools.CodeAnalysis.csproj" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Dev.Tools\Dev.Tools.csproj" />
   </ItemGroup>
 
