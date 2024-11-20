@@ -1,0 +1,20 @@
+﻿{
+  Diagnostics: [
+    {
+      Message: The 'TestTool' class marked with  attribute should be partial,
+      Severity: Error,
+      Descriptor: {
+        Id: DT2001,
+        Title: Class should be partial,
+        Description: Class should be partial.,
+        MessageFormat: The '{0}' class marked with {1} attribute should be partial,
+        Category: Generation,
+        DefaultSeverity: Error,
+        IsEnabledByDefault: true,
+        CustomTags: [
+          CompilationEnd
+        ]
+      }
+    }
+  ]
+}

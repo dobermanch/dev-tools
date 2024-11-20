@@ -1,5 +1,6 @@
 namespace Dev.Tools;
 
+[GenerateValues]
 public partial record struct Keyword(string Value)
 {
     public const string Base64 = nameof(Base64);

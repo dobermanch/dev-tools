@@ -1,5 +1,6 @@
 ﻿namespace Dev.Tools;
 
+[GenerateValues]
 public partial record struct Category(string Value)
 {
     public const string None = nameof(None);

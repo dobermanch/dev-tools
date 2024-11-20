@@ -37,7 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dev.Tools.Analyzers\Dev.Tools.Analyzers.csproj" />
     <ProjectReference Include="..\..\src\Dev.Tools.Generators\Dev.Tools.Generators.csproj" />
-    <ProjectReference Include="..\..\src\Dev.Tools\Dev.Tools.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,7 @@
-using Dev.Tools.Analyzers;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace Dev.Tools.Tests.Analyzers;
+namespace Dev.Tools.Analyzers.Tests.Analyzers;
 
 public class ToolNameAnalyzerTests
 {

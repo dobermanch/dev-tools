@@ -1,6 +1,6 @@
 namespace Dev.Tools.Providers;
 
-public sealed record ToolDefinition
+public readonly record struct ToolDefinition
 (
     string Name,
     string[] Aliases,

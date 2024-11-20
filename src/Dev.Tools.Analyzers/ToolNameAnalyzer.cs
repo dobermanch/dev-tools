@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using Dev.Tools.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -48,7 +47,7 @@ public class ToolNameAnalyzer : DiagnosticAnalyzer
             {
                 var attributeSyntax = (AttributeSyntax)syntaxContext.Node;
                 var symbolInfo = syntaxContext.SemanticModel.GetSymbolInfo(attributeSyntax);
-                if (symbolInfo.Symbol?.ContainingType is not { Name: nameof(ToolDefinitionAttribute) })
+                if (symbolInfo.Symbol?.ContainingType is not { Name: "ToolDefinitionAttribute" })
                 {
                     return;
                 }
@@ -57,7 +56,7 @@ public class ToolNameAnalyzer : DiagnosticAnalyzer
                     attributeSyntax
                         .ArgumentList
                         ?.Arguments
-                        .Where(arg => arg.NameEquals?.Name.Identifier.Text == nameof(ToolDefinitionAttribute.Name))
+                        .Where(arg => arg.NameEquals?.Name.Identifier.Text == "Name")
                         .Select(it => it.Expression)
                         .OfType<LiteralExpressionSyntax>()
                         .FirstOrDefault();

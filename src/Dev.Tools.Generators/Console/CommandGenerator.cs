@@ -1,10 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Diagnostics;
-using Dev.Tools.Core;
 
 namespace Dev.Tools.Generators.Console;
 
-[Generator]
+//[Generator]
 public class CommandGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -22,23 +21,23 @@ public class CommandGenerator : IIncrementalGenerator
                     .Select(it => compilation.GetAssemblyOrModuleSymbol(it))
                     .OfType<IAssemblySymbol>()
                     .SelectMany(it => GetAllTypes(it.GlobalNamespace))
-                    .Where(it => it.GetAttributes().Any(attr => attr.AttributeClass?.ToDisplayString() == typeof(ToolDefinitionAttribute).FullName))
+                   // .Where(it => it.GetAttributes().Any(attr => attr.AttributeClass?.ToDisplayString() == typeof(ToolDefinitionAttribute).FullName))
                     .Select(it => {
-                        var attr = it.GetAttributes().First(attr => attr.AttributeClass?.ToDisplayString() == typeof(ToolDefinitionAttribute).FullName);
+                     //   var attr = it.GetAttributes().First(attr => attr.AttributeClass?.ToDisplayString() == typeof(ToolDefinitionAttribute).FullName);
                         var types = it.GetMembers().OfType<ITypeSymbol>().ToArray();
 
                         return new ToolDefinition
                         {
                             FullName = it.ToDisplayString(),
                             ClassName = it.Name,
-                            Name = (string?)attr.NamedArguments.FirstOrDefault(it => it.Key == "Name").Value.Value,
-                            Alieases = attr.NamedArguments.FirstOrDefault(it => it.Key == "Aliases").Value.Values.Select(it => it.Value).OfType<string>().ToArray(),
-                            Args = types.Where(it => it.BaseType?.ToDisplayString() == typeof(ToolArgs).FullName)
-                                        .Select(GetTypeDetails)
-                                        .FirstOrDefault(),
-                            Result = types.Where(it => it.BaseType?.ToDisplayString() == typeof(ToolResult).FullName)
-                                        .Select(GetTypeDetails)
-                                        .FirstOrDefault(),
+                            //Name = (string?)attr.NamedArguments.FirstOrDefault(it => it.Key == "Name").Value.Value,
+                            //Alieases = attr.NamedArguments.FirstOrDefault(it => it.Key == "Aliases").Value.Values.Select(it => it.Value).OfType<string>().ToArray(),
+                            // Args = types.Where(it => it.BaseType?.ToDisplayString() == typeof(ToolArgs).FullName)
+                            //             .Select(GetTypeDetails)
+                            //             .FirstOrDefault(),
+                            // Result = types.Where(it => it.BaseType?.ToDisplayString() == typeof(ToolResult).FullName)
+                            //             .Select(GetTypeDetails)
+                            //             .FirstOrDefault(),
                             LOcation = it.Locations.FirstOrDefault()
                         };
                     })

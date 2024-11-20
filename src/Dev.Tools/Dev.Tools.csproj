@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,12 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dev.Tools.Core\Dev.Tools.Core.csproj" />
     <ProjectReference Include="..\Dev.Tools.Analyzers\Dev.Tools.Analyzers.csproj"
                       PrivateAssets="all"
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer"
                       SetTargetFramework="TargetFramework=netstandard2.0" />
-    <ProjectReference Include="..\Dev.Tools.Core\Dev.Tools.Core.csproj" />
+    <ProjectReference Include="..\Dev.Tools.Generators\Dev.Tools.Generators.csproj" 
+                      PrivateAssets="all" 
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false"
+                      SetTargetFramework="TargetFramework=netstandard2.0"/>
   </ItemGroup>
-
 </Project>
