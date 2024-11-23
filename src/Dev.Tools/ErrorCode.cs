@@ -6,6 +6,7 @@ public partial record struct ErrorCode(string Value)
     public const string Unknown = nameof(Unknown);
     public const string NamespaceEmpty = nameof(Unknown);
     public const string TextEmpty = nameof(Unknown);
+    public const string InputNotValid = nameof(InputNotValid);
     
     public static implicit operator string(ErrorCode code) => code.Value;
     

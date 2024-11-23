@@ -1,8 +1,11 @@
+using Dev.Tools;
 using Dev.Tools.Api.Core;
 using Dev.Tools.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+
+[assembly:GenerateApiEndpoints]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,3 +52,4 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+

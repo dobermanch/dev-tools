@@ -25,7 +25,7 @@ public class ValuesListGenerator : IIncrementalGenerator
         GeneratorType = typeof(ValuesListGenerator),
         Content = """
                   [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-                  public class {TypeName}: System.Attribute;
+                  internal class {TypeName}: System.Attribute;
                   """
     };
 

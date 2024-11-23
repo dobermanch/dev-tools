@@ -3,7 +3,29 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Core;
 
-internal static class GeneratorExtensions {
+internal static class GeneratorExtensions
+{
+    public static IEnumerable<ITypeSymbol> GetAllTypes(this INamespaceSymbol root,
+        Predicate<ITypeSymbol>? predicate = null)
+    {
+        foreach (var namespaceOrTypeSymbol in root.GetMembers())
+        {
+            if (namespaceOrTypeSymbol is INamespaceSymbol @namespace)
+            {
+                foreach (var nested in GetAllTypes(@namespace, predicate))
+                {
+                    yield return nested;
+                }
+            }
+            else if (namespaceOrTypeSymbol is ITypeSymbol type)
+            {
+                if (predicate is null || predicate(type))
+                {
+                    yield return type;
+                }
+            }
+        }
+    }
 
     public static bool HasAttribute(this SyntaxNode node, string attributeName)
     {
@@ -12,16 +34,26 @@ internal static class GeneratorExtensions {
                    .SelectMany(it => it.Attributes)
                    .Any(it => it.Name.ToString() == attributeName);
     }
-    
+
     public static AttributeSyntax? GetAttributeSyntax(this SyntaxNode node, SemanticModel model, string attributeName)
     {
-        var attribute = model
+        return model
             .GetDeclaredSymbol(node)
-            ?.GetAttributes()
-            .FirstOrDefault(it => it.AttributeClass?.ToString() == attributeName);
-        
-        return attribute?.ApplicationSyntaxReference?.GetSyntax() as AttributeSyntax;
+            ?.GetAttributeSyntax(attributeName);
     }
+
+    public static AttributeSyntax? GetAttributeSyntax(this ISymbol symbol, string attributeName)
+        => symbol.GetAttributeData(attributeName)
+            ?.ApplicationSyntaxReference
+            ?.GetSyntax() as AttributeSyntax;
+
+    public static bool HasAttribute(this ISymbol symbol, string attributeName)
+        => symbol.GetAttributeData(attributeName) != null;
+
+    public static AttributeData? GetAttributeData(this ISymbol symbol, string attributeName)
+        => symbol
+            .GetAttributes()
+            .FirstOrDefault(it => it.AttributeClass?.ToString() == attributeName);
 
     public static (TypeDeclarationSyntax?, INamedTypeSymbol?) GetTypeNode(this SyntaxNode node, SemanticModel model)
     {
@@ -30,7 +62,7 @@ internal static class GeneratorExtensions {
         {
             return (classDeclaration, null);
         }
-        
+
         return (classDeclaration, classSymbol);
     }
 }

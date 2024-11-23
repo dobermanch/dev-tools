@@ -11,7 +11,7 @@
 namespace Dev.Tools;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class ToolDefinitionAttribute : Attribute
+internal sealed class ToolDefinitionAttribute : System.Attribute
 {
     public string Name { get; set; } = default!;
     public string[] Aliases { get; set; } = [];

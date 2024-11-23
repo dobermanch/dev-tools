@@ -12,7 +12,7 @@ namespace Dev.Tools.Providers;
 
 internal partial class ToolsProvider
 {
-    protected IEnumerable<ToolDefinition> GetToolDefinitions()
+    private IEnumerable<ToolDefinition> GetToolDefinitions()
     {
         yield return new ToolDefinition(
             Name: "tool-test",

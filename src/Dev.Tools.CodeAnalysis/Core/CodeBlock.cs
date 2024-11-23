@@ -20,6 +20,8 @@ public record CodeBlock
 
     public string TypeFullName => $"{Namespace}.{TypeName}";
 
+    public IList<string> Usings { get; set; } = [];
+
     public Dictionary<string, string> Placeholders { get; set; } = new();
 
     public string? Header { get; set; }
@@ -39,27 +41,36 @@ public record CodeBlock
     public override string ToString()
     {
         var code =
-            $"""
-             {GetHeader()}
+            """
+             {Header}
+             {Usings}
              namespace {Namespace};
 
-             {BuildContent()}
+             {Content}
              """;
 
-        return code;
+        return BuildContent();
     }
 
     private string BuildContent()
     {
-        var replacements = Placeholders
-            .Concat(new Dictionary<string, string>
-            {
-                [nameof(Namespace)] = Namespace,
-                [nameof(TypeName)] = TypeName,
-                [nameof(TypeFullName)] = TypeFullName,
-            });
+        var replacements = new Dictionary<string, string>
+        {
+            [nameof(Content)] = Content,
+            [nameof(Header)] = GetHeader(),
+            [nameof(Usings)] = GetUsings(),
+            [nameof(Namespace)] = Namespace,
+            [nameof(TypeName)] = TypeName,
+            [nameof(TypeFullName)] = TypeFullName,
+        }.Concat(Placeholders);
 
-        var builder = new StringBuilder(Content);
+        var builder = new StringBuilder("""
+                                        {Header}
+                                        {Usings}
+                                        namespace {Namespace};
+                                        
+                                        {Content}
+                                        """);
         foreach (var token in replacements)
         {
             builder.Replace($"{{{token.Key}}}", token.Value);
@@ -79,6 +90,11 @@ public record CodeBlock
          // the code is regenerated. 
          // </auto-generated> 
          //------------------------------------------------------------------------------
-
          """;
+
+    private string GetUsings()
+        => Usings
+            .Distinct()
+            .Where(it => it != Namespace)
+            .Aggregate("", (current, it) => current + $"using {it};\n");
 }

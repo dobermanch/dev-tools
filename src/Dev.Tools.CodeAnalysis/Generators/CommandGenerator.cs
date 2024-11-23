@@ -8,8 +8,6 @@ public class CommandGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        AttachDebugger();
-
         var tools = context
             .CompilationProvider
             .SelectMany((compilation, _) =>
@@ -157,14 +155,5 @@ internal sealed partial class {className} : AsyncCommand<{settingsClassName}>
             .ToArray();
 
         return new TypeDetails(typeSymbol.Name, properties);
-    }
-
-    [Conditional("DEBUG")]
-    private void AttachDebugger()
-    {
-        if (!Debugger.IsAttached)
-        {
-           // Debugger.Launch();
-        }
     }
 }

@@ -11,4 +11,4 @@
 namespace Dev.Tools;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class GenerateValuesAttribute: System.Attribute;
+internal class GenerateValuesAttribute: System.Attribute;

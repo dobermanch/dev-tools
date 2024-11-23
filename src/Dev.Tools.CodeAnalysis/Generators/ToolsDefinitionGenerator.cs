@@ -15,7 +15,7 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
         GeneratorType = typeof(ToolsDefinitionGenerator),
         Content = """
                   [AttributeUsage(AttributeTargets.Class)]
-                  public sealed class {TypeName} : Attribute
+                  internal sealed class {TypeName} : System.Attribute
                   {
                       public string Name { get; set; } = default!;
                       public string[] Aliases { get; set; } = [];
@@ -135,7 +135,7 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
             Content = """
                       internal partial class {TypeName}
                       {
-                          protected IEnumerable<ToolDefinition> GetToolDefinitions()
+                          private IEnumerable<ToolDefinition> GetToolDefinitions()
                           {
                       {Tools}
                           }
@@ -151,5 +151,12 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
         public string[] Categories { get; set; } = [];
         public string[] Keywords { get; set; } = [];
         public string[] ErrorCodes { get; set; } = [];
+        public TypeDetails? Args { get; set; }
+        public TypeDetails? Result { get; set; }
+
+        public record TypeDetails : TypeDeclaration
+        {
+            public (string Name, string Type)[] Properties { get; set; } = [];
+        }
     }
 }
