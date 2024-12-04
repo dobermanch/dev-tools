@@ -1,56 +1,55 @@
 using Dev.Tools.Api.Core;
 using Dev.Tools.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using System.Net.Mime;
 
 namespace Dev.Tools.Api.Endpoints;
 
 public class Base64DecoderEndpoint(Base64DecoderTool tool) : EndpointBase
 {
-    [HttpPost("base64-decoder")]
-    [SwaggerOperation(
-        Summary = "Decode Base64",
-        Description = "Decode Base64 string",
-        OperationId = "base64-decoder",
-        Tags = ["Converters"])
-    ]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> HandleAsync([FromBody] RequestDto request, CancellationToken cancellationToken)
+    [HttpPost("base64-decoder1")]
+    [EndpointName("base64-decoder1")]
+    [EndpointSummary("Summary: Base64 decoder base64 encoded text")]
+    [EndpointDescription("Description: Base64 decoder base64 encoded text")]
+    [Tags("Converters")]
+    [ProducesResponseType<ResponseDto>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
+    public async Task<IResult> HandleAsync([FromBody] RequestDto request, CancellationToken cancellationToken)
     {
-        var args = new Base64DecoderTool.Args(
-            request.Text
-        );
-
-        Base64DecoderTool.Result result = await tool.RunAsync(args, cancellationToken);
-
-        if (result.HasErrors)
+        try
         {
-            return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
+            var args = new Base64DecoderTool.Args(
+                request.Text
+            );
+
+            Base64DecoderTool.Result result = await tool.RunAsync(args, cancellationToken);
+
+            if (result.HasErrors)
+            {
+                return Results.Problem(type: result.ErrorCodes[0], statusCode: (int)HttpStatusCode.BadRequest);
+            }
+
+            return Results.Ok(new ResponseDto
+            {
+                Text = result.Data
+            });
+            
         }
-
-        return Ok(new ResponseDto
+        catch (Exception e)
         {
-            Text = result.Data
-        });
+            return Results.Problem(title:"The base64-decoder1 failed.", type: "Unhandled", detail: e.Message, statusCode: (int)HttpStatusCode.BadRequest);
+        }
     }
 
     public record RequestDto
     {
-        [SwaggerSchema(
-            Title = "Text to decode",
-            Description = "THe base64 string to decode"
-        )]
         public string Text { get; init; } = default!;
     }
 
     public record ResponseDto
     {
-        [SwaggerSchema(
-            Title = "The baser64 string",
-            Description = "Encoded base64 string"
-        )]
         public string Text { get; init; } = default!;
     }
 }

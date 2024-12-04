@@ -5,7 +5,7 @@ namespace Dev.Tools;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddTools(this IServiceCollection services)
+    public static IServiceCollection AddDevTools(this IServiceCollection services)
     {
         var toolsProvider = new ToolsProvider();
         services.AddSingleton<IToolsProvider>(toolsProvider);

@@ -104,14 +104,16 @@ public class ApiEndpointGenerator : IIncrementalGenerator
             Usings = [
                 "Dev.Tools.Api.Core",
                 "Microsoft.AspNetCore.Mvc",
-                "System.Net"
+                "System.Net",
+                "System.Net.Mime"
             ],
             Content = """
                       public class {TypeName}({ToolType} tool) : EndpointBase
                       {
                           [HttpPost("{ToolName}")]
-                          [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({ToolArgsType}))]
-                          [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+                          [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+                          [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
+                          [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
                           public async Task<IActionResult> HandleAsync([FromBody] {ToolArgsType} request, CancellationToken cancellationToken)
                           {
                               try 

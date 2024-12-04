@@ -16,6 +16,6 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<ILayoutService, LayoutService>();
 builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 builder.Services.AddCoreComponents(builder.Configuration);
-builder.Services.AddTools();
+builder.Services.AddDevTools();
 
 await builder.Build().RunAsync();

@@ -1,48 +1,81 @@
+using System.Net.Mime;
 using Dev.Tools;
 using Dev.Tools.Api.Core;
-using Dev.Tools.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Any;
+using Scalar.AspNetCore;
 
-[assembly:GenerateApiEndpoints]
+[assembly: GenerateApiEndpoints]
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddControllers(options =>
-    {
-        options.UseNamespaceRouteToken();
-    })
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+    .AddControllers(options => { options.UseNamespaceRouteToken(); })
+    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => {
-    c.UseApiEndpoints();
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dev Tools", Version = "v1" });
-    c.EnableAnnotations();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, ctx) => { return Task.CompletedTask; });
+
+    options.AddOperationTransformer((operation, context, ctx) =>
+    {
+        foreach (var response in operation.Responses)
+        {
+            if (response.Value.Content.TryGetValue(MediaTypeNames.Application.Json, out var content))
+            {
+            }
+        }
+
+        return Task.CompletedTask;
+    });
+
+    options.AddSchemaTransformer((schema, context, ctx) =>
+    {
+        if (context.JsonTypeInfo.Type is { Name: "Args", DeclaringType: not null })
+        {
+            schema.Annotations["x-schema-id"] =
+                schema.Title = $"{context.JsonTypeInfo.Type.DeclaringType.Name}Request";
+        }
+
+        if (context.JsonTypeInfo.Type is { Name: "Result", DeclaringType: not null })
+        {
+            schema.Annotations["x-schema-id"] =
+                schema.Title = $"{context.JsonTypeInfo.Type.DeclaringType.Name}Response";
+
+            schema.Properties.Remove("hasErrors");
+            schema.Properties.Remove("errorCodes");
+        }
+
+        if (context.JsonTypeInfo.Type.IsEnum)
+        {
+            schema.Enum =
+                Enum.GetNames(context.JsonTypeInfo.Type)
+                    .Select(it => (IOpenApiAny)new OpenApiString(it))
+                    .ToList();
+        }
+
+        return Task.CompletedTask;
+    });
 });
 
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressInferBindingSourcesForParameters = true;
-});
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressInferBindingSourcesForParameters = true; });
 
 builder.Services
-    .AddTransient<Base64DecoderTool>()
-    .AddTransient<Base64EncoderTool>()
-    .AddTransient<UuidGeneratorTool>()
-    ;
+    .AddDevTools();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Dev Tools API")
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
 }
 
 app.UseHttpsRedirection();
@@ -52,4 +85,3 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
-
