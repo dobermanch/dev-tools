@@ -1,0 +1,67 @@
+﻿services:
+  dev.tools.api:
+    image: dev.tools.api
+    build:
+      context: .
+      dockerfile: src/Dev.Tools.Api/Dockerfile
+    ports:
+      - 8081:8080
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.dev-tools-api.rule=Host(`api.traefik.me`)"
+      - "traefik.http.routers.dev-tools-api.entrypoints=websecure"
+      - "traefik.http.services.dev-tools-api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dev-tools-api.tls=true"
+    depends_on:
+      - traefik
+  
+#  dev.tools.console:
+#    image: dev.tools.console
+#    build:
+#      context: .
+#      dockerfile: src/Dev.Tools.Console/Dockerfile
+#  
+#  dev.tools.web:
+#    image: dev.tools.web
+#    build:
+#      context: .
+#      dockerfile: src/Dev.Tools.Web/Dockerfile
+#    ports:
+#      - 8080:80
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.dev-tools-api.rule=Host(`web.traefik.me`)"
+#      - "traefik.http.routers.dev-tools-api.entrypoints=websecure"
+#      - "traefik.http.services.dev-tools-api.loadbalancer.server.port=8080"
+#      - "traefik.http.routers.dev-tools-api.tls=true"
+#    depends_on:
+#      - traefik
+
+  traefik:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./tls.yml:/etc/traefik/tls.yml
+      - certs:/etc/ssl/traefik
+    depends_on:
+      - reverse-proxy-https-helper
+  
+  reverse-proxy-https-helper:
+    image: alpine
+    command: sh -c "cd /etc/ssl/traefik
+      && wget traefik.me/cert.pem -O cert.pem
+      && wget traefik.me/privkey.pem -O privkey.pem"
+    volumes:
+      - certs:/etc/ssl/traefik
+
+volumes:
+  certs:

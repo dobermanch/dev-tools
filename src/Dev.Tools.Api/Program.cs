@@ -3,6 +3,8 @@ using Dev.Tools;
 using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.OpenApi.Any;
 using Scalar.AspNetCore;
 
@@ -11,8 +13,14 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddControllers(options => { options.UseNamespaceRouteToken(); })
-    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+    .AddControllers(options =>
+    {
+        options.UseNamespaceRouteToken();
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
@@ -60,28 +68,32 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
-builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressInferBindingSourcesForParameters = true; });
+builder.Services
+    .Configure<ApiBehaviorOptions>(options =>
+    {
+        options.SuppressInferBindingSourcesForParameters = true;
+    })
+    .AddOptions<ScalarOptions>()
+    .Configure<IServer>((options, server) =>
+    {
+        options
+            .WithEndpointPrefix("ui/{documentName}")
+            .WithTitle("Dev Tools API")
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+        options.Servers = server.Features
+            .Get<IServerAddressesFeature>()
+            ?.Addresses
+            .Select(it => new ScalarServer(it))
+            .ToList();
+    });
 
 builder.Services
     .AddDevTools();
 
 var app = builder.Build();
+app.MapOpenApi();
+app.MapScalarApiReference();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(options =>
-    {
-        options
-            .WithTitle("Dev Tools API")
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-    });
-}
-
-app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
+app.MapGet("/ui", [ExcludeFromDescription]() => Results.Redirect("ui/v1", true, true));
 app.MapControllers();
-
 app.Run();
