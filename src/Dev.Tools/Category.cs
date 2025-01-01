@@ -9,6 +9,7 @@ public partial record struct Category(string Value)
     public const string Misc = nameof(Misc);
     public const string Security = nameof(Security);
     public const string Text = nameof(Text);
+    public const string Network = nameof(Network);
 
     public static implicit operator string(Category category) => category.Value;
 

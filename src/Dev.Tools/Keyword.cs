@@ -16,6 +16,9 @@ public partial record struct Keyword(string Value)
     public const string Text = nameof(Text);
     public const string Url = nameof(Url);
     public const string Uuid = nameof(Uuid);
+    public const string Network = nameof(Network);
+    public const string Ip = nameof(Ip);
+    public const string Internet = nameof(Internet);
 
     public static implicit operator string(Keyword keyword) => keyword.Value;
     
