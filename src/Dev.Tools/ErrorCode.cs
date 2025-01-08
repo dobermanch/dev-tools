@@ -1,4 +1,4 @@
-namespace Dev.Tools.Core;
+namespace Dev.Tools;
 
 [GenerateValues]
 public partial record struct ErrorCode(string Value)

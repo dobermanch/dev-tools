@@ -29,9 +29,9 @@ internal sealed partial class ToolsProvider : IToolsProvider
     public ToolDefinition? GetTool(string name)
         => _toolsByName.GetValueOrDefault(name);
 
-    public IReadOnlyCollection<ToolDefinition> GetTools(Core.Category category)
+    public IReadOnlyCollection<ToolDefinition> GetTools(Category category)
         => _toolsByCategory.GetValueOrDefault(category, []);
 
-    public IReadOnlyCollection<ToolDefinition> GetTools(Core.Keyword keyword)
+    public IReadOnlyCollection<ToolDefinition> GetTools(Keyword keyword)
         => _toolsByKeyword.GetValueOrDefault(keyword, []);
 }
