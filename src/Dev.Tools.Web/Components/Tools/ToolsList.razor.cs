@@ -15,7 +15,7 @@ public partial class ToolsList : ComponentBase
 
     protected override void OnInitialized()
     {
-        ToolsCollection tools = ToolsProvider.GetTools();
+        var tools = ToolsProvider.GetTools();
             
         Tools = new GroupedList<string, ToolDefinition>(it => it.Name, tools);
         

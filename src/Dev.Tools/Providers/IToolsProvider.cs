@@ -2,5 +2,11 @@ namespace Dev.Tools.Providers;
 
 public interface IToolsProvider
 {
-    ToolsCollection GetTools();
+    IReadOnlyCollection<ToolDefinition> GetTools();
+
+    ToolDefinition? GetTool(string name);
+
+    IReadOnlyCollection<ToolDefinition> GetTools(Category category);
+
+    IReadOnlyCollection<ToolDefinition> GetTools(Keyword keyword);
 }

@@ -1,4 +1,4 @@
-﻿namespace Dev.Tools;
+﻿namespace Dev.Tools.Core;
 
 [GenerateValues]
 public partial record struct Category(string Value)
@@ -10,7 +10,7 @@ public partial record struct Category(string Value)
     public const string Security = nameof(Security);
     public const string Text = nameof(Text);
     public const string Network = nameof(Network);
-
+    
     public static implicit operator string(Category category) => category.Value;
 
     public static explicit operator Category(string category) => new(category);

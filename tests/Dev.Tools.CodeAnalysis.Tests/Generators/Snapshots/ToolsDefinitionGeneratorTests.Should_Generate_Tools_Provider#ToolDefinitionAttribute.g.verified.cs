@@ -19,3 +19,13 @@ internal sealed class ToolDefinitionAttribute : System.Attribute
     public string[] Keywords { get; set; } = [];
     public string[] ErrorCodes { get; set; } = [];
 }
+
+public readonly record struct ToolDefinition
+(
+    string Name,
+    string[] Aliases,
+    string[] Categories,
+    string[] Keywords,
+    string[] ErrorCodes,
+    Type ToolType
+);

@@ -2,10 +2,36 @@ namespace Dev.Tools.Providers;
 
 internal sealed partial class ToolsProvider : IToolsProvider
 {
-    private ToolsCollection? _tools;
-
-    public ToolsCollection GetTools()
+    private readonly Dictionary<string, ToolDefinition[]> _toolsByCategory;
+    private readonly Dictionary<string, ToolDefinition[]> _toolsByKeyword;
+    private readonly Dictionary<string, ToolDefinition> _toolsByName;
+    
+    public ToolsProvider()
     {
-        return _tools ??= new ToolsCollection(GetToolDefinitions());
+        var tools = GetTools();
+        _toolsByName = tools.ToDictionary(it => it.Name, it => it);
+
+        _toolsByCategory = tools
+            .SelectMany(tool => tool.Categories.Select(key => (key, tool)))
+            .GroupBy(it => it.key)
+            .ToDictionary(
+                it => it.Key,
+                pair => pair.Select(it => it.tool).ToArray());
+
+        _toolsByKeyword = tools
+            .SelectMany(tool => tool.Keywords.Select(key => (key, tool)))
+            .GroupBy(it => it.key)
+            .ToDictionary(
+                it => it.Key,
+                pair => pair.Select(it => it.tool).ToArray());
     }
+
+    public ToolDefinition? GetTool(string name)
+        => _toolsByName.GetValueOrDefault(name);
+
+    public IReadOnlyCollection<ToolDefinition> GetTools(Core.Category category)
+        => _toolsByCategory.GetValueOrDefault(category, []);
+
+    public IReadOnlyCollection<ToolDefinition> GetTools(Core.Keyword keyword)
+        => _toolsByKeyword.GetValueOrDefault(keyword, []);
 }

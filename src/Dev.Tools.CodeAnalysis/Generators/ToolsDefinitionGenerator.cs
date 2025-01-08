@@ -23,6 +23,16 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
                       public string[] Keywords { get; set; } = [];
                       public string[] ErrorCodes { get; set; } = [];
                   }
+                  
+                  public readonly record struct ToolDefinition
+                  (
+                      string Name,
+                      string[] Aliases,
+                      string[] Categories,
+                      string[] Keywords,
+                      string[] ErrorCodes,
+                      Type ToolType
+                  );
                   """
     };
     
@@ -122,22 +132,26 @@ public class ToolsDefinitionGenerator : IIncrementalGenerator
             {
                 ["Tools"] = infos.Select(it =>
                     $"""
-                             yield return new ToolDefinition(
-                                 Name: "{it.Name}",
-                                 Aliases: {Aggregate(it.Aliases)},
-                                 Categories: {Aggregate(it.Categories)},
-                                 Keywords: {Aggregate(it.Keywords)},
-                                 ErrorCodes: {Aggregate(it.ErrorCodes)},
-                                 ToolType: typeof({it.Namespace}.{it.TypeName})
-                             );
+                                 new ToolDefinition(
+                                     Name: "{it.Name}",
+                                     Aliases: {Aggregate(it.Aliases)},
+                                     Categories: {Aggregate(it.Categories)},
+                                     Keywords: {Aggregate(it.Keywords)},
+                                     ErrorCodes: {Aggregate(it.ErrorCodes)},
+                                     ToolType: typeof({it.Namespace}.{it.TypeName})
+                                 ),
                      """).Aggregate("", (current, it) => current + it + "\n")
             },
             Content = """
                       internal partial class {TypeName}
                       {
-                          private IEnumerable<ToolDefinition> GetToolDefinitions()
+                          private IReadOnlyCollection<ToolDefinition>? _tools;
+                            
+                          public IReadOnlyCollection<ToolDefinition> GetTools()
                           {
+                              return _tools ??= [
                       {Tools}
+                              ];
                           }
                       }
                       """

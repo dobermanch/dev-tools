@@ -1,4 +1,4 @@
-namespace Dev.Tools;
+namespace Dev.Tools.Core;
 
 [GenerateValues]
 public partial record struct Keyword(string Value)

@@ -12,16 +12,20 @@ namespace Dev.Tools.Providers;
 
 internal partial class ToolsProvider
 {
-    private IEnumerable<ToolDefinition> GetToolDefinitions()
+    private IReadOnlyCollection<ToolDefinition>? _tools;
+      
+    public IReadOnlyCollection<ToolDefinition> GetTools()
     {
-        yield return new ToolDefinition(
-            Name: "tool-test",
-            Aliases: ["tt"],
-            Categories: ["default"],
-            Keywords: ["test", "keywords"],
-            ErrorCodes: ["unknown"],
-            ToolType: typeof(Dev.Tools.TestTool)
-        );
+        return _tools ??= [
+            new ToolDefinition(
+                Name: "tool-test",
+                Aliases: ["tt"],
+                Categories: ["default"],
+                Keywords: ["test", "keywords"],
+                ErrorCodes: ["unknown"],
+                ToolType: typeof(Dev.Tools.TestTool)
+            ),
 
+        ];
     }
 }
