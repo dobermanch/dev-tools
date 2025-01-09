@@ -19,6 +19,7 @@ public partial record struct Keyword(string Value)
     public const string Network = nameof(Network);
     public const string Ip = nameof(Ip);
     public const string Internet = nameof(Internet);
+    public const string Token = nameof(Token);
 
     public static implicit operator string(Keyword keyword) => keyword.Value;
     
