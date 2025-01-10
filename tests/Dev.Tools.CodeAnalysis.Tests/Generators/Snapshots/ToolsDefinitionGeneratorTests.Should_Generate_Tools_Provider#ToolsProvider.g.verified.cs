@@ -7,6 +7,7 @@
 // the code is regenerated. 
 // </auto-generated> 
 //------------------------------------------------------------------------------
+#nullable enable
 
 namespace Dev.Tools.Providers;
 

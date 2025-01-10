@@ -137,6 +137,6 @@ public class ValuesListGenerator : IIncrementalGenerator
 
     private record TypeInfo : TypeDeclaration
     {
-        public List<string> Constants { get; set; }
+        public List<string> Constants { get; set; } = [];
     }
 }

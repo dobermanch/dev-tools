@@ -41,19 +41,16 @@ public static class MvcOptionsExtensions
         {
             foreach (var selector in selectors.Where(s => s.AttributeRouteModel != null))
             {
-                selector.AttributeRouteModel.Template = InsertTokenValue(selector.AttributeRouteModel.Template, tokenValue);
-                selector.AttributeRouteModel.Name = InsertTokenValue(selector.AttributeRouteModel.Name, tokenValue);
+                selector.AttributeRouteModel!.Template = InsertTokenValue(selector.AttributeRouteModel.Template, tokenValue);
+                selector.AttributeRouteModel!.Name = InsertTokenValue(selector.AttributeRouteModel.Name, tokenValue);
             }
         }
 
         private string? InsertTokenValue(string? template, string? tokenValue)
         {
-            if (template is null)
-            {
-                return template;
-            }
-
-            return Regex.Replace(template, _tokenRegex, tokenValue);
+            return template is null || tokenValue is null
+                ? template
+                : Regex.Replace(template, _tokenRegex, tokenValue);
         }
     }
 }

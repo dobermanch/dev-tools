@@ -79,7 +79,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
     }
 
     public record Args(
-        string Text,
+        string? Text,
         HashAlgorithm Algorithm
     ) : ToolArgs;
 

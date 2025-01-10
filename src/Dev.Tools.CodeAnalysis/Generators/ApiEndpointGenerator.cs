@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -156,10 +155,10 @@ public class ApiEndpointGenerator : IIncrementalGenerator
 
     private record TypeInfo
     {
-        public string ToolName { get; set; } = default!;
-        public string ToolTypeName { get; set; } = default!;
-        public string ToolType { get; set; } = default!;
-        public string ToolArgsType { get; set; } = default!;
-        public string ToolResultType { get; set; } = default!;
+        public string ToolName { get; set; } = null!;
+        public string ToolTypeName { get; set; } = null!;
+        public string ToolType { get; set; } = null!;
+        public string ToolArgsType { get; set; } = null!;
+        public string ToolResultType { get; set; } = null!;
     }
 }

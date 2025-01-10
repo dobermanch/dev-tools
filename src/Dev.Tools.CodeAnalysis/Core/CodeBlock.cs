@@ -8,17 +8,19 @@ namespace Dev.Tools.CodeAnalysis.Core;
 public record CodeBlock
 {
     private string? _shortName;
-    public string Namespace { get; set; } = default!;
+    public string Namespace { get; set; } = null!;
 
-    public string TypeName { get; set; } = default!;
+    public string TypeName { get; set; } = null!;
 
-    public string Content { get; set; } = default!;
+    public string Content { get; set; } = null!;
 
     public Type? GeneratorType { get; set; }
 
     public string OutputFileName => $"{TypeName}.g.cs";
 
     public string TypeFullName => $"{Namespace}.{TypeName}";
+
+    public IList<string> Directives { get; set; } = [];
 
     public IList<string> Usings { get; set; } = [];
 
@@ -38,24 +40,13 @@ public record CodeBlock
     public static implicit operator SyntaxTree(CodeBlock codeBlock)
         => CSharpSyntaxTree.ParseText(codeBlock.ToString());
 
-    public override string ToString()
-    {
-        var code =
-            """
-             {Header}
-             {Usings}
-             namespace {Namespace};
-
-             {Content}
-             """;
-
-        return BuildContent();
-    }
+    public override string ToString() => BuildContent();
 
     private string BuildContent()
     {
         var replacements = new Dictionary<string, string>
         {
+            [nameof(Directives)] = GetDirectives(),
             [nameof(Content)] = Content,
             [nameof(Header)] = GetHeader(),
             [nameof(Usings)] = GetUsings(),
@@ -66,6 +57,7 @@ public record CodeBlock
 
         var builder = new StringBuilder("""
                                         {Header}
+                                        {Directives}
                                         {Usings}
                                         namespace {Namespace};
                                         
@@ -91,6 +83,11 @@ public record CodeBlock
          // </auto-generated> 
          //------------------------------------------------------------------------------
          """;
+
+    private string GetDirectives()
+    {
+        return string.Join("\n", Directives.Concat(["#nullable enable"]));
+    }
 
     private string GetUsings()
         => Usings

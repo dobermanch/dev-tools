@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 
 namespace Dev.Tools.CodeAnalysis.Generators;
 
@@ -36,7 +35,7 @@ public class CommandGenerator : IIncrementalGenerator
                             // Result = types.Where(it => it.BaseType?.ToDisplayString() == typeof(ToolResult).FullName)
                             //             .Select(GetTypeDetails)
                             //             .FirstOrDefault(),
-                            LOcation = it.Locations.FirstOrDefault()
+                            Location = it.Locations.FirstOrDefault()
                         };
                     })
              );
@@ -118,7 +117,7 @@ internal sealed partial class {className} : AsyncCommand<{settingsClassName}>
         string[]? Alieases,
         TypeDetails? Args,
         TypeDetails? Result,
-        Location LOcation
+        Location? Location
     );
 
     private record struct TypeDetails
