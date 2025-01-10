@@ -1,15 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Dev.Tools.Core;
+﻿using Dev.Tools.Core;
 using Dev.Tools.Core.Localization;
+using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Commands;
 
-internal sealed partial class Base64DecoderCommand(Base64DecoderTool tool, IToolResponseHandler responseHandler) 
+internal sealed partial class Base64DecoderCommand(IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
     : AsyncCommand<Base64DecoderCommand.Settings>
 {
     public sealed class Settings : CommandSettings
@@ -23,6 +21,7 @@ internal sealed partial class Base64DecoderCommand(Base64DecoderTool tool, ITool
     {
         try
         {
+            var tool = toolProvider.GetTool<Base64DecoderTool>();
             Base64DecoderTool.Args args = new Base64DecoderTool.Args(
                 settings.Text
             );

@@ -1,13 +1,12 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Dev.Tools.Core.Localization;
+﻿using Dev.Tools.Core.Localization;
+using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Commands;
 
-internal sealed class Base64EncoderCommand(Base64EncoderTool tool) : AsyncCommand<Base64EncoderCommand.Settings>
+internal sealed class Base64EncoderCommand(IToolsProvider toolProvider) : AsyncCommand<Base64EncoderCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -26,6 +25,8 @@ internal sealed class Base64EncoderCommand(Base64EncoderTool tool) : AsyncComman
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        var tool = toolProvider.GetTool<Base64EncoderTool>();
+
         var args = new Base64EncoderTool.Args(
             settings.Text,
             settings.InsertLineBreaks,

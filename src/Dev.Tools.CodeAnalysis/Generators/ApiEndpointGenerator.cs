@@ -107,7 +107,7 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                 "System.Net.Mime"
             ],
             Content = """
-                      public class {TypeName}({ToolType} tool) : EndpointBase
+                      public class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider) : EndpointBase
                       {
                           [HttpPost("{ToolName}")]
                           [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
@@ -117,6 +117,7 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                           {
                               try 
                               {  
+                                  var tool = toolProvider.GetTool<{ToolType}>();  
                                   {ToolResultType} result = await tool.RunAsync(request, cancellationToken);
                                   if (result.HasErrors)
                                   {

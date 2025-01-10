@@ -1,15 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Dev.Tools.Core;
-using Dev.Tools.Core.Localization;
+﻿using Dev.Tools.Core.Localization;
+using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Commands;
 
-internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncCommand<UuidGeneratorCommand.Settings>
+internal sealed class UuidGeneratorCommand(IToolsProvider toolProvider) : AsyncCommand<UuidGeneratorCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -36,6 +33,8 @@ internal sealed class UuidGeneratorCommand(UuidGeneratorTool tool) : AsyncComman
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        var tool = toolProvider.GetTool<UuidGeneratorTool>();
+
         var args = new UuidGeneratorTool.Args(
             settings.Type,
             settings.Count,

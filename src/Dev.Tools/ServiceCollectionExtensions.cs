@@ -7,13 +7,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDevTools(this IServiceCollection services)
     {
-        var toolsProvider = new ToolsProvider();
-        services.AddSingleton<IToolsProvider>(toolsProvider);
-
-        foreach (var tool in toolsProvider.GetTools())
-        {
-            services.AddTransient(tool.ToolType);
-        }
+        services.AddSingleton<IToolsProvider, ToolsProvider>();
 
         return services;
     }

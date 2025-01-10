@@ -15,7 +15,7 @@ internal partial class ToolsProvider
 {
     private IReadOnlyCollection<ToolDefinition>? _tools;
       
-    public IReadOnlyCollection<ToolDefinition> GetTools()
+    public IReadOnlyCollection<ToolDefinition> GetToolDefinitions()
     {
         return _tools ??= [
             new ToolDefinition(
