@@ -3,13 +3,13 @@
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
-    Name = "public-ip",
+    Name = "ip-details",
     Aliases = ["ip"],
     Keywords = [Keyword.Network, Keyword.Internet, Keyword.Ip],
     Categories = [Category.Network],
     ErrorCodes = [ErrorCode.Unknown]
 )]
-public sealed class PublicIpTool : ToolBase<PublicIpTool.Args, PublicIpTool.Result>
+public sealed class IpDetailsTool : ToolBase<IpDetailsTool.Args, IpDetailsTool.Result>
 {
     protected override async Task<Result> ExecuteAsync(Args args, CancellationToken cancellationToken)
     {

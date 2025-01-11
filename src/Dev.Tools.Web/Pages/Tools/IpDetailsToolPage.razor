@@ -1,0 +1,22 @@
+@page "/tools/ip-details"
+
+<MudStack Row="true" AlignItems="AlignItems.Center">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="NavigateToPreviousPage"/>
+    <MudText Typo="Typo.h4" Class="my-4">IP Details</MudText>
+</MudStack>
+
+
+<MudCard Class="my-2">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">@_toolDefinition.Name</MudText>
+            <MudText Typo="Typo.body2">Tools provide IP details</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack Row="true" Spacing="5">
+            <MudText Typo="Typo.body1">Your IP:</MudText>
+            <MudText Typo="Typo.body1">@_result.IpV4</MudText>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
