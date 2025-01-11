@@ -23,20 +23,32 @@
             <MudTextField
                 T="string"
                 Value="@_encoderArgs.Text"
-                ValueChanged="OnStringToEncodeValueChangedAsync"
+                DebounceInterval="500" 
+                OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
                 Error="@_encoderResult.HasErrors"
                 ErrorText="@_encoderResult.ErrorCodes.FirstOrDefault("")"
                 Label="String to Encode"
                 Lines="5"
+                AutoGrow="true"
+                MaxLines="10"
                 Variant="Variant.Outlined"
-                Margin="Margin.Dense"/>
+                Margin="Margin.Dense"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                OnAdornmentClick="async () => await OnCopyToClipboardAsync(_encoderArgs.Text)"/>
             <MudTextField
                 T="string"
                 Value="@_encoderResult.Text"
                 Label="Base64 String"
                 ReadOnly="true"
                 Lines="5"
-                Variant="Variant.Outlined"/>
+                AutoGrow="true"
+                MaxLines="10"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                OnAdornmentClick="async () => await OnCopyToClipboardAsync(_encoderResult.Text)"/>
         </MudStack>
     </MudCardContent>
 </MudCard>
@@ -53,20 +65,32 @@
             <MudTextField
                 T="string"
                 Value="@_decoderArgs.Text"
-                ValueChanged="OnDecodeStringValueChangedAsync"
+                DebounceInterval="500"
+                OnDebounceIntervalElapsed="OnDecodeStringValueChangedAsync"
                 Error="@_decoderResult.HasErrors"
                 ErrorText="@_decoderResult.ErrorCodes.FirstOrDefault("")"
                 Label="Base64 String to Decode"
                 Lines="5"
+                AutoGrow="true"
+                MaxLines="10"
                 Variant="Variant.Outlined"
-                Margin="Margin.Dense"/>
+                Margin="Margin.Dense"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                OnAdornmentClick="async () => await OnCopyToClipboardAsync(_decoderArgs.Text)"/>
             <MudTextField
                 T="string"
                 Value="@_decoderResult.Data"
                 Label="Decoded String"
                 ReadOnly="true"
                 Lines="5"
-                Variant="Variant.Outlined"/>
+                AutoGrow="true"
+                MaxLines="10"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense"
+                Adornment="Adornment.End"
+                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                OnAdornmentClick="async () => await OnCopyToClipboardAsync(_decoderResult.Data)"/>
         </MudStack>
     </MudCardContent>
 </MudCard>

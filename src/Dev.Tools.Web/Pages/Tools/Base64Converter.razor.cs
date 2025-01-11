@@ -1,5 +1,6 @@
 using Dev.Tools.Providers;
 using Dev.Tools.Tools;
+using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Pages.Tools;
@@ -20,6 +21,9 @@ public partial class Base64Converter : ComponentBase
     
     [Inject]
     private NavigationManager Navigation { get; set; } = null!;
+    
+    [Inject]
+    private IJsServices JsServices { get; set; } = null!;
 
     protected override void OnInitialized()
     {
@@ -48,5 +52,13 @@ public partial class Base64Converter : ComponentBase
     {
         Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
         Navigation.NavigateTo("javascript:history.back()");
+    }
+
+    private async Task OnCopyToClipboardAsync(string? textToCopy)
+    {
+        if (!string.IsNullOrEmpty(textToCopy))
+        {
+            await JsServices.CopyToClipboardAsync(textToCopy);
+        }
     }
 }

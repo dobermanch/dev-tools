@@ -1,6 +1,7 @@
 using Dev.Tools;
 using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
+using Dev.Tools.Web.Services;
 using Dev.Tools.Web.Services.Layout;
 using Dev.Tools.Web.Services.Preferences;
 using Microsoft.AspNetCore.Components.Web;
@@ -15,6 +16,7 @@ builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.H
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<ILayoutService, LayoutService>();
 builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
+builder.Services.AddSingleton<IJsServices, JsServices>();
 builder.Services.AddCoreComponents(builder.Configuration);
 builder.Services.AddDevTools();
 
