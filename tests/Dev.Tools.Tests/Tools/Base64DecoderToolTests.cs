@@ -1,5 +1,4 @@
-﻿using Dev.Tools.Core;
-using Dev.Tools.Tools;
+﻿using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -14,7 +13,10 @@ public class Base64DecoderToolTests
     )]
     public async Task ShouldDecodeString_FromBase64(string text, string expectedResult)
     {
-        var args = new Base64DecoderTool.Args(text);
+        var args = new Base64DecoderTool.Args
+        {
+            Text = text
+        };
 
         var result = await new Base64DecoderTool().RunAsync(args, CancellationToken.None);
 
@@ -24,7 +26,10 @@ public class Base64DecoderToolTests
     [Fact]
     public async Task ShouldReturnEmptyErrorCode_WhenTextIsNotProvided()
     {
-        var args = new Base64DecoderTool.Args("");
+        var args = new Base64DecoderTool.Args
+        {
+            Text = ""
+        };
 
         var result = await new Base64DecoderTool().RunAsync(args, CancellationToken.None);
 

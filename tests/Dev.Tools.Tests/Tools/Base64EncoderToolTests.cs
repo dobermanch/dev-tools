@@ -1,5 +1,4 @@
-﻿using Dev.Tools.Core;
-using Dev.Tools.Tools;
+﻿using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -14,7 +13,10 @@ public class Base64EncoderToolTests
     )]
     public async Task ShouldEncodeStringToBase64_WhenStringSpecified(string text, string expectedResult)
     {
-        var args = new Base64EncoderTool.Args(text);
+        var args = new Base64EncoderTool.Args
+        {
+            Text = text
+        };
 
         var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
 
@@ -28,8 +30,11 @@ public class Base64EncoderToolTests
     )]
     public async Task ShouldSplitEncodeStringOnNewLines_WhenInsertLineBreaksIsSet(string text, string expectedResult)
     {
-        var args = new Base64EncoderTool.Args(text, InsertLineBreaks: true);
-
+        var args = new Base64EncoderTool.Args
+        {
+            Text = text, InsertLineBreaks = true
+        }; 
+        
         var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
 
         Assert.Equal(expectedResult, result.Text);
@@ -39,7 +44,10 @@ public class Base64EncoderToolTests
     [InlineData("Тест дата 123 !", "0KLQtdGB0YIg0LTQsNGC0LAgMTIzICE")]
     public async Task ShouldEncodeToUrlSafeString_WhenUrlSafeIsSet(string text, string expectedResult)
     {
-        var args = new Base64EncoderTool.Args(text, UrlSafe: true);
+        var args = new Base64EncoderTool.Args
+        {
+            Text = text, UrlSafe = true
+        };
 
         var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
 
@@ -49,7 +57,10 @@ public class Base64EncoderToolTests
     [Fact]
     public async Task ShouldReturnEmptyErrorCode_WhenTextIsNotProvided()
     {
-        var args = new Base64EncoderTool.Args("");
+        var args = new Base64EncoderTool.Args
+        {
+            Text = ""
+        };
 
         var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
 

@@ -27,11 +27,12 @@ internal sealed class Base64EncoderCommand(IToolsProvider toolProvider) : AsyncC
     {
         var tool = toolProvider.GetTool<Base64EncoderTool>();
 
-        var args = new Base64EncoderTool.Args(
-            settings.Text,
-            settings.InsertLineBreaks,
-            settings.UrlSafe
-        );
+        var args = new Base64EncoderTool.Args
+        {
+            Text = settings.Text,
+            InsertLineBreaks = settings.InsertLineBreaks,
+            UrlSafe = settings.UrlSafe
+        };
 
         Base64EncoderTool.Result result = await tool.RunAsync(args, CancellationToken.None);
 

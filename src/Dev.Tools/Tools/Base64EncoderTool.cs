@@ -36,7 +36,12 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
         return new(encoded);
     }
 
-    public record Args(string Text, bool InsertLineBreaks = false, bool UrlSafe = false) : ToolArgs;
+    public record Args : ToolArgs
+    {
+        public string? Text { get; set; }
+        public bool InsertLineBreaks { get; set; }
+        public bool UrlSafe { get; set; }
+    }
 
     public record Result(string Text) : ToolResult
     {

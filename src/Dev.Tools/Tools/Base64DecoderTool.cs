@@ -29,7 +29,10 @@ public sealed class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64D
         }
     }
 
-    public record Args(string Text) : ToolArgs;
+    public record Args : ToolArgs
+    {
+        public string? Text { get; set; }
+    }
 
     public record Result(string Data) : ToolResult
     {

@@ -22,9 +22,10 @@ internal sealed partial class Base64DecoderCommand(IToolsProvider toolProvider, 
         try
         {
             var tool = toolProvider.GetTool<Base64DecoderTool>();
-            Base64DecoderTool.Args args = new Base64DecoderTool.Args(
-                settings.Text
-            );
+            Base64DecoderTool.Args args = new Base64DecoderTool.Args
+            {
+                Text = settings.Text,
+            };
 
             PostUpdateArgs(ref args, context, settings);
 

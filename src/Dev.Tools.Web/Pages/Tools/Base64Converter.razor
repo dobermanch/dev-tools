@@ -1,4 +1,72 @@
 @page "/tools/base64-decoder"
 @page "/tools/base64-encoder"
 
-<h3>Base64Converter</h3>
+<MudStack Row="true" AlignItems="AlignItems.Center">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="NavigateToPreviousPage" />
+    <MudText Typo="Typo.h4" Class="my-4" >Base64 Text Encoder/Decoder</MudText>
+</MudStack>
+
+
+<MudCard Class="my-2">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">@_encoderToolDefinition.Name</MudText>
+            <MudText Typo="Typo.body2">Tools encodes the plain text to base64 string</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack AlignItems="AlignItems.Start">
+            <MudSwitch T="bool" @bind-Value="@_encoderArgs.UrlSafe" Label="Use Safe URL" Color="Color.Primary"/>
+            <MudSwitch T="bool" @bind-Value="@_encoderArgs.InsertLineBreaks" Label="Insert Line Breaks" Color="Color.Primary"/>
+        </MudStack>
+        <MudStack Spacing="4">
+            <MudTextField
+                T="string"
+                Value="@_encoderArgs.Text"
+                ValueChanged="OnStringToEncodeValueChangedAsync"
+                Error="@_encoderResult.HasErrors"
+                ErrorText="@_encoderResult.ErrorCodes.FirstOrDefault("")"
+                Label="String to Encode"
+                Lines="5"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense"/>
+            <MudTextField
+                T="string"
+                Value="@_encoderResult.Text"
+                Label="Base64 String"
+                ReadOnly="true"
+                Lines="5"
+                Variant="Variant.Outlined"/>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
+
+<MudCard Class="my-2">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">@_decoderToolDefinition.Name</MudText>
+            <MudText Typo="Typo.body2">Tools decodes the base64 string to plain text</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack Spacing="4">
+            <MudTextField
+                T="string"
+                Value="@_decoderArgs.Text"
+                ValueChanged="OnDecodeStringValueChangedAsync"
+                Error="@_decoderResult.HasErrors"
+                ErrorText="@_decoderResult.ErrorCodes.FirstOrDefault("")"
+                Label="Base64 String to Decode"
+                Lines="5"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense"/>
+            <MudTextField
+                T="string"
+                Value="@_decoderResult.Data"
+                Label="Decoded String"
+                ReadOnly="true"
+                Lines="5"
+                Variant="Variant.Outlined"/>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
