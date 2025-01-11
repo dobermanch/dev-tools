@@ -7,7 +7,7 @@ namespace Dev.Tools.Tools;
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty]
+    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.FailedToDecrypt, ErrorCode.InputNotValid]
 )]
 public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
@@ -18,20 +18,32 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
             return Failed(ErrorCode.TextEmpty);
         }
 
-        var bytes = Encoding.UTF8.GetBytes(args.Text);
-
-        byte[] data = args.Algorithm switch
+        byte[] hash;
+        try
         {
-            HashAlgorithm.Md5 => ComputeMd5(bytes),
-            HashAlgorithm.Sha1 => ComputeSha1(bytes),
-            HashAlgorithm.Sha256 => ComputeSha256(bytes),
-            HashAlgorithm.Sha384 => ComputeSha384(bytes),
-            HashAlgorithm.Sha512 => ComputeSha512(bytes),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            var bytes = Encoding.UTF8.GetBytes(args.Text);
+            hash = args.Algorithm switch
+            {
+                HashAlgorithm.Md5 => ComputeMd5(bytes),
+                HashAlgorithm.Sha1 => ComputeSha1(bytes),
+                HashAlgorithm.Sha256 => ComputeSha256(bytes),
+                HashAlgorithm.Sha384 => ComputeSha384(bytes),
+                HashAlgorithm.Sha512 => ComputeSha512(bytes),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
+        }
+        catch (CryptographicException _)
+        {
+            return Failed(ErrorCode.FailedToDecrypt);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return Failed(ErrorCode.InputNotValid);    
+        }   
+        
         var result = new StringBuilder();
-        foreach (var ch in data)
+        foreach (var ch in hash)
         {
             result.Append(ch.ToString("x2"));
         }
@@ -78,10 +90,11 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
         Sha512
     }
 
-    public record Args(
-        string? Text,
-        HashAlgorithm Algorithm
-    ) : ToolArgs;
+    public record Args : ToolArgs
+    {
+        public string? Text { get; set; }
+        public HashAlgorithm Algorithm { get; set; }
+    }
 
     public record Result(string Data) : ToolResult
     {

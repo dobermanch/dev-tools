@@ -19,8 +19,12 @@ public class HashTextToolTests
     [InlineData("", HashTextTool.HashAlgorithm.Sha512)]
     public async Task WhenTextIsEmpty_ShouldReturnFailure(string? text, HashTextTool.HashAlgorithm algorithm)
     {
-        var args = new HashTextTool.Args(text, algorithm);
-
+        var args = new HashTextTool.Args
+        {
+            Text = text,
+            Algorithm = algorithm
+        };
+        
         var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
 
         result.HasErrors.Should().BeTrue();
@@ -35,7 +39,11 @@ public class HashTextToolTests
     [InlineData("test-text", HashTextTool.HashAlgorithm.Sha512, "8c077cc8620923d614e4e5631578b7ad2b3faa28db3873eecdca2151fa3357087a9d958978bcb75be8426c7db3322c28668570edb8890f79b323eded5a8f917b")]
     public async Task WhenTextProvided_ShouldGenerateHash(string text, HashTextTool.HashAlgorithm algorithm, string expectedHash)
     {
-        var args = new HashTextTool.Args(text, algorithm);
+        var args = new HashTextTool.Args
+        {
+            Text = text,
+            Algorithm = algorithm
+        };
 
         var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
 

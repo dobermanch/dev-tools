@@ -19,7 +19,7 @@ public partial class IpDetailsToolPage : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         _tool = Provider.GetTool<IpDetailsTool>();
-        _toolDefinition = Provider.GetToolDefinition<Base64DecoderTool>();
+        _toolDefinition = Provider.GetToolDefinition<IpDetailsTool>();
         
         _result = await _tool.RunAsync(_args, CancellationToken.None);
 
