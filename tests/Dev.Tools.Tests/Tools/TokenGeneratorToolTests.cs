@@ -15,12 +15,12 @@ public class TokenGeneratorToolTests
             ? new TokenGeneratorTool.Args()
             : new TokenGeneratorTool.Args
             {
-                Count = expectedCount.Value
+                TokenCount = expectedCount.Value
             };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedCount ?? args.Count, result.Tokens.Length);
+        Assert.Equal(expectedCount ?? args.TokenCount, result.Tokens.Length);
     }
     
     [Theory]
@@ -33,12 +33,12 @@ public class TokenGeneratorToolTests
             ? new TokenGeneratorTool.Args()
             : new TokenGeneratorTool.Args
             {
-                Length = expectedLength.Value
+                TokenLength = expectedLength.Value
             };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedLength ?? args.Length, result.Tokens[0].Length);
+        Assert.Equal(expectedLength ?? args.TokenLength, result.Tokens[0].Length);
     }
     
     [Fact]
@@ -61,8 +61,11 @@ public class TokenGeneratorToolTests
     {
         var args = new TokenGeneratorTool.Args
         { 
+            Numbers = false,
+            Lowercase = false,
             Uppercase = true,
-            Length = 10
+            Symbols = false,
+            TokenLength = 10
         };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
@@ -78,8 +81,11 @@ public class TokenGeneratorToolTests
     {
         var args = new TokenGeneratorTool.Args
         { 
+            Numbers = false,
             Lowercase = true,
-            Length = 10
+            Uppercase = false,
+            Symbols = false,
+            TokenLength = 10
         };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
@@ -96,7 +102,10 @@ public class TokenGeneratorToolTests
         var args = new TokenGeneratorTool.Args
         { 
             Numbers = true,
-            Length = 10
+            Lowercase = false,
+            Uppercase = false,
+            Symbols = false,
+            TokenLength = 10
         };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
@@ -112,8 +121,11 @@ public class TokenGeneratorToolTests
     {
         var args = new TokenGeneratorTool.Args
         { 
+            Numbers = false,
+            Lowercase = false,
+            Uppercase = false,
             Symbols = true,
-            Length = 10
+            TokenLength = 10
         };
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
@@ -130,7 +142,7 @@ public class TokenGeneratorToolTests
         char[] symbols = ['B', 'C'];
         var args = new TokenGeneratorTool.Args
         {
-            Length = 30,
+            TokenLength = 30,
             Alphabet = new string(symbols)
         };
 

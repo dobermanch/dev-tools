@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
-public partial class Base64Converter : ComponentBase
+public partial class Base64ConverterPage : ComponentBase
 {
     private ToolDefinition _decoderToolDefinition;
     private Base64DecoderTool _decoderTool = null!;

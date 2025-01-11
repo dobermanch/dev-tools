@@ -51,7 +51,7 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
     public record Args : ToolArgs
     {
         public int PhraseCount { get; set; } = 1;
-        public int WordCount { get; set; } = 1;
+        public int WordCount { get; set; } = 5;
         public string? Salt { get; set; }
         public char? Separator { get; set; } = '-';
         public bool Capitalize { get; set; }

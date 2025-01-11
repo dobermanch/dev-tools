@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
-public partial class PassphraseGeneratorToolPage : ComponentBase
+public partial class TokenGeneratorToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition;
-    private PassphraseGeneratorTool _tool = null!;
-    private readonly PassphraseGeneratorTool.Args _args = new();
-    private PassphraseGeneratorTool.Result? _result;
+    private TokenGeneratorTool _tool = null!;
+    private readonly TokenGeneratorTool.Args _args = new();
+    private TokenGeneratorTool.Result? _result;
 
     [Inject] private IToolsProvider Provider { get; set; } = null!;
     
@@ -22,8 +22,8 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<PassphraseGeneratorTool>();
-        _toolDefinition = Provider.GetToolDefinition<PassphraseGeneratorTool>();
+        _tool = Provider.GetTool<TokenGeneratorTool>();
+        _toolDefinition = Provider.GetToolDefinition<TokenGeneratorTool>();
         await OnValueChangedAsync();
 
         await base.OnInitializedAsync();
@@ -34,9 +34,9 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
         _result = await _tool.RunAsync(_args, CancellationToken.None);
     }
 
-    private string GetPassphrase()
+    private string GetTokens()
     {
-        return _result != null ? string.Join(Environment.NewLine, _result.Phrases) : string.Empty;
+        return _result != null ? string.Join(Environment.NewLine, _result.Tokens) : string.Empty;
     }
 
     private void NavigateToPreviousPage()
@@ -53,21 +53,41 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
         }
     }
 
-    private Task OnWordCountValueChangedAsync(int count)
+    private Task OnTokenCountValueChangedAsync(int count)
     {
-        _args.WordCount = count;
+        _args.TokenCount = count;
         return OnValueChangedAsync();
     }
     
-    private Task OnPhraseCountValueChangedAsync(int count)
+    private Task OnTokenLengthValueChangedAsync(int count)
     {
-        _args.PhraseCount = count;
+        _args.TokenLength = count;
         return OnValueChangedAsync();
     }
     
-    private Task OnCapitalValueChangedAsync(bool value)
+    private Task OnLowercaseValueChangedAsync(bool value)
     {
-        _args.Capitalize = value;
+        _args.Lowercase = value;
+        return OnValueChangedAsync();
+    }
+    
+    private Task OnUppercaseValueChangedAsync(bool value)
+    {
+        _args.Uppercase = value;
+        return OnValueChangedAsync();
+    }
+    
+    
+    private Task OnNumbersValueChangedAsync(bool value)
+    {
+        _args.Numbers = value;
+        return OnValueChangedAsync();
+    }
+    
+    
+    private Task OnSymbolsValueChangedAsync(bool value)
+    {
+        _args.Symbols = value;
         return OnValueChangedAsync();
     }
 }
