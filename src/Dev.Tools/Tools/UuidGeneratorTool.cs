@@ -3,8 +3,8 @@
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
-    Name = "uuid",
-    Aliases = [],
+    Name = "uuid-generator",
+    Aliases = ["uuid"],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto],
     ErrorCodes = [ErrorCode.Unknown, ErrorCode.NamespaceEmpty]
@@ -66,23 +66,25 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
 
     private static Guid NewUuidV3(Guid namespaceUuid, string name)
     {
-        using var md5 = MD5.Create();
-        return NewHashBasdUuid(md5, namespaceUuid, name);
+#if WEBASSEMBLY
+        return NewHashBasedUuid(Dev.Tools.Core.Cryptography.MD5.ComputeHash, namespaceUuid, name);
+#else
+        return NewHashBasedUuid(MD5.HashData, namespaceUuid, name);
+#endif
     }
 
     private static Guid NewUuidV5(Guid namespaceUuid, string name)
     {
-        using var sha1 = SHA1.Create();
-        return NewHashBasdUuid(sha1, namespaceUuid, name);
+        return NewHashBasedUuid(SHA1.HashData, namespaceUuid, name);
     }
 
-    private static Guid NewHashBasdUuid(HashAlgorithm algorithm, Guid namespaceUuid, string name)
+    private static Guid NewHashBasedUuid(Func<byte[], byte[]> computeHash, Guid namespaceUuid, string name)
     {
         byte[] namespaceBytes = namespaceUuid.ToByteArray();
         byte[] nameBytes = Encoding.UTF8.GetBytes(name);
         byte[] bytes = [.. namespaceBytes, .. nameBytes];
 
-        byte[] hash = algorithm.ComputeHash(bytes);
+        byte[] hash = computeHash(bytes);
         hash[6] = (byte)((hash[6] & 0x0F) | 0x50); // Set version to 5 (0b0101)
         hash[8] = (byte)((hash[8] & 0x3F) | 0x80); // Set variant to RFC 4122
 
@@ -128,14 +130,15 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
     }
 
     // TODO: Taking into account that each UUID type has it own set of parameters,
-    // it make sence to make separate tool for each type
-    public record Args(
-        UuidType Type,
-        int Count = 1,
-        Guid? Namespace = null,
-        string? Name = null,
-        DateTimeOffset? Time = null
-    ) : ToolArgs;
+    // it make sense to make separate tool for each type
+    public record Args : ToolArgs
+    {
+        public UuidType Type { get; set; }
+        public int Count { get; set; } = 1;
+        public Guid? Namespace { get; set; }
+        public string? Name { get; set; }
+        public DateTime? Time { get; set; }
+    }
 
     public record Result(IReadOnlyCollection<Guid> Data) : ToolResult
     {

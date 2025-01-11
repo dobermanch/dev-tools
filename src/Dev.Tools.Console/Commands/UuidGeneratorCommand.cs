@@ -28,20 +28,21 @@ internal sealed class UuidGeneratorCommand(IToolsProvider toolProvider) : AsyncC
 
         [LocalizedDescription("Timestamp (ISO 8601) for V7 UUID version")]
         [CommandOption("-t|--time <time>")]
-        public DateTimeOffset? Time { get; init; }
+        public DateTime? Time { get; init; }
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         var tool = toolProvider.GetTool<UuidGeneratorTool>();
 
-        var args = new UuidGeneratorTool.Args(
-            settings.Type,
-            settings.Count,
-            settings.Namespace,
-            settings.Name,
-            settings.Time
-        );
+        var args = new UuidGeneratorTool.Args
+        {
+            Type = settings.Type,
+            Count = settings.Count,
+            Namespace = settings.Namespace,
+            Name = settings.Name,
+            Time = settings.Time
+        };
 
         UuidGeneratorTool.Result result = await tool.RunAsync(args, CancellationToken.None);
 

@@ -53,32 +53,31 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
 
     private byte[] ComputeMd5(byte[] data)
     {
-        using var hash = MD5.Create();
-        return hash.ComputeHash(data);
+#if WEBASSEMBLY
+        return Dev.Tools.Core.Cryptography.MD5.ComputeHash(data);
+#else
+        return MD5.HashData(data);
+#endif
     }
 
     private byte[] ComputeSha1(byte[] data)
     {
-        using var hash = SHA1.Create();
-        return hash.ComputeHash(data);
+        return SHA1.HashData(data);
     }
 
     private byte[] ComputeSha256(byte[] data)
     {
-        using var hash = SHA256 .Create();
-        return hash.ComputeHash(data);
+        return SHA256.HashData(data);
     }
 
     private byte[] ComputeSha384(byte[] data)
     {
-        using var hash = SHA384.Create();
-        return hash.ComputeHash(data);
+        return SHA384.HashData(data);
     }
 
     private byte[] ComputeSha512(byte[] data)
     {
-        using var hash = SHA512.Create();
-        return hash.ComputeHash(data);
+        return SHA512.HashData(data);
     }
 
     public enum HashAlgorithm
