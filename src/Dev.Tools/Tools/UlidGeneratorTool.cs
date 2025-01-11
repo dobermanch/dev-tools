@@ -1,8 +1,8 @@
 ﻿namespace Dev.Tools.Tools;
 
 [ToolDefinition(
-    Name = "ulid",
-    Aliases = [],
+    Name = "ulid-generator",
+    Aliases = ["ulid"],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto],
     ErrorCodes = []
@@ -36,10 +36,11 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         Max
     }
 
-    public record Args(
-        UlidType Type,
-        int Count = 1
-    ) : ToolArgs;
+    public record Args : ToolArgs
+    {
+        public UlidType Type { get; set; }
+        public int Count { get; set; } = 1;
+    }
 
     public record Result(IReadOnlyCollection<Ulid> Data) : ToolResult
     {
