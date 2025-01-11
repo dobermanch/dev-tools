@@ -1,5 +1,4 @@
-﻿using Dev.Tools.Core;
-using Dev.Tools.Tools;
+﻿using Dev.Tools.Tools;
 using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;

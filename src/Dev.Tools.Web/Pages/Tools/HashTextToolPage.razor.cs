@@ -26,7 +26,7 @@ public partial class HashTextToolPage : ComponentBase
         _tool = Provider.GetTool<HashTextTool>();
         _toolDefinition = Provider.GetToolDefinition<HashTextTool>();
         _results = Enum.GetValues<HashTextTool.HashAlgorithm>()
-            .ToDictionary(it => it, it => (HashTextTool.Result)null);
+            .ToDictionary(it => it, it => (HashTextTool.Result?)null);
 
         await base.OnInitializedAsync();
     }
