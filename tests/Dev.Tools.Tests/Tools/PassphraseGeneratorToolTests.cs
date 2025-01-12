@@ -33,12 +33,12 @@ public class PassphraseGeneratorToolTests
             : new PassphraseGeneratorTool.Args
             {
                 WordCount = expectedLength.Value,
-                Separator = '-'
+                Separator = ' '
             };
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedLength ?? args.WordCount, result.Phrases[0].Split(args.Separator ?? '-').Length);
+        Assert.Equal(expectedLength ?? args.WordCount, result.Phrases[0].Split(args.Separator ?? ' ').Length);
     }
     
     [Fact]
