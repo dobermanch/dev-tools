@@ -33,7 +33,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
             };
 
         }
-        catch (CryptographicException _)
+        catch (CryptographicException)
         {
             return Failed(ErrorCode.FailedToDecrypt);
         }

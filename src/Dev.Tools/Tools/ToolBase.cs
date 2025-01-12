@@ -15,7 +15,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
         {
             return await ExecuteAsync(args, cancellationToken);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             return Failed(ErrorCode.Unknown);
         }

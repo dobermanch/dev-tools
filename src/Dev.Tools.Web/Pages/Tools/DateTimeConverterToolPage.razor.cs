@@ -7,7 +7,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class DateTimeConverterToolPage : ComponentBase
 {
-    private System.Timers.Timer _timer;
+    private System.Timers.Timer? _timer;
     private ToolDefinition _toolDefinition;
     private DateTimeConverterTool _tool = null!;
     private readonly DateTimeConverterTool.Args _args = new();
@@ -45,7 +45,7 @@ public partial class DateTimeConverterToolPage : ComponentBase
     private async Task OnValueChangedAsync(string value)
     {
         _args.Date = value;
-        _timer.Enabled = string.IsNullOrEmpty(value);
+        _timer!.Enabled = string.IsNullOrEmpty(value);
         
         await ConvertAsync(value);
     }
@@ -100,7 +100,7 @@ public partial class DateTimeConverterToolPage : ComponentBase
         return ConvertAsync(_args.Date);
     }
     
-    private async void UpdateTime(object source, System.Timers.ElapsedEventArgs e)
+    private async void UpdateTime(object? source, System.Timers.ElapsedEventArgs e)
     {
         await ConvertAsync(DateTime.Now.ToString("O"));
         await InvokeAsync(StateHasChanged);
