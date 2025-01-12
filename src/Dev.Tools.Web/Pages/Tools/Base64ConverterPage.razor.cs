@@ -1,4 +1,3 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -17,21 +16,15 @@ public partial class Base64ConverterPage : ComponentBase
     private readonly Base64EncoderTool.Args _encoderArgs = new();
     private Base64EncoderTool.Result _encoderResult = new();
 
-    [Inject] private IToolsProvider Provider { get; set; } = null!;
-    
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
-    
-    [Inject]
-    private IJsServices JsServices { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
 
     protected override void OnInitialized()
     {
-        _decoderTool = Provider.GetTool<Base64DecoderTool>();
-        _decoderToolDefinition = Provider.GetToolDefinition<Base64DecoderTool>();
+        _decoderTool = Context.ToolsProvider.GetTool<Base64DecoderTool>();
+        _decoderToolDefinition = Context.ToolsProvider.GetToolDefinition<Base64DecoderTool>();
 
-        _encoderTool = Provider.GetTool<Base64EncoderTool>();
-        _encoderToolDefinition = Provider.GetToolDefinition<Base64EncoderTool>();
+        _encoderTool = Context.ToolsProvider.GetTool<Base64EncoderTool>();
+        _encoderToolDefinition = Context.ToolsProvider.GetToolDefinition<Base64EncoderTool>();
 
         base.OnInitialized();
     }
@@ -50,14 +43,14 @@ public partial class Base64ConverterPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
         {
-            await JsServices.CopyToClipboardAsync(textToCopy);
+            await Context.JsService.CopyToClipboardAsync(textToCopy);
         }
     }
 }

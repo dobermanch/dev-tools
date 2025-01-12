@@ -1,4 +1,3 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -12,18 +11,11 @@ public partial class TokenGeneratorToolPage : ComponentBase
     private readonly TokenGeneratorTool.Args _args = new();
     private TokenGeneratorTool.Result? _result;
 
-    [Inject] private IToolsProvider Provider { get; set; } = null!;
-    
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
-    
-    [Inject]
-    private IJsServices JsServices { get; set; } = null!;
-
+    [Inject] private WebContext Context { get; set; } = null!;
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<TokenGeneratorTool>();
-        _toolDefinition = Provider.GetToolDefinition<TokenGeneratorTool>();
+        _tool = Context.ToolsProvider.GetTool<TokenGeneratorTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<TokenGeneratorTool>();
         await OnValueChangedAsync();
 
         await base.OnInitializedAsync();
@@ -41,14 +33,14 @@ public partial class TokenGeneratorToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
         {
-            await JsServices.CopyToClipboardAsync(textToCopy);
+            await Context.JsService.CopyToClipboardAsync(textToCopy);
         }
     }
 

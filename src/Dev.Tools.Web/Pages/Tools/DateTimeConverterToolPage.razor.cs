@@ -1,4 +1,3 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -13,19 +12,12 @@ public partial class DateTimeConverterToolPage : ComponentBase
     private readonly DateTimeConverterTool.Args _args = new();
     private Dictionary<DateTimeConverterTool.DateFormatType, DateTimeConverterTool.Result?> _results = new();
 
-    [Inject] 
-    private IToolsProvider Provider { get; set; } = null!;
-    
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
-    
-    [Inject]
-    private IJsServices JsServices { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
     
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<DateTimeConverterTool>();
-        _toolDefinition = Provider.GetToolDefinition<DateTimeConverterTool>();
+        _tool = Context.ToolsProvider.GetTool<DateTimeConverterTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<DateTimeConverterTool>();
         _results = DateFormats()
             .ToDictionary(it => it, _ => (DateTimeConverterTool.Result?)null);
 
@@ -73,14 +65,14 @@ public partial class DateTimeConverterToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
         {
-            await JsServices.CopyToClipboardAsync(textToCopy);
+            await Context.JsService.CopyToClipboardAsync(textToCopy);
         }
     }
 

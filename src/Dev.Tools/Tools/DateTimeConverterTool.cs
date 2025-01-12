@@ -7,7 +7,7 @@ namespace Dev.Tools.Tools;
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty]
+    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.WrongFormat]
 )]
 public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args, DateTimeConverterTool.Result>
 {

@@ -1,4 +1,3 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -12,18 +11,12 @@ public partial class UuidGeneratorToolPage : ComponentBase
     private readonly UuidGeneratorTool.Args _args = new();
     private UuidGeneratorTool.Result? _result;
 
-    [Inject] private IToolsProvider Provider { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
     
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
-    
-    [Inject]
-    private IJsServices JsServices { get; set; } = null!;
-
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<UuidGeneratorTool>();
-        _toolDefinition = Provider.GetToolDefinition<UuidGeneratorTool>();
+        _tool = Context.ToolsProvider.GetTool<UuidGeneratorTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<UuidGeneratorTool>();
         await OnValueChangedAsync();
 
         await base.OnInitializedAsync();
@@ -41,14 +34,14 @@ public partial class UuidGeneratorToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
         {
-            await JsServices.CopyToClipboardAsync(textToCopy);
+            await Context.JsService.CopyToClipboardAsync(textToCopy);
         }
     }
 

@@ -1,4 +1,3 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -12,19 +11,12 @@ public partial class HashTextToolPage : ComponentBase
     private readonly HashTextTool.Args _args = new();
     private Dictionary<HashTextTool.HashAlgorithm, HashTextTool.Result?> _results = new();
 
-    [Inject] 
-    private IToolsProvider Provider { get; set; } = null!;
-    
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
-    
-    [Inject]
-    private IJsServices JsServices { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
     
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<HashTextTool>();
-        _toolDefinition = Provider.GetToolDefinition<HashTextTool>();
+        _tool = Context.ToolsProvider.GetTool<HashTextTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<HashTextTool>();
         _results = Enum.GetValues<HashTextTool.HashAlgorithm>()
             .ToDictionary(it => it, it => (HashTextTool.Result?)null);
 
@@ -55,14 +47,14 @@ public partial class HashTextToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
         {
-            await JsServices.CopyToClipboardAsync(textToCopy);
+            await Context.JsService.CopyToClipboardAsync(textToCopy);
         }
     }
 

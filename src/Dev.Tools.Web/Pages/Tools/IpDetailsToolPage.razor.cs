@@ -1,5 +1,5 @@
-using Dev.Tools.Providers;
 using Dev.Tools.Tools;
+using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Pages.Tools;
@@ -11,15 +11,12 @@ public partial class IpDetailsToolPage : ComponentBase
     private readonly IpDetailsTool.Args _args = new();
     private IpDetailsTool.Result _result = new();
 
-    [Inject] private IToolsProvider Provider { get; set; } = null!;
-    
-    [Inject]
-    private NavigationManager Navigation { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
     
     protected override async Task OnInitializedAsync()
     {
-        _tool = Provider.GetTool<IpDetailsTool>();
-        _toolDefinition = Provider.GetToolDefinition<IpDetailsTool>();
+        _tool = Context.ToolsProvider.GetTool<IpDetailsTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<IpDetailsTool>();
         
         _result = await _tool.RunAsync(_args, CancellationToken.None);
 
@@ -28,6 +25,6 @@ public partial class IpDetailsToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo("/");
+        Context.Navigation.NavigateTo("/");
     }
 }
