@@ -1,7 +1,5 @@
-﻿using Dev.Tools.Tools;
-using Dev.Tools.Web.Services.Layout;
+﻿using Dev.Tools.Web.Services.Layout;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace Dev.Tools.Web.Layout;
@@ -27,7 +25,6 @@ public partial class MainLayout
             ThemeMode.Light => Icons.Material.Outlined.LightMode,
             _ => Icons.Material.Outlined.AutoMode
         };
-
 
     protected override void OnInitialized()
     {
@@ -55,10 +52,4 @@ public partial class MainLayout
 
     private void HandlerUpdateRequest(LayoutChangedNotification _) 
         => StateHasChanged();
-
-    private Task OnSearchKeyUpAsync(KeyboardEventArgs arg)
-    {
-        return Task.CompletedTask;
-        ;
-    }
 }

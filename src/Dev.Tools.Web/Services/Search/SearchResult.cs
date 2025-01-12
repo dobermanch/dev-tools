@@ -19,5 +19,5 @@ public sealed record SearchResult : IEnumerable<SearchResult.Item>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     
     
-    public record Item(string Title, Uri Link, int Rank, IDictionary<string, string> Details);
+    public record Item(string Title, string Link, int Rank, Dictionary<string, string>? Details = null);
 }

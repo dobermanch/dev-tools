@@ -1,0 +1,41 @@
+@using Dev.Tools.Web.Services.Search
+
+<MudAutocomplete
+    T="SearchResult.Item"
+    Placeholder="Type to search"
+    ValueChanged="OnSearchItemSelectedAsync"
+    SearchFunc="@SearchAsync"
+    ResetValueOnEmptyText="true"
+    CoerceText="true"
+    CoerceValue="true"
+    Clearable="true"
+    Margin="Margin.Dense"
+    Variant="Variant.Outlined"
+    Adornment="Adornment.End"
+    AdornmentIcon="@Icons.Material.Filled.Search"
+    DebounceInterval="500"
+    ToStringFunc="@(e=> e?.Title ?? "")">
+    <ItemTemplate Context="e">
+        <MudText>
+            <MudIcon Icon="@Icons.Material.Filled.Construction" Class="mb-n1 mr-3"/>@e.Title
+        </MudText>
+        @if (e.Details != null && e.Details.Any())
+        {
+            <MudText Typo="Typo.subtitle1">
+                @e.Details.First().Value
+            </MudText>
+        }
+    </ItemTemplate>
+    <ItemSelectedTemplate Context="e">
+        <MudText>
+            <MudIcon Icon="@Icons.Material.Filled.Construction" Class="mb-n1 mr-3"/>@e.Title
+        </MudText>
+        @if (e.Details != null && e.Details.Any())
+        {
+            <MudText Typo="Typo.subtitle1">
+                @e.Details.First().Value
+            </MudText>
+        }
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+    
