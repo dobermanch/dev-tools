@@ -55,10 +55,9 @@ public partial class HashTextToolPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
-        Navigation.NavigateTo("javascript:history.back()");
+        Navigation.NavigateTo("/");
     }
-    
+
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))

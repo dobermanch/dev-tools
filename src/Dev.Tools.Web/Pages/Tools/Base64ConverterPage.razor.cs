@@ -50,8 +50,7 @@ public partial class Base64ConverterPage : ComponentBase
 
     private void NavigateToPreviousPage()
     {
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
-        Navigation.NavigateTo("javascript:history.back()");
+        Navigation.NavigateTo("/");
     }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
