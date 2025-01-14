@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Web.Services.Layout;
+﻿using Dev.Tools.Web.Services;
+using Dev.Tools.Web.Services.Layout;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -11,6 +12,8 @@ public partial class MainLayout
     [Inject] private IMessenger Messenger { get; set; } = null!;
     
     [Inject] private ILayoutService LayoutService { get; set; } = null!;
+    
+    [Inject] private WebContext Context { get; set; } = null!;
 
     private bool ObserveSystemThemeChange => true;
 
@@ -26,11 +29,11 @@ public partial class MainLayout
             _ => Icons.Material.Outlined.AutoMode
         };
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await Context.InitializeAsync(CancellationToken.None);
         Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
-
-        base.OnInitialized();
+        await base.OnInitializedAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

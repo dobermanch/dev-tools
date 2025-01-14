@@ -48,11 +48,11 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
         await StoreUserPreferencesAsync(cancellationToken);
     }
 
-    private async Task ApplyUserPreferencesAsync(CancellationToken cancellationToken)
+    private Task ApplyUserPreferencesAsync(CancellationToken cancellationToken)
     {
-        await preferencesService.InitializeAsync(cancellationToken);
         ThemeMode = preferencesService.Preferences.Layout.ThemeMode ?? ThemeMode.System;
         IsDrawerOpen = preferencesService.Preferences.Layout.IsDrawerOpen ?? true;
+        return Task.CompletedTask;
     }
 
     private async Task StoreUserPreferencesAsync(CancellationToken cancellationToken)

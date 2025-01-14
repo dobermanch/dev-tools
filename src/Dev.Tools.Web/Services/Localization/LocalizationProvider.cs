@@ -8,6 +8,6 @@ internal sealed class LocalizationProvider : ILocalizationProvider
     
     public string GetLocalizedString(string key)
     {
-        return key;
+        return key.Split("_").Last();
     }
 }

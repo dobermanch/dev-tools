@@ -27,6 +27,16 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
         
         await SaveAsync(preferences, cancellationToken);
     }
+    
+    public async Task UpdateFavoriteAsync(UserPreferences.FavoriteDetails favorites, CancellationToken cancellationToken)
+    {
+        var preferences = Preferences with
+        {
+            Favorite = favorites
+        };
+        
+        await SaveAsync(preferences, cancellationToken);
+    }
 
     public Task ResetAsync(CancellationToken cancellationToken)
     {

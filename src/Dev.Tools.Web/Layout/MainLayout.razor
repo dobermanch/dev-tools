@@ -15,7 +15,10 @@
         <SearchTextField/>
         
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" aria-label="github" />
+
+        <MudLink Href="https://github.com/dobermanch/dev-tools" Target="_blank" Rel="noopener noreferrer">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
+        </MudLink>
         <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ChangeThemeModeAsync" />
         <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
