@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		nginx.conf = nginx.conf
 		docker-compose.yml = docker-compose.yml
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.Tools.Tests", "tests\Dev.Tools.Tests\Dev.Tools.Tests.csproj", "{399E622D-E800-4E7D-A5FA-2A4CEC9594AF}"

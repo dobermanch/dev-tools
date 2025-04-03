@@ -77,7 +77,6 @@ builder.Services
     .Configure<IServer>((options, server) =>
     {
         options
-            .WithEndpointPrefix("ui/{documentName}")
             .WithTitle("Dev Tools API")
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
         options.Servers = server.Features
@@ -92,7 +91,7 @@ builder.Services
 
 var app = builder.Build();
 app.MapOpenApi();
-app.MapScalarApiReference();
+app.MapScalarApiReference("ui/{documentName}");
 
 app.MapGet("/ui", [ExcludeFromDescription]() => Results.Redirect("ui/v1", true, true));
 app.MapControllers();
