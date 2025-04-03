@@ -18,6 +18,14 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
         }
     }
 
+    public async Task UpdatePreferencesAsync(UserPreferences preferences, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(preferences);
+        
+        Interlocked.Exchange(ref _userPreferences, preferences);
+        await storageProvider.SetItemAsync(PreferenceKey, _userPreferences, cancellationToken);
+    }
+
     public async Task UpdateLayoutAsync(UserPreferences.LayoutSettings settings, CancellationToken cancellationToken)
     {
         var preferences = Preferences with
@@ -25,9 +33,9 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
             Layout = settings
         };
         
-        await SaveAsync(preferences, cancellationToken);
+        await UpdatePreferencesAsync(preferences, cancellationToken);
     }
-    
+
     public async Task UpdateFavoriteAsync(UserPreferences.FavoriteDetails favorites, CancellationToken cancellationToken)
     {
         var preferences = Preferences with
@@ -35,17 +43,11 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
             Favorite = favorites
         };
         
-        await SaveAsync(preferences, cancellationToken);
+        await UpdatePreferencesAsync(preferences, cancellationToken);
     }
 
     public Task ResetAsync(CancellationToken cancellationToken)
     {
-        return SaveAsync(new UserPreferences(), cancellationToken);
-    }
-
-    private async Task SaveAsync(UserPreferences preferences, CancellationToken cancellationToken)
-    {
-        Interlocked.Exchange(ref _userPreferences, preferences);
-        await storageProvider.SetItemAsync(PreferenceKey, _userPreferences, cancellationToken);
+        return UpdatePreferencesAsync(new UserPreferences(), cancellationToken);
     }
 }

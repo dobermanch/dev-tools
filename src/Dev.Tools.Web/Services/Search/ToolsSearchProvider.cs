@@ -40,8 +40,8 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
             .GetToolDefinitions()
             .Select(it => new ToolInfo(
                 $"/tools/{it.Name}",
-                webContext.LocalizationProvider.GetToolTitle(it.ToolType),
-                webContext.LocalizationProvider.GetToolDescription(it.ToolType)
+                webContext.Localization.GetToolTitle(it.ToolType),
+                webContext.Localization.GetToolDescription(it.ToolType)
             ))
             .ToArray();
     }

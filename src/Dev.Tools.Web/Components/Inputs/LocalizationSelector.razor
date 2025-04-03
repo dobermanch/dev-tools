@@ -1,0 +1,14 @@
+@using System.Globalization
+
+<MudSelect
+    T="CultureInfo"
+    ToStringFunc="@(culture => Context.Localization.GetString(culture!))"
+    Value="@Context.Localization.CurrentCulture"
+    ValueChanged="OnLanguageChangedAsync"
+    Variant="Variant.Outlined"
+    Margin="Margin.Dense">
+    @foreach (var culture in Context.Localization.SupportedCultures)
+    {
+        <MudSelectItem Value="culture">@Context.Localization.GetString(culture)</MudSelectItem>
+    }
+</MudSelect>

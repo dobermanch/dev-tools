@@ -24,5 +24,9 @@ builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 builder.Services.AddSingleton<IJsServices, JsServices>();
 builder.Services.AddCoreComponents(builder.Configuration);
 builder.Services.AddDevTools();
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Locals";
+});
 
 await builder.Build().RunAsync();

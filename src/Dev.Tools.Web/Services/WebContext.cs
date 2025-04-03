@@ -10,7 +10,7 @@ public class WebContext(
     IToolsProvider toolsProvider,
     IMessenger messenger,
     IJsServices jsService,
-    ILocalizationProvider localizationProvider,
+    ILocalizationProvider localization,
     IPreferencesService preferences
 )
 {
@@ -22,7 +22,7 @@ public class WebContext(
     
     public IJsServices JsService { get; } = jsService;
     
-    public ILocalizationProvider LocalizationProvider { get; } = localizationProvider;
+    public ILocalizationProvider Localization { get; } = localization;
     
     public IPreferencesService Preferences { get; } = preferences;
 

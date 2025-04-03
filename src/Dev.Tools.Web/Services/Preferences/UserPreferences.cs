@@ -6,6 +6,8 @@ public sealed record UserPreferences
 {
     public LayoutSettings Layout { get; init; } = new();
     public FavoriteDetails Favorite { get; init; } = new();
+    
+    public LocalizationSettings Localization { get; init; } = new();
 
     public sealed record LayoutSettings
     {
@@ -16,5 +18,10 @@ public sealed record UserPreferences
     public sealed record FavoriteDetails
     {
         public HashSet<string> Tools { get; init; } = [];
+    }
+
+    public sealed record LocalizationSettings
+    {
+        public string? Culture { get; init; }
     }
 }
