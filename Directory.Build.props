@@ -12,4 +12,9 @@
     <LangVersion>latest</LangVersion>
     <RepositoryUrl>https://github.com/dobermanch/dev-tools</RepositoryUrl>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 </Project>
