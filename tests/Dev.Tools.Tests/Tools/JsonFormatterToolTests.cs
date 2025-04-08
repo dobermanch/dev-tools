@@ -4,7 +4,7 @@ namespace Dev.Tools.Tests.Tools;
 
 public class JsonFormatterToolTests
 {
-    private readonly string _testJson = "{\"section2\":{\"Key1\":\"Value1\",\"NestedSection\":{\"NestedKey1\":1},\"Empty\":null,\"DefaultBool\":false,\"DefaultNumber\":0,\"Array1\":[\"value2\",\"value1\"],\"Array2\":[{\"key2\":\"value2\",\"key1\":\"value1\"},{\"key\":\"value2\"}]},\"Section1\":{\"KeyB\":1.2,\"KeyA\":true}}";
+    private const string TestJson = "{\"section2\":{\"Key1\":\"Value1\",\"NestedSection\":{\"NestedKey1\":1},\"Empty\":null,\"DefaultBool\":false,\"DefaultNumber\":0,\"Array1\":[\"value2\",\"value1\"],\"Array2\":[{\"key2\":\"value2\",\"key1\":\"value1\"},{\"key\":\"value2\"}]},\"Section1\":{\"KeyB\":1.2,\"KeyA\":true}}";
 
     [Theory]
     [InlineData(null, ErrorCode.InputNotValid)]
@@ -26,10 +26,10 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson
+            Json = TestJson
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -37,11 +37,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             IndentSize = 3
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -49,11 +49,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             SortKeys = JsonFormatterTool.SortDirection.Ascending
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -61,11 +61,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             SortKeys = JsonFormatterTool.SortDirection.Descending
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -73,11 +73,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             ExcludeNulls = true
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -85,11 +85,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             Compact = true
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -97,11 +97,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             KeyFormat = JsonFormatterTool.TextCase.UpperCase
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -109,11 +109,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             KeyFormat = JsonFormatterTool.TextCase.LowerCase
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -121,11 +121,11 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             KeyFormat = JsonFormatterTool.TextCase.PascalCase
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
     
     [Fact]
@@ -133,10 +133,10 @@ public class JsonFormatterToolTests
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = _testJson,
+            Json = TestJson,
             KeyFormat = JsonFormatterTool.TextCase.CamelCase
         }, CancellationToken.None);
 
-        await Verify(result.Json).UseDirectory("../Snapshots");
+        await Verify(result.Json).UseSnapshotFolder();
     }
 }

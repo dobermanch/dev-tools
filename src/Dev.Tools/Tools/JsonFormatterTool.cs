@@ -6,7 +6,7 @@ namespace Dev.Tools.Tools;
 [ToolDefinition(
     Name = "json-formatter",
     Aliases = ["jf"],
-    Keywords = [Keyword.Text, Keyword.String, Keyword.Json, Keyword.Json, Keyword.Format],
+    Keywords = [Keyword.Text, Keyword.String, Keyword.Json, Keyword.Format],
     Categories = [Category.Text],
     ErrorCodes = [ErrorCode.InputNotValid]
 )]
