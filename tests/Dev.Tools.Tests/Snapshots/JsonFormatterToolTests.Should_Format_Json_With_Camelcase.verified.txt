@@ -1,0 +1,28 @@
+﻿{
+  "section2": {
+    "key1": "Value1",
+    "nestedSection": {
+      "nestedKey1": 1
+    },
+    "empty": null,
+    "defaultBool": false,
+    "defaultNumber": 0,
+    "array1": [
+      "value2",
+      "value1"
+    ],
+    "array2": [
+      {
+        "key2": "value2",
+        "key1": "value1"
+      },
+      {
+        "key": "value2"
+      }
+    ]
+  },
+  "section1": {
+    "keyB": 1.2,
+    "keyA": true
+  }
+}

@@ -286,3 +286,7 @@ docs/reference
 **/*.cer
 **/*.crt
 **/*.pfx
+
+# Verifier test files
+*.received.*
+*.received/

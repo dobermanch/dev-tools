@@ -1,0 +1,28 @@
+﻿{
+  "SECTION2": {
+    "KEY1": "Value1",
+    "NESTEDSECTION": {
+      "NESTEDKEY1": 1
+    },
+    "EMPTY": null,
+    "DEFAULTBOOL": false,
+    "DEFAULTNUMBER": 0,
+    "ARRAY1": [
+      "value2",
+      "value1"
+    ],
+    "ARRAY2": [
+      {
+        "KEY2": "value2",
+        "KEY1": "value1"
+      },
+      {
+        "KEY": "value2"
+      }
+    ]
+  },
+  "SECTION1": {
+    "KEYB": 1.2,
+    "KEYA": true
+  }
+}

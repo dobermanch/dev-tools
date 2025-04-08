@@ -12,6 +12,9 @@ public partial record struct Keyword(string Value)
     public const string Hash = nameof(Hash);
     public const string Misc = nameof(Misc);
     public const string String = nameof(String);
+    public const string Json = nameof(Json);
+    public const string Xml = nameof(Xml);
+    public const string Format = nameof(Format);
     public const string Password = nameof(Password);
     public const string Text = nameof(Text);
     public const string Url = nameof(Url);
