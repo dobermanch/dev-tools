@@ -1,0 +1,28 @@
+﻿<Root xmlns1="test">
+  <section2>
+    <NestedSection>
+      <NestedKey1 attr="attrValue">1</NestedKey1>
+    </NestedSection>
+    <Key1>Value1</Key1>
+    <Empty></Empty>
+    <DefaultNumber>0</DefaultNumber>
+    <DefaultBool>false</DefaultBool>
+    <Array2>
+      <Item>
+        <key>value2</key>
+      </Item>
+      <Item>
+        <key2>value2</key2>
+        <key1>value1</key1>
+      </Item>
+    </Array2>
+    <Array1>
+      <Item>value1</Item>
+      <Item>value2</Item>
+    </Array1>
+  </section2>
+  <Section1>
+    <KeyB>1.2</KeyB>
+    <KeyA>true</KeyA>
+  </Section1>
+</Root>

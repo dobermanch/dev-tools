@@ -1,0 +1,28 @@
+﻿<ROOT XMLNS1="test">
+  <SECTION2>
+    <KEY1>Value1</KEY1>
+    <NESTEDSECTION>
+      <NESTEDKEY1 ATTR="attrValue">1</NESTEDKEY1>
+    </NESTEDSECTION>
+    <EMPTY></EMPTY>
+    <DEFAULTBOOL>false</DEFAULTBOOL>
+    <DEFAULTNUMBER>0</DEFAULTNUMBER>
+    <ARRAY1>
+      <ITEM>value2</ITEM>
+      <ITEM>value1</ITEM>
+    </ARRAY1>
+    <ARRAY2>
+      <ITEM>
+        <KEY2>value2</KEY2>
+        <KEY1>value1</KEY1>
+      </ITEM>
+      <ITEM>
+        <KEY>value2</KEY>
+      </ITEM>
+    </ARRAY2>
+  </SECTION2>
+  <SECTION1>
+    <KEYB>1.2</KEYB>
+    <KEYA>true</KEYA>
+  </SECTION1>
+</ROOT>

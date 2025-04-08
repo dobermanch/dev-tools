@@ -36,7 +36,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
             WriteIndented = !args.Compact,
             IndentSize = args.IndentSize,
             // this does not work on JsonDocument
-            DefaultIgnoreCondition = args.ExcludeNulls
+            DefaultIgnoreCondition = args.ExcludeEmpty
                 ? JsonIgnoreCondition.WhenWritingNull
                 : JsonIgnoreCondition.Never
         });
@@ -59,7 +59,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
 
             foreach (var property in element.EnumerateObject())
             {
-                if (!args.ExcludeNulls || property.Value.ValueKind != JsonValueKind.Null)
+                if (!args.ExcludeEmpty || property.Value.ValueKind != JsonValueKind.Null)
                 {
                     sortedDictionary[FormatKey(property.Name, args.KeyFormat)] = FormatJson(property.Value, args);
                 }
@@ -73,7 +73,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
             var sortedList = new List<object>();
             foreach (var item in element.EnumerateArray())
             {
-                if (!args.ExcludeNulls || item.ValueKind != JsonValueKind.Null)
+                if (!args.ExcludeEmpty || item.ValueKind != JsonValueKind.Null)
                 {
                     sortedList.Add(FormatJson(item, args));
                 }
@@ -119,7 +119,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         public int IndentSize { get; init; } = 2;
         public SortDirection SortKeys { get; init; } = SortDirection.None;
         public TextCase KeyFormat { get; init; } = TextCase.None;
-        public bool ExcludeNulls { get; init; }
+        public bool ExcludeEmpty { get; init; }
         public bool Compact { get; init; }
     }
 

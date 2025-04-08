@@ -74,7 +74,7 @@ public class JsonFormatterToolTests
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
             Json = TestJson,
-            ExcludeNulls = true
+            ExcludeEmpty = true
         }, CancellationToken.None);
 
         await Verify(result.Json).UseSnapshotFolder();
