@@ -5,6 +5,7 @@ public partial record struct Keyword(string Value)
 {
     public const string Base64 = nameof(Base64);
     public const string Convert = nameof(Convert);
+    public const string Case = nameof(Case);
     public const string Decode = nameof(Decode);
     public const string Encode = nameof(Encode);
     public const string Generate = nameof(Generate);
