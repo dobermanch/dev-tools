@@ -24,7 +24,7 @@ public abstract class GeneratorTestsBase
         driver = driver.RunGenerators(compilation);
 
         // Use verify to snapshot test the source generator output!
-        return Verifier.Verify(driver).UseDirectory("Snapshots");
+        return Verifier.Verify(driver).UseDirectory($"../Snapshots/{GetType().Name}");
     }
 
     protected CSharpCompilation CreateCompilation(string assemblyName, IEnumerable<SyntaxTree> sources,
