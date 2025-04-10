@@ -11,11 +11,11 @@ public class XmlFormatterToolTests
     [InlineData("", ErrorCode.InputNotValid)]
     [InlineData("  ", ErrorCode.InputNotValid)]
     [InlineData("{\"key\":}", ErrorCode.InputNotValid)]
-    public async Task Should_Format_Xml_Should_Fail(string xml, ErrorCode errorCode)
+    public async Task Should_Format_Xml_Should_Fail(string? xml, ErrorCode errorCode)
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
         {
-            Xml = xml
+            Xml = xml!
         }, CancellationToken.None);
 
         Assert.Equal(errorCode, result.ErrorCodes.First());

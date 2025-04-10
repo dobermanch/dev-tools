@@ -11,11 +11,11 @@ public class JsonFormatterToolTests
     [InlineData("", ErrorCode.InputNotValid)]
     [InlineData("  ", ErrorCode.InputNotValid)]
     [InlineData("{\"key\":}", ErrorCode.InputNotValid)]
-    public async Task Should_Format_Json_Should_Fail(string json, ErrorCode errorCode)
+    public async Task Should_Format_Json_Should_Fail(string? json, ErrorCode errorCode)
     {
         var result = await new JsonFormatterTool().RunAsync(new JsonFormatterTool.Args
         {
-            Json = json
+            Json = json!
         }, CancellationToken.None);
 
         Assert.Equal(errorCode, result.ErrorCodes.First());
