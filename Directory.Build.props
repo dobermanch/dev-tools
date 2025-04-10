@@ -11,10 +11,14 @@
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>latest</LangVersion>
     <RepositoryUrl>https://github.com/dobermanch/dev-tools</RepositoryUrl>
+    <Version>0.0.1</Version>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
   
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>NU5119,RS2007</NoWarn>
   </PropertyGroup>
 </Project>
