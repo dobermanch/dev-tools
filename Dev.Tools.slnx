@@ -14,6 +14,7 @@
     <Project Path="src/Dev.Tools.Console/Dev.Tools.Console.csproj" />
     <Project Path="src/Dev.Tools.Web/Dev.Tools.Web.csproj" />
     <Project Path="src/Dev.Tools/Dev.Tools.csproj" />
+    <Project Path="src\Dev.Tools.Mcp\Dev.Tools.Mcp.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Dev.Tools.CodeAnalysis.Tests/Dev.Tools.CodeAnalysis.Tests.csproj" />

@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Localization" Version="9.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
@@ -11,6 +12,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.4" PrivateAssets="all" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageVersion Include="MediatR" Version="12.5.0" />
+    <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.7" />
     <PackageVersion Include="MudBlazor" Version="8.5.1" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.1.9" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.50.0" />

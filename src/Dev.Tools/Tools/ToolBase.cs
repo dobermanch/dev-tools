@@ -4,16 +4,13 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsy
     where TArgs : ToolArgs
     where TResult: ToolResult, new()
 {
-    public TResult Run(TArgs args)
-    {
-        throw new NotImplementedException();
-    }
+    public TResult Run(TArgs args) => RunAsync(args, CancellationToken.None).GetAwaiter().GetResult();
 
     public async Task<TResult> RunAsync(TArgs args, CancellationToken cancellationToken)
     {
         try
         {
-            return await ExecuteAsync(args, cancellationToken);
+            return await ExecuteAsync(args, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception)
         {
