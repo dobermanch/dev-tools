@@ -6,11 +6,11 @@ public class XmlFormatterToolTests
 {
     private const string TestXml = "<Root xmlns1=\"test\"><section2><Key1>Value1</Key1><NestedSection><NestedKey1 attr=\"attrValue\">1</NestedKey1></NestedSection><Empty/><DefaultBool>false</DefaultBool><DefaultNumber>0</DefaultNumber><Array1><Item>value2</Item><Item>value1</Item></Array1><Array2><Item><key2>value2</key2><key1>value1</key1></Item><Item><key>value2</key></Item></Array2></section2><Section1><KeyB>1.2</KeyB><KeyA>true</KeyA></Section1></Root>";
 
-    [Theory]
-    [InlineData(null, ErrorCode.InputNotValid)]
-    [InlineData("", ErrorCode.InputNotValid)]
-    [InlineData("  ", ErrorCode.InputNotValid)]
-    [InlineData("{\"key\":}", ErrorCode.InputNotValid)]
+    [Test]
+    [Arguments(null, ErrorCode.InputNotValid)]
+    [Arguments("", ErrorCode.InputNotValid)]
+    [Arguments("  ", ErrorCode.InputNotValid)]
+    [Arguments("{\"key\":}", ErrorCode.InputNotValid)]
     public async Task Should_Format_Xml_Should_Fail(string? xml, ErrorCode errorCode)
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -18,10 +18,10 @@ public class XmlFormatterToolTests
             Xml = xml!
         }, CancellationToken.None);
 
-        Assert.Equal(errorCode, result.ErrorCodes.First());
+        await Assert.That(result.ErrorCodes.First()).IsEqualTo(errorCode);
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -32,7 +32,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_With_Right_Indent()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -44,7 +44,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_And_Sort_Keys_Asc()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -56,7 +56,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_And_Sort_Keys_Desc()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -68,7 +68,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_And_Exclude_Nulls()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -80,7 +80,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_As_Compact()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -92,7 +92,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_With_Uppercase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -104,7 +104,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_With_Lowercase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -116,7 +116,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_With_Pascalcase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
@@ -128,7 +128,7 @@ public class XmlFormatterToolTests
         await Verify(result.Xml).UseSnapshotFolder();
     }
     
-    [Fact]
+    [Test]
     public async Task Should_Format_Xml_With_Camelcase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args

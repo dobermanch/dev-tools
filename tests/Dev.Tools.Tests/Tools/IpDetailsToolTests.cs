@@ -5,7 +5,7 @@ namespace Dev.Tools.Tests.Tools;
 
 public class IpDetailsToolTests
 {
-    [Fact]
+    [Test]
     public async Task ShouldReturnIpAddress()
     {
         var args = new IpDetailsTool.Args();
@@ -15,16 +15,16 @@ public class IpDetailsToolTests
         var result = false;
         if (response.IpV4 is not null)
         {
-            Assert.True(IPAddress.TryParse(response.IpV4, out _), "IPv4 is wrong");
+            await Assert.That(IPAddress.TryParse(response.IpV4, out _)).IsTrue();
             result = true;
         }
         
         if (response.IpV6 is not null)
         {
-            Assert.True(IPAddress.TryParse(response.IpV6, out _), "IPv6 is wrong");
+            await Assert.That(IPAddress.TryParse(response.IpV6, out _)).IsTrue();
             result = true;
         }
         
-        Assert.True(result, "IP is not returned");
+        await Assert.That(result).IsTrue();
     }
 }

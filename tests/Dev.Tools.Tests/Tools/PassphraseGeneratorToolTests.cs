@@ -4,10 +4,10 @@ namespace Dev.Tools.Tests.Tools;
 
 public class PassphraseGeneratorToolTests
 {
-    [Theory]
-    [InlineData(null)]
-    [InlineData(1)]
-    [InlineData(2)]
+    [Test]
+    [Arguments(null)]
+    [Arguments(1)]
+    [Arguments(2)]
     public async Task WhenPhraseCountProvided_ShouldGenerateRightAmountOfPhrases(int? expectedCount)
     {
         var args = expectedCount is null
@@ -19,13 +19,13 @@ public class PassphraseGeneratorToolTests
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedCount ?? args.PhraseCount, result.Phrases.Length);
+        await Assert.That(result.Phrases.Length).IsEqualTo(expectedCount ?? args.PhraseCount);
     }
     
-    [Theory]
-    [InlineData(null)]
-    [InlineData(1)]
-    [InlineData(10)]
+    [Test]
+    [Arguments(null)]
+    [Arguments(1)]
+    [Arguments(10)]
     public async Task WhenWordCountProvided_ShouldGeneratePhraseOfRightLength(int? expectedLength)
     {
         var args = expectedLength is null
@@ -38,10 +38,10 @@ public class PassphraseGeneratorToolTests
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedLength ?? args.WordCount, result.Phrases[0].Split(args.Separator ?? ' ').Length);
+        await Assert.That(result.Phrases[0].Split(args.Separator ?? ' ').Length).IsEqualTo(expectedLength ?? args.WordCount);
     }
     
-    [Fact]
+    [Test]
     public async Task WhenSeparatorProvided_ShouldGeneratePhraseWithSeparator()
     {
         var args = new PassphraseGeneratorTool.Args
@@ -52,10 +52,10 @@ public class PassphraseGeneratorToolTests
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Contains(args.Separator ?? '-', result.Phrases[0]);
+        await Assert.That(result.Phrases[0]).Contains(args.Separator ?? '-');
     }
     
-    [Fact]
+    [Test]
     public async Task WhenSaltIsProvided_ShouldGeneratePhraseWithSalt()
     {
         var args = new PassphraseGeneratorTool.Args
@@ -65,6 +65,6 @@ public class PassphraseGeneratorToolTests
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.EndsWith(args.Salt!, result.Phrases[0]);
+        await Assert.That(result.Phrases[0]).EndsWith(args.Salt!);
     }
 }

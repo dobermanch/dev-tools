@@ -5,7 +5,7 @@ namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
 public class ApiEndpointGeneratorTests: GeneratorTestsBase
 {
-    [Fact(Skip = "Just for now")]
+    [Test, Skip("Just for now")]
     public async Task Should_Generate_Tools_Provider()
     {
         var toolCode = new CodeBlock
