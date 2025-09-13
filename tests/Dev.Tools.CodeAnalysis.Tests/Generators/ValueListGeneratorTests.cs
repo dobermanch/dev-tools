@@ -5,7 +5,7 @@ namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
 public class ValueListGeneratorTests : GeneratorTestsBase
 {
-    [Fact]
+    [Test]
     public async Task Should_Generate_GetValues_Method()
     {
         var code = new CodeBlock

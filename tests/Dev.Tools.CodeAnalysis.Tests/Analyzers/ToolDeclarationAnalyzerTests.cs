@@ -7,7 +7,7 @@ namespace Dev.Tools.CodeAnalysis.Tests.Analyzers;
 
 public class ToolDeclarationAnalyzerTests
 {
-    [Fact]
+    [Test]
     public async Task Should_not_report_diagnostic_When_name_is_valid_and_unique()
     {
         var context = new CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier>
@@ -33,7 +33,7 @@ public class ToolDeclarationAnalyzerTests
         await context.RunAsync();
     }
 
-    [Fact]
+    [Test]
     public async Task Should_report_diagnostic_When_name_is_not_unique()
     {
         var context = new CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier>
@@ -67,10 +67,10 @@ public class ToolDeclarationAnalyzerTests
         await context.RunAsync();
     }
     
-    [Theory]
-    [InlineData("internal sealed")]
-    [InlineData("public")]
-    [InlineData("sealed")]
+    [Test]
+    [Arguments("internal sealed")]
+    [Arguments("public")]
+    [Arguments("sealed")]
     public async Task Should_report_diagnostic_When_class_not_public(string modifiers)
     {
         var context = new CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier>
@@ -102,12 +102,12 @@ public class ToolDeclarationAnalyzerTests
         await context.RunAsync();
     }
 
-    [Theory]
-    [InlineData("1tool")]
-    [InlineData("_tool")]
-    [InlineData("tool$")]
-    [InlineData("tool name")]
-    [InlineData("verylongnameforthetool")]
+    [Test]
+    [Arguments("1tool")]
+    [Arguments("_tool")]
+    [Arguments("tool$")]
+    [Arguments("tool name")]
+    [Arguments("verylongnameforthetool")]
     public async Task Should_report_diagnostic_When_name_is_not_valid(string name)
     {
         var context = new CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier>

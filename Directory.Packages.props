@@ -16,6 +16,7 @@
     <PackageVersion Include="MudBlazor" Version="8.12.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.8.3" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.51.1" />
+    <PackageVersion Include="TUnit" Version="0.57.65" />
     <PackageVersion Include="Ulid" Version="1.4.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
@@ -29,18 +30,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.2" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.XUnit" Version="30.12.0" />
-    <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageVersion>
-    <PackageVersion Include="FluentAssertions" Version="8.6.0" />
+    <PackageVersion Include="Verify.TUnit" Version="30.12.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
   </ItemGroup>
 </Project>

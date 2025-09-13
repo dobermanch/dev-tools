@@ -1,9 +1,10 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Assembly = System.Reflection.Assembly;
 
 // ReSharper disable once CheckNamespace
-namespace VerifyXunit;
+namespace VerifyTests;
 
 public static class VerifyExtensions
 {

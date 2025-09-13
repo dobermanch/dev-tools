@@ -1,13 +1,12 @@
 ﻿using Dev.Tools.Tools;
-using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;
 
 public class UlidGeneratorToolTests
 {
-    [Theory]
-    [InlineData(1)]
-    [InlineData(5)]
+    [Test]
+    [Arguments(1)]
+    [Arguments(5)]
     public async Task WhenTypeIsMin_ShouldGenerateAllMinUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
@@ -18,13 +17,14 @@ public class UlidGeneratorToolTests
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(count);
-        result.Data.All(it => it == Ulid.MinValue).Should().BeTrue();
+        await Assert.That(result.Data).HasCount(count);
+
+        await Assert.That(result.Data).All().Satisfy(it => it, it => it.IsEqualTo(Ulid.MinValue));
     }
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(5)]
+    [Test]
+    [Arguments(1)]
+    [Arguments(5)]
     public async Task WhenTypeIsMax_ShouldGenerateAllMaxUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
@@ -35,13 +35,14 @@ public class UlidGeneratorToolTests
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(count);
-        result.Data.All(it => it == Ulid.MaxValue).Should().BeTrue();
+        await Assert.That(result.Data).HasCount(count);
+        
+        await Assert.That(result.Data).All().Satisfy(it => it, it => it.IsEqualTo(Ulid.MaxValue));
     }
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(5)]
+    [Test]
+    [Arguments(1)]
+    [Arguments(5)]
     public async Task WhenTypeIsRandom_ShouldGenerateAllRandomUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
@@ -51,8 +52,10 @@ public class UlidGeneratorToolTests
         };
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
+        
+        await Assert.That(result.Data).HasCount(count);
 
-        result.Data.Should().HaveCount(count);
-        result.Data.All(it => it != Ulid.MaxValue && it != Ulid.MinValue).Should().BeTrue();
+        await Assert.That(result.Data).All().Satisfy(it => it,
+            it => it.IsNotEqualTo(Ulid.MinValue).And.IsNotEqualTo<Ulid>(Ulid.MaxValue));
     }
 }

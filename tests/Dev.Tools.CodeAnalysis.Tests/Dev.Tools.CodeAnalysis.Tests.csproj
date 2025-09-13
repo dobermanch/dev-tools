@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsTestProject>true</IsTestProject>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,27 +12,16 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Verify.SourceGenerators" />
-    <PackageReference Include="Verify.XUnit" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="Verify.TUnit" />
     <PackageReference Include="Moq" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dev.Tools.CodeAnalysis\Dev.Tools.CodeAnalysis.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

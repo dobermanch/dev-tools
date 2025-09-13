@@ -1,14 +1,13 @@
 ﻿using Dev.Tools.Tools;
-using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;
 
 public class TokenGeneratorToolTests
 {
-    [Theory]
-    [InlineData(null)]
-    [InlineData(1)]
-    [InlineData(2)]
+    [Test]
+    [Arguments(null)]
+    [Arguments(1)]
+    [Arguments(2)]
     public async Task WhenCountProvided_ShouldGenerateRightAmountOfTokens(int? expectedCount)
     {
         var args = expectedCount is null
@@ -20,13 +19,13 @@ public class TokenGeneratorToolTests
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedCount ?? args.TokenCount, result.Tokens.Length);
+        await Assert.That(result.Tokens.Length).IsEqualTo(expectedCount ?? args.TokenCount);
     }
     
-    [Theory]
-    [InlineData(null)]
-    [InlineData(1)]
-    [InlineData(10)]
+    [Test]
+    [Arguments(null)]
+    [Arguments(1)]
+    [Arguments(10)]
     public async Task WhenLengthProvided_ShouldGenerateTokenOfRightLength(int? expectedLength)
     {
         var args = expectedLength is null
@@ -38,10 +37,10 @@ public class TokenGeneratorToolTests
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        Assert.Equal(expectedLength ?? args.TokenLength, result.Tokens[0].Length);
+        await Assert.That(result.Tokens[0].Length).IsEqualTo(expectedLength ?? args.TokenLength);
     }
     
-    [Fact]
+    [Test]
     public async Task WhenExcludeSymbolsProvided_ShouldGenerateTokenWithoutThem()
     {
         char[] symbols = ['B', 'C'];
@@ -53,10 +52,10 @@ public class TokenGeneratorToolTests
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Tokens[0].ToArray().Should().NotContain(symbols);
+        await Assert.That(result.Tokens[0].ToArray()).DoesNotContain(it => symbols.Contains(it));
     }
     
-    [Fact]
+    [Test]
     public async Task WhenUppercaseSpecified_TokenShouldContainsOnlyUppercase()
     {
         var args = new TokenGeneratorTool.Args
@@ -72,11 +71,11 @@ public class TokenGeneratorToolTests
 
         foreach (var ch in result.Tokens[0])
         {
-            Assert.True(char.IsUpper(ch));
+            await Assert.That(char.IsUpper(ch)).IsTrue();
         }
     }
     
-    [Fact]
+    [Test]
     public async Task WhenLowercaseSpecified_TokenShouldContainsOnlyLowercase()
     {
         var args = new TokenGeneratorTool.Args
@@ -92,11 +91,11 @@ public class TokenGeneratorToolTests
 
         foreach (var ch in result.Tokens[0])
         {
-            Assert.True(char.IsLower(ch));
+            await Assert.That(char.IsLower(ch)).IsTrue();
         }
     }
     
-    [Fact]
+    [Test]
     public async Task WhenNumbersSpecified_TokenShouldContainsOnlyNumbers()
     {
         var args = new TokenGeneratorTool.Args
@@ -112,11 +111,11 @@ public class TokenGeneratorToolTests
 
         foreach (var ch in result.Tokens[0])
         {
-            Assert.True(char.IsDigit(ch));
+            await Assert.That(char.IsDigit(ch)).IsTrue();
         }
     }
     
-    [Fact]
+    [Test]
     public async Task WhenSymbolsSpecified_TokenShouldContainsOnlySymbols()
     {
         var args = new TokenGeneratorTool.Args
@@ -132,11 +131,11 @@ public class TokenGeneratorToolTests
 
         foreach (var ch in result.Tokens[0])
         {
-            Assert.True(char.IsSymbol(ch) || char.IsPunctuation(ch));
+            await Assert.That(char.IsSymbol(ch) || char.IsPunctuation(ch)).IsTrue();
         }
     }
 
-    [Fact]
+    [Test]
     public async Task WhenAlphabetProvided_TokenShouldContainsSymbolsFromAlphabet()
     {
         char[] symbols = ['B', 'C'];
@@ -148,6 +147,6 @@ public class TokenGeneratorToolTests
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Tokens[0].ToArray().Should().Contain(symbols);
+        await Assert.That(result.Tokens[0].ToArray()).Contains(it => symbols.Contains(it));
     }
 }

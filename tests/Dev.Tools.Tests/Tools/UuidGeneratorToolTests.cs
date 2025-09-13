@@ -1,5 +1,4 @@
 ﻿using Dev.Tools.Tools;
-using FluentAssertions;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -8,7 +7,7 @@ public class UuidGeneratorToolTests
     // -------------------------------
     // NIL tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsNil_ShouldGenerateEmptyUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -18,11 +17,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().BeEmpty();
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsNilAndCountProvided_ShouldGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -33,11 +32,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
-        result.Data.Should().AllBeEquivalentTo(Guid.Empty);
+        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).All().Satisfy(it => it.IsEqualTo(Guid.Empty));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsNilAndNameProvided_ShouldIgnoreName()
     {
         var args = new UuidGeneratorTool.Args
@@ -48,11 +47,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().BeEmpty();
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsNilAndNamespaceProvided_ShouldIgnoreNamespace()
     {
         var args = new UuidGeneratorTool.Args
@@ -63,14 +62,14 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().BeEmpty();
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
     // -------------------------------
     // Max tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsMax_ShoudGenerateEmptyUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -80,11 +79,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsMaxAndCountProvided_ShoudGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -95,11 +94,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
-        result.Data.Should().AllBeEquivalentTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).All().Satisfy(it => it.IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsMaxAndNameProvided_ShouldIgnoreName()
     {
         var args = new UuidGeneratorTool.Args
@@ -110,11 +109,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1); 
-        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsMaxAndNamespaceProvided_ShouldIgnoreNamespace()
     {
         var args = new UuidGeneratorTool.Args
@@ -125,14 +124,14 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().Be(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
     // -------------------------------
     // V3 tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV3AndNamespaceNotProvided_ShouldReturnErrorCode()
     {
         var args = new UuidGeneratorTool.Args
@@ -142,11 +141,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be(ErrorCode.NamespaceEmpty);
+        await Assert.That(result.Data).IsEmpty();
+        await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.NamespaceEmpty);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV3AndNameIsNotProvided_ShouldGenerateGuilds()
     {
         var args = new UuidGeneratorTool.Args
@@ -157,11 +156,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBe(args.Namespace!.Value);
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV3AndNameAndNamespaceProvided_ShouldGenerateGuids()
     {
         var args = new UuidGeneratorTool.Args
@@ -172,12 +171,12 @@ public class UuidGeneratorToolTests
         };
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
-
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBe(args.Namespace!.Value);
+        
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV3AndNameAndNamespaceProvided_ShouldAlwaysGenerateTheSameGuids()
     {
         var args = new UuidGeneratorTool.Args
@@ -189,11 +188,11 @@ public class UuidGeneratorToolTests
 
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
-
-        result1.Data.First().Should().Be(result2.Data.First());
+        
+        await Assert.That(result1.Data.First()).IsEqualTo(result2.Data.First());
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV3AndNameAndNamespaceAndCountProvided_ShouldGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -206,13 +205,13 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
+        await Assert.That(result.Data).HasCount(args.Count);
     }
 
     // -------------------------------
     // V4 tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV4_ShouldGenerateRandomUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -222,12 +221,12 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBeEmpty();
-        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV4AndCountProvided_ShouldGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -238,11 +237,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
-        result.Data.Should().OnlyHaveUniqueItems();
+        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).HasDistinctItems();
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV4AndNameProvided_ShouldIgnoreName()
     {
         var args = new UuidGeneratorTool.Args
@@ -253,10 +252,10 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
+        await Assert.That(result.Data).HasCount(1);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV4AndNamespaceProvided_ShouldIgnoreNamespace()
     {
         var args = new UuidGeneratorTool.Args
@@ -267,10 +266,10 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
+        await Assert.That(result.Data).HasCount(1);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV4_ShouldAlwaysReturnsUniqueData()
     {
         var args = new UuidGeneratorTool.Args
@@ -281,14 +280,14 @@ public class UuidGeneratorToolTests
 
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
-
-        result1.Data.First().Should().NotBe(result2.Data.First());
+        
+        await Assert.That(result1.Data.First()).IsNotEqualTo(result2.Data.First());
     }
 
     // -------------------------------
     // V5 tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV5AndNamespaceNotProvided_ShouldReturnErrorCode()
     {
         var args = new UuidGeneratorTool.Args
@@ -298,11 +297,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().BeEmpty();
-        result.ErrorCodes.First().Should().Be(ErrorCode.NamespaceEmpty);
+        await Assert.That(result.Data).IsEmpty();
+        await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.NamespaceEmpty);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV5AndNameIsNotProvided_ShouldGenerateGuilds()
     {
         var args = new UuidGeneratorTool.Args
@@ -313,11 +312,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBe(args.Namespace!.Value);
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV5AndNameAndNamespaceProvided_ShouldGenerateGuids()
     {
         var args = new UuidGeneratorTool.Args
@@ -329,11 +328,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBe(args.Namespace!.Value);
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV5AndNameAndNamespaceProvided_ShouldAlwaysGenerateTheSameGuids()
     {
         var args = new UuidGeneratorTool.Args
@@ -346,10 +345,10 @@ public class UuidGeneratorToolTests
         var result1 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
         var result2 = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result1.Data.First().Should().Be(result2.Data.First());
+        await Assert.That(result1.Data.First()).IsEqualTo(result2.Data.First());
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV5AndNameAndNamespaceAndCountProvided_ShouldGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -362,13 +361,13 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
+        await Assert.That(result.Data).HasCount(args.Count);
     }
 
     // -------------------------------
     // V7 tests 
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7_ShouldGenerateUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -378,12 +377,12 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBeEmpty();
-        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7AndTimeProvided_ShouldAlwaysGenerateSimilarUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -398,10 +397,10 @@ public class UuidGeneratorToolTests
         byte[] bytes1 = result1.Data.First().ToByteArray()[..5];
         byte[] bytes2 = result2.Data.First().ToByteArray()[..5];
 
-        bytes1.Should().BeEquivalentTo(bytes2);
+        await Assert.That(bytes1).IsEquivalentTo(bytes2);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7AndTimeAndCountProvided_ShouldAlwaysGenerateUniqueUuid()
     {
         var args = new UuidGeneratorTool.Args
@@ -413,11 +412,11 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
-        result.Data.Should().OnlyHaveUniqueItems();
+        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).HasDistinctItems();
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7AndCountProvided_ShouldGenerateRightAmountOfData()
     {
         var args = new UuidGeneratorTool.Args
@@ -428,10 +427,10 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(args.Count);
+        await Assert.That(result.Data).HasCount(args.Count);
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7AndNameProvided_ShouldIgnoreName()
     {
         var args = new UuidGeneratorTool.Args
@@ -442,12 +441,12 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBeEmpty();
-        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
-    [Fact]
+    [Test]
     public async Task WhenTypeIsV7AndNamespaceProvided_ShouldIgnoreNamespace()
     {
         var args = new UuidGeneratorTool.Args
@@ -458,8 +457,8 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        result.Data.Should().HaveCount(1);
-        result.Data.First().Should().NotBeEmpty();
-        result.Data.First().Should().NotBe(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
+        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
+        await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 }
