@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -9,6 +10,7 @@ public abstract class GeneratorTestsBase
     [ModuleInitializer]
     public static void Init()
     {
+        CodeBlock.SystemTime = new DateTime(2025, 1, 1);
         VerifySourceGenerators.Initialize();
     }
 

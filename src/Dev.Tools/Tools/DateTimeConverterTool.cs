@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "date-convert",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
-    Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.WrongFormat]
+    Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
 public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args, DateTimeConverterTool.Result>
 {
@@ -16,13 +15,13 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
         var date = ConvertStringToDate(args.Date, args.From);
         if (date is null)
         {
-            return Failed(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat);
         }
         
         var result = ConvertDateToString(date.Value, args.To);
         if (result is null)
         {
-            return Failed(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat);
         }
         
         return new Result(result);
@@ -112,7 +111,7 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
         JsDateTime
     }
     
-    public record Args : ToolArgs
+    public record Args
     {
         public string? Date { get; set; }
         public DateFormatType From { get; set; }

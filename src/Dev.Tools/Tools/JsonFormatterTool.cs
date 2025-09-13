@@ -7,8 +7,7 @@ namespace Dev.Tools.Tools;
     Name = "json-formatter",
     Aliases = ["jf"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Json, Keyword.Format],
-    Categories = [Category.Text],
-    ErrorCodes = [ErrorCode.InputNotValid]
+    Categories = [Category.Text]
 )]
 public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFormatterTool.Result>
 {
@@ -16,7 +15,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
     {
         if (string.IsNullOrWhiteSpace(args.Json))
         {
-            return Failed(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid);
         }
 
         JsonDocument document;
@@ -26,7 +25,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         }
         catch (Exception)
         {
-            return Failed(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid);
         }
 
         var jsonObject = FormatJson(document.RootElement, args);
@@ -113,7 +112,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         Descending
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public required string Json { get; init; } = null!;
         public int IndentSize { get; init; } = 2;

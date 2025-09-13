@@ -64,7 +64,7 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
 
                 var attribute = syntaxContext.Node.GetAttributeSyntax(
                     syntaxContext.SemanticModel,
-                    ToolsDefinitionGenerator.Attribute.TypeFullName);
+                    CodeDefinitions.ToolDefinitionAttribute.TypeFullName);
 
                 LiteralExpressionSyntax? literal =
                     attribute

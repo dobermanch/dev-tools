@@ -4,8 +4,7 @@
     Name = "token-generator",
     Aliases = ["tokengen"],
     Keywords = [Keyword.Generate, Keyword.Token, Keyword.Text, Keyword.String, Keyword.Password],
-    Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = []
+    Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
 public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, TokenGeneratorTool.Result>
 {
@@ -73,7 +72,7 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         return new Result(result);
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public int TokenLength { get; set; } = 15;
         public bool Lowercase { get; set; } = true;

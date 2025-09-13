@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "uuid-generator",
     Aliases = ["uuid"],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
-    Categories = [Category.Crypto],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.NamespaceEmpty]
+    Categories = [Category.Crypto]
 )]
 public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
@@ -28,7 +27,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
             case UuidType.V3:
                 if (args.Namespace is null)
                 {
-                    return Failed(ErrorCode.NamespaceEmpty);
+                    throw new ToolException(ErrorCode.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
@@ -39,7 +38,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
             case UuidType.V5:
                 if (args.Namespace is null)
                 {
-                    return Failed(ErrorCode.NamespaceEmpty);
+                    throw new ToolException(ErrorCode.NamespaceEmpty);
                 }
 
                 guids = Generate(args, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
@@ -131,7 +130,7 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
 
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sense to make separate tool for each type
-    public record Args : ToolArgs
+    public record Args
     {
         public UuidType Type { get; set; }
         public int Count { get; set; } = 1;

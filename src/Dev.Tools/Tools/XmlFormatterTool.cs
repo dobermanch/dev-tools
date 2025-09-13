@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "xml-formatter",
     Aliases = ["xf"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Xml, Keyword.Format],
-    Categories = [Category.Text],
-    ErrorCodes = [ErrorCode.InputNotValid]
+    Categories = [Category.Text]
 )]
 public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormatterTool.Result>
 {
@@ -15,7 +14,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
     {
         if (string.IsNullOrWhiteSpace(args.Xml))
         {
-            return Failed(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid);
         }
 
         XmlDocument document = new XmlDocument();
@@ -26,7 +25,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
         }
         catch (Exception)
         {
-            return Failed(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid);
         }
 
         var xmlNode = Format(document.DocumentElement!, args, document);
@@ -139,7 +138,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
         Descending
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public required string Xml { get; init; } = null!;
         public int IndentSize { get; init; } = 2;

@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "hash",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
-    Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.FailedToDecrypt, ErrorCode.InputNotValid]
+    Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
 public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
@@ -15,7 +14,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty);
         }
 
         byte[] hash;
@@ -35,11 +34,11 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
         }
         catch (CryptographicException)
         {
-            return Failed(ErrorCode.FailedToDecrypt);
+            throw new ToolException(ErrorCode.FailedToDecrypt);
         }
         catch (ArgumentOutOfRangeException)
         {
-            return Failed(ErrorCode.InputNotValid);    
+            throw new ToolException(ErrorCode.InputNotValid);    
         }   
         
         var result = new StringBuilder();
@@ -89,7 +88,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
         Sha512
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public string? Text { get; set; }
         public HashAlgorithm Algorithm { get; set; }

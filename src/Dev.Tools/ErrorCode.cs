@@ -1,6 +1,6 @@
 namespace Dev.Tools;
 
-[GenerateValues]
+//[GenerateValues]
 public partial record struct ErrorCode(string Value)
 {
     public const string Unknown = nameof(Unknown);

@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "passphrase-generator",
     Aliases = ["passphrase"],
     Keywords = [Keyword.Generate, Keyword.Token, Keyword.Text, Keyword.String, Keyword.Password],
-    Categories = [Category.Text, Category.Crypto, Category.Security],
-    ErrorCodes = []
+    Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
 public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.Args, PassphraseGeneratorTool.Result>
 {
@@ -48,7 +47,7 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
         return new Result(phrases);
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public int PhraseCount { get; set; } = 1;
         public int WordCount { get; set; } = 5;

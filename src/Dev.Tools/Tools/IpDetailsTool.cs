@@ -6,8 +6,7 @@ namespace Dev.Tools.Tools;
     Name = "ip-details",
     Aliases = ["ip"],
     Keywords = [Keyword.Network, Keyword.Internet, Keyword.Ip],
-    Categories = [Category.Network],
-    ErrorCodes = [ErrorCode.Unknown]
+    Categories = [Category.Network]
 )]
 public sealed class IpDetailsTool : ToolBase<IpDetailsTool.Args, IpDetailsTool.Result>
 {
@@ -42,7 +41,7 @@ public sealed class IpDetailsTool : ToolBase<IpDetailsTool.Args, IpDetailsTool.R
         }
     }
 
-    public record Args : ToolArgs;
+    public record Args;
 
     public record Result(string? IpV4, string? IpV6) : ToolResult
     {

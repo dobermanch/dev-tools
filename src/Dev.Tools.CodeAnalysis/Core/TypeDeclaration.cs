@@ -4,11 +4,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Core;
 
-internal record TypeDeclaration
+public record TypeDeclaration
 {
-    public TypeDeclarationSyntax Syntax { get; set; } = default!;
+    public TypeDeclarationSyntax Syntax { get; set; } = null!;
 
-    public INamedTypeSymbol Symbol { get; set; } = default!;
+    public INamedTypeSymbol Symbol { get; set; } = null!;
 
     public string Namespace => Symbol.ContainingNamespace.ToDisplayString();
 

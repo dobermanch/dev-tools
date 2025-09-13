@@ -1,31 +1,31 @@
 ﻿namespace Dev.Tools.Tools;
 
-public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>, IToolAsync<TArgs, TResult>
-    where TArgs : ToolArgs
+public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
     where TResult: ToolResult, new()
 {
-    public TResult Run(TArgs args) => RunAsync(args, CancellationToken.None).GetAwaiter().GetResult();
-
     public async Task<TResult> RunAsync(TArgs args, CancellationToken cancellationToken)
     {
         try
         {
             return await ExecuteAsync(args, cancellationToken).ConfigureAwait(false);
         }
+        catch (ToolException ex)
+        {
+            return Failed1(ex.ErrorCode);
+        }
         catch (Exception)
         {
-            return Failed(ErrorCode.Unknown);
+            return Failed1(ErrorCode.Unknown);
         }
     }
 
-    protected virtual Task<TResult> ExecuteAsync(TArgs args, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(Execute(args));
-    }
+    protected virtual Task<TResult> ExecuteAsync(TArgs args, CancellationToken cancellationToken) 
+        => Task.FromResult(Execute(args));
 
-    protected virtual TResult Execute(TArgs args) => new();
+    protected virtual TResult Execute(TArgs args) 
+        => throw new NotImplementedException();
 
-    protected TResult Failed(ErrorCode code) => new ()
+    protected TResult Failed1(ErrorCode code) => new ()
     {
         ErrorCodes = { code }
     };

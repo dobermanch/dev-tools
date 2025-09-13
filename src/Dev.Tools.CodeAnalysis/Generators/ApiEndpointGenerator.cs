@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Dev.Tools.CodeAnalysis.Generators;
 
 [Generator]
-public class ApiEndpointGenerator : IIncrementalGenerator
+public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
 {
     public static readonly CodeBlock Attribute = new()
     {
@@ -50,14 +50,14 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                 .References
                 .Select(compilation.GetAssemblyOrModuleSymbol)
                 .OfType<IAssemblySymbol>()
-                .Where(it => it.Name == ToolsDefinitionGenerator.Attribute.Namespace)
+                .Where(it => it.Name == CodeDefinitions.ToolDefinitionAttribute.Namespace)
                 .SelectMany(it => it.GlobalNamespace
-                    .GetAllTypes(t => t.HasAttribute(ToolsDefinitionGenerator.Attribute.TypeFullName)))
+                    .GetAllTypes(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName)))
                 .Select(it => new TypeInfo
                 {
                     ToolName = it.GetAttributes()
                         .Where(x => x.AttributeClass?.ToDisplayString() ==
-                                    ToolsDefinitionGenerator.Attribute.TypeFullName)
+                                    CodeDefinitions.ToolDefinitionAttribute.TypeFullName)
                         .SelectMany(x => x.NamedArguments)
                         .Where(x => x.Key == "Name")
                         .Select(x => x.Value.Value?.ToString())
@@ -66,11 +66,13 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                     ToolTypeName = it.Name,
                     ToolArgsType = it.GetMembers()
                         .OfType<ITypeSymbol>()
-                        .Where(x => x.BaseType?.ToDisplayString() == "Dev.Tools.Core.ToolArgs")
+                        //TODO: use ITool interface to get args type
+                        .Where(x => x.Name.EndsWith("Args"))
                         .Select(x => x.ToDisplayString())
                         .First(),
                     ToolResultType = it.GetMembers()
                         .OfType<ITypeSymbol>()
+                        //TODO: use ITool interface to get result type
                         .Where(x => x.BaseType?.ToDisplayString() == "Dev.Tools.Core.ToolResult")
                         .Select(x => x.ToDisplayString())
                         .First()

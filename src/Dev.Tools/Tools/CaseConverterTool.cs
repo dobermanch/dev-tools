@@ -4,8 +4,7 @@ namespace Dev.Tools.Tools;
     Name = "case-converter",
     Aliases = ["case"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Convert, Keyword.Case],
-    Categories = [Category.Converter, Category.Text],
-    ErrorCodes = [ErrorCode.Unknown]
+    Categories = [Category.Converter, Category.Text]
 )]
 public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseConverterTool.Result>
 {
@@ -148,7 +147,7 @@ public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseCon
         MockingCase,        // LoReMiPsUm dOlOr
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public string Text { get; init; } = null!;
         public CaseType Type { get; init; }

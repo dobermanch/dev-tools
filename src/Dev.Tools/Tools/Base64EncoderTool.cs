@@ -4,8 +4,7 @@
     Name = "base64-encoder",
     Aliases = ["64e"],
     Keywords = [Keyword.Base64, Keyword.Encode, Keyword.Url, Keyword.Text, Keyword.String],
-    Categories = [Category.Converter],
-    ErrorCodes = [ErrorCode.Unknown, ErrorCode.TextEmpty]
+    Categories = [Category.Converter]
 )]
 public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64EncoderTool.Result>
 {
@@ -13,7 +12,7 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            return Failed(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty);
         }
 
         byte[] bytes = Encoding.UTF8.GetBytes(args.Text);
@@ -36,7 +35,7 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
         return new(encoded);
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public string? Text { get; set; }
         public bool InsertLineBreaks { get; set; }

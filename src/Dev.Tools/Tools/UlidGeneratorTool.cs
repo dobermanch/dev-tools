@@ -4,8 +4,7 @@
     Name = "ulid-generator",
     Aliases = ["ulid"],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
-    Categories = [Category.Crypto],
-    ErrorCodes = []
+    Categories = [Category.Crypto]
 )]
 public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGeneratorTool.Result>
 {
@@ -36,7 +35,7 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         Max
     }
 
-    public record Args : ToolArgs
+    public record Args
     {
         public UlidType Type { get; set; }
         public int Count { get; set; } = 1;

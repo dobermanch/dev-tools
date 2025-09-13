@@ -3,7 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/dotnet:9.0",
   "runArgs": [
     "--name",
-    "dev-tools-devcontainer"
+    "dev-tools"
   ],
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker": {
