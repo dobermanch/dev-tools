@@ -53,7 +53,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
     private byte[] ComputeMd5(byte[] data)
     {
 #if WEBASSEMBLY
-        return Dev.Tools.Core.Cryptography.MD5.ComputeHash(data);
+        return Dev.Tools.Cryptography.MD5.ComputeHash(data);
 #else
         return MD5.HashData(data);
 #endif

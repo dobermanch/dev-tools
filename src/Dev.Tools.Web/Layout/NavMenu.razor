@@ -1,6 +1,47 @@
-﻿<MudNavMenu>
+﻿@using Dev.Tools.Providers
+<MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    <MudNavGroup Title="Tools" Expanded="true">
+        @foreach (var group in _tools)
+        {
+            <MudNavGroup Title="@group.Key" Expanded="true">
+                @foreach (var tool in group)
+                {
+                    <MudNavLink
+                        Icon="@Icons.Material.Outlined.Construction"
+                        IconColor="Color.Info"
+                        Href="@($"/tools/{tool.Item2.Name}")"
+                        Match="NavLinkMatch.Prefix">
+                        @tool.Item2.Name
+                    </MudNavLink>
+                }
+            </MudNavGroup>
+        }
+    </MudNavGroup>
     <MudNavGroup Title="Settings" Expanded="true">
         <MudNavLink Href="/data-providers" Match="NavLinkMatch.Prefix">Providers</MudNavLink>
     </MudNavGroup>
 </MudNavMenu>
+
+@code{
+
+    [Inject] private IToolsProvider ToolsProvider { get; set; } = null!;
+
+    private GroupedList<string, (Category, ToolDefinition)> _tools = GroupedList<string, (Category, ToolDefinition)>.Empty;
+
+    protected override void OnInitialized()
+    {
+        var tools = ToolsProvider.GetToolDefinitions();
+
+        (Category category, ToolDefinition tools)[] grouped =
+            tools
+                .SelectMany(it => it.Categories.Select(x => (category: x, tools: it)))
+                .ToArray();
+
+        _tools = new GroupedList<string, (Category, ToolDefinition)>(it => it.Item1.ToString(), grouped);
+        
+        base.OnInitialized();
+    }
+
+
+}

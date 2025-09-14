@@ -1,4 +1,4 @@
-namespace Dev.Tools.Core.Cryptography;
+namespace Dev.Tools.Cryptography;
 
 public static class MD5
 {
