@@ -1,4 +1,4 @@
-﻿namespace Dev.Tools.Core;
+﻿namespace Dev.Tools;
 
 public interface ITool;
 
