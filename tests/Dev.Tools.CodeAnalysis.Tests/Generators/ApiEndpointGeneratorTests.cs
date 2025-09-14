@@ -1,3 +1,4 @@
+using Dev.Tools.Api.Core;
 using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.CodeAnalysis.Generators;
 
@@ -12,22 +13,31 @@ public class ApiEndpointGeneratorTests: GeneratorTestsBase
         {
             Namespace = "Dev.Tools.Tests",
             TypeName = "TestTool",
-            Usings = [
-                CodeDefinitions.ToolsArgs.Namespace,
-                CodeDefinitions.ToolsResult.Namespace,
-                CodeDefinitions.ToolDefinitionAttribute.Namespace
-            ],
-            Placeholders =
-            {
-                ["ToolDefinition"] = CodeDefinitions.ToolDefinitionAttribute.SyntaxTypeName,
-                ["ToolArgs"] = CodeDefinitions.ToolsArgs.SyntaxTypeName,
-                ["ToolResult"] = CodeDefinitions.ToolsResult.SyntaxTypeName,
-            },
             Content = """
-                      [{ToolDefinition}(Name = "tool-test")]
-                      public sealed class TestTool {
-                        public record Args : {ToolArgs};
-                        public record Result : {ToolResult};
+                      [ToolDefinition(
+                          Name = "tool-test",
+                          Aliases = ["tt"],
+                          Keywords = [Keyword.Value1, Keyword.Value2],
+                          Categories = [Category.Value1]
+                      )]
+                      public sealed class TestTool : ITool<int, long> {
+                        public void Test1() {
+                            throw new ToolException("testCode"); 
+                        }
+                        public void Test2() {
+                          throw new ToolException(Errors.TextEmpty); 
+                        }
+                      }
+                      
+                      public interface ITool<TArgs, TResult> {}
+                      
+                      public class Errors {
+                        public const string TextEmpty = "TextEmpty";
+                      }
+                      
+                      public sealed class ToolException(string errorCode) : System.Exception
+                      {
+                          public string ErrorCode { get; } = errorCode;
                       }
                       """
         };
@@ -36,17 +46,19 @@ public class ApiEndpointGeneratorTests: GeneratorTestsBase
             toolCode,
             CodeDefinitions.ToolDefinitionAttribute,
             CodeDefinitions.ToolsArgs,
-            CodeDefinitions.ToolsResult
+            CodeDefinitions.ToolsResult,
+            CodeDefinitions.Keywords,
+            CodeDefinitions.Category
         ]);
         var code = new CodeBlock
         {
             Namespace = "Dev.Tools.Tests",
             Usings = [
-                CodeDefinitions.GenerateApiEndpointsAttribute.Namespace,
+                typeof(GenerateToolsApiEndpointAttribute).Namespace,
             ],
             Placeholders =
             {
-                ["GenerateApiEndpoints"] = CodeDefinitions.GenerateApiEndpointsAttribute.SyntaxTypeName
+                ["GenerateApiEndpoints"] = nameof(GenerateToolsApiEndpointAttribute)
             },
             Content = """
                       [assembly:{GenerateApiEndpoints}]

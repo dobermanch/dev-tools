@@ -21,8 +21,36 @@ public static class CodeDefinitions
                   {
                       public required string Name { get; set; }
                       public string[] Aliases { get; set; } = [];
-                      public string[] Categories { get; set; } = [];
-                      public string[] Keywords { get; set; } = [];
+                      public Category[] Categories { get; set; } = [];
+                      public Keyword[] Keywords { get; set; } = [];
+                  }
+                  """
+    };
+    
+    public static readonly CodeBlock Category = new()
+    {
+        Namespace = ToolsGlobalNamespace,
+        TypeName = "Category",
+        Usings = ["System"],
+        Content = """
+                  public enum Category
+                  {
+                      Value1,
+                      Value2
+                  }
+                  """
+    };
+    
+    public static readonly CodeBlock Keywords = new()
+    {
+        Namespace = ToolsGlobalNamespace,
+        TypeName = "Keyword",
+        Usings = ["System"],
+        Content = """
+                  public enum Keyword
+                  {
+                      Value1,
+                      Value2
                   }
                   """
     };
@@ -38,8 +66,8 @@ public static class CodeDefinitions
                   (
                       string Name,
                       string[] Aliases,
-                      string[] Categories,
-                      string[] Keywords,
+                      Category[] Categories,
+                      Keyword[] Keywords,
                       string[] ErrorCodes,
                       Type ToolType,
                       ToolTypeDetails ArgsType,
@@ -55,18 +83,18 @@ public static class CodeDefinitions
                   """
     };
     
-    public static readonly CodeBlock GenerateApiEndpointsAttribute = new()
-    {
-        Namespace = ToolsGlobalNamespace,
-        TypeName = "GenerateApiEndpointsAttribute",
-        SyntaxTypeName = "GenerateApiEndpoints",
-        GeneratorType = typeof(ToolsCatalogGenerator),
-        Usings = ["System"],
-        Content = """
-                  [AttributeUsage(AttributeTargets.Assembly)]
-                  internal class {TypeName} : Attribute;
-                  """
-    };
+    // public static readonly CodeBlock GenerateApiEndpointsAttribute = new()
+    // {
+    //     Namespace = ToolsGlobalNamespace,
+    //     TypeName = "GenerateApiEndpointsAttribute",
+    //     SyntaxTypeName = "GenerateApiEndpoints",
+    //     GeneratorType = typeof(ToolsCatalogGenerator),
+    //     Usings = ["System"],
+    //     Content = """
+    //               [AttributeUsage(AttributeTargets.Assembly)]
+    //               internal class {TypeName} : Attribute;
+    //               """
+    // };
     
     public static readonly CodeBlock GenerateCommandsAttribute = new()
     {

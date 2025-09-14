@@ -10,5 +10,17 @@
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers"/>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Dev.Tools.Api\Core\GenerateToolsApiEndpointAttribute.cs">
+      <Link>Core\GenerateToolsApiEndpointAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Dev.Tools.Console\Core\GenerateToolsCliCommandAttribute.cs">
+      <Link>Core\GenerateToolsCliCommandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Dev.Tools.Mcp\Core\GenerateToolsMcpToolAttribute.cs">
+      <Link>Core\GenerateToolsMcpToolAttribute.cs</Link>
+    </Compile>
+  </ItemGroup>
   
 </Project>

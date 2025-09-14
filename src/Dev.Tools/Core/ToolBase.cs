@@ -1,4 +1,4 @@
-﻿namespace Dev.Tools.Tools;
+﻿namespace Dev.Tools.Core;
 
 public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
     where TResult: ToolResult, new()

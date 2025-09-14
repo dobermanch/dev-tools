@@ -8,6 +8,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDevTools(this IServiceCollection services)
     {
         services.AddSingleton<IToolsProvider, ToolsProvider>();
+
+        foreach (var tool in ToolsCatalog.ToolDefinitions)
+        {
+            services.AddTransient(tool.ToolType);
+        }
+
         return services;
     }
 }

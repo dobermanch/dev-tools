@@ -22,7 +22,7 @@ public record CodeBlock
 
     public IList<string> Directives { get; set; } = [];
 
-    public IList<string> Usings { get; set; } = [];
+    public IList<string?> Usings { get; set; } = [];
 
     public Dictionary<string, string> Placeholders { get; set; } = new();
 

@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Generators;
 
-[Generator]
+//[Generator]
 public class ValuesListGenerator : IIncrementalGenerator
 {
     public static readonly DiagnosticDescriptor NotPartialRule = new(

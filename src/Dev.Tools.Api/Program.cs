@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.OpenApi.Any;
 using Scalar.AspNetCore;
 
-[assembly: GenerateApiEndpoints]
+[assembly: GenerateToolsApiEndpoint]
 
 var builder = WebApplication.CreateBuilder(args);
 

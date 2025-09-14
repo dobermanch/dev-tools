@@ -7,8 +7,8 @@ internal sealed class ToolsProvider : IToolsProvider
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IReadOnlyCollection<ToolDefinition> _tools;
-    private readonly FrozenDictionary<string, ToolDefinition[]> _toolsByCategory;
-    private readonly FrozenDictionary<string, ToolDefinition[]> _toolsByKeyword;
+    private readonly FrozenDictionary<Category, ToolDefinition[]> _toolsByCategory;
+    private readonly FrozenDictionary<Keyword, ToolDefinition[]> _toolsByKeyword;
     private readonly FrozenDictionary<string, ToolDefinition> _toolsByName;
     private readonly FrozenDictionary<Type, ToolDefinition> _toolsByType;
 

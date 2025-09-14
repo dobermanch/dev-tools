@@ -15,8 +15,8 @@ public sealed record ToolDefinition
 (
     string Name,
     string[] Aliases,
-    string[] Categories,
-    string[] Keywords,
+    Category[] Categories,
+    Keyword[] Keywords,
     string[] ErrorCodes,
     Type ToolType,
     ToolTypeDetails ArgsType,

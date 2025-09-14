@@ -1,50 +1,48 @@
+using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Generators;
 
-public class ToolGeneratorBase
+public abstract class ToolGeneratorBase
 {
-    protected static ToolDetails? GetToolDetails(GeneratorSyntaxContext context)
+    protected abstract void GenerateTools(SourceProductionContext spc, ImmutableArray<ToolDetails> tools);
+    
+    protected IncrementalValueProvider<AttributeData?> GetAssemblyAttribute<T>(IncrementalValueProvider<Compilation> provider)
     {
-        (TypeDeclarationSyntax? syntax, INamedTypeSymbol? symbol) = context.Node.GetTypeNode(context.SemanticModel);
-        if (syntax is null || symbol is null)
+        var guardAttribute = typeof(T);
+        return provider.Select((compilation, _) =>
+        {
+            var attrSymbol = compilation.GetTypeByMetadataName($"{guardAttribute.Namespace}.{guardAttribute.Name}");
+            return compilation.Assembly.GetAttributes().FirstOrDefault(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, attrSymbol));
+        });
+    }
+    
+    protected static ToolDetails? GetToolDetails(INamedTypeSymbol symbol)
+    {
+        var syntax = symbol.DeclaringSyntaxReferences
+            .Select(it => it.GetSyntax())
+            .OfType<TypeDeclarationSyntax>()
+            .FirstOrDefault();
+        if (syntax == null)
         {
             return null;
         }
-
-        Dictionary<string, ExpressionSyntax> values = GetToolDefinitionDetails(context);
+        
+        Dictionary<string, ExpressionSyntax> values = GetToolDefinitionDetails(symbol);
         if (values.Count <= 0)
         {
             return null;
         }
         
-        INamedTypeSymbol? toolInterface = FindToolInterface(symbol);
-        if (toolInterface is null)
+        IList<TypeDetails> toolTypes = FindToolInterface(symbol);
+        if (toolTypes.Count <= 0)
         {
             return null;
         }
 
-        TypeDetails[] toolTypes = toolInterface
-            .TypeArguments
-            .Select(arg => new TypeDetails
-            {
-                Type = arg.ToDisplayString(),
-                Properties = arg.GetMembers()
-                    .OfType<IPropertySymbol>()
-                    .Where(it => it.DeclaredAccessibility == Accessibility.Public)
-                    .Select(it => new PropertyDetails{
-                        Name = it.Name, 
-                        Type = it.Type.ToDisplayString(),
-                        IsRequired = it.IsRequired,
-                        IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
-                    })
-                    .ToArray()
-            })
-            .ToArray();
-
-        ExpressionSyntax[] errorCodes = FindToolExceptionErrorCodes(syntax);
+        ExpressionSyntax[] errorCodes = FindToolExceptionErrorCodes(symbol);
         
         return new ToolDetails
         {
@@ -59,50 +57,68 @@ public class ToolGeneratorBase
             ResultDetails = toolTypes[1]
         };
     }
-
-    protected static Dictionary<string, ExpressionSyntax> GetToolDefinitionDetails(GeneratorSyntaxContext context) =>
-        context
-            .Node
-            .GetAttributeSyntax(
-                context.SemanticModel,
-                CodeDefinitions.ToolDefinitionAttribute.TypeFullName
-            )
-            ?.ArgumentList
-            ?.Arguments
+    
+    private static Dictionary<string, ExpressionSyntax> GetToolDefinitionDetails(INamedTypeSymbol node) =>
+        node.GetAttributes()
+            .Where(x => x.AttributeClass?.ToDisplayString() == CodeDefinitions.ToolDefinitionAttribute.TypeFullName)
+            .Select(it => it.ApplicationSyntaxReference)
+            .Select(it => it?.GetSyntax())
+            .OfType<AttributeSyntax>()
+            .SelectMany(it => it.ArgumentList?.Arguments ?? [])
             .Select(it => (it.NameEquals?.Name.Identifier.Text, it.Expression))
-            .Where(it => it.Item1 != null)
-            .ToDictionary(it => it.Item1!, it => it.Item2) ?? [];
-
-    protected static ExpressionSyntax[] FindToolExceptionErrorCodes(TypeDeclarationSyntax node) =>
-        node
-            .DescendantNodes()
-            .OfType<ThrowStatementSyntax>()
-            .Select(it => it.Expression)
-            .OfType<ObjectCreationExpressionSyntax>()
-            .Where(it => it.Type.ToFullString() == "ToolException")
-            .Select(it => it.ArgumentList?.Arguments[0].Expression!)
+            .Where(it => it.Text != null)
+            .ToDictionary(it => it.Text!, it => it.Expression);
+    
+    private static ExpressionSyntax[] FindToolExceptionErrorCodes(INamedTypeSymbol node) =>
+        node.GetMembers()
+            .OfType<IMethodSymbol>()
+            .SelectMany(it => it.DeclaringSyntaxReferences)
+            .Select(it => it.GetSyntax())
+            .OfType<MethodDeclarationSyntax>()
+            .SelectMany(it =>
+                it.DescendantNodes()
+                    .OfType<ThrowStatementSyntax>()
+                    .Select(x => x.Expression)
+                    .OfType<ObjectCreationExpressionSyntax>()
+                    .Where(x => x.Type.ToFullString() == "ToolException")
+                    .Select(x => x.ArgumentList?.Arguments[0].Expression!)
+            )
             .ToArray();
 
-    protected static INamedTypeSymbol? FindToolInterface(INamedTypeSymbol? typeSymbol)
+    private static IList<TypeDetails> FindToolInterface(INamedTypeSymbol? typeSymbol)
     {
-        while (typeSymbol != null)
+        INamedTypeSymbol? toolInterface = null;
+        while (typeSymbol != null && toolInterface == null)
         {
-            INamedTypeSymbol? toolInterface = typeSymbol
+            toolInterface = typeSymbol
                 .Interfaces
                 .FirstOrDefault(i => i.IsGenericType && i is { TypeArguments.Length: 2 });
-            
-            if (toolInterface != null)
-            {
-                return toolInterface;
-            }
 
             typeSymbol = typeSymbol.BaseType;
         }
 
-        return null;
+        return toolInterface
+            ?.TypeArguments
+            .Select(arg => new TypeDetails
+            {
+                Type = arg.ToDisplayString(),
+                Properties =
+                    arg.GetMembers()
+                        .OfType<IPropertySymbol>()
+                        .Where(it => it.DeclaredAccessibility == Accessibility.Public)
+                        .Select(it => new PropertyDetails
+                        {
+                            Name = it.Name,
+                            Type = it.Type.ToDisplayString(),
+                            IsRequired = it.IsRequired,
+                            IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
+                        })
+                        .ToArray()
+            })
+            .ToArray() ?? [];
     }
     
-    protected  record ToolDetails : TypeDeclaration
+    protected record ToolDetails : TypeDeclaration
     {
         public string Name { get; set; } = null!;
         public string[] Aliases { get; set; } = [];

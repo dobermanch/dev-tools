@@ -1,8 +1,7 @@
-﻿using Dev.Tools.Core;
+﻿using Dev.Tools.Console.Core;
 using Dev.Tools.Core.Localization;
 using Dev.Tools.Providers;
 using Dev.Tools.Tools;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Commands;
@@ -19,6 +18,8 @@ internal sealed partial class Base64DecoderCommand(IToolsProvider toolProvider, 
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
+        ToolDefinition definition = toolProvider.GetToolDefinition<Base64DecoderTool>();
+
         try
         {
             var tool = toolProvider.GetTool<Base64DecoderTool>();
@@ -27,23 +28,16 @@ internal sealed partial class Base64DecoderCommand(IToolsProvider toolProvider, 
                 Text = settings.Text,
             };
 
-            PostUpdateArgs(ref args, context, settings);
-
             Base64DecoderTool.Result result = await tool.RunAsync(args, CancellationToken.None);
-
-            return responseHandler.Handle(result);
+            
+            return responseHandler.ProcessResponse(result, definition);
         }
         catch (Exception ex)
         {
-            AnsiConsole.WriteException(ex);
-            return -1;
+            return responseHandler.ProcessError(ex, definition);
+
+            //AnsiConsole.WriteException(ex);
+            //return -1;
         }
     }
-
-    partial void PostUpdateArgs(ref Base64DecoderTool.Args args, CommandContext context, Settings settings);
-}
-
-public interface IToolResponseHandler
-{
-    int Handle(ToolResult result);
 }

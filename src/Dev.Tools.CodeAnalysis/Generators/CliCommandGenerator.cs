@@ -1,12 +1,12 @@
-using System.Collections.Immutable;
-using Dev.Tools.Api.Core;
+﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
+using Dev.Tools.Console.Core;
 using Microsoft.CodeAnalysis;
 
 namespace Dev.Tools.CodeAnalysis.Generators;
 
 [Generator]
-public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
+public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -25,7 +25,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                         .Select(it => it!)
                 );
 
-        var attributes = GetAssemblyAttribute<GenerateToolsApiEndpointAttribute>(context.CompilationProvider);
+        var attributes = GetAssemblyAttribute<GenerateToolsCliCommandAttribute>(context.CompilationProvider);
         
         var compilationAndAttributes = referencedToolTypes
             .Combine(attributes)
@@ -40,17 +40,17 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
     {
         foreach (var tool in tools)
         {
-            var code = GenerateApiEndpoint(tool);
+            var code = GenerateCliCommand(tool);
             spc.AddSource(code.OutputFileName, code);
         }
     }
 
-    private CodeBlock GenerateApiEndpoint(ToolDetails tool) =>
+    private CodeBlock GenerateCliCommand(ToolDetails tool) =>
         new()
         {
-            Namespace = "Dev.Tools.Api.Endpoints",
-            TypeName = tool.TypeName + "Endpoint",
-            GeneratorType = typeof(ApiEndpointGenerator),
+            Namespace = "Dev.Tools.Console.Commands",
+            TypeName = tool.TypeName + "Command",
+            GeneratorType = typeof(CliCommandGenerator),
             Placeholders = new()
             {
                 ["ToolName"] = tool.Name,
@@ -59,35 +59,41 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["ToolResultType"] = tool.ResultDetails.Type
             },
             Usings = [
-                "Dev.Tools.Api.Core",
-                "Microsoft.AspNetCore.Mvc",
-                "System.Net",
-                "System.Net.Mime"
+                "Dev.Tools.Core",
+                "Dev.Tools.Console.Core",
+                "Dev.Tools.Core.Localization",
+                "Dev.Tools.Providers",
+                "Dev.Tools.Tools",
+                "Spectre.Console",
+                "Spectre.Console.Cli",
             ],
             Content = 
               """
-              public class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider) : EndpointBase
+              internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
+                  : AsyncCommand<{TypeName}.Settings>
               {
-                  [HttpPost("{ToolName}")]
-                  [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
-                  [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
-                  [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
-                  public async Task<IActionResult> HandleAsync([FromBody] {ToolArgsType} request, CancellationToken cancellationToken)
+                  public sealed class Settings : CommandSettings
                   {
-                      try 
-                      {  
-                          var tool = toolProvider.GetTool<{ToolType}>();  
-                          {ToolResultType} result = await tool.RunAsync(request, cancellationToken);
-                          if (result.HasErrors)
-                          {
-                              return Problem(type: result.ErrorCodes[0], statusCode: (int)HttpStatusCode.BadRequest);
-                          }
+                  }
                   
-                          return Ok(result);
-                      }
-                      catch (Exception e)
+                  public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+                  {
+                      ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
+                      
+                      try
                       {
-                          return Problem(title: "Failed to run tool", detail: e.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+                          var tool = toolProvider.GetTool<{ToolType}>();
+                          var args = new {ToolType}.Args
+                          {
+                          };
+                      
+                          var result = await tool.RunAsync(args, CancellationToken.None);
+                          
+                          return responseHandler.ProcessResponse(result, definition);
+                      }
+                      catch (Exception ex)
+                      {
+                          return responseHandler.ProcessError(ex, definition);
                       }
                   }
               }

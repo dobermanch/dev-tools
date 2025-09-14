@@ -1,8 +1,11 @@
 ﻿using Dev.Tools.Console.Core.DI;
 using Dev.Tools.Console.Commands;
+using Dev.Tools.Console.Core;
 using Spectre.Console.Cli;
 using Microsoft.Extensions.DependencyInjection;
 using Dev.Tools.Tools;
+
+[assembly: GenerateToolsCliCommand]
 
 var services = new ServiceCollection();
 services
