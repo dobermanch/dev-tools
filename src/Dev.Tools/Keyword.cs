@@ -21,5 +21,6 @@ public enum Keyword
     Network,
     Ip,
     Internet,
-    Token
+    Token,
+    Web
 }

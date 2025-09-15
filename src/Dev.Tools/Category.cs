@@ -6,5 +6,6 @@ public enum Category
     Crypto,
     Security,
     Text,
-    Network
+    Network,
+    Web
 }
