@@ -7,7 +7,7 @@ public class StringToNatoAlphabetToolTests
     [Test]
     [Arguments("hello #$ 12world", "Hotel Echo Lima Lima Oscar   # $   1 2 Whiskey Oscar Romeo Lima Delta")]
     [Arguments("привіт", "п р и в і т")]
-    public async Task ShouldTranscodeToSafeUrlString(string input, string expectedResult)
+    public async Task ShouldConvertToNatoAlphabet_WhenInputProvided(string input, string expectedResult)
     {
         var args = new StringToNatoAlphabetTool.Args(input);
 
