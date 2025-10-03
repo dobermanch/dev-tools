@@ -82,9 +82,9 @@ public partial class CharacterViewerPage : ComponentBase
     {
         if (_hideSymbols)
         {
-            return _charMap.TryGetValue(c, out var value1) ? value1.NonStandard ? "" : value1.Printable;
+            return _charMap.TryGetValue(c, out var value1) ? value1.NonStandard ? "" : value1.Printable : c.ToString();
         }
-        
+
         if (_args.ViewType != CharacterViewerTool.ViewType.RevealAll)
         {
             var result = c switch
