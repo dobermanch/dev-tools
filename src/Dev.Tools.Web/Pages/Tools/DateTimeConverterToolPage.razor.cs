@@ -7,9 +7,9 @@ namespace Dev.Tools.Web.Pages.Tools;
 public partial class DateTimeConverterToolPage : ComponentBase
 {
     private System.Timers.Timer? _timer;
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private DateTimeConverterTool _tool = null!;
-    private readonly DateTimeConverterTool.Args _args = new();
+    private readonly Args _args = new();
     private Dictionary<DateTimeConverterTool.DateFormatType, DateTimeConverterTool.Result?> _results = new();
 
     [Inject] private WebContext Context { get; set; } = null!;
@@ -39,17 +39,17 @@ public partial class DateTimeConverterToolPage : ComponentBase
         _args.Date = value;
         _timer!.Enabled = string.IsNullOrEmpty(value);
         
-        await ConvertAsync(value);
+        await ConvertAsync();
     }
     
-    private async Task ConvertAsync(string? date)
+    private async Task ConvertAsync()
     {
         var tasks = new List<Task>();
         foreach (var format in _results.Keys)
         {
             tasks.Add(_tool.RunAsync(new DateTimeConverterTool.Args
                     {
-                        Date = date,
+                        Date = _args.Date,
                         From = _args.From,
                         To = format
                     },
@@ -61,19 +61,6 @@ public partial class DateTimeConverterToolPage : ComponentBase
         }
         
         await Task.WhenAll(tasks);
-    }
-
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
-
-    private async Task OnCopyToClipboardAsync(string? textToCopy)
-    {
-        if (!string.IsNullOrEmpty(textToCopy))
-        {
-            await Context.JsService.CopyToClipboardAsync(textToCopy);
-        }
     }
 
     private string ErrorMessage()
@@ -89,17 +76,25 @@ public partial class DateTimeConverterToolPage : ComponentBase
     private Task OnFromFormatSelectedAsync(DateTimeConverterTool.DateFormatType format)
     {
         _args.From = format;
-        return ConvertAsync(_args.Date);
+        return ConvertAsync();
     }
     
     private async void UpdateTime(object? source, System.Timers.ElapsedEventArgs e)
     {
-        await ConvertAsync(DateTime.Now.ToString("O"));
+        _args.Date = DateTime.Now.ToString("O");
+        await ConvertAsync();
         await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
     {
         _timer?.Dispose();
+    }
+    
+    public record Args
+    {
+        public string Date { get; set; } = DateTime.Now.ToString("O");
+        public DateTimeConverterTool.DateFormatType From { get; set; } = DateTimeConverterTool.DateFormatType.Iso8601;
+        public DateTimeConverterTool.DateFormatType To { get; set; }
     }
 }

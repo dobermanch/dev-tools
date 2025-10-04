@@ -32,11 +32,6 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
         return _result != null ? string.Join(Environment.NewLine, _result.Phrases) : string.Empty;
     }
 
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
-
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))

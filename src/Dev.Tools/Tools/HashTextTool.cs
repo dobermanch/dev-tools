@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Dev.Tools.Cryptography;
 
 namespace Dev.Tools.Tools;
 
@@ -8,7 +9,7 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
-public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Result>
+public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
     protected override Result Execute(Args args)
     {
@@ -50,34 +51,20 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
         return new Result(result.ToString());
     }
 
-    private byte[] ComputeMd5(byte[] data)
-    {
-#if WEBASSEMBLY
-        return Dev.Tools.Cryptography.MD5.ComputeHash(data);
-#else
-        return MD5.HashData(data);
-#endif
-    }
+    private byte[] ComputeMd5(byte[] data) 
+        => md5Hash.ComputeHash(data);
 
-    private byte[] ComputeSha1(byte[] data)
-    {
-        return SHA1.HashData(data);
-    }
+    private byte[] ComputeSha1(byte[] data) 
+        => SHA1.HashData(data);
 
-    private byte[] ComputeSha256(byte[] data)
-    {
-        return SHA256.HashData(data);
-    }
+    private byte[] ComputeSha256(byte[] data) 
+        => SHA256.HashData(data);
 
     private byte[] ComputeSha384(byte[] data)
-    {
-        return SHA384.HashData(data);
-    }
+        => SHA384.HashData(data);
 
-    private byte[] ComputeSha512(byte[] data)
-    {
-        return SHA512.HashData(data);
-    }
+    private byte[] ComputeSha512(byte[] data) 
+        => SHA512.HashData(data);
 
     public enum HashAlgorithm
     {
@@ -88,7 +75,7 @@ public sealed class HashTextTool : ToolBase<HashTextTool.Args, HashTextTool.Resu
         Sha512
     }
 
-    public record Args
+    public sealed record Args
     {
         public string? Text { get; set; }
         public HashAlgorithm Algorithm { get; set; }

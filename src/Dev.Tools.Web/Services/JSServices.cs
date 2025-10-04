@@ -6,6 +6,6 @@ internal sealed class JsServices(IJSRuntime jsRuntime) : IJsServices
 {
     public ValueTask CopyToClipboardAsync(string text, CancellationToken token = default)
     {
-        return jsRuntime.InvokeVoidAsync("copyToClipboard", token, text);
+        return string.IsNullOrEmpty(text) ? default : jsRuntime.InvokeVoidAsync("copyToClipboard", token, text);
     }
 }

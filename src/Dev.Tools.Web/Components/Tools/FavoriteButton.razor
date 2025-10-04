@@ -1,0 +1,37 @@
+<MudIconButton
+    Class="@Class"
+    Icon="@(_isFavorite ? Icons.Material.Outlined.Favorite : Icons.Material.Outlined.FavoriteBorder)"
+    Size="Size.Small"
+    Color="Color.Default"
+    OnClick="@OnToggleFavoriteAsync"/>
+
+@code {
+    private bool _isFavorite;
+    
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+    
+    [Parameter]
+    public string Class { get; set; } = null!;
+
+    [Parameter] 
+    public ToolDefinition ToolDefinition { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        _isFavorite = Context.Preferences.Preferences.Favorite.Tools.Contains(ToolDefinition.Name);
+        base.OnInitialized();
+    }
+
+    private async Task OnToggleFavoriteAsync()
+    {
+        if (!Context.Preferences.Preferences.Favorite.Tools.Add(ToolDefinition.Name))
+        {
+            Context.Preferences.Preferences.Favorite.Tools.Remove(ToolDefinition.Name);
+        }
+        
+        await Context.Preferences.UpdateFavoriteAsync(Context.Preferences.Preferences.Favorite, CancellationToken.None);
+   
+        _isFavorite = Context.Preferences.Preferences.Favorite.Tools.Contains(ToolDefinition.Name);
+    }
+}

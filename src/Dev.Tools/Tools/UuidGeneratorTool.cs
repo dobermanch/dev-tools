@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Dev.Tools.Cryptography;
 
 namespace Dev.Tools.Tools;
 
@@ -8,7 +9,7 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto]
 )]
-public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
+public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
     private static readonly Guid Max = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
 
@@ -63,13 +64,9 @@ public sealed class UuidGeneratorTool : ToolBase<UuidGeneratorTool.Args, UuidGen
         return guilds;
     }
 
-    private static Guid NewUuidV3(Guid namespaceUuid, string name)
+    private Guid NewUuidV3(Guid namespaceUuid, string name)
     {
-#if WEBASSEMBLY
-        return NewHashBasedUuid(Dev.Tools.Core.Cryptography.MD5.ComputeHash, namespaceUuid, name);
-#else
-        return NewHashBasedUuid(MD5.HashData, namespaceUuid, name);
-#endif
+        return NewHashBasedUuid(md5Hash.ComputeHash, namespaceUuid, name);
     }
 
     private static Guid NewUuidV5(Guid namespaceUuid, string name)

@@ -1,12 +1,6 @@
 @page "/tools/ip-details"
 
-<MudStack>
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="NavigateToPreviousPage"/>
-        <MudText Typo="Typo.h4" Class="my-4">@_toolDefinition.Name</MudText>
-    </MudStack>
-    <MudText Typo="Typo.body2">The IP details tool tool</MudText>
-</MudStack>
+<DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
 
 <MudCard Class="my-2">

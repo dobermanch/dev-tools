@@ -22,9 +22,4 @@ public partial class IpDetailsToolPage : ComponentBase
 
         await base.OnInitializedAsync();
     }
-
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
 }

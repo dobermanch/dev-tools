@@ -27,11 +27,6 @@ public partial class CharacterViewerPage : ComponentBase
 
         base.OnInitialized();
     }
-    
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
 
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {

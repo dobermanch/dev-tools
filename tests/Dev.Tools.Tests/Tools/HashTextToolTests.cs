@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Cryptography;
+using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -23,7 +24,7 @@ public class HashTextToolTests
             Algorithm = algorithm
         };
         
-        var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
         await Assert.That(result.ErrorCodes).Contains(ErrorCode.TextEmpty);
@@ -43,7 +44,7 @@ public class HashTextToolTests
             Algorithm = algorithm
         };
 
-        var result = await new HashTextTool().RunAsync(args, CancellationToken.None);
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Data).IsEqualTo(expectedHash);
     }

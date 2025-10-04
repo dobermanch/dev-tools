@@ -1,6 +1,8 @@
 using Dev.Tools;
+using Dev.Tools.Cryptography;
 using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
+using Dev.Tools.Web.Core.Cryptography;
 using Dev.Tools.Web.Services;
 using Dev.Tools.Web.Services.Layout;
 using Dev.Tools.Web.Services.Localization;
@@ -23,6 +25,7 @@ builder.Services.AddSingleton<ILocalizationProvider, LocalizationProvider>();
 builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 builder.Services.AddSingleton<IJsServices, JsServices>();
 builder.Services.AddCoreComponents(builder.Configuration);
+builder.Services.AddSingleton<IMd5Hash, WebAssemblyMd5>();
 builder.Services.AddDevTools();
 builder.Services.AddLocalization(options =>
 {

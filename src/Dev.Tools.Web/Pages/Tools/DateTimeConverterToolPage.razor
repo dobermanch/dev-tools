@@ -1,62 +1,39 @@
 @page "/tools/date-convert"
-@using Dev.Tools.Tools
 
-<MudStack>
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="NavigateToPreviousPage"/>
-        <MudText Typo="Typo.h4" Class="my-4">@_toolDefinition.Name</MudText>
-    </MudStack>
-    <MudText Typo="Typo.body2">The DateTime converter tool</MudText>
-</MudStack>
-
+<DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudStack Row="true" AlignItems="AlignItems.Center">
-            <MudTextField
-                T="string"
-                Value="@_args.Date"
-                DebounceInterval="500"
-                OnDebounceIntervalElapsed="OnValueChangedAsync"
-                Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                ErrorText="@ErrorMessage()"
-                Label="Date"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                Adornment="Adornment.End"
-                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                OnAdornmentClick="async () => await OnCopyToClipboardAsync(_args.Date)"/>
-
-            <MudSelect 
-                T="DateTimeConverterTool.DateFormatType"
-                Class="mt-1"
-                Value="@_args.From"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                ValueChanged="OnFromFormatSelectedAsync"
-                >
-                @foreach (var format in DateFormats())
-                {
-                    <MudSelectItem Value="format">@format.ToString()</MudSelectItem>
-                }
-            </MudSelect>
-        </MudStack>
-        @foreach (var result in _results)
-        {
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudPaper Width="120px" Elevation="0">
-                    <MudText Typo="Typo.button">@result.Key.ToString()</MudText>
-                </MudPaper>
-                <MudTextField
-                    T="string"
-                    Value="@result.Value?.Time"
-                    ReadOnly="true"
+        <MudGrid>
+            <MudItem xs="8">
+                <DtTextField
+                    Value="@_args.Date"
+                    Label="Input Date"
+                    OnDebounceIntervalElapsed="OnValueChangedAsync"
+                    Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
+                    ErrorText="@ErrorMessage()"/>
+    
+            </MudItem>
+            <MudItem xs="4">
+                <MudSelect
+                    T="DateTimeConverterTool.DateFormatType"
+                    ShrinkLabel="true"
+                    Label="Date Format"
+                    Value="@_args.From"
                     Variant="Variant.Outlined"
                     Margin="Margin.Dense"
-                    Adornment="Adornment.End"
-                    AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                    OnAdornmentClick="async () => await OnCopyToClipboardAsync(result.Value?.Time)"/>
-            </MudStack>
+                    ValueChanged="OnFromFormatSelectedAsync">
+                    @foreach (var format in DateFormats())
+                    {
+                        <MudSelectItem Value="format">@format.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+        
+        @foreach (var result in _results)
+        {
+            <DtTextField Value="@result.Value?.Time" Label="@result.Key.ToString()" LabelPosition="DtTextField.LabelPositionType.Left" LabelWidth="120" ReadOnly="true"/>
         }
     </MudCardContent>
 </MudCard>

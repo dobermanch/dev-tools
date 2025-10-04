@@ -1,0 +1,34 @@
+<MudGrid Class="mt-4 mb-2" Spacing="0">
+    
+    <MudItem xs="12">
+        <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Size="Size.Medium" OnClick="@NavigateToPreviousPage"/>
+                <MudText Typo="Typo.h4">@ToolDefinition.Name</MudText>
+            </MudStack>
+            <FavoriteButton Class="mr-2" ToolDefinition="@ToolDefinition"/>
+        </MudStack>
+    </MudItem>
+
+    <MudItem xs="12" Class="mud-card-content">
+        <KeywordChips ToolDefinition="@ToolDefinition"/>
+    </MudItem>
+
+    <MudItem xs="12" Class="mud-card-content">
+        <MudText Typo="Typo.body2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</MudText>
+    </MudItem>
+
+</MudGrid>
+
+@code {
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+
+    [Parameter] 
+    public ToolDefinition ToolDefinition { get; set; } = null!;
+    
+    private void NavigateToPreviousPage()
+    {
+        Context.Navigation.NavigateTo("/");
+    }
+}

@@ -44,12 +44,7 @@ public partial class HashTextToolPage : ComponentBase
         
         await Task.WhenAll(tasks);
     }
-
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
-
+    
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))

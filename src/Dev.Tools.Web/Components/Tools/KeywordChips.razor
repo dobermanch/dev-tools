@@ -1,0 +1,14 @@
+<MudStack Class="@Class" Row="true" Spacing="0" Wrap="Wrap.Wrap">
+    @foreach (var keyword in ToolDefinition.Keywords.OrderBy(it => it))
+    {
+        <MudChip T="string" Color="Color.Dark" Size="Size.Small" Label="true" Text="@keyword.ToString()"/>
+    }
+</MudStack>
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = null!;
+    
+    [Parameter] 
+    public ToolDefinition ToolDefinition { get; set; } = null!;
+}

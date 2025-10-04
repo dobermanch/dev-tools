@@ -1,12 +1,6 @@
 @page "/tools/hash"
 
-<MudStack>
-    <MudStack Row="true" AlignItems="AlignItems.Center">
-        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" OnClick="NavigateToPreviousPage"/>
-        <MudText Typo="Typo.h4" Class="my-4">@_toolDefinition.Name</MudText>
-    </MudStack>
-    <MudText Typo="Typo.body2">The hash text tool</MudText>
-</MudStack>
+<DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
 
 <MudCard Class="my-2">
@@ -30,20 +24,7 @@
 
         @foreach (var result in _results)
         {
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudPaper Width="64px" Elevation="0">
-                    <MudText Typo="Typo.button">@result.Key.ToString()</MudText>
-                </MudPaper>
-                <MudTextField
-                    T="string"
-                    Value="@result.Value?.Data"
-                    ReadOnly="true"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Adornment="Adornment.End"
-                    AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                    OnAdornmentClick="async () => await OnCopyToClipboardAsync(result.Value?.Data)"/>
-            </MudStack>
+            <DtTextField Value="@result.Value?.Data" Label="@result.Key.ToString()" LabelPosition="DtTextField.LabelPositionType.Left" LabelWidth="64" ReadOnly="true" />
         }
     </MudCardContent>
 </MudCard>

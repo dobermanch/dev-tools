@@ -31,11 +31,6 @@ public partial class TokenGeneratorToolPage : ComponentBase
         return _result != null ? string.Join(Environment.NewLine, _result.Tokens) : string.Empty;
     }
 
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo("/");
-    }
-
     private async Task OnCopyToClipboardAsync(string? textToCopy)
     {
         if (!string.IsNullOrEmpty(textToCopy))
