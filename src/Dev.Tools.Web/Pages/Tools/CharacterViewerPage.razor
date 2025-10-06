@@ -1,16 +1,9 @@
 @page "/tools/char-viewer"
-@using Dev.Tools.Tools
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
 
 <MudCard Class="my-2">
-    <MudCardHeader>
-        <CardHeaderContent>
-            <MudText Typo="Typo.h6">@_toolDefinition.Name</MudText>
-            <MudText Typo="Typo.body2">Reveal all characters in text</MudText>
-        </CardHeaderContent>
-    </MudCardHeader>
     <MudCardContent>
         <MudStack AlignItems="AlignItems.Start">
             <MudToggleGroup
@@ -130,16 +123,6 @@
                     <MudTd>@context.AsciiCode</MudTd>
                     <MudTd>@context.HtmlString</MudTd>
                     <MudTd>@context.UrlString</MudTd>
-                    @* <MudTd> *@
-                    @*     @if (@context.NonStandard) *@
-                    @*     { *@
-                    @*         <MudText>Non-Standard</MudText>     *@
-                    @*     } *@
-                    @*     else *@
-                    @*     { *@
-                    @*         <MudText>Standard</MudText> *@
-                    @*     } *@
-                    @* </MudTd> *@
                 </RowTemplate>
             </MudTable>
         </MudPaper>

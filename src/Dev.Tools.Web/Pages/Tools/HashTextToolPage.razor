@@ -1,30 +1,44 @@
 @page "/tools/hash"
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudTextField
-            T="string"
-            Value="@_args.Text"
-            DebounceInterval="500"
-            OnDebounceIntervalElapsed="OnValueChangedAsync"
-            Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-            ErrorText="@ErrorMessage()"
-            Label="Text to Hash"
-            Lines="5"
-            AutoGrow="true"
-            MaxLines="10"
-            Variant="Variant.Outlined"
-            Margin="Margin.Dense"
-            Adornment="Adornment.End"
-            AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-            OnAdornmentClick="async () => await OnCopyToClipboardAsync(_args.Text)"/>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField
+                    T="string"
+                    Value="@_args.Text"
+                    DebounceInterval="500"
+                    OnDebounceIntervalElapsed="OnValueChangedAsync"
+                    Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
+                    ErrorText="@ErrorMessage()"
+                    Label="Text to Hash"
+                    Lines="5"
+                    AutoGrow="true"
+                    MaxLines="10"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                    OnAdornmentClick="async () => await OnCopyToClipboardAsync(_args.Text)"/>
+            </MudItem>
+        </MudGrid>
+        
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
 
-        @foreach (var result in _results)
-        {
-            <DtTextField Value="@result.Value?.Data" Label="@result.Key.ToString()" LabelPosition="DtTextField.LabelPositionType.Left" LabelWidth="64" ReadOnly="true" />
-        }
+        <MudGrid Spacing="3">
+            @foreach (var result in _results)
+            {
+                <MudItem xs="12">
+                    <DtTextField T="string" Value="@result.Value?.Data" Label="@result.Key.ToString()" LabelWidth="64"
+                                 ReadOnly="true"/>
+                </MudItem>
+            }
+        </MudGrid>
+
     </MudCardContent>
 </MudCard>

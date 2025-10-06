@@ -32,14 +32,6 @@ public partial class UuidGeneratorToolPage : ComponentBase
         return _result != null ? string.Join(Environment.NewLine, _result.Data) : string.Empty;
     }
 
-    private async Task OnCopyToClipboardAsync(string? textToCopy)
-    {
-        if (!string.IsNullOrEmpty(textToCopy))
-        {
-            await Context.JsService.CopyToClipboardAsync(textToCopy);
-        }
-    }
-
     private Task OnCountValueChangedAsync(int count)
     {
         _args.Count = count;

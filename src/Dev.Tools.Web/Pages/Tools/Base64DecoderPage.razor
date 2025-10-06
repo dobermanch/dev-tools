@@ -1,0 +1,39 @@
+@page "/tools/base64-decoder"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Label="Base64 String to Decode"
+                    Value="@_args.Text"
+                    Error="@_result.HasErrors"
+                    ErrorText="@_result.ErrorCodes.FirstOrDefault("")"
+                    LabelPosition="LabelPositionType.Inline"
+                    Lines="10"
+                    OnDebounceIntervalElapsed="OnDecodeStringValueChangedAsync"
+                />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@_result.Data"
+                    Label="Decoded String"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>

@@ -1,0 +1,46 @@
+@typeparam T
+
+<MudGrid Class="align-center">
+    <MudItem xs="4">
+        <MudText Typo="Typo.body1">@Label</MudText>
+    </MudItem>
+    
+    <MudItem xs="8">
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudSlider
+                T="@T"
+                Value="@Value"
+                Min="@MinValue"
+                Max="@MaxValue"
+                ValueChanged="@ValueChanged"/>
+
+            <MudPaper Width="100px" Elevation="0">
+                <MudNumericField
+                    T="@T"
+                    Value="@Value"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Min="@MinValue"
+                    Max="@MaxValue"
+                    ValueChanged="@ValueChanged"/>
+            </MudPaper>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+@* <MudStack Class="@Class" Row="true" AlignItems="AlignItems.Center"> *@
+@*     <MudText Typo="Typo.body1">@Label</MudText> *@
+@*     <MudSlider  *@
+@*         T="@T"  *@
+@*         Value="@Value"  *@
+@*         Min="@MinValue"  *@
+@*         Max="@MaxValue" *@
+@*         ValueChanged="@ValueChanged"/> *@
+@*     <MudNumericField *@
+@*         T="@T" *@
+@*         Value="@Value" *@
+@*         Variant="Variant.Outlined" *@
+@*         Margin="Margin.Dense" *@
+@*         Min="@MinValue" *@
+@*         Max="@MaxValue" *@
+@*         ValueChanged="@ValueChanged"/> *@
+@* </MudStack> *@

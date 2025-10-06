@@ -1,13 +1,17 @@
 @page "/tools/ip-details"
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudStack Row="true" Spacing="5">
-            <MudText Typo="Typo.body1">Your IP:</MudText>
-            <MudText Typo="Typo.body1">@_result.IpV4</MudText>
-        </MudStack>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudStack Row="true" Spacing="5">
+                    <MudText Typo="Typo.body1">Your IP:</MudText>
+                    <MudText Typo="Typo.body1">@_result.IpV4</MudText>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>

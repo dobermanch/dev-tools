@@ -18,7 +18,9 @@ public partial class DateTimeConverterToolPage : ComponentBase
     {
         _tool = Context.ToolsProvider.GetTool<DateTimeConverterTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<DateTimeConverterTool>();
-        _results = DateFormats()
+        
+        _results = Enum
+            .GetValues<DateTimeConverterTool.DateFormatType>()
             .ToDictionary(it => it, _ => (DateTimeConverterTool.Result?)null);
 
         await base.OnInitializedAsync();
@@ -28,11 +30,6 @@ public partial class DateTimeConverterToolPage : ComponentBase
         _timer.AutoReset = true;
         _timer.Enabled = true;
     }
-
-    private DateTimeConverterTool.DateFormatType[] DateFormats()
-    {
-        return Enum.GetValues<DateTimeConverterTool.DateFormatType>();
-    } 
     
     private async Task OnValueChangedAsync(string value)
     {

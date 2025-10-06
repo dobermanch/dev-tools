@@ -1,96 +1,87 @@
 @page "/tools/uuid-generator"
-@using Dev.Tools.Tools
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudStack AlignItems="AlignItems.Start">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Token Count</MudText>
-                <MudSlider T="int" Value="@_args.Count" Min="1" Max="100"
-                           ValueChanged="OnCountValueChangedAsync"/>
-                <MudNumericField
-                    T="int"
-                    Value="@_args.Count"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Min="1"
-                    Max="100"
-                    ValueChanged="OnCountValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudToggleGroup
-                    T="UuidGeneratorTool.UuidType"
-                    SelectionMode="SelectionMode.SingleSelection"
-                    Value="@_args.Type"
-                    Color="Color.Primary"
-                    ValueChanged="OnTypeValueChangedAsync"
-                    FixedContent>
-                    @foreach (var type in Enum.GetValues<UuidGeneratorTool.UuidType>())
-                    {
-                        <MudToggleItem Value="@type" Text="@type.ToString()"/>
-                    }
-                </MudToggleGroup>
-            </MudStack>
-            
+        <MudGrid Class="align-center">
+            <MudItem xs="12">
+                <MudGrid Class="align-center">
+                    <MudItem xs="12" md="6">
+                        <DtSlider
+                            T="int"
+                            Label="Token Count"
+                            Value="@_args.Count"
+                            MinValue="1"
+                            MaxValue="100"
+                            ValueChanged="@OnCountValueChangedAsync"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtSelectEnum
+                            T="UuidGeneratorTool.UuidType"
+                            Label="Type"
+                            Value="@_args.Type"
+                            ValueChanged="OnTypeValueChangedAsync"
+                        />
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
             @if (_args.Type is UuidGeneratorTool.UuidType.V3 or UuidGeneratorTool.UuidType.V5)
             {
-                <MudStack Row="true" AlignItems="AlignItems.Center">
-                    <MudText Typo="Typo.body1">Name</MudText>
-                    <MudTextField
-                        T="string"
-                        @bind-Value="@_args.Name"
-                        Label="Name"
-                        Variant="Variant.Outlined"
-                        Margin="Margin.Dense"
-                        DebounceInterval="500"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudStack>
-                <MudStack Row="true" AlignItems="AlignItems.Center">
-                    <MudText Typo="Typo.body1">Namespace</MudText>
-                    <MudTextField
-                        T="Guid?"
-                        @bind-Value="@_args.Namespace"
-                        Label="Namespace"
-                        Variant="Variant.Outlined"
-                        Margin="Margin.Dense"
-                        DebounceInterval="500"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudStack>
+                <MudItem xs="12">
+                    <MudGrid Class="align-center">
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Label="Name"
+                                @bind-Value="@_args.Name"
+                                OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="Guid?"
+                                Label="Namespace"
+                                @bind-Value="@_args.Namespace"
+                                OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            />
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
             }
 
             @if (_args.Type == UuidGeneratorTool.UuidType.V7)
             {
-                <MudStack Row="true" AlignItems="AlignItems.Center">
-                    <MudText Typo="Typo.body1">Time</MudText>
-                    <MudTextField
+                <MudItem xs="12">
+                    <DtTextField
                         T="DateTime?"
                         @bind-Value="@_args.Time"
                         Label="Time"
                         Format="s"
                         InputType="InputType.DateTimeLocal"
-                        Variant="Variant.Outlined"
-                        Margin="Margin.Dense"
-                        DebounceInterval="500"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudStack>
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"
+                    />
+                </MudItem>
             }
-        </MudStack>
-        <MudStack Spacing="4">
-            <MudTextField
-                T="string"
-                Value="@GetUuids()"
-                Label="ULIDs"
-                ReadOnly="true"
-                Lines="5"
-                AutoGrow="true"
-                MaxLines="10"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                Adornment="Adornment.End"
-                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                OnAdornmentClick="async () => await OnCopyToClipboardAsync(GetUuids())"/>
-        </MudStack>
+        </MudGrid>
+
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@GetUuids()"
+                    Label="UUIDs"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>

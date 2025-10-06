@@ -1,82 +1,36 @@
-<MudStack Class="@Class" Row="true" AlignItems="AlignItems.Center">
+@typeparam T
+
+<MudGrid Class="align-center">
     @if (LabelPosition == LabelPositionType.Left)
     {
-        <MudPaper Width="@($"{LabelWidth}px")" Elevation="0">
-            <MudText Typo="Typo.button">@Label</MudText>
-        </MudPaper>
-    }
-    <MudTextField
-        T="string"
-        ShrinkLabel="true"
-        Label="@(LabelPosition == LabelPositionType.Inline ? Label : null)"
-        Value="@Value"
-        DebounceInterval="@DebounceInterval"
-        OnDebounceIntervalElapsed="@OnDebounceIntervalElapsed"
-        Error="@Error"
-        ErrorText="@ErrorText"
-        ReadOnly="@ReadOnly"
-        Variant="Variant.Outlined"
-        Margin="Margin.Dense"
-        Adornment="Adornment.End"
-        IconSize="Size.Small"
-        AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-        OnAdornmentClick="async () => await OnCopyToClipboardAsync()"/>
-</MudStack>
-
-@code {
-    private const int LabelWidthMinWidth = 100;
-    private const int LabelWidthMaxWidth = 300;
-    
-    private int _labelWidth = LabelWidthMinWidth;
-    
-    [Inject]
-    private WebContext Context { get; set; } = null!;
-    
-    [Parameter]
-    public string Class { get; set; } = null!;
-
-    [Parameter]
-    public string Label { get; set; } = null!;
-
-    [Parameter]
-    public int LabelWidth
-    {
-        get => _labelWidth;
-        set => _labelWidth = value <= 0 ? LabelWidthMinWidth : value > LabelWidthMaxWidth ? LabelWidthMaxWidth : value;
+        <MudItem xs="4">
+            <MudText Typo="Typo.body1">@Label</MudText>
+        </MudItem>
     }
     
-    [Parameter]
-    public LabelPositionType LabelPosition { get; set; }
-    
-    [Parameter]
-    public string? Value { get; set; }
-    
-    [Parameter]
-    public bool ReadOnly { get; set; }
-    
-    [Parameter]
-    public string? ErrorText { get; set; }
-
-    [Parameter]
-    public bool Error { get; set; }
-
-    [Parameter] 
-    public double DebounceInterval { get; set; } = 500;
-
-    [Parameter]
-    public EventCallback<string> OnDebounceIntervalElapsed { get; set; }
-
-    private async Task OnCopyToClipboardAsync()
-    {
-        if (!string.IsNullOrEmpty(Value))
-        {
-            await Context.JsService.CopyToClipboardAsync(Value);
-        }
-    }
-
-    public enum LabelPositionType
-    {
-        Inline,
-        Left
-    }
-}
+    <MudItem xs="@(LabelPosition == LabelPositionType.Left ? 8 : 12)">
+        <MudTextField
+            T="@T"
+            ShrinkLabel="true"
+            Label="@(LabelPosition == LabelPositionType.Inline ? Label : null)"
+            Value="@Value"
+            ValueChanged="@ValueChanged"
+            MaxLength="@MaxLength"
+            DebounceInterval="@DebounceInterval"
+            OnDebounceIntervalElapsed="@OnDebounceIntervalElapsed"
+            Error="@Error"
+            ErrorText="@ErrorText"
+            ReadOnly="@ReadOnly"
+            Variant="Variant.Outlined"
+            Margin="Margin.Dense"
+            Format="@Format"
+            InputType="@InputType"
+            Lines="@Lines"
+            AutoGrow="@(Lines > 1)"
+            MaxLines="@Lines"
+            Adornment="@(ShowCopyButton ? Adornment.End : Adornment.None)"
+            IconSize="Size.Small"
+            AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+            OnAdornmentClick="async () => await OnCopyToClipboardAsync()"/>
+    </MudItem>
+</MudGrid>

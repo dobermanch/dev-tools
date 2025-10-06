@@ -1,53 +1,46 @@
 @page "/tools/ulid-generator"
-@using Dev.Tools.Tools
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudStack AlignItems="AlignItems.Start">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Token Count</MudText>
-                <MudSlider T="int" Value="@_args.Count" Min="1" Max="100"
-                           ValueChanged="OnCountValueChangedAsync"/>
-                <MudNumericField
+        <MudGrid Class="align-center">
+            <MudItem xs="12" md="6">
+                <DtSlider
                     T="int"
+                    Label="Token Count"
                     Value="@_args.Count"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Min="1"
-                    Max="100"
-                    ValueChanged="OnCountValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudToggleGroup
+                    MinValue="1"
+                    MaxValue="100"
+                    ValueChanged="@OnCountValueChangedAsync"
+                />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <DtSelectEnum
                     T="UlidGeneratorTool.UlidType"
-                    SelectionMode="SelectionMode.SingleSelection"
+                    Label="Type"
                     Value="@_args.Type"
-                    Color="Color.Primary"
                     ValueChanged="OnTypeValueChangedAsync"
-                    FixedContent>
-                    @foreach (var type in Enum.GetValues<UlidGeneratorTool.UlidType>())
-                    {
-                        <MudToggleItem Value="@type" Text="@type.ToString()"/>    
-                    }
-                </MudToggleGroup>
-            </MudStack>
-        </MudStack>
-        <MudStack Spacing="4">
-            <MudTextField
-                T="string"
-                Value="@GetUlids()"
-                Label="ULIDs"
-                ReadOnly="true"
-                Lines="5"
-                AutoGrow="true"
-                MaxLines="10"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                Adornment="Adornment.End"
-                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                OnAdornmentClick="async () => await OnCopyToClipboardAsync(GetUlids())"/>
-        </MudStack>
+                />
+            </MudItem>
+        </MudGrid>
+
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@GetUlids()"
+                    Label="ULIDs"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>

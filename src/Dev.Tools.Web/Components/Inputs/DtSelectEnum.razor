@@ -1,0 +1,25 @@
+@typeparam T
+
+<MudGrid Class="align-center">
+    @if (LabelPosition == LabelPositionType.Left)
+    {
+        <MudItem xs="4">
+            <MudText Typo="Typo.body1">@Label</MudText>
+        </MudItem>
+    }
+    
+    <MudItem xs="@(LabelPosition == LabelPositionType.Left ? 8 : 12)">
+        <MudSelect
+            T="@T"
+            ShrinkLabel="true"
+            Value="@Value"
+            Variant="Variant.Outlined"
+            Margin="Margin.Dense"
+            ValueChanged="@ValueChanged">
+            @foreach (var value in GetEnumValues())
+            {
+                <MudSelectItem Value="@value">@(ValueToDisplay?.Invoke(value) ?? value.ToString())</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+</MudGrid>

@@ -1,0 +1,46 @@
+@page "/tools/base64-encoder"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudStack AlignItems="AlignItems.Start">
+                    <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="Use Safe URL" Color="Color.Primary"/>
+                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="Insert Line Breaks"
+                               Color="Color.Primary"/>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Label="String to Encode"
+                    Value="@_args.Text"
+                    Error="@_result.HasErrors"
+                    ErrorText="@_result.ErrorCodes.FirstOrDefault("")"
+                    Lines="10"
+                    OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@_result.Text"
+                    Label="Base64 String"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>

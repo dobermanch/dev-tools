@@ -32,14 +32,6 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
         return _result != null ? string.Join(Environment.NewLine, _result.Phrases) : string.Empty;
     }
 
-    private async Task OnCopyToClipboardAsync(string? textToCopy)
-    {
-        if (!string.IsNullOrEmpty(textToCopy))
-        {
-            await Context.JsService.CopyToClipboardAsync(textToCopy);
-        }
-    }
-
     private Task OnWordCountValueChangedAsync(int count)
     {
         _args.WordCount = count;

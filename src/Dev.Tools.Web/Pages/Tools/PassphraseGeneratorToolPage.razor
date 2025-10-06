@@ -1,80 +1,83 @@
 @page "/tools/passphrase-generator"
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 <MudCard Class="my-2">
     <MudCardContent>
-        <MudStack AlignItems="AlignItems.Start">
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Word Count</MudText>
-                <MudSlider T="int" Value="@_args.WordCount" Min="1" Max="20"
-                           ValueChanged="OnWordCountValueChangedAsync"/>
-                <MudNumericField
-                    T="int"
-                    Value="@_args.WordCount"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Min="1"
-                    Max="20"
-                    ValueChanged="OnWordCountValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Phrase Count</MudText>
-                <MudSlider T="int" Value="@_args.PhraseCount" Min="1" Max="100" ValueChanged="OnPhraseCountValueChangedAsync"/>
-                <MudNumericField
-                    T="int"
-                    Value="@_args.PhraseCount"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Min="1"
-                    Max="100"
-                    ValueChanged="OnPhraseCountValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudSwitch
-                    T="bool"
-                    Value="@_args.Capitalize"
-                    Label="Capitalize first letter"
-                    Color="Color.Primary"
-                    ValueChanged="OnCapitalValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Separator</MudText>
-                <MudTextField
-                    T="char?"
-                    @bind-Value="@_args.Separator"
-                    MaxLength="1"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    DebounceInterval="500"
-                    OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-            </MudStack>
-            <MudStack Row="true" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.body1">Salt</MudText>
-                <MudTextField
+        <MudGrid Class="align-center">
+            <MudItem xs="12">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <DtSlider
+                            T="int"
+                            Label="Word Count"
+                            Value="@_args.WordCount"
+                            MinValue="1"
+                            MaxValue="20"
+                            ValueChanged="OnWordCountValueChangedAsync"/>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="char?"
+                            Label="Separator"
+                            @bind-Value="@_args.Separator"
+                            MaxLength="1"
+                            OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <DtSlider
+                            T="int"
+                            Label="Phrase Count"
+                            Value="@_args.PhraseCount"
+                            MinValue="1"
+                            MaxValue="100"
+                            ValueChanged="OnPhraseCountValueChangedAsync"/>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Label="Salt"
+                            @bind-Value="@_args.Salt"
+                            OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudSwitch
+                        T="bool"
+                        Value="@_args.Capitalize"
+                        Label="Capitalize first letter"
+                        Color="Color.Primary"
+                        ValueChanged="OnCapitalValueChangedAsync"/>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
                     T="string"
-                    @bind-Value="@_args.Salt"
-                    Label="Salt"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    DebounceInterval="500"
-                    OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-            </MudStack>
-        </MudStack>
-        <MudStack Spacing="4">
-            <MudTextField
-                T="string"
-                Value="@GetPassphrase()"
-                Label="Passphrases"
-                ReadOnly="true"
-                Lines="5"
-                AutoGrow="true"
-                MaxLines="10"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                Adornment="Adornment.End"
-                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                OnAdornmentClick="async () => await OnCopyToClipboardAsync(GetPassphrase())"/>
-        </MudStack>
+                    Value="@GetPassphrase()"
+                    Label="Passphrases"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>
