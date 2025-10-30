@@ -5,8 +5,8 @@ namespace Dev.Tools.Web.Components.Inputs;
 public partial class DtSelectEnum<T> : ComponentBase
     where T: struct, Enum
 {
-    [Parameter]
-    public string Label { get; set; }
+    [Parameter] 
+    public string Label { get; set; } = null!;
     
     [Parameter]
     public T Value { get; set; }

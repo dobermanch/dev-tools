@@ -7,9 +7,9 @@ public partial class ToolCard : ComponentBase
 {
     [Inject]
     private WebContext Context { get; set; } = null!;
-    
-    [Parameter]
-    public ToolDefinition Tool { get; set; }
+
+    [Parameter] 
+    public ToolDefinition Tool { get; set; } = null!;
     
     private void NavigateToToolPage()
     {

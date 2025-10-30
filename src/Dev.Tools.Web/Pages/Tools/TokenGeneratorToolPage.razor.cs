@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class TokenGeneratorToolPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private TokenGeneratorTool _tool = null!;
     private readonly TokenGeneratorTool.Args _args = new();
     private TokenGeneratorTool.Result? _result;

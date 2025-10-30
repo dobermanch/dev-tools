@@ -7,7 +7,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class CharacterViewerPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private CharacterViewerTool _tool = null!;
     private readonly Args _args = new();
     private CharacterViewerTool.Result _result = new();

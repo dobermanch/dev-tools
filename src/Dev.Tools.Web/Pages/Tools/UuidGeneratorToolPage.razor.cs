@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class UuidGeneratorToolPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private UuidGeneratorTool _tool = null!;
     private readonly UuidGeneratorTool.Args _args = new();
     private UuidGeneratorTool.Result? _result;

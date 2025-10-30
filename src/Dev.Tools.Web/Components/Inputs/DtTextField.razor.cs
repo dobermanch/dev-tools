@@ -6,11 +6,6 @@ namespace Dev.Tools.Web.Components.Inputs;
 
 public partial class DtTextField<T> : ComponentBase
 {
-    private const int LabelWidthMinWidth = 100;
-    private const int LabelWidthMaxWidth = 300;
-    
-    private int _labelWidth = LabelWidthMinWidth;
-    
     [Inject]
     private WebContext Context { get; set; } = null!;
     
@@ -21,21 +16,14 @@ public partial class DtTextField<T> : ComponentBase
     public string Label { get; set; } = null!;
 
     [Parameter]
-    public int LabelWidth
-    {
-        get => _labelWidth;
-        set => _labelWidth = value <= 0 ? LabelWidthMinWidth : value > LabelWidthMaxWidth ? LabelWidthMaxWidth : value;
-    }
-    
-    [Parameter]
     public LabelPositionType LabelPosition { get; set; }
     
     [Parameter]
     public T? Value { get; set; }
     
-    [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
-    
+    // [Parameter]
+    // public EventCallback<T> ValueChanged { get; set; }
+    //
     [Parameter]
     public bool ReadOnly { get; set; }
     

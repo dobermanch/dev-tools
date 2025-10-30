@@ -42,8 +42,8 @@ public partial class MainLayout
 
         if (firstRender)
         {
-            await LayoutService.InitAsync(await _themeProvider.GetSystemPreference());
-            await _themeProvider.WatchSystemPreference(LayoutService.SetSystemModeAsync);
+            await LayoutService.InitAsync(await _themeProvider.GetSystemDarkModeAsync());
+            await _themeProvider.WatchSystemDarkModeAsync(LayoutService.SetSystemModeAsync);
         }
     }
 

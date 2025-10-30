@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class Base64DecoderPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private Base64DecoderTool _tool = null!;
     private readonly Base64DecoderTool.Args _args = new();
     private Base64DecoderTool.Result _result = new();

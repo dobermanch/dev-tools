@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class UlidGeneratorToolPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private UlidGeneratorTool _tool = null!;
     private readonly UlidGeneratorTool.Args _args = new();
     private UlidGeneratorTool.Result? _result;

@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class PassphraseGeneratorToolPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private PassphraseGeneratorTool _tool = null!;
     private readonly PassphraseGeneratorTool.Args _args = new();
     private PassphraseGeneratorTool.Result? _result;

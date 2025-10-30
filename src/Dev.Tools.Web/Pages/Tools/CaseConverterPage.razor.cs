@@ -4,21 +4,22 @@ using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
-public partial class HashTextToolPage : ComponentBase
+public partial class CaseConverterPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
-    private HashTextTool _tool = null!;
-    private readonly HashTextTool.Args _args = new();
-    private Dictionary<HashTextTool.HashAlgorithm, HashTextTool.Result?> _results = new();
+    private CaseConverterTool _tool = null!;
+    private readonly Args _args = new();
+    private Dictionary<CaseConverterTool.CaseType, CaseConverterTool.Result?> _results = new();
 
     [Inject] private WebContext Context { get; set; } = null!;
-    
+
     protected override async Task OnInitializedAsync()
     {
-        _tool = Context.ToolsProvider.GetTool<HashTextTool>();
-        _toolDefinition = Context.ToolsProvider.GetToolDefinition<HashTextTool>();
-        _results = Enum.GetValues<HashTextTool.HashAlgorithm>()
-            .ToDictionary(it => it, it => (HashTextTool.Result?)null);
+        _tool = Context.ToolsProvider.GetTool<CaseConverterTool>();
+        _toolDefinition = Context.ToolsProvider.GetToolDefinition<CaseConverterTool>();
+        _results = Enum
+            .GetValues<CaseConverterTool.CaseType>()
+            .ToDictionary(it => it, it => (CaseConverterTool.Result?)null);
 
         await base.OnInitializedAsync();
     }
@@ -28,17 +29,17 @@ public partial class HashTextToolPage : ComponentBase
         _args.Text = value;
         
         var tasks = new List<Task>();
-        foreach (var algorithm in _results.Keys)
+        foreach (var caseType in _results.Keys)
         {
-            tasks.Add(_tool.RunAsync(new HashTextTool.Args()
+            tasks.Add(_tool.RunAsync(new CaseConverterTool.Args()
                     {
-                        Text = value,
-                        Algorithm = algorithm
+                        Text = _args.Text,
+                        Type = caseType
                     },
                     CancellationToken.None)
                 .ContinueWith(it =>
                 {
-                    _results[algorithm] = it.Result;
+                    _results[caseType] = it.Result;
                 }));
         }
         
@@ -53,5 +54,11 @@ public partial class HashTextToolPage : ComponentBase
                 .Where(it => it.Value?.HasErrors ?? false)
                 .Select(it => $"{it.Key.ToString()}: {it.Value!.ErrorCodes[0]}")
         );
+    }
+    
+    public record Args
+    {
+        public string Text { get; set; } = null!;
+        public CaseConverterTool.CaseType Type { get; set; }
     }
 }

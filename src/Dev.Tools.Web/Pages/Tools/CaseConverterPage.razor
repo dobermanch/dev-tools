@@ -1,7 +1,6 @@
-@page "/tools/hash"
+@page "/tools/case-converter"
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
-
 
 <MudCard Class="my-2">
     <MudCardContent>
@@ -13,13 +12,13 @@
                     OnDebounceIntervalElapsed="OnValueChangedAsync"
                     Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
                     ErrorText="@ErrorMessage()"
-                    Label="Text to Hash"
+                    Label="Text to Convert"
                     LabelPosition="LabelPositionType.Inline"
                     Lines="5"
                 />
             </MudItem>
         </MudGrid>
-        
+
         <MudDivider
             Class="my-5"
             DividerType="DividerType.FullWidth"/>
@@ -28,12 +27,11 @@
             @foreach (var result in _results)
             {
                 <MudItem xs="12">
-                    <DtTextField 
-                        T="string" 
-                        Value="@result.Value?.Data" 
-                        Label="@result.Key.ToString()" 
-                        ReadOnly="true"
-                        />
+                    <DtTextField
+                        T="string"
+                        Value="@result.Value?.Text"
+                        Label="@result.Key.ToString()"
+                        ReadOnly="true"/>
                 </MudItem>
             }
         </MudGrid>

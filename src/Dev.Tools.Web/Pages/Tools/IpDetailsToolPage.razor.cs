@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class IpDetailsToolPage : ComponentBase
 {
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private IpDetailsTool _tool = null!;
     private readonly IpDetailsTool.Args _args = new();
     private IpDetailsTool.Result _result = new();

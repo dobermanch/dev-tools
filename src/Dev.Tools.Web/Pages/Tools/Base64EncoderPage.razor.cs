@@ -7,7 +7,7 @@ namespace Dev.Tools.Web.Pages.Tools;
 public partial class Base64EncoderPage : ComponentBase
 {
 
-    private ToolDefinition _toolDefinition;
+    private ToolDefinition _toolDefinition = null!;
     private Base64EncoderTool _tool = null!;
     private readonly Base64EncoderTool.Args _args = new();
     private Base64EncoderTool.Result _result = new();
