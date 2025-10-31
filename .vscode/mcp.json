@@ -1,0 +1,15 @@
+{
+  "inputs": [],
+  "servers": {
+      "DevTools1": {
+          "type": "stdio",
+          "command": "dotnet",
+          "args": [
+              "run",
+              "--project",
+              "${workspaceFolder}/src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj"
+          ]
+      }
+  }
+}
+

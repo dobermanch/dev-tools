@@ -1,0 +1,68 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Blazor (watch)",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Dev.Tools.Web/Dev.Tools.Web.csproj"
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "dotnet",
+        "pattern": {
+          "regexp": "^$(.*)$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Starting watch.*$",
+          "endsPattern": "^.*Application started.*$"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/Dev.Tools.slnx",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/Dev.Tools.slnx",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/Dev.Tools.slnx"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

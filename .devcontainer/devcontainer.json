@@ -33,5 +33,6 @@
       "target": "/home/vscode/.dotnet/corefx/cryptography/x509stores"
     }
   ],
-  "onCreateCommand": "bash .devcontainer/init.sh"
+  "onCreateCommand": "bash .devcontainer/init.sh",
+  "remoteUser": "vscode"
 }

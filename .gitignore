@@ -46,7 +46,7 @@ _ReSharper*/
 *.sln.iml
 
 # Visual Studio Code
-.vscode/
+#.vscode/
 
 # Ignore certificates
 **/*.pem

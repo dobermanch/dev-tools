@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Blazor (watch)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "https://localhost:7209",
+      "webRoot": "${workspaceFolder}/src/Dev.Tools.Web/wwwroot",
+      "preLaunchTask": "Blazor (watch)",
+      "timeout": 60000,
+      "presentation": {
+        "group": "dotnet"
+      }
+    },
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Dev.Tools/bin/Debug/net8.0/Dev.Tools.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Dev.Tools",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    }
+  ]
+}
