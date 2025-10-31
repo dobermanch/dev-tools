@@ -1,7 +1,6 @@
 using Dev.Tools.Web.Core.Serializer;
 using Dev.Tools.Web.Core.Storage;
 using Dev.Tools.Web.Core.WeakReferences;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Dev.Tools.Web.Core;
@@ -37,12 +36,7 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddMessenger(this IServiceCollection services)
         => services
-            .AddMediatR(config =>
-            {
-                config.MediatorImplementationType = typeof(Messenger);
-                config.RegisterServicesFromAssemblyContaining<Program>();
-            })
-            .AddSingleton(provider => (IMessenger)provider.GetRequiredService<IMediator>());
+            .AddSingleton<IMessenger, Messenger>();
 
     private static IServiceCollection AddWeakReferences(this IServiceCollection services, IConfiguration configuration) 
         => services

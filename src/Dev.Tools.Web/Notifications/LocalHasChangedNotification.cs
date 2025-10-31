@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace Dev.Tools.Web.Notifications;
 
-internal record LocalHasChangedNotification : INotification;
+internal record LocalHasChangedNotification : IMessage;

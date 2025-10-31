@@ -1,10 +1,8 @@
 ﻿using Dev.Tools.Web.Core.WeakReferences;
-using MediatR;
 
 namespace Dev.Tools.Web.Core.Messaging;
 
-internal sealed class Messenger(IServiceProvider provider, WeakReferenceManager weakReferenceManager) 
-    : Mediator(provider), IMessenger
+internal sealed class Messenger(WeakReferenceManager weakReferenceManager) : IMessenger
 {
     public IDisposable Subscribe<T>(Handler<T> handler) 
         => weakReferenceManager.CreateReference(handler);
@@ -12,13 +10,12 @@ internal sealed class Messenger(IServiceProvider provider, WeakReferenceManager 
     public IDisposable Subscribe<T>(AsyncHandler<T> handler) 
         => weakReferenceManager.CreateReference(handler);
 
-    protected override async Task PublishCore(IEnumerable<NotificationHandlerExecutor> handlerExecutors, INotification notification, CancellationToken cancellationToken)
+    public async Task Publish<TMessage>(TMessage message, CancellationToken cancellationToken = default) where TMessage : IMessage
     {
-        await NotifySubscribers(notification, cancellationToken).ConfigureAwait(false);
-        await base.PublishCore(handlerExecutors, notification, cancellationToken);
+        await NotifySubscribers(message, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task NotifySubscribers(INotification notification, CancellationToken cancellationToken)
+    private async Task NotifySubscribers(IMessage message, CancellationToken cancellationToken)
     {
         foreach (var reference in weakReferenceManager.References)
         {
@@ -28,20 +25,20 @@ internal sealed class Messenger(IServiceProvider provider, WeakReferenceManager 
                 continue;
             }
 
-            var handlerType = typeof(Handler<>).MakeGenericType(notification.GetType());
+            var handlerType = typeof(Handler<>).MakeGenericType(message.GetType());
             if (reference.TargetType == handlerType)
             {
-                ((Delegate)target).DynamicInvoke(notification);
+                ((Delegate)target).DynamicInvoke(message);
                 continue;
             }
 
-            var asyncHandlerType = typeof(AsyncHandler<>).MakeGenericType(notification.GetType());
+            var asyncHandlerType = typeof(AsyncHandler<>).MakeGenericType(message.GetType());
             if (reference.TargetType != asyncHandlerType)
             {
                 continue;
             }
             
-            Task? task = (Task?)((Delegate)target).DynamicInvoke(notification, cancellationToken);
+            Task? task = (Task?)((Delegate)target).DynamicInvoke(message, cancellationToken);
             if (task is not null && !task.IsCompleted)
             {
                 await task.ConfigureAwait(false);
