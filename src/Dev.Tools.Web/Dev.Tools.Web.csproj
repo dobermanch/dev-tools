@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Models\Settings\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 

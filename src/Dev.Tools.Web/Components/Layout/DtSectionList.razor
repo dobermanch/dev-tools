@@ -1,0 +1,15 @@
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+
+@code {
+    [Parameter] 
+    public RenderFragment? ChildContent { get; set; }
+
+    private readonly List<DtSection> _sections = new();
+
+    public void Register(DtSection section) => _sections.Add(section);
+    
+    public IReadOnlyList<DtSection> Sections => _sections;
+}

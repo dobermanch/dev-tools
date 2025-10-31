@@ -1,0 +1,45 @@
+<MudGrid Class="mt-4 mb-2" Spacing="0">
+    <MudItem xs="12">
+        <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                @if (ShowBackButton)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Size="Size.Medium" OnClick="@NavigateToPreviousPage"/>
+                }
+                <MudText Typo="Typo.h4">@Caption</MudText>
+            </MudStack>
+            @Actions
+        </MudStack>
+    </MudItem>
+    
+    @if (Content != null)
+    {
+        <MudItem xs="12" Class="mud-card-content">
+            @Content
+        </MudItem>
+    }
+
+</MudGrid>
+
+@code {
+    [Parameter]
+    public required string Caption { get; set; }
+
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+
+    [Parameter]
+    public bool ShowBackButton { get; set; } = true;
+    
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+    
+    [Parameter]
+    public RenderFragment? Content { get; set; }
+
+
+    private void NavigateToPreviousPage()
+    {
+        Context.Navigation.NavigateTo("/");
+    }
+}

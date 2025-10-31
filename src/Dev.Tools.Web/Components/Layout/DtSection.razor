@@ -1,0 +1,31 @@
+<section id="@Id" class="@(Class ?? "mt-6")">
+    @if (Caption is not null)
+    {
+        <MudText Typo="Typo.h6">@Caption</MudText>
+        <MudDivider
+            Class="mt-2 mb-4"
+            DividerType="DividerType.FullWidth"/>
+    }
+    @ChildContent
+</section>
+
+@code {
+    [Parameter]
+    public required string Id { get; set; }
+
+    [Parameter]
+    public string? Caption { get; set; }
+    
+    [Parameter]
+    public string? Class { get; set; }
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+    [CascadingParameter] public DtSectionList? List { get; set; }
+
+    protected override void OnInitialized()
+    {
+        List?.Register(this);
+    }
+}
