@@ -1,6 +1,4 @@
-﻿using Dev.Tools.Web.Core.WeakReferences;
-
-namespace Dev.Tools.Web.Core.Messaging;
+﻿namespace Dev.Tools.Web.Core.Messaging;
 
 internal sealed class Messenger(WeakReferenceManager weakReferenceManager) : IMessenger
 {

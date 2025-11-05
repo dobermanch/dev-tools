@@ -1,10 +1,11 @@
 using System.Text.Json;
 using Dev.Tools.Web.Core.Serializer;
-using Microsoft.JSInterop;
+using Dev.Tools.Web.Services;
+using Dev.Tools.Web.Services.JavaScript;
 
 namespace Dev.Tools.Web.Core.Storage;
 
-internal class BrowserStorageProvider(IJSRuntime jSRuntime, IJsonSerializer serializer) : IStorageProvider
+internal class BrowserStorageProvider(IJsServices jsServices, IJsonSerializer serializer) : IStorageProvider
 {
     public async ValueTask SetItemAsync<T>(string key, T data, CancellationToken cancellationToken = default)
     {
@@ -39,45 +40,45 @@ internal class BrowserStorageProvider(IJSRuntime jSRuntime, IJsonSerializer seri
 
     public async ValueTask<string?> GetItemAsync(string key, CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync(async () =>
-            await jSRuntime.InvokeAsync<string?>("localStorage.getItem", cancellationToken, key)
+            await jsServices.InvokeAsync<string?>("localStorage.getItem", cancellationToken, key)
         );
 
     public async ValueTask SetItemAsync(string key, string data, CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync<object>(async () =>{
-            await jSRuntime.InvokeVoidAsync("localStorage.setItem", cancellationToken, key, data);
+            await jsServices.InvokeVoidAsync("localStorage.setItem", cancellationToken, key, data);
             return default!;
         });
 
     public async ValueTask ClearAsync(CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync<object>(async () =>{
-            await jSRuntime.InvokeVoidAsync("localStorage.clear", cancellationToken);
+            await jsServices.InvokeVoidAsync("localStorage.clear", cancellationToken);
             return default!;
         });
 
     public async ValueTask<bool> ContainKeyAsync(string key, CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync(async () =>
-            await jSRuntime.InvokeAsync<bool>("localStorage.hasOwnProperty", cancellationToken, key)
+            await jsServices.InvokeAsync<bool>("localStorage.hasOwnProperty", cancellationToken, key)
         );
 
     public async ValueTask<string?> KeyAsync(int index, CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync(async () =>
-            await jSRuntime.InvokeAsync<string?>("localStorage.key", cancellationToken, index)
+            await jsServices.InvokeAsync<string?>("localStorage.key", cancellationToken, index)
         );
 
     public async ValueTask<IEnumerable<string>> KeysAsync(CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync(async () =>
-            await jSRuntime.InvokeAsync<IEnumerable<string>>("eval", cancellationToken, "Object.keys(localStorage)")
+            await jsServices.InvokeAsync<IEnumerable<string>>("eval", cancellationToken, "Object.keys(localStorage)")
         );
 
     public async ValueTask<int> LengthAsync(CancellationToken cancellationToken = default)
         => await InvokeWrapperAsync(async () =>
-            await jSRuntime.InvokeAsync<int>("eval", cancellationToken, "localStorage.length")
+            await jsServices.InvokeAsync<int>("eval", cancellationToken, "localStorage.length")
         );
 
     public async ValueTask RemoveItemAsync(string key, CancellationToken cancellationToken = default)
         => _ = await InvokeWrapperAsync<object>(async () =>
         {
-            await jSRuntime.InvokeVoidAsync("localStorage.removeItem", cancellationToken, key);
+            await jsServices.InvokeVoidAsync("localStorage.removeItem", cancellationToken, key);
             return default!;
         });
 

@@ -1,4 +1,5 @@
 using Dev.Tools.Providers;
+using Dev.Tools.Web.Services.JavaScript;
 using Dev.Tools.Web.Services.Localization;
 using Dev.Tools.Web.Services.Preferences;
 using Microsoft.AspNetCore.Components;

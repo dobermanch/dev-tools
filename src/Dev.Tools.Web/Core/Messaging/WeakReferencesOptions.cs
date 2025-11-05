@@ -1,4 +1,4 @@
-namespace Dev.Tools.Web.Core.WeakReferences;
+namespace Dev.Tools.Web.Core.Messaging;
 
 public record WeakReferencesOptions
 {

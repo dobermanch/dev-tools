@@ -4,6 +4,7 @@ using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
 using Dev.Tools.Web.Core.Cryptography;
 using Dev.Tools.Web.Services;
+using Dev.Tools.Web.Services.JavaScript;
 using Dev.Tools.Web.Services.Layout;
 using Dev.Tools.Web.Services.Localization;
 using Dev.Tools.Web.Services.Preferences;

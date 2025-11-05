@@ -4,8 +4,8 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
-    <File Path="docker-compose.yml" />
-    <File Path="nginx.conf" />
+    <File Path="deploy/docker-compose.yml" />
+    <File Path="deploy/nginx.conf" />
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">

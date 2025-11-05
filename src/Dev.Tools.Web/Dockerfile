@@ -18,7 +18,7 @@ WORKDIR "/src/src/Dev.Tools.Web"
 RUN dotnet publish "Dev.Tools.Web.csproj" --no-restore -c $BUILD_CONFIGURATION -o /app/publish
 
 FROM base AS final
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY deploy/nginx.conf /etc/nginx/nginx.conf
 COPY --from=publish /app/publish/wwwroot ./
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
 

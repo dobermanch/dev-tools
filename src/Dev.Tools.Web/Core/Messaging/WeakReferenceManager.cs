@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace Dev.Tools.Web.Core.WeakReferences;
+namespace Dev.Tools.Web.Core.Messaging;
 
 internal sealed class WeakReferenceManager(IOptions<WeakReferencesOptions> options) : BackgroundService
 {
