@@ -45,7 +45,7 @@ public class ToolsCatalogGeneratorTests : GeneratorTestsBase
         await Verify<ToolsCatalogGenerator>(code);
     }
     
-    //[Test]
+    [Test, Skip("temporary")]
     public async Task Should_Properly_Cache_Results()
     {
         var code = new CodeBlock

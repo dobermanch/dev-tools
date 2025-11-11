@@ -54,7 +54,8 @@ public abstract class ToolGeneratorBase
             ErrorCodes = ["ErrorCode.Unknown", ..errorCodes.Select(it => it.ToString())],
             Aliases = ((CollectionExpressionSyntax)values["Aliases"]).Elements.Select(c => c.ToString()).ToArray(),
             ArgsDetails = toolTypes[0],
-            ResultDetails = toolTypes[1]
+            ResultDetails = toolTypes[1],
+            ExtraTypes = toolTypes.SelectMany(it => it.Enums).GroupBy(it => it.Type).Select(it => it.First()).ToArray<TypeDeclaration>()
         };
     }
     
@@ -113,9 +114,49 @@ public abstract class ToolGeneratorBase
                             IsRequired = it.IsRequired,
                             IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
                         })
-                        .ToArray()
+                        .ToArray(),
+                Enums = ExtractEnumsFromType(arg)
             })
             .ToArray() ?? [];
+    }
+
+    private static EnumDetails[] ExtractEnumsFromType(ITypeSymbol typeSymbol)
+    {
+        var enums = new List<EnumDetails>();
+        var processedEnums = new HashSet<string>();
+
+        foreach (var prop in typeSymbol.GetMembers().OfType<IPropertySymbol>())
+        {
+            if (prop.Type is not INamedTypeSymbol { TypeKind: TypeKind.Enum } enumType)
+            {
+                continue;
+            }
+            
+            var enumFullName = enumType.ToDisplayString();
+
+            if (enumType.ContainingNamespace.ToDisplayString() == "Dev.Tools" 
+                && enumType.Name is "Category" or "Keyword" or "ErrorCode")
+            {
+                continue;
+            }
+
+            if (!processedEnums.Add(enumFullName))
+            {
+                continue;
+            }
+
+            enums.Add(new EnumDetails
+            {
+                Type = enumFullName,
+                Values = enumType.GetMembers()
+                    .OfType<IFieldSymbol>()
+                    .Where(f => f.HasConstantValue)
+                    .Select(f => f.Name)
+                    .ToArray()
+            });
+        }
+
+        return enums.ToArray();
     }
     
     protected record ToolDetails : TypeDeclaration
@@ -127,19 +168,27 @@ public abstract class ToolGeneratorBase
         public string[] ErrorCodes { get; set; } = [];
         public TypeDetails ArgsDetails { get; set; } = null!;
         public TypeDetails ResultDetails { get; set; } = null!;
+        public IList<TypeDeclaration> ExtraTypes { get; set; } = [];
     }
 
     protected record TypeDetails : TypeDeclaration
     {
         public string Type { get; set; } = null!;
         public PropertyDetails[] Properties { get; set; } = [];
+        public EnumDetails[] Enums { get; set; } = [];
     }
-    
+
     protected record PropertyDetails
     {
         public string Name { get; set; } = null!;
         public string Type { get; set; } = null!;
         public bool IsRequired { get; set; }
         public bool IsNullable { get; set; }
+    }
+
+    protected record EnumDetails : TypeDeclaration
+    {
+        public string Type { get; set; } = null!;
+        public string[] Values { get; set; } = [];
     }
 }

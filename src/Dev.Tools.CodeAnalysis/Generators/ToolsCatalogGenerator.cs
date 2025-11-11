@@ -76,7 +76,7 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
         string Aggregate(IList<string> data)
         {
             return "[" + string.Join(", ", data) + "]";
-        }
+        } 
 
         string toolsString = tools.Select(it =>
             $"""
@@ -88,19 +88,26 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
                          ErrorCodes: {Aggregate(it.ErrorCodes)},
                          ToolType: typeof({it.Namespace}.{it.TypeName}),
                          ArgsType: new ToolDefinition.TypeDetails(
+                             Name: "{it.ArgsDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ArgsDetails.Type}),
                              Properties: [
                                  {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()})"))}
                              ]
                          ),
                          ReturnType: new ToolDefinition.TypeDetails(
+                             Name: "{it.ResultDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ResultDetails.Type}),
                              Properties: [
                                  {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()})"))}
                              ]
-                         )   
+                         ),
+                         ExtraTypes: [
+                             {string.Join(",\n\t\t\t\t", it.ExtraTypes.OfType<EnumDetails>().Select(x => $"new ToolDefinition.EnumDetails(\"{x.Type.Split('.').Last()}\", typeof({x.Type}), [{string.Join(", ", x.Values.Select(v => $"\"{v}\""))}])"))}
+                         ]
                      ),
-             """).Aggregate("", (current, it) => current + it + "\n");
+             """)
+            .Aggregate("", (current, it) => current + it + "\n")
+            .Replace("\t", "    ");
 
         var codeBlock = new CodeBlock
         {

@@ -34,7 +34,10 @@ internal class ToolsCatalog
                 Properties: [
                     
                 ]
-            )   
+            ),
+            ExtraTypes: [
+                    
+            ]
         ),
 
     ];

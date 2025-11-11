@@ -1,0 +1,52 @@
+using System.Xml.Linq;
+
+namespace ResxGenerator;
+
+/// <summary>
+/// Simple RESX file writer that generates standard .NET RESX XML format
+/// </summary>
+class SimpleResxWriter
+{
+    private readonly Dictionary<string, string> _resources = new();
+
+    public void AddResource(string name, string value)
+        => _resources[name] = $":{value}:";
+
+    public void Save(string filePath)
+    {
+        var doc = new XDocument(
+            new XDeclaration("1.0", "utf-8", null),
+            new XElement("root",
+                new XComment(
+                    $"""
+                     This code was generated at {DateTime.Now:yyyy-MM-dd HH:mm:ss} by the ResxGenerator.
+                           Changes to this file may cause incorrect behavior and will be lost
+                           if the code is regenerated.
+                     """
+                ),
+                new XElement("resheader",
+                    new XAttribute("name", "resmimetype"),
+                    new XElement("value", "text/microsoft-resx")),
+                new XElement("resheader",
+                    new XAttribute("name", "version"),
+                    new XElement("value", "2.0")),
+                new XElement("resheader",
+                    new XAttribute("name", "reader"),
+                    new XElement("value", "System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")),
+                new XElement("resheader",
+                    new XAttribute("name", "writer"),
+                    new XElement("value", "System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")),
+                _resources
+                    .OrderBy(kvp => kvp.Key)
+                    .Select(kvp =>
+                        new XElement("data",
+                            new XAttribute("name", kvp.Key),
+                            new XAttribute(XNamespace.Xml + "space", "preserve"),
+                            new XElement("value", kvp.Value))
+                    )
+            )
+        );
+
+        doc.Save(filePath);
+    }
+}

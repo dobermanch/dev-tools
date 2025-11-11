@@ -8,13 +8,20 @@ public sealed record ToolDefinition(
     string[] ErrorCodes,
     Type ToolType,
     ToolDefinition.TypeDetails ArgsType,
-    ToolDefinition.TypeDetails ReturnType
+    ToolDefinition.TypeDetails ReturnType,
+    ToolDefinition.TypeDetailsBase[] ExtraTypes
 )
 {
-    public sealed record TypeDetails(
+    public record TypeDetailsBase(
+        string Name,
+        Type DataType
+    );
+    
+    public sealed record TypeDetails (
+        string Name,
         Type DataType,
         TypeProperty[] Properties
-    );
+    ) : TypeDetailsBase(Name, DataType);
 
     public sealed record TypeProperty(
         string Name,
@@ -22,4 +29,10 @@ public sealed record ToolDefinition(
         bool IsRequired,
         bool IsNullable
     );
+
+    public sealed record EnumDetails(
+        string Name,
+        Type DataType,
+        string[] Values
+    ): TypeDetailsBase(Name, DataType);
 }

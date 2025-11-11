@@ -12,6 +12,7 @@
     <Project Path="src/Dev.Tools.Api/Dev.Tools.Api.csproj" />
     <Project Path="src/Dev.Tools.CodeAnalysis/Dev.Tools.CodeAnalysis.csproj" />
     <Project Path="src/Dev.Tools.Console/Dev.Tools.Console.csproj" />
+    <Project Path="src/Dev.Tools.Localization/Dev.Tools.Localization.csproj" />
     <Project Path="src/Dev.Tools.Web/Dev.Tools.Web.csproj" />
     <Project Path="src/Dev.Tools/Dev.Tools.csproj" />
     <Project Path="src\Dev.Tools.Mcp\Dev.Tools.Mcp.csproj" Type="Classic C#" />
@@ -19,5 +20,8 @@
   <Folder Name="/tests/">
     <Project Path="tests/Dev.Tools.CodeAnalysis.Tests/Dev.Tools.CodeAnalysis.Tests.csproj" />
     <Project Path="tests/Dev.Tools.Tests/Dev.Tools.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/ResxGenerator/ResxGenerator.csproj" />
   </Folder>
 </Solution>

@@ -57,3 +57,6 @@ _ReSharper*/
 # Verifier test files
 *.received.*
 *.received/
+
+# Ignore local files
+*.local.json
