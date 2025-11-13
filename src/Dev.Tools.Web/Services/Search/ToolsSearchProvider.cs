@@ -1,5 +1,3 @@
-using Dev.Tools.Web.Services.Localization;
-
 namespace Dev.Tools.Web.Services.Search;
 
 internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvider
@@ -40,8 +38,8 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
             .GetToolDefinitions()
             .Select(it => new ToolInfo(
                 $"/tools/{it.Name}",
-                webContext.Localization.GetToolTitle(it.ToolType),
-                webContext.Localization.GetToolDescription(it.ToolType)
+                webContext.Localization.GetToolTitle(it),
+                webContext.Localization.GetToolDescription(it)
             ))
             .ToArray();
     }

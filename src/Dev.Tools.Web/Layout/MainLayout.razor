@@ -1,26 +1,27 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Globalization
+@inherits LayoutComponentBase
 
 <MudThemeProvider @ref="_themeProvider" IsDarkMode="@IsDarkMode" ObserveSystemThemeChange="@ObserveSystemThemeChange" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
+<MudLayout @key="CultureInfo.CurrentUICulture.Name">
     <MudAppBar Elevation="1" Dense="true">
-        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" 
-                       Edge="Edge.Start" OnClick="@DrawerToggle" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit"
+                       Edge="Edge.Start" OnClick="@DrawerToggle"/>
         <MudText Typo="Typo.h5" Class="ml-3">Dev Tools</MudText>
-        <MudSpacer />
-        
+        <MudSpacer/>
+
         <SearchTextField/>
-            
-        <MudSpacer />
-        <LocalizationSelector/>
+
+        <MudSpacer/>
+        <LanguageSelector/>
         <MudLink Href="https://github.com/dobermanch/dev-tools" Target="_blank">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github"/>
         </MudLink>
-        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ChangeThemeModeAsync" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" Edge="Edge.End" Href="/settings" />
+        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ChangeThemeModeAsync"/>
+        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" Edge="Edge.End" Href="/settings"/>
     </MudAppBar>
 
     <MudDrawer Elevation="2" ClipMode="DrawerClipMode.Always" Open="@IsDrawerOpen">

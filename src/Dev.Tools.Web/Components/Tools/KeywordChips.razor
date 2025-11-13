@@ -1,11 +1,14 @@
 <MudStack Class="@Class" Row="true" Spacing="0" Wrap="Wrap.Wrap">
     @foreach (var keyword in ToolDefinition.Keywords.OrderBy(it => it))
     {
-        <MudChip T="string" Color="Color.Dark" Size="Size.Small" Label="true" Text="@keyword.ToString()"/>
+        <MudChip T="string" Color="Color.Dark" Size="Size.Small" Label="true" Text="@Context.Localization.GetKeyword(keyword)"/>
     }
 </MudStack>
 
 @code {
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+    
     [Parameter]
     public string Class { get; set; } = null!;
     

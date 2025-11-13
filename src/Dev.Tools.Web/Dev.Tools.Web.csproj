@@ -3,13 +3,13 @@
   <PropertyGroup>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+<!--    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>-->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.Localization" />
     <PackageReference Include="MudBlazor" />
   </ItemGroup>
 
@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dev.Tools\Dev.Tools.csproj" />
+    <ProjectReference Include="..\Dev.Tools.Localization\Dev.Tools.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

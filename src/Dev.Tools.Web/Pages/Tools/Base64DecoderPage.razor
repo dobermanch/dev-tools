@@ -11,7 +11,7 @@
                     Label="Base64 String to Decode"
                     Value="@_args.Text"
                     Error="@_result.HasErrors"
-                    ErrorText="@_result.ErrorCodes.FirstOrDefault("")"
+                    ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
                     LabelPosition="LabelPositionType.Inline"
                     Lines="10"
                     OnDebounceIntervalElapsed="OnDecodeStringValueChangedAsync"

@@ -6,14 +6,14 @@
             </MudAvatar>
         </CardHeaderAvatar>
         <CardHeaderContent>
-            <MudText Typo="Typo.body1">@Tool.Name</MudText>
+            <MudText Typo="Typo.body1">@Context.Localization.GetToolTitle(Tool)</MudText>
         </CardHeaderContent>
         <CardHeaderActions>
             <FavoriteButton ToolDefinition="@Tool" />
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent Class="d-flex align-content-space-between flex-wrap flex-grow-1">
-        <MudText GutterBottom="true" Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+        <MudText GutterBottom="true" Typo="Typo.body2">@Context.Localization.GetToolDescription(Tool)</MudText>
         <KeywordChips ToolDefinition="@Tool"/>
     </MudCardContent>
 </MudCard>

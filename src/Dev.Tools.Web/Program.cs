@@ -1,4 +1,3 @@
-using Dev.Tools;
 using Dev.Tools.Cryptography;
 using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
@@ -22,15 +21,15 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<WebContext>();
 builder.Services.AddSingleton<ISearchProvider, ToolsSearchProvider>();
 builder.Services.AddSingleton<ILayoutService, LayoutService>();
-builder.Services.AddSingleton<ILocalizationProvider, LocalizationProvider>();
+builder.Services.AddSingleton<ILocalizationProvider, WebLocalizationProvider>();
 builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
 builder.Services.AddSingleton<IJsServices, JsServices>();
 builder.Services.AddCoreComponents(builder.Configuration);
 builder.Services.AddSingleton<IMd5Hash, WebAssemblyMd5>();
 builder.Services.AddDevTools();
-builder.Services.AddLocalization(options =>
-{
-    options.ResourcesPath = "Locals";
-});
+builder.Services.AddDevToolsLocalization(typeof(Program).Assembly);
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+// TODO: make it work properly. 
+//await app.Services.GetRequiredService<WebContext>().InitializeAsync(CancellationToken.None);
+await app.RunAsync();

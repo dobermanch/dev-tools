@@ -31,7 +31,7 @@
                 DebounceInterval="500" 
                 OnDebounceIntervalElapsed="OnTextValueChangedAsync"
                 Error="@_result.HasErrors"
-                ErrorText="@_result.ErrorCodes.FirstOrDefault("")"
+                ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
                 Label="Input Text"
                 Lines="5"
                 AutoGrow="true"

@@ -5,7 +5,7 @@ public sealed record ToolDefinition(
     string[] Aliases,
     Category[] Categories,
     Keyword[] Keywords,
-    string[] ErrorCodes,
+    ErrorCode[] ErrorCodes,
     Type ToolType,
     ToolDefinition.TypeDetails ArgsType,
     ToolDefinition.TypeDetails ReturnType,

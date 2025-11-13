@@ -1,36 +1,22 @@
-using System.Globalization;
+using Microsoft.Extensions.Localization;
 
-namespace Dev.Tools.Web.Services.Localization;
+// ReSharper disable once CheckNamespace
+namespace Dev.Tools.Localization;
 
-public static class LocalizerExtensions
+internal static class LocalizerExtensions
 {
-    public static string GetString(this ILocalizer provider, CultureInfo culture)
-    {
-        return provider.GetString($"Locals_{culture.Name}_Title");
-    }
+    public static string GetToolTitle(this IStringLocalizer provider, ToolDefinition tool) 
+        => provider.GetToolTitle(tool.ToolType.Name);
+
+    public static string GetToolDescription(this IStringLocalizer provider, ToolDefinition tool) 
+        => provider.GetToolDescription(tool.ToolType.Name);
     
-    public static string GetToolTitle(this ILocalizer provider, Type tool)
-    {
-        return provider.GetString($"{tool.Name}_Title");
-    }
+    public static string GetKeyword(this IStringLocalizer provider, Keyword value) 
+        => provider.GetEnum(value);
     
-    public static string GetToolDescription(this ILocalizer provider, Type tool)
-    {
-        return provider.GetString($"Tool_{tool.Name}_Description");
-    }
+    public static string GetCategory(this IStringLocalizer provider, Category value) 
+        => provider.GetEnum(value);
     
-    public static string GetToolKeyword(this ILocalizer provider, string keyword)
-    {
-        return provider.GetString($"Tool_Keyword_{keyword}_Title");
-    }
-    
-    public static string GetToolCategory(this ILocalizer provider, string category)
-    {
-        return provider.GetString($"Tool_Category_{category}_Title");
-    }
-    
-    public static string GetErrorCode(this ILocalizer provider, string code)
-    {
-        return provider.GetString($"Tool_Category_{code}_Description");
-    }
+    public static string GetErrorCode(this IStringLocalizer provider, ErrorCode value) 
+        => provider.GetEnum(value);
 }

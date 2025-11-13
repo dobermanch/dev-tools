@@ -1,4 +1,4 @@
-<DtPageHeader Caption="@ToolDefinition.Name" ShowBackButton="true">
+<DtPageHeader Caption="@Context.Localization.GetToolTitle(ToolDefinition)" ShowBackButton="true">
     <Actions>
         <FavoriteButton Class="mr-2" ToolDefinition="@ToolDefinition"/>
     </Actions>
@@ -9,13 +9,16 @@
             </MudItem>
 
             <MudItem xs="12" Class="mud-card-content">
-                <MudText Typo="Typo.body2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</MudText>
+                <MudText Typo="Typo.body2">@Context.Localization.GetToolDescription(ToolDefinition)</MudText>
             </MudItem>
         </MudGrid>
     </Content>
 </DtPageHeader>
 
 @code {
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+    
     [Parameter] 
     public ToolDefinition ToolDefinition { get; set; } = null!;
 }

@@ -1,6 +1,6 @@
 namespace Dev.Tools;
 
-public sealed class ToolException(string errorCode) : Exception
+public sealed class ToolException(ErrorCode errorCode) : Exception
 {
-    public string ErrorCode { get; } = errorCode;
+    public ErrorCode ErrorCode { get; } = errorCode;
 }

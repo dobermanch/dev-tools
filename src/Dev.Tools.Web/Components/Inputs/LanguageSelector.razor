@@ -2,13 +2,13 @@
 
 <MudSelect
     T="CultureInfo"
-    ToStringFunc="@(culture => Context.Localization.GetString(culture!))"
+    ToStringFunc="@(culture => Context.Localization.GetLocal(culture!))"
     Value="@Context.Localization.CurrentCulture"
     ValueChanged="OnLanguageChangedAsync"
     Variant="Variant.Outlined"
     Margin="Margin.Dense">
     @foreach (var culture in Context.Localization.SupportedCultures)
     {
-        <MudSelectItem Value="culture">@Context.Localization.GetString(culture)</MudSelectItem>
+        <MudSelectItem Value="culture">@Context.Localization.GetLocal(culture)</MudSelectItem>
     }
 </MudSelect>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Dev.Tools.Web.Components.Inputs;
 
-public partial class LocalizationSelector : ComponentBase
+public partial class LanguageSelector : ComponentBase
 {
     [Inject]
     WebContext Context { get; set; } = null!;

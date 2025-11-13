@@ -18,7 +18,7 @@
                     Label="String to Encode"
                     Value="@_args.Text"
                     Error="@_result.HasErrors"
-                    ErrorText="@_result.ErrorCodes.FirstOrDefault("")"
+                    ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
                     Lines="10"
                     OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
                     LabelPosition="LabelPositionType.Inline"

@@ -1,19 +1,44 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Dev.Tools.Localization</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Resource file will be generated into Locale/Resource.resx -->
-    <None Update="Resources\ToolResources.resx">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Microsoft.Extensions.Localization"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <EmbeddedResource Update="Resources\ToolResources.resx">
+      <!--      <Generator>ResXFileCodeGenerator</Generator>-->
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\ToolResources.en.resx">
+      <DependentUpon>ToolResources.resx</DependentUpon>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Locals.resx">
+      <!--      <Generator>ResXFileCodeGenerator</Generator>-->
+      <LastGenOutput>Locals.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Locals.en.resx">
+      <DependentUpon>Locals.resx</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ToolResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Locals.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Locals.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

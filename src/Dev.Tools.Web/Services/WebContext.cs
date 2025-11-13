@@ -1,6 +1,7 @@
+using System.Globalization;
 using Dev.Tools.Providers;
 using Dev.Tools.Web.Services.JavaScript;
-using Dev.Tools.Web.Services.Localization;
+using Dev.Tools.Web.Services.Layout;
 using Dev.Tools.Web.Services.Preferences;
 using Microsoft.AspNetCore.Components;
 
@@ -12,7 +13,8 @@ public class WebContext(
     IMessenger messenger,
     IJsServices jsService,
     ILocalizationProvider localization,
-    IPreferencesService preferences
+    IPreferencesService preferences,
+    ILayoutService layout
 )
 {
     public NavigationManager Navigation { get; } = navigation;
@@ -26,9 +28,18 @@ public class WebContext(
     public ILocalizationProvider Localization { get; } = localization;
     
     public IPreferencesService Preferences { get; } = preferences;
+    
+    public ILayoutService Layout { get; } = layout;
 
     public async Task InitializeAsync(CancellationToken cancellationToken)
     {
-        await Preferences.InitializeAsync(cancellationToken);
+        await Preferences.InitializeAsync(cancellationToken).ConfigureAwait(false);
+
+        if (Preferences.Preferences.Localization.Culture is not null)
+        {
+            await Localization
+                .SetCurrentCultureInfo(new CultureInfo(Preferences.Preferences.Localization.Culture), cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

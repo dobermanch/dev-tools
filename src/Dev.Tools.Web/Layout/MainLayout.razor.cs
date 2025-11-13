@@ -8,21 +8,18 @@ namespace Dev.Tools.Web.Layout;
 public partial class MainLayout
 {
     private MudThemeProvider _themeProvider = null!;
-
-    [Inject] private IMessenger Messenger { get; set; } = null!;
     
-    [Inject] private ILayoutService LayoutService { get; set; } = null!;
-    
-    [Inject] private WebContext Context { get; set; } = null!;
+    [Inject]
+    private WebContext Context { get; set; } = null!;
 
     private bool ObserveSystemThemeChange => true;
 
-    private bool IsDarkMode => LayoutService.IsDarkMode;
+    private bool IsDarkMode => Context.Layout.IsDarkMode;
 
-    private bool IsDrawerOpen => LayoutService.IsDrawerOpen;
+    private bool IsDrawerOpen => Context.Layout.IsDrawerOpen;
 
     private string LightModeIcon =>
-        LayoutService.ThemeMode switch
+        Context.Layout.ThemeMode switch
         {
             ThemeMode.Dark => Icons.Material.Outlined.DarkMode,
             ThemeMode.Light => Icons.Material.Outlined.LightMode,
@@ -31,8 +28,9 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
-        await Context.InitializeAsync(CancellationToken.None);
-        Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
+        await Context.InitializeAsync(CancellationToken.None).ConfigureAwait(false);
+        Context.Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
+        Context.Messenger.Subscribe<LocalHasChangedNotification>(HandlerLocalHasChanged);
         await base.OnInitializedAsync();
     }
 
@@ -42,17 +40,20 @@ public partial class MainLayout
 
         if (firstRender)
         {
-            await LayoutService.InitAsync(await _themeProvider.GetSystemDarkModeAsync());
-            await _themeProvider.WatchSystemDarkModeAsync(LayoutService.SetSystemModeAsync);
+            await Context.Layout.InitAsync(await _themeProvider.GetSystemDarkModeAsync());
+            await _themeProvider.WatchSystemDarkModeAsync(Context.Layout.SetSystemModeAsync);
         }
     }
 
     private async Task DrawerToggle() 
-        => await LayoutService.ToggleDrawerAsync();
+        => await Context.Layout.ToggleDrawerAsync();
 
     private async Task ChangeThemeModeAsync() 
-        => await LayoutService.ToggleDarkModeAsync();
+        => await Context.Layout.ToggleDarkModeAsync();
 
     private void HandlerUpdateRequest(LayoutChangedNotification _) 
+        => StateHasChanged();
+    
+    private void HandlerLocalHasChanged(LocalHasChangedNotification _)
         => StateHasChanged();
 }
