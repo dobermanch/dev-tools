@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -6,21 +7,22 @@ namespace Dev.Tools.Web.Core.Messaging;
 
 internal sealed class WeakReferenceManager(IOptions<WeakReferencesOptions> options) : BackgroundService
 {
-    private readonly ConcurrentDictionary<int, Reference> _references = new();
+    private readonly ConcurrentDictionary<SubscriptionKey, IReference> _references = new();
 
-    public ICollection<Reference> References => _references.Values;
+    public ICollection<IReference> References => _references.Values;
 
-    public Reference CreateReference<T>(T obj)
+    public IReference CreateReference<T>(T referenceForObj, object? metadata = null)
         where T : class
     {
-        ArgumentNullException.ThrowIfNull(obj);
+        ArgumentNullException.ThrowIfNull(referenceForObj);
 
-        return _references.GetOrAdd(obj.GetHashCode(), _ => new Reference(this, obj));
+        var key = new SubscriptionKey(RuntimeHelpers.GetHashCode(referenceForObj), metadata?.GetHashCode() ?? 0);
+        return _references.GetOrAdd(key, _ => new Reference(key, this, referenceForObj, metadata));
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
@@ -30,7 +32,7 @@ internal sealed class WeakReferenceManager(IOptions<WeakReferencesOptions> optio
 
                 foreach (var reference in referencesToRemove)
                 {
-                    _references.TryRemove(reference);
+                    _references.TryRemove(reference.Key, out _);
                 }
 
                 await Task.Delay(options.Value.CleanupPeriod, stoppingToken);
@@ -39,33 +41,41 @@ internal sealed class WeakReferenceManager(IOptions<WeakReferencesOptions> optio
         }
     }
 
-    private void Remove(Reference? reference)
+    private void Remove(SubscriptionKey key) 
+        => _references.TryRemove(key, out _);
+
+    public interface IReference : IDisposable
     {
-        var target = reference?.Target;
-        if (target is not null)
-        {
-            _references.TryRemove(target.GetHashCode(), out _);
-        }
+        public object? Target { get; }
+
+        public bool IsAlive { get; }
+        
+        public object? Metadata { get; }
     }
 
-    public sealed record Reference : IDisposable
+    private readonly record struct SubscriptionKey(int ObjectHashCode, int MetadataHashCode);
+
+    private sealed record Reference : IReference
     {
         private readonly WeakReferenceManager _manager;
         private readonly WeakReference _reference;
-
-        public Reference(WeakReferenceManager manager, object obj)
+        private readonly SubscriptionKey _key;
+        
+        // NOTE: do not convert to primary constructor, because it will generate hard reference to the obj
+        internal Reference(SubscriptionKey key, WeakReferenceManager manager, object obj, object? metadata)
         {
             _manager = manager;
             _reference = new WeakReference(obj);
-            TargetType = obj.GetType();
+            _key = key;
+            Metadata = metadata;
         }
 
         public object? Target => _reference.Target;
 
         public bool IsAlive => _reference.IsAlive;
+        
+        public object? Metadata { get; }
 
-        public Type TargetType { get; }
-
-        public void Dispose() => _manager.Remove(this);
+        public void Dispose() => _manager.Remove(_key);
     }
 }
