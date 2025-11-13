@@ -18,6 +18,8 @@
     <PackageReference Include="TUnit" />
     <PackageReference Include="Verify.TUnit" />
     <PackageReference Include="Moq" />
+    <!-- Override vulnerable transitive dependency (version managed in Directory.Packages.props) -->
+    <PackageReference Include="System.Formats.Asn1" />
   </ItemGroup>
   
   <ItemGroup>
