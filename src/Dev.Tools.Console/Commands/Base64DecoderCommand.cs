@@ -16,7 +16,7 @@ internal sealed partial class Base64DecoderCommand(IToolsProvider toolProvider, 
         public string Text { get; init; } = default!;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         ToolDefinition definition = toolProvider.GetToolDefinition<Base64DecoderTool>();
 

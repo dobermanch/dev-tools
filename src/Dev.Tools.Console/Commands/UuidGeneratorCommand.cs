@@ -31,7 +31,7 @@ internal sealed class UuidGeneratorCommand(IToolsProvider toolProvider) : AsyncC
         public DateTime? Time { get; init; }
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var tool = toolProvider.GetTool<UuidGeneratorTool>();
 

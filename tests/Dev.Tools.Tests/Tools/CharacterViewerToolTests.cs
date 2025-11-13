@@ -59,7 +59,8 @@ public class CharacterViewerToolTests
         foreach (var ch in inputText)
         {
             var hexCode = $"{(int)ch:X4}";
-            await Assert.That(codes).ContainsKey(ch).And.ContainsValue(hexCode);
+            await Assert.That(codes).ContainsKey(ch);
+            await Assert.That(codes.Values).Contains(hexCode);
         }
     }
 }

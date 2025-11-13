@@ -1,12 +1,13 @@
 using System.Net.Mime;
+using System.Text.Json.Nodes;
 using Dev.Tools;
 using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.OpenApi.Any;
 using Scalar.AspNetCore;
+using Microsoft.OpenApi;
 
 [assembly: GenerateToolsApiEndpoint]
 
@@ -29,9 +30,9 @@ builder.Services.AddOpenApi(options =>
 
     options.AddOperationTransformer((operation, context, ctx) =>
     {
-        foreach (var response in operation.Responses)
+        foreach (var response in operation.Responses ?? [])
         {
-            if (response.Value.Content.TryGetValue(MediaTypeNames.Application.Json, out var content))
+            if (response.Value.Content != null && response.Value.Content.TryGetValue(MediaTypeNames.Application.Json, out var content))
             {
             }
         }
@@ -41,27 +42,32 @@ builder.Services.AddOpenApi(options =>
 
     options.AddSchemaTransformer((schema, context, ctx) =>
     {
-        if (context.JsonTypeInfo.Type is { Name: "Args", DeclaringType: not null })
+        var type = context.JsonTypeInfo.Type;
+
+        if (type is { Name: "Args", DeclaringType: not null })
         {
-            schema.Annotations["x-schema-id"] =
-                schema.Title = $"{context.JsonTypeInfo.Type.DeclaringType.Name}Request";
+            var title = $"{type.DeclaringType.Name}Request";
+            schema.Title = title;
+            schema.Extensions?["x-schema-id"] = new JsonNodeExtension(JsonValue.Create(title));
+
         }
 
-        if (context.JsonTypeInfo.Type is { Name: "Result", DeclaringType: not null })
+        if (type is { Name: "Result", DeclaringType: not null })
         {
-            schema.Annotations["x-schema-id"] =
-                schema.Title = $"{context.JsonTypeInfo.Type.DeclaringType.Name}Response";
+            var title = $"{type.DeclaringType.Name}Response";
+            schema.Title = title;
+            schema.Extensions?["x-schema-id"] = new JsonNodeExtension(JsonValue.Create(title));
 
-            schema.Properties.Remove("hasErrors");
-            schema.Properties.Remove("errorCodes");
+            schema.Properties?.Remove("hasErrors");
+            schema.Properties?.Remove("errorCodes");
         }
 
-        if (context.JsonTypeInfo.Type.IsEnum)
+        if (type.IsEnum)
         {
-            schema.Enum =
-                Enum.GetNames(context.JsonTypeInfo.Type)
-                    .Select(it => (IOpenApiAny)new OpenApiString(it))
-                    .ToList();
+            schema.Enum = Enum.GetNames(type)
+                .Select(it => JsonValue.Create(it))
+                .OfType<JsonNode>()
+                .ToList();
         }
 
         return Task.CompletedTask;

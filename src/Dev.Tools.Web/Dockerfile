@@ -3,7 +3,7 @@ USER $APP_UID
 WORKDIR /usr/share/nginx/html
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS publish
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS publish
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Directory.Build.props", "src/Directory.Build.props"]

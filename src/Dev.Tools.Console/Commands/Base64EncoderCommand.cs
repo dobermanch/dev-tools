@@ -23,7 +23,7 @@ internal sealed class Base64EncoderCommand(IToolsProvider toolProvider) : AsyncC
         public bool UrlSafe { get; init; }
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var tool = toolProvider.GetTool<Base64EncoderTool>();
 
