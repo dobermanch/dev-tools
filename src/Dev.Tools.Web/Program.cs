@@ -31,5 +31,5 @@ builder.Services.AddDevToolsLocalization(typeof(Program).Assembly);
 
 var app = builder.Build();
 // TODO: make it work properly. 
-//await app.Services.GetRequiredService<WebContext>().InitializeAsync(CancellationToken.None);
+await app.Services.GetRequiredService<WebContext>().InitializeAsync(CancellationToken.None);
 await app.RunAsync();

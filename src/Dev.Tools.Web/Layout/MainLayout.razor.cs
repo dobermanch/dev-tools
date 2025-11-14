@@ -28,7 +28,7 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
-        await Context.InitializeAsync(CancellationToken.None).ConfigureAwait(false);
+        //await Context.InitializeAsync(CancellationToken.None).ConfigureAwait(false);
         Context.Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
         Context.Messenger.Subscribe<LocalHasChangedNotification>(HandlerLocalHasChanged);
         await base.OnInitializedAsync();

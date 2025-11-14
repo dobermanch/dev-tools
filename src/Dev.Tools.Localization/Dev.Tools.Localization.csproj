@@ -11,19 +11,17 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\ToolResources.resx">
-      <!--      <Generator>ResXFileCodeGenerator</Generator>-->
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
 
-    <EmbeddedResource Update="Resources\ToolResources.en.resx">
+    <EmbeddedResource Update="Resources\ToolResources.*.resx">
       <DependentUpon>ToolResources.resx</DependentUpon>
     </EmbeddedResource>
 
     <EmbeddedResource Update="Resources\Locals.resx">
-      <!--      <Generator>ResXFileCodeGenerator</Generator>-->
       <LastGenOutput>Locals.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Locals.en.resx">
+    <EmbeddedResource Update="Resources\Locals.*.resx">
       <DependentUpon>Locals.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

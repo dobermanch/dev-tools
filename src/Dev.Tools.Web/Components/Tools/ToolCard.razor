@@ -1,5 +1,5 @@
 <MudCard @onclick="NavigateToToolPage">
-    <MudCardHeader>
+    <MudCardHeader Class="pb-0">
         <CardHeaderAvatar>
             <MudAvatar Color="Color.Primary">
                 <MudIcon Color="Color.Dark" Icon="@Icons.Material.Outlined.Construction" Size="Size.Medium" />
@@ -13,7 +13,12 @@
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent Class="d-flex align-content-space-between flex-wrap flex-grow-1">
-        <MudText GutterBottom="true" Typo="Typo.body2">@Context.Localization.GetToolDescription(Tool)</MudText>
-        <KeywordChips ToolDefinition="@Tool"/>
+        <MudText
+            GutterBottom="true"
+            Typo="Typo.body2"
+            Style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5;">
+            @Context.Localization.GetToolDescription(Tool)
+        </MudText>
+        <KeywordChips ToolDefinition="@Tool" SingleLine="true" Class="ml-n1"/>
     </MudCardContent>
 </MudCard>

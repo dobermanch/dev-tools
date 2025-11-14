@@ -5,18 +5,27 @@ namespace Dev.Tools.Localization;
 
 internal static class LocalizerExtensions
 {
-    public static string GetToolTitle(this IStringLocalizer provider, ToolDefinition tool) 
-        => provider.GetToolTitle(tool.ToolType.Name);
+    extension(IStringLocalizer provider)
+    {
+        public string GetToolTitle(ToolDefinition tool) 
+            => provider.GetToolTitle(tool.ToolType.Name);
 
-    public static string GetToolDescription(this IStringLocalizer provider, ToolDefinition tool) 
-        => provider.GetToolDescription(tool.ToolType.Name);
-    
-    public static string GetKeyword(this IStringLocalizer provider, Keyword value) 
-        => provider.GetEnum(value);
-    
-    public static string GetCategory(this IStringLocalizer provider, Category value) 
-        => provider.GetEnum(value);
-    
-    public static string GetErrorCode(this IStringLocalizer provider, ErrorCode value) 
-        => provider.GetEnum(value);
+        public string GetToolDescription(ToolDefinition tool) 
+            => provider.GetToolDescription(tool.ToolType.Name);
+
+        public string GetKeyword(Keyword value) 
+            => provider.GetEnum(value);
+
+        public string GetCategory(Category value) 
+            => provider.GetEnum(value);
+
+        public string GetErrorCode(ErrorCode value) 
+            => provider.GetEnum(value);
+    }
+
+    extension<TPage>(ILocalizationProvider provider)
+    {
+        public IStringLocalizer PageLocalizer()
+         => provider.CreateScopedLocalizer($"Page.{typeof(TPage).Name}");
+    }
 }

@@ -18,11 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Settings\" />
-    <Folder Include="wwwroot\css\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Dev.Tools\Dev.Tools.csproj" />
     <ProjectReference Include="..\Dev.Tools.Localization\Dev.Tools.Localization.csproj" />
   </ItemGroup>
@@ -36,11 +31,11 @@
   <ItemGroup>
     <EmbeddedResource Update="Locals\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.en.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
+    <EmbeddedResource Update="Locals\Resources.*.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Locals\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

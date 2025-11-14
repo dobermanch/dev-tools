@@ -1,17 +1,53 @@
-<MudStack Class="@Class" Row="true" Spacing="0" Wrap="Wrap.Wrap">
-    @foreach (var keyword in ToolDefinition.Keywords.OrderBy(it => it))
-    {
-        <MudChip T="string" Color="Color.Dark" Size="Size.Small" Label="true" Text="@Context.Localization.GetKeyword(keyword)"/>
-    }
-</MudStack>
+@if (SingleLine)
+{
+    <div class="@DivMarker @Class" style="display: flex; align-items: center; gap: 0; width: 100%; max-width: 100%; overflow: hidden;">
+        @foreach (var keyword in _visibleKeywords)
+        {
+            <MudChip T="string"
+                     Color="Color.Dark"
+                     Size="Size.Small"
+                     Label="true"
+                     Text="@Context.Localization.GetKeyword(keyword)"
+                     Style="max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0;"/>
+        }
 
-@code {
-    [Inject]
-    private WebContext Context { get; set; } = null!;
-    
-    [Parameter]
-    public string Class { get; set; } = null!;
-    
-    [Parameter] 
-    public ToolDefinition ToolDefinition { get; set; } = null!;
+        @if (_hiddenKeywords.Any())
+        {
+            <MudTooltip>
+                <ChildContent>
+                    <MudChip T="string"
+                             Color="Color.Primary"
+                             Size="Size.Small"
+                             Label="true"
+                             Text="@($"+{_hiddenKeywords.Count}")"
+                             Style="max-width: 60px; flex-shrink: 0;"/>
+                </ChildContent>
+                <TooltipContent>
+                    <div style="max-width: 300px; display: flex; flex-wrap: wrap; gap: 4px;">
+                        @foreach (var keyword in _hiddenKeywords)
+                        {
+                            <MudChip T="string"
+                                     Color="Color.Dark"
+                                     Size="Size.Small"
+                                     Label="true"
+                                     Text="@Context.Localization.GetKeyword(keyword)"/>
+                        }
+                    </div>
+                </TooltipContent>
+            </MudTooltip>
+        }
+    </div>
+}
+else
+{
+    <MudStack Class="@Class" Row="true" Spacing="0" Wrap="Wrap.Wrap">
+        @foreach (var keyword in ToolDefinition.Keywords.OrderBy(it => it))
+        {
+            <MudChip T="string"
+                     Color="Color.Dark"
+                     Size="Size.Small"
+                     Label="true"
+                     Text="@Context.Localization.GetKeyword(keyword)"/>
+        }
+    </MudStack>
 }

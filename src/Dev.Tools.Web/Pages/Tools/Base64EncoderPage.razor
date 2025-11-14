@@ -7,15 +7,15 @@
         <MudGrid>
             <MudItem xs="12">
                 <MudStack AlignItems="AlignItems.Start">
-                    <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="Use Safe URL" Color="Color.Primary"/>
-                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="Insert Line Breaks"
+                    <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
+                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]"
                                Color="Color.Primary"/>
                 </MudStack>
             </MudItem>
             <MudItem xs="12">
                 <DtTextField
                     T="string"
-                    Label="String to Encode"
+                    Label="@_localizer["TextField.Input.Label"]"
                     Value="@_args.Text"
                     Error="@_result.HasErrors"
                     ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
@@ -35,7 +35,7 @@
                 <DtTextField
                     T="string"
                     Value="@_result.Text"
-                    Label="Base64 String"
+                    Label="@_localizer["TextField.Result.Label"]"
                     ReadOnly="true"
                     Lines="10"
                     LabelPosition="LabelPositionType.Inline"

@@ -1,31 +1,30 @@
 ﻿@using Dev.Tools.Providers
 <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavGroup Title="Tools" Expanded="true">
-        @foreach (var group in _tools)
-        {
-            <MudNavGroup Title="@group.Key" Expanded="true">
-                @foreach (var tool in group)
-                {
-                    <MudNavLink
-                        Icon="@Icons.Material.Outlined.Construction"
-                        IconColor="Color.Info"
-                        Href="@($"/tools/{tool.Item2.Name}")"
-                        Match="NavLinkMatch.Prefix">
-                        @tool.Item2.Name
-                    </MudNavLink>
-                }
-            </MudNavGroup>
-        }
-    </MudNavGroup>
+    @foreach (var group in _tools)
+    {
+        <MudNavGroup Title="@Context.Localization.GetCategory(group.Key)" Expanded="true">
+            @foreach (var tool in group)
+            {
+                <MudNavLink
+                    Icon="@Icons.Material.Outlined.Construction"
+                    IconColor="Color.Info"
+                    Href="@($"/tools/{tool.Item2.Name}")"
+                    Match="NavLinkMatch.Prefix">
+                    @Context.Localization.GetToolTitle(tool.Item2)
+                </MudNavLink>
+            }
+        </MudNavGroup>
+    }
     <MudNavLink Href="/settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">Settings</MudNavLink>
 </MudNavMenu>
 
 @code{
 
     [Inject] private IToolsProvider ToolsProvider { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
 
-    private GroupedList<string, (Category, ToolDefinition)> _tools = GroupedList<string, (Category, ToolDefinition)>.Empty;
+    private GroupedList<Category, (Category, ToolDefinition)> _tools = GroupedList<Category, (Category, ToolDefinition)>.Empty;
 
     protected override void OnInitialized()
     {
@@ -36,7 +35,7 @@
                 .SelectMany(it => it.Categories.Select(x => (category: x, tools: it)))
                 .ToArray();
 
-        _tools = new GroupedList<string, (Category, ToolDefinition)>(it => it.Item1.ToString(), grouped);
+        _tools = new GroupedList<Category, (Category, ToolDefinition)>(it => it.Item1, grouped);
         
         base.OnInitialized();
     }

@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -10,11 +10,13 @@ public partial class Base64DecoderPage : ComponentBase
     private Base64DecoderTool _tool = null!;
     private readonly Base64DecoderTool.Args _args = new();
     private Base64DecoderTool.Result _result = new();
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
     protected override void OnInitialized()
     {
+        _localizer = Context.Localization.PageLocalizer<Base64DecoderPage>();
         _tool = Context.ToolsProvider.GetTool<Base64DecoderTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<Base64DecoderTool>();
 
