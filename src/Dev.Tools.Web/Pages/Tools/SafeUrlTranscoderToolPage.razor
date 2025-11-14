@@ -1,0 +1,44 @@
+@page "/tools/url-transcoder"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid Class="align-center">
+            <MudItem xs="12" md="8">
+                <DtTextField
+                    T="string"
+                    Label="@_localizer["TextField.Input.Label"]"
+                    @bind-Value="@_url"
+                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                />
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <DtSelectEnum
+                    T="SafeUrlTranscoderTool.TranscodingType"
+                    Label="@_localizer["Select.Operation.Label"]"
+                    Value="@_transcoding"
+                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                    ValueChanged="OnTranscodingValueChangedAsync"
+                />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@(_result?.Url ?? string.Empty)"
+                    Label="@_localizer["TextField.Result.Label"]"
+                    ReadOnly="true"
+                    Lines="3"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>

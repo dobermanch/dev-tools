@@ -1,0 +1,80 @@
+@page "/tools/xml-formatter"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid Class="align-center">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Label="@_localizer["TextField.Input.Label"]"
+                    @bind-Value="@_xml"
+                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                    Lines="10"
+                />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <DtSlider
+                    T="int"
+                    Label="@_localizer["Slider.IndentSize.Label"]"
+                    Value="@_indentSize"
+                    MinValue="0"
+                    MaxValue="8"
+                    ValueChanged="@OnIndentSizeChangedAsync"
+                />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <DtSelectEnum
+                    T="XmlFormatterTool.SortDirection"
+                    Label="@_localizer["Select.SortKeys.Label"]"
+                    Value="@_sortKeys"
+                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                    ValueChanged="OnSortKeysChangedAsync"
+                />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <DtSelectEnum
+                    T="XmlFormatterTool.TextCase"
+                    Label="@_localizer["Select.KeyFormat.Label"]"
+                    Value="@_keyFormat"
+                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                    ValueChanged="OnKeyFormatChangedAsync"
+                />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudSwitch
+                        T="bool"
+                        Value="@_excludeEmpty"
+                        Label="@_localizer["Switch.ExcludeEmpty.Label"]"
+                        Color="Color.Primary"
+                        ValueChanged="OnExcludeEmptyChangedAsync"/>
+                    <MudSwitch
+                        T="bool"
+                        Value="@_compact"
+                        Label="@_localizer["Switch.Compact.Label"]"
+                        Color="Color.Primary"
+                        ValueChanged="OnCompactChangedAsync"/>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@(_result?.Xml ?? string.Empty)"
+                    Label="@_localizer["TextField.Result.Label"]"
+                    ReadOnly="true"
+                    Lines="15"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>

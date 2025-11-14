@@ -1,0 +1,35 @@
+@page "/tools/nato"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid Class="align-center">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Label="@_localizer["TextField.Input.Label"]"
+                    @bind-Value="@_text"
+                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Value="@GetNatoWords()"
+                    Label="@_localizer["TextField.Result.Label"]"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>

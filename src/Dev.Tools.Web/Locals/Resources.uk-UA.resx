@@ -162,4 +162,115 @@
     <data name="Page.UlidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>ULID</value>
     </data>
+    <data name="Page.IntegerBaseConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Вхідне значення</value>
+    </data>
+    <data name="Page.IntegerBaseConverterToolPage.Select.InputBase.Label" xml:space="preserve">
+        <value>Вхідна система</value>
+    </data>
+    <data name="Page.IntegerBaseConverterToolPage.Select.TargetBase.Label" xml:space="preserve">
+        <value>Цільова система</value>
+    </data>
+    <data name="Page.IntegerBaseConverterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Конвертоване значення</value>
+    </data>
+    <data name="Page.IntegerToRomanConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Число</value>
+    </data>
+    <data name="Page.IntegerToRomanConverterToolPage.Select.Direction.Label" xml:space="preserve">
+        <value>Напрямок</value>
+    </data>
+    <data name="Page.IntegerToRomanConverterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Конвертоване значення</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Вхідний JSON</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.Slider.IndentSize.Label" xml:space="preserve">
+        <value>Розмір відступу</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.Select.SortKeys.Label" xml:space="preserve">
+        <value>Сортувати ключі</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.Select.KeyFormat.Label" xml:space="preserve">
+        <value>Формат ключів</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.Switch.ExcludeEmpty.Label" xml:space="preserve">
+        <value>Виключити порожні</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.Switch.Compact.Label" xml:space="preserve">
+        <value>Компактний</value>
+    </data>
+    <data name="Page.JsonFormatterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Форматований JSON</value>
+    </data>
+    <data name="Page.SafeUrlTranscoderToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>URL</value>
+    </data>
+    <data name="Page.SafeUrlTranscoderToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Операція</value>
+    </data>
+    <data name="Page.SafeUrlTranscoderToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Результат</value>
+    </data>
+    <data name="Page.StringToNatoAlphabetToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="Page.StringToNatoAlphabetToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Слова НАТО</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>URL</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Schema.Label" xml:space="preserve">
+        <value>Схема</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Hostname.Label" xml:space="preserve">
+        <value>Ім'я хоста</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Port.Label" xml:space="preserve">
+        <value>Порт</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Path.Label" xml:space="preserve">
+        <value>Шлях</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Username.Label" xml:space="preserve">
+        <value>Ім'я користувача</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Password.Label" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="Page.UrlParserToolPage.TextField.Query.Label" xml:space="preserve">
+        <value>Запит</value>
+    </data>
+    <data name="Page.UrlParserToolPage.Section.Parameters.Title" xml:space="preserve">
+        <value>Параметри запиту</value>
+    </data>
+    <data name="Page.UrlParserToolPage.Table.Header.Key" xml:space="preserve">
+        <value>Ключ</value>
+    </data>
+    <data name="Page.UrlParserToolPage.Table.Header.Value" xml:space="preserve">
+        <value>Значення</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Вхідний XML</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.Slider.IndentSize.Label" xml:space="preserve">
+        <value>Розмір відступу</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.Select.SortKeys.Label" xml:space="preserve">
+        <value>Сортувати елементи</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.Select.KeyFormat.Label" xml:space="preserve">
+        <value>Формат елементів</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.Switch.ExcludeEmpty.Label" xml:space="preserve">
+        <value>Виключити порожні</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.Switch.Compact.Label" xml:space="preserve">
+        <value>Компактний</value>
+    </data>
+    <data name="Page.XmlFormatterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Форматований XML</value>
+    </data>
 </root>

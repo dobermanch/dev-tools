@@ -1,0 +1,123 @@
+@page "/tools/url-parser"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-2">
+    <MudCardContent>
+        <MudGrid Class="align-center">
+            <MudItem xs="12">
+                <DtTextField
+                    T="string"
+                    Label="@_localizer["TextField.Input.Label"]"
+                    @bind-Value="@_url"
+                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                />
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        @if (_result != null)
+        {
+            <MudGrid Spacing="3">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result.Schema ?? string.Empty)"
+                        Label="@_localizer["TextField.Schema.Label"]"
+                        ReadOnly="true"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result.Hostname ?? string.Empty)"
+                        Label="@_localizer["TextField.Hostname.Label"]"
+                        ReadOnly="true"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result.Port?.ToString() ?? string.Empty)"
+                        Label="@_localizer["TextField.Port.Label"]"
+                        ReadOnly="true"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result.Path ?? string.Empty)"
+                        Label="@_localizer["TextField.Path.Label"]"
+                        ReadOnly="true"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                @if (!string.IsNullOrEmpty(_result.Username))
+                {
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.Username ?? string.Empty)"
+                            Label="@_localizer["TextField.Username.Label"]"
+                            ReadOnly="true"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    </MudItem>
+                }
+                @if (!string.IsNullOrEmpty(_result.Password))
+                {
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.Password ?? string.Empty)"
+                            Label="@_localizer["TextField.Password.Label"]"
+                            ReadOnly="true"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    </MudItem>
+                }
+                @if (!string.IsNullOrEmpty(_result.Query))
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.Query ?? string.Empty)"
+                            Label="@_localizer["TextField.Query.Label"]"
+                            ReadOnly="true"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    </MudItem>
+                }
+                @if (_result.Parameters?.Count > 0)
+                {
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">@_localizer["Section.Parameters.Title"]</MudText>
+                        <MudSimpleTable Dense="true" Hover="true" Bordered="true">
+                            <thead>
+                            <tr>
+                                <th>@_localizer["Table.Header.Key"]</th>
+                                <th>@_localizer["Table.Header.Value"]</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var param in _result.Parameters)
+                            {
+                                <tr>
+                                    <td>@param.Key</td>
+                                    <td>@param.Value</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </MudSimpleTable>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+    </MudCardContent>
+</MudCard>
