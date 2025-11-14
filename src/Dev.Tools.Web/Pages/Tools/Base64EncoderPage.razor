@@ -6,13 +6,21 @@
     <MudCardContent>
         <MudGrid>
             <MudItem xs="12">
-                <MudStack AlignItems="AlignItems.Start">
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]" Color="Color.Primary"/>
+                    </MudItem>
+                </MudGrid>
+                @* <MudStack AlignItems="AlignItems.Start">
                     <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
                     <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]"
                                Color="Color.Primary"/>
-                </MudStack>
+                </MudStack> *@
             </MudItem>
-            <MudItem xs="12">
+            <MudItem xs="12" md="6">
                 <DtTextField
                     T="string"
                     Label="@_localizer["TextField.Input.Label"]"
@@ -24,14 +32,7 @@
                     LabelPosition="LabelPositionType.Inline"
                 />
             </MudItem>
-        </MudGrid>
-
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="12">
+            <MudItem xs="12" md="6">
                 <DtTextField
                     T="string"
                     Value="@_result.Text"
@@ -42,5 +43,22 @@
                 />
             </MudItem>
         </MudGrid>
+@* 
+        <MudDivider
+            Class="my-5"
+            DividerType="DividerType.FullWidth"/>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12" md="6">
+                <DtTextField
+                    T="string"
+                    Value="@_result.Text"
+                    Label="@_localizer["TextField.Result.Label"]"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
+        </MudGrid> *@
     </MudCardContent>
 </MudCard>

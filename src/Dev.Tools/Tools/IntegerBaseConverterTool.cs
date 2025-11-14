@@ -37,15 +37,15 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
         var customTargetBase = standardBases.All(it => it != args.TargetBase);
 
         var input = args.InputBase == BaseType.Base64
-            ? BitConverter.ToInt32(Convert.FromBase64String(args.InputValue))
+            ? BitConverter.ToInt64(Convert.FromBase64String(args.InputValue))
             : customInputBase
                 ? FromCustomBase(args.InputValue, (int)args.InputBase)
-                : Convert.ToInt32(args.InputValue, (int)args.InputBase);
+                : Convert.ToInt64(args.InputValue, (int)args.InputBase);
 
         var result = args.TargetBase == BaseType.Base64
             ? Convert.ToBase64String(BitConverter.GetBytes(input), 0)
             : customTargetBase
-                ? ToCustomBase(input, (int)args.TargetBase)
+                ? ToCustomBase((int)input, (int)args.TargetBase)
                 : Convert.ToString(input, (int)args.TargetBase);
         
         return new Result(result, args.TargetBase);

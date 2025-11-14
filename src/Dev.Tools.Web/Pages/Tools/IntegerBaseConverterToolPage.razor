@@ -5,7 +5,7 @@
 <MudCard Class="my-2">
     <MudCardContent>
         <MudGrid Class="align-center">
-            <MudItem xs="12">
+            <MudItem xs="12" md="4">
                 <DtTextField
                     T="string"
                     Label="@_localizer["TextField.Input.Label"]"
@@ -13,7 +13,7 @@
                     OnDebounceIntervalElapsed="@OnValueChangedAsync"
                 />
             </MudItem>
-            <MudItem xs="12" md="6">
+            <MudItem xs="12" md="4">
                 <DtSelectEnum
                     T="IntegerBaseConverterTool.BaseType"
                     Label="@_localizer["Select.InputBase.Label"]"
@@ -22,7 +22,7 @@
                     ValueChanged="OnInputBaseValueChangedAsync"
                 />
             </MudItem>
-            <MudItem xs="12" md="6">
+            <MudItem xs="12" md="4">
                 <DtSelectEnum
                     T="IntegerBaseConverterTool.BaseType"
                     Label="@_localizer["Select.TargetBase.Label"]"

@@ -5,7 +5,7 @@
 <MudCard Class="my-2">
     <MudCardContent>
         <MudGrid>
-            <MudItem xs="12">
+            <MudItem xs="12" md="6">
                 <DtTextField
                     T="string"
                     Label="@_localizer["TextField.Input.Label"]"
@@ -17,9 +17,38 @@
                     OnDebounceIntervalElapsed="OnDecodeStringValueChangedAsync"
                 />
             </MudItem>
+@* 
+            <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                <MudItem xs="12">
+                    <MudDivider
+                        Class="my-5"
+                        DividerType="DividerType.FullWidth"/>
+                </MudItem>
+            </MudHidden>
+
+            <MudHidden Breakpoint="Breakpoint.MdAndDown">
+                <MudItem xs="12">
+                    <MudDivider
+                        Class="my-5"
+                        Vertical="true"
+                        DividerType="DividerType.FullWidth"/>
+                </MudItem>
+            </MudHidden> *@
+
+
+            <MudItem xs="12" md="6">
+                <DtTextField
+                    T="string"
+                    Value="@_result.Data"
+                    Label="@_localizer["TextField.Result.Label"]"
+                    ReadOnly="true"
+                    Lines="10"
+                    LabelPosition="LabelPositionType.Inline"
+                />
+            </MudItem>
         </MudGrid>
 
-        <MudDivider
+        @* <MudDivider
             Class="my-5"
             DividerType="DividerType.FullWidth"/>
 
@@ -34,6 +63,6 @@
                     LabelPosition="LabelPositionType.Inline"
                 />
             </MudItem>
-        </MudGrid>
+        </MudGrid> *@
     </MudCardContent>
 </MudCard>
