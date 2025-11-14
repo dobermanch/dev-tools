@@ -21,9 +21,9 @@ public partial class DtTextField<T> : ComponentBase
     [Parameter]
     public T? Value { get; set; }
     
-    // [Parameter]
-    // public EventCallback<T> ValueChanged { get; set; }
-    //
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+    
     [Parameter]
     public bool ReadOnly { get; set; }
     
@@ -40,7 +40,7 @@ public partial class DtTextField<T> : ComponentBase
     public EventCallback<string> OnDebounceIntervalElapsed { get; set; }
 
     [Parameter] 
-    public int MaxLength { get; set; }
+    public int MaxLength { get; set; } = 524288;
 
     [Parameter] 
     public bool ShowCopyButton { get; set; } = true;

@@ -606,6 +606,60 @@
   <data name="Tools.PassphraseGenerator.Result.Phrases.Name" xml:space="preserve">
     <value>:Phrases:</value>
   </data>
+  <data name="Tools.RsaKeyGenerator.Args.Algorithm.Description" xml:space="preserve">
+    <value>:Algorithm description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.Algorithm.Name" xml:space="preserve">
+    <value>:Algorithm:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.InsertLineBreaks.Description" xml:space="preserve">
+    <value>:InsertLineBreaks description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.InsertLineBreaks.Name" xml:space="preserve">
+    <value>:InsertLineBreaks:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.KeySize.Description" xml:space="preserve">
+    <value>:KeySize description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.KeySize.Name" xml:space="preserve">
+    <value>:KeySize:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.WithPemHeaders.Description" xml:space="preserve">
+    <value>:WithPemHeaders description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Args.WithPemHeaders.Name" xml:space="preserve">
+    <value>:WithPemHeaders:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Description" xml:space="preserve">
+    <value>:Description for RsaKeyGenerator:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Enums.Algorithm.DSA" xml:space="preserve">
+    <value>:D S A:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Enums.Algorithm.ECDH" xml:space="preserve">
+    <value>:E C D H:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Enums.Algorithm.ECDSA" xml:space="preserve">
+    <value>:E C D S A:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Enums.Algorithm.RSA" xml:space="preserve">
+    <value>:R S A:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Name" xml:space="preserve">
+    <value>:RsaKeyGenerator:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Result.PrivateKey.Description" xml:space="preserve">
+    <value>:PrivateKey description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Result.PrivateKey.Name" xml:space="preserve">
+    <value>:PrivateKey:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Result.PublicKey.Description" xml:space="preserve">
+    <value>:PublicKey description:</value>
+  </data>
+  <data name="Tools.RsaKeyGenerator.Result.PublicKey.Name" xml:space="preserve">
+    <value>:PublicKey:</value>
+  </data>
   <data name="Tools.SafeUrlTranscoder.Args.Transcoding.Description" xml:space="preserve">
     <value>:Transcoding description:</value>
   </data>

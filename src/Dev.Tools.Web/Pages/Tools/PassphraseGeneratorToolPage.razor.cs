@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -10,11 +10,13 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
     private PassphraseGeneratorTool _tool = null!;
     private readonly PassphraseGeneratorTool.Args _args = new();
     private PassphraseGeneratorTool.Result? _result;
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.PageLocalizer<PassphraseGeneratorToolPage>();
         _tool = Context.ToolsProvider.GetTool<PassphraseGeneratorTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<PassphraseGeneratorTool>();
         await OnValueChangedAsync();

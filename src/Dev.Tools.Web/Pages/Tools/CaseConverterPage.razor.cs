@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -10,11 +10,13 @@ public partial class CaseConverterPage : ComponentBase
     private CaseConverterTool _tool = null!;
     private readonly Args _args = new();
     private Dictionary<CaseConverterTool.CaseType, CaseConverterTool.Result?> _results = new();
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.PageLocalizer<CaseConverterPage>();
         _tool = Context.ToolsProvider.GetTool<CaseConverterTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<CaseConverterTool>();
         _results = Enum
@@ -46,16 +48,6 @@ public partial class CaseConverterPage : ComponentBase
         await Task.WhenAll(tasks);
     }
 
-    private string ErrorMessage()
-    {
-        return string.Join(
-            "; ",
-            _results
-                .Where(it => it.Value?.HasErrors ?? false)
-                .Select(it => $"{it.Key.ToString()}: {it.Value!.ErrorCodes[0]}")
-        );
-    }
-    
     public record Args
     {
         public string Text { get; set; } = null!;

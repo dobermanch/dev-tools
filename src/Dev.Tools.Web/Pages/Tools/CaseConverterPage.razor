@@ -11,8 +11,8 @@
                     Value="@_args.Text"
                     OnDebounceIntervalElapsed="OnValueChangedAsync"
                     Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                    ErrorText="@ErrorMessage()"
-                    Label="Text to Convert"
+                    ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
+                    Label="@_localizer["TextField.Input.Label"]"
                     LabelPosition="LabelPositionType.Inline"
                     Lines="5"
                 />
@@ -30,7 +30,7 @@
                     <DtTextField
                         T="string"
                         Value="@result.Value?.Text"
-                        Label="@result.Key.ToString()"
+                        Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
                         ReadOnly="true"/>
                 </MudItem>
             }

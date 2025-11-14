@@ -12,6 +12,10 @@ internal static class LocalizerExtensions
 
         public string GetToolDescription(ToolDefinition tool) 
             => provider.GetToolDescription(tool.ToolType.Name);
+        
+        public string GetToolEnum<TEnum>(ToolDefinition tool, TEnum value)
+            where TEnum: Enum 
+            => provider.GetToolEnum(tool.ToolType.Name, value);
 
         public string GetKeyword(Keyword value) 
             => provider.GetEnum(value);

@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -10,11 +10,13 @@ public partial class UuidGeneratorToolPage : ComponentBase
     private UuidGeneratorTool _tool = null!;
     private readonly UuidGeneratorTool.Args _args = new();
     private UuidGeneratorTool.Result? _result;
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
-    
+
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.PageLocalizer<UuidGeneratorToolPage>();
         _tool = Context.ToolsProvider.GetTool<UuidGeneratorTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<UuidGeneratorTool>();
         await OnValueChangedAsync();

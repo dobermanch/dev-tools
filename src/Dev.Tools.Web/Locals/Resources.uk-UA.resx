@@ -3,7 +3,7 @@
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -19,147 +19,147 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="Page.Base64DecoderPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Input:</value>
+        <value>Вхідні дані</value>
     </data>
     <data name="Page.Base64DecoderPage.TextField.Result.Label" xml:space="preserve">
-        <value>:Result:</value>
+        <value>Результат</value>
     </data>
     <data name="Page.Base64EncoderPage.Switch.SafeUrl.Label" xml:space="preserve">
-        <value>:SafeUrl:</value>
+        <value>Безпечний URL</value>
     </data>
     <data name="Page.Base64EncoderPage.Switch.LineBreaks.Label" xml:space="preserve">
-        <value>:LineBreaks:</value>
+        <value>Вставити переноси рядків</value>
     </data>
     <data name="Page.Base64EncoderPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Input:</value>
+        <value>Вхідні дані</value>
     </data>
     <data name="Page.Base64EncoderPage.TextField.Result.Label" xml:space="preserve">
-        <value>:Result:</value>
+        <value>Результат</value>
     </data>
     <data name="Page.CaseConverterPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Text to Convert:</value>
+        <value>Текст для перетворення</value>
     </data>
     <data name="Page.CharacterViewerPage.Switch.HideSymbols.Label" xml:space="preserve">
-        <value>:Hide Special Symbols:</value>
+        <value>Приховати спеціальні символи</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Input Text:</value>
+        <value>Вхідний текст</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Output.Label" xml:space="preserve">
-        <value>:Output Text:</value>
+        <value>Вихідний текст</value>
     </data>
     <data name="Page.CharacterViewerPage.Section.FormattedText.Title" xml:space="preserve">
-        <value>:Formatted Text with Highlights:</value>
+        <value>Форматований текст з підсвічуванням</value>
     </data>
     <data name="Page.CharacterViewerPage.Section.CharacterInfo.Title" xml:space="preserve">
-        <value>:Character Info:</value>
+        <value>Інформація про символи</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.Char" xml:space="preserve">
-        <value>:Char:</value>
+        <value>Символ</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.Category" xml:space="preserve">
-        <value>:Category:</value>
+        <value>Категорія</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.Printable" xml:space="preserve">
-        <value>:Printable:</value>
+        <value>Друкований</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.Hex" xml:space="preserve">
-        <value>:Hex:</value>
+        <value>Hex</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.Unicode" xml:space="preserve">
-        <value>:Unicode:</value>
+        <value>Unicode</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.ASCII" xml:space="preserve">
-        <value>:ASCII:</value>
+        <value>ASCII</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.HTML" xml:space="preserve">
-        <value>:HTML:</value>
+        <value>HTML</value>
     </data>
     <data name="Page.CharacterViewerPage.Table.Header.URL" xml:space="preserve">
-        <value>:URL:</value>
+        <value>URL</value>
     </data>
     <data name="Page.DateTimeConverterToolPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Input Date:</value>
+        <value>Вхідна дата</value>
     </data>
     <data name="Page.DateTimeConverterToolPage.Select.Format.Label" xml:space="preserve">
-        <value>:Date Format:</value>
+        <value>Формат дати</value>
     </data>
     <data name="Page.HashTextToolPage.TextField.Input.Label" xml:space="preserve">
-        <value>:Text to Hash:</value>
+        <value>Текст для хешування</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Slider.TokenLength.Label" xml:space="preserve">
-        <value>:Token Length:</value>
+        <value>Довжина токена</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.TextField.Alphabet.Label" xml:space="preserve">
-        <value>:Alphabet:</value>
+        <value>Алфавіт</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
-        <value>:Token Count:</value>
+        <value>Кількість токенів</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.TextField.ExcludeSymbols.Label" xml:space="preserve">
-        <value>:Exclude Symbols:</value>
+        <value>Виключити символи</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Switch.Lowercase.Label" xml:space="preserve">
-        <value>:Lowercase:</value>
+        <value>Малі літери</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Switch.Uppercase.Label" xml:space="preserve">
-        <value>:Uppercase:</value>
+        <value>Великі літери</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Switch.Numbers.Label" xml:space="preserve">
-        <value>:Numbers:</value>
+        <value>Цифри</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.Switch.Symbols.Label" xml:space="preserve">
-        <value>:Symbols:</value>
+        <value>Символи</value>
     </data>
     <data name="Page.TokenGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>:Tokens:</value>
+        <value>Токени</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.Slider.WordCount.Label" xml:space="preserve">
-        <value>:Word Count:</value>
+        <value>Кількість слів</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.TextField.Separator.Label" xml:space="preserve">
-        <value>:Separator:</value>
+        <value>Роздільник</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.Slider.PhraseCount.Label" xml:space="preserve">
-        <value>:Phrase Count:</value>
+        <value>Кількість фраз</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.TextField.Salt.Label" xml:space="preserve">
-        <value>:Salt:</value>
+        <value>Сіль</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.Switch.Capitalize.Label" xml:space="preserve">
-        <value>:Capitalize first letter:</value>
+        <value>Перша літера велика</value>
     </data>
     <data name="Page.PassphraseGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>:Passphrases:</value>
+        <value>Парольні фрази</value>
     </data>
     <data name="Page.IpDetailsToolPage.Label.YourIp" xml:space="preserve">
-        <value>:Your IP:</value>
+        <value>Ваш IP:</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
-        <value>:Token Count:</value>
+        <value>Кількість UUID</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.Select.Type.Label" xml:space="preserve">
-        <value>:Type:</value>
+        <value>Тип</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.TextField.Name.Label" xml:space="preserve">
-        <value>:Name:</value>
+        <value>Назва</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.TextField.Namespace.Label" xml:space="preserve">
-        <value>:Namespace:</value>
+        <value>Простір імен</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.TextField.Time.Label" xml:space="preserve">
-        <value>:Time:</value>
+        <value>Час</value>
     </data>
     <data name="Page.UuidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>:UUIDs:</value>
+        <value>UUID</value>
     </data>
     <data name="Page.UlidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
-        <value>:Token Count:</value>
+        <value>Кількість ULID</value>
     </data>
     <data name="Page.UlidGeneratorToolPage.Select.Type.Label" xml:space="preserve">
-        <value>:Type:</value>
+        <value>Тип</value>
     </data>
     <data name="Page.UlidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>:ULIDs:</value>
+        <value>ULID</value>
     </data>
 </root>

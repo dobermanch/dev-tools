@@ -29,4 +29,130 @@
     <data name="Page.Base64EncoderPage.Switch.LineBreaks.Label" xml:space="preserve">
         <value>Insert Line Breaks</value>
     </data>
+    <data name="Page.CaseConverterPage.TextField.Input.Label" xml:space="preserve">
+        <value>Text to Convert</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Switch.HideSymbols.Label" xml:space="preserve">
+        <value>Hide Special Symbols</value>
+    </data>
+    <data name="Page.CharacterViewerPage.TextField.Input.Label" xml:space="preserve">
+        <value>Input Text</value>
+    </data>
+    <data name="Page.CharacterViewerPage.TextField.Output.Label" xml:space="preserve">
+        <value>Output Text</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Section.FormattedText.Title" xml:space="preserve">
+        <value>Formatted Text with Highlights</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Section.CharacterInfo.Title" xml:space="preserve">
+        <value>Character Info</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.Char" xml:space="preserve">
+        <value>Char</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.Category" xml:space="preserve">
+        <value>Category</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.Printable" xml:space="preserve">
+        <value>Printable</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.Hex" xml:space="preserve">
+        <value>Hex</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.Unicode" xml:space="preserve">
+        <value>Unicode</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.ASCII" xml:space="preserve">
+        <value>ASCII</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.HTML" xml:space="preserve">
+        <value>HTML</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Table.Header.URL" xml:space="preserve">
+        <value>URL</value>
+    </data>
+    <data name="Page.DateTimeConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Input Date</value>
+    </data>
+    <data name="Page.DateTimeConverterToolPage.Select.Format.Label" xml:space="preserve">
+        <value>Date Format</value>
+    </data>
+    <data name="Page.HashTextToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Text to Hash</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Slider.TokenLength.Label" xml:space="preserve">
+        <value>Token Length</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.TextField.Alphabet.Label" xml:space="preserve">
+        <value>Alphabet</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
+        <value>Token Count</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.TextField.ExcludeSymbols.Label" xml:space="preserve">
+        <value>Exclude Symbols</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Switch.Lowercase.Label" xml:space="preserve">
+        <value>Lowercase</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Switch.Uppercase.Label" xml:space="preserve">
+        <value>Uppercase</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Switch.Numbers.Label" xml:space="preserve">
+        <value>Numbers</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.Switch.Symbols.Label" xml:space="preserve">
+        <value>Symbols</value>
+    </data>
+    <data name="Page.TokenGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Tokens</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.Slider.WordCount.Label" xml:space="preserve">
+        <value>Word Count</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.TextField.Separator.Label" xml:space="preserve">
+        <value>Separator</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.Slider.PhraseCount.Label" xml:space="preserve">
+        <value>Phrase Count</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.TextField.Salt.Label" xml:space="preserve">
+        <value>Salt</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.Switch.Capitalize.Label" xml:space="preserve">
+        <value>Capitalize First Letter</value>
+    </data>
+    <data name="Page.PassphraseGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Passphrases</value>
+    </data>
+    <data name="Page.IpDetailsToolPage.Label.YourIp" xml:space="preserve">
+        <value>Your IP:</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
+        <value>UUID Count</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Select.Type.Label" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.TextField.Name.Label" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.TextField.Namespace.Label" xml:space="preserve">
+        <value>Namespace</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.TextField.Time.Label" xml:space="preserve">
+        <value>Time</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>UUIDs</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
+        <value>ULID Count</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Select.Type.Label" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>ULIDs</value>
+    </data>
 </root>

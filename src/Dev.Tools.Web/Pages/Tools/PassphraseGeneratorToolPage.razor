@@ -10,7 +10,7 @@
                     <MudItem xs="12" md="6">
                         <DtSlider
                             T="int"
-                            Label="Word Count"
+                            Label="@_localizer["Slider.WordCount.Label"]"
                             Value="@_args.WordCount"
                             MinValue="1"
                             MaxValue="20"
@@ -20,7 +20,7 @@
                     <MudItem xs="12" md="6">
                         <DtTextField
                             T="char?"
-                            Label="Separator"
+                            Label="@_localizer["TextField.Separator.Label"]"
                             @bind-Value="@_args.Separator"
                             MaxLength="1"
                             OnDebounceIntervalElapsed="OnValueChangedAsync"/>
@@ -33,7 +33,7 @@
                     <MudItem xs="12" md="6">
                         <DtSlider
                             T="int"
-                            Label="Phrase Count"
+                            Label="@_localizer["Slider.PhraseCount.Label"]"
                             Value="@_args.PhraseCount"
                             MinValue="1"
                             MaxValue="100"
@@ -43,7 +43,7 @@
                     <MudItem xs="12" md="6">
                         <DtTextField
                             T="string"
-                            Label="Salt"
+                            Label="@_localizer["TextField.Salt.Label"]"
                             @bind-Value="@_args.Salt"
                             OnDebounceIntervalElapsed="OnValueChangedAsync"/>
                     </MudItem>
@@ -55,7 +55,7 @@
                     <MudSwitch
                         T="bool"
                         Value="@_args.Capitalize"
-                        Label="Capitalize first letter"
+                        Label="@_localizer["Switch.Capitalize.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnCapitalValueChangedAsync"/>
                 </MudStack>
@@ -72,7 +72,7 @@
                 <DtTextField
                     T="string"
                     Value="@GetPassphrase()"
-                    Label="Passphrases"
+                    Label="@_localizer["TextField.Result.Label"]"
                     ReadOnly="true"
                     Lines="10"
                     LabelPosition="LabelPositionType.Inline"

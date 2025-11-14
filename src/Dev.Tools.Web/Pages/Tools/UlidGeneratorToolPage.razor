@@ -8,7 +8,7 @@
             <MudItem xs="12" md="6">
                 <DtSlider
                     T="int"
-                    Label="Token Count"
+                    Label="@_localizer["Slider.TokenCount.Label"]"
                     Value="@_args.Count"
                     MinValue="1"
                     MaxValue="100"
@@ -18,8 +18,9 @@
             <MudItem xs="12" md="6">
                 <DtSelectEnum
                     T="UlidGeneratorTool.UlidType"
-                    Label="Type"
+                    Label="@_localizer["Select.Type.Label"]"
                     Value="@_args.Type"
+                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
                     ValueChanged="OnTypeValueChangedAsync"
                 />
             </MudItem>
@@ -35,7 +36,7 @@
                 <DtTextField
                     T="string"
                     Value="@GetUlids()"
-                    Label="ULIDs"
+                    Label="@_localizer["TextField.Result.Label"]"
                     ReadOnly="true"
                     Lines="10"
                     LabelPosition="LabelPositionType.Inline"

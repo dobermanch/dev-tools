@@ -10,7 +10,7 @@
                     <MudItem xs="12" md="6">
                         <DtSlider
                             T="int"
-                            Label="Token Count"
+                            Label="@_localizer["Slider.TokenCount.Label"]"
                             Value="@_args.Count"
                             MinValue="1"
                             MaxValue="100"
@@ -19,8 +19,9 @@
                     <MudItem xs="12" md="6">
                         <DtSelectEnum
                             T="UuidGeneratorTool.UuidType"
-                            Label="Type"
+                            Label="@_localizer["Select.Type.Label"]"
                             Value="@_args.Type"
+                            ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
                             ValueChanged="OnTypeValueChangedAsync"
                         />
                     </MudItem>
@@ -34,7 +35,7 @@
                         <MudItem xs="12" md="6">
                             <DtTextField
                                 T="string"
-                                Label="Name"
+                                Label="@_localizer["TextField.Name.Label"]"
                                 @bind-Value="@_args.Name"
                                 OnDebounceIntervalElapsed="@OnValueChangedAsync"
                             />
@@ -42,7 +43,7 @@
                         <MudItem xs="12" md="6">
                             <DtTextField
                                 T="Guid?"
-                                Label="Namespace"
+                                Label="@_localizer["TextField.Namespace.Label"]"
                                 @bind-Value="@_args.Namespace"
                                 OnDebounceIntervalElapsed="@OnValueChangedAsync"
                             />
@@ -57,7 +58,7 @@
                     <DtTextField
                         T="DateTime?"
                         @bind-Value="@_args.Time"
-                        Label="Time"
+                        Label="@_localizer["TextField.Time.Label"]"
                         Format="s"
                         InputType="InputType.DateTimeLocal"
                         OnDebounceIntervalElapsed="OnValueChangedAsync"
@@ -76,7 +77,7 @@
                 <DtTextField
                     T="string"
                     Value="@GetUuids()"
-                    Label="UUIDs"
+                    Label="@_localizer["TextField.Result.Label"]"
                     ReadOnly="true"
                     Lines="10"
                     LabelPosition="LabelPositionType.Inline"

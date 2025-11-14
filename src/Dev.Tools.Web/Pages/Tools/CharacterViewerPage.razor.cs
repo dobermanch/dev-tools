@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -13,6 +13,7 @@ public partial class CharacterViewerPage : ComponentBase
     private CharacterViewerTool.Result _result = new();
     private Dictionary<char, CharacterViewerTool.CharInfo> _charMap = new();
     private bool _hideSymbols = false;
+    private IStringLocalizer _localizer = null!;
 
     private bool HideSymbolsOptions =>
         _args.ViewType is not CharacterViewerTool.ViewType.RemoveAll
@@ -22,6 +23,7 @@ public partial class CharacterViewerPage : ComponentBase
 
     protected override void OnInitialized()
     {
+        _localizer = Context.Localization.PageLocalizer<CharacterViewerPage>();
         _tool = Context.ToolsProvider.GetTool<CharacterViewerTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<CharacterViewerTool>();
 

@@ -9,17 +9,18 @@
                 <DtTextField
                     T="string"
                     Value="@_args.Date"
-                    Label="Input Date"
+                    Label="@_localizer["TextField.Input.Label"]"
                     OnDebounceIntervalElapsed="OnValueChangedAsync"
                     Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                    ErrorText="@ErrorMessage()"/>
-    
+                    ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"/>
+
             </MudItem>
             <MudItem xs="12" md="6">
-                <DtSelectEnum 
+                <DtSelectEnum
                     T="DateTimeConverterTool.DateFormatType"
-                    Label="Date Format"
+                    Label="@_localizer["Select.Format.Label"]"
                     Value="@_args.From"
+                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
                     ValueChanged="OnFromFormatSelectedAsync"
                 />
             </MudItem>
@@ -38,7 +39,7 @@
                     <DtTextField 
                         T="string"
                         Value="@result.Value?.Time" 
-                        Label="@result.Key.ToString()"
+                        Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
                         ReadOnly="true"/>
                 </MudItem>
             }

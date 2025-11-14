@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -11,11 +11,13 @@ public partial class DateTimeConverterToolPage : ComponentBase
     private DateTimeConverterTool _tool = null!;
     private readonly Args _args = new();
     private Dictionary<DateTimeConverterTool.DateFormatType, DateTimeConverterTool.Result?> _results = new();
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
-    
+
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.PageLocalizer<DateTimeConverterToolPage>();
         _tool = Context.ToolsProvider.GetTool<DateTimeConverterTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<DateTimeConverterTool>();
         
@@ -58,16 +60,6 @@ public partial class DateTimeConverterToolPage : ComponentBase
         }
         
         await Task.WhenAll(tasks);
-    }
-
-    private string ErrorMessage()
-    {
-        return string.Join(
-            "; ",
-            _results
-                .Where(it => it.Value?.HasErrors ?? false)
-                .Select(it => $"{it.Key.ToString()}: {it.Value!.ErrorCodes[0]}")
-        );
     }
 
     private Task OnFromFormatSelectedAsync(DateTimeConverterTool.DateFormatType format)

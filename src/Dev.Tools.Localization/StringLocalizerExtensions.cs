@@ -5,18 +5,25 @@ namespace Dev.Tools.Localization;
 
 public static class StringLocalizerExtensions
 {
-    public static string GetLocal(this IStringLocalizer provider, CultureInfo culture) 
-        => provider[$"Locals.{culture.Name}.Name"];
+    extension(IStringLocalizer provider)
+    {
+        public string GetLocal(CultureInfo culture) 
+            => provider[$"Locals.{culture.Name}.Name"];
 
-    public static string GetToolTitle(this IStringLocalizer provider, string toolName) 
-        => provider[$"Tools.{NormalizeToolName(toolName)}.Name"];
+        public string GetToolTitle(string toolName) 
+            => provider[$"Tools.{NormalizeToolName(toolName)}.Name"];
 
-    public static string GetToolDescription(this IStringLocalizer provider, string toolName) 
-        => provider[$"Tools.{NormalizeToolName(toolName)}.Description"];
-    
-    public static string GetEnum<T>(this IStringLocalizer provider, T value)
-        where T: Enum
-        => provider[$"Enums.{typeof(T).Name}.{value.ToString()}"];
+        public string GetToolDescription(string toolName) 
+            => provider[$"Tools.{NormalizeToolName(toolName)}.Description"];
+
+        public string GetToolEnum<TEnum>(string toolName, TEnum value) 
+            where TEnum: Enum 
+            => provider[$"Tools.{NormalizeToolName(toolName)}.Enums.{typeof(TEnum).Name}.{value.ToString()}"];
+
+        public string GetEnum<TEnum>(TEnum value)
+            where TEnum: Enum
+            => provider[$"Enums.{typeof(TEnum).Name}.{value.ToString()}"];
+    }
 
     private static string NormalizeToolName(string toolName) 
         => toolName.Replace("Tool", "");

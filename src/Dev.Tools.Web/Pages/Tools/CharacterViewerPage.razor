@@ -15,24 +15,24 @@
                 FixedContent>
                 @foreach (var type in Enum.GetValues<CharacterViewerTool.ViewType>())
                 {
-                    <MudToggleItem Value="@type" Text="@type.ToString()"/>    
+                    <MudToggleItem Value="@type" Text="@Context.Localization.GetToolEnum(_toolDefinition, type)"/>    
                 }
             </MudToggleGroup>
             
             @if (HideSymbolsOptions)
             {
-                <MudSwitch T="bool" @bind-Value="@_hideSymbols" Label="Hide Special Symbols" Color="Color.Primary"/>
+                <MudSwitch T="bool" @bind-Value="@_hideSymbols" Label="@_localizer["Switch.HideSymbols.Label"]" Color="Color.Primary"/>
             }
         </MudStack>
         <MudStack Spacing="4">
             <MudTextField
                 T="string"
                 Value="@_args.Text"
-                DebounceInterval="500" 
+                DebounceInterval="500"
                 OnDebounceIntervalElapsed="OnTextValueChangedAsync"
                 Error="@_result.HasErrors"
                 ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
-                Label="Input Text"
+                Label="@_localizer["TextField.Input.Label"]"
                 Lines="5"
                 AutoGrow="true"
                 MaxLines="10"
@@ -49,7 +49,7 @@
             @* *@
             <MudPaper Class="pa-4">
                 <MudText Typo="Typo.caption" Class="mud-input-label mud-input-label-shrink">
-                    Output Text
+                    @_localizer["TextField.Output.Label"]
                 </MudText>
 
                 <div class="mud-input-control mud-input-root mud-input mud-input-outlined mud-input-margin-dense"
@@ -68,7 +68,7 @@
                 </div>
             </MudPaper>
             <MudPaper Class="pa-4">
-                <MudText Typo="Typo.h6">Formatted Text with Highlights</MudText>
+                <MudText Typo="Typo.h6">@_localizer["Section.FormattedText.Title"]</MudText>
 
                 <div style="white-space: pre-wrap; font-family: monospace; min-height: 100px; max-height: 300px; overflow-y: auto; padding: 12px;">
                     @foreach (var c in _result.Text)
@@ -86,7 +86,7 @@
             <MudTextField
                 T="string"
                 Value="@FormatText(_result.Text)"
-                Label="Output Text"
+                Label="@_localizer["TextField.Output.Label"]"
                 ReadOnly="true"
                 Lines="5"
                 AutoGrow="true"
@@ -99,18 +99,18 @@
         </MudStack>
         
         <MudPaper Class="mt-4">
-            <MudText Typo="Typo.h5">Character Info</MudText>
+            <MudText Typo="Typo.h5">@_localizer["Section.CharacterInfo.Title"]</MudText>
 
             <MudTable Items="@_result.CharInfos" Dense="true" Hover="true" Bordered="true" Striped="true">
                 <HeaderContent>
-                    <MudTh>Char</MudTh>
-                    <MudTh>Category</MudTh>
-                    <MudTh>Printable</MudTh>
-                    <MudTh>Hex</MudTh>
-                    <MudTh>Unicode</MudTh>
-                    <MudTh>ASCII</MudTh>
-                    <MudTh>HTML</MudTh>
-                    <MudTh>URL</MudTh>
+                    <MudTh>@_localizer["Table.Header.Char"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.Category"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.Printable"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.Hex"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.Unicode"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.ASCII"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.HTML"]</MudTh>
+                    <MudTh>@_localizer["Table.Header.URL"]</MudTh>
                     @* <MudTh>Non-Standard</MudTh> *@
                 </HeaderContent>
 

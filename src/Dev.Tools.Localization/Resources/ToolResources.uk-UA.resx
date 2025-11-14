@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Ukrainian localization for Dev.Tools
+    Українська локалізація для Dev.Tools
+  -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Global Category Enums -->
+  <data name="Enums.Category.Converter" xml:space="preserve">
+    <value>Конвертер</value>
+  </data>
+  <data name="Enums.Category.Crypto" xml:space="preserve">
+    <value>Криптографія</value>
+  </data>
+  <data name="Enums.Category.Network" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="Enums.Category.Security" xml:space="preserve">
+    <value>Безпека</value>
+  </data>
+  <data name="Enums.Category.Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Enums.Category.Web" xml:space="preserve">
+    <value>Веб</value>
+  </data>
+
+  <!-- Global Error Code Enums -->
+  <data name="Enums.ErrorCode.FailedToDecrypt" xml:space="preserve">
+    <value>Помилка дешифрування</value>
+  </data>
+  <data name="Enums.ErrorCode.InputNotValid" xml:space="preserve">
+    <value>Вхідні дані недійсні</value>
+  </data>
+  <data name="Enums.ErrorCode.NamespaceEmpty" xml:space="preserve">
+    <value>Простір імен не може бути порожнім</value>
+  </data>
+  <data name="Enums.ErrorCode.TextEmpty" xml:space="preserve">
+    <value>Текст не може бути порожнім</value>
+  </data>
+  <data name="Enums.ErrorCode.Unknown" xml:space="preserve">
+    <value>Невідома помилка</value>
+  </data>
+  <data name="Enums.ErrorCode.WrongBase" xml:space="preserve">
+    <value>Недійсна система числення</value>
+  </data>
+  <data name="Enums.ErrorCode.WrongFormat" xml:space="preserve">
+    <value>Недійсний формат</value>
+  </data>
+
+  <!-- Global Keyword Enums -->
+  <data name="Enums.Keyword.Base64" xml:space="preserve">
+    <value>Base64</value>
+  </data>
+  <data name="Enums.Keyword.Case" xml:space="preserve">
+    <value>Регістр</value>
+  </data>
+  <data name="Enums.Keyword.Convert" xml:space="preserve">
+    <value>Конвертувати</value>
+  </data>
+  <data name="Enums.Keyword.Decode" xml:space="preserve">
+    <value>Декодувати</value>
+  </data>
+  <data name="Enums.Keyword.Encode" xml:space="preserve">
+    <value>Кодувати</value>
+  </data>
+  <data name="Enums.Keyword.Format" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="Enums.Keyword.Generate" xml:space="preserve">
+    <value>Генерувати</value>
+  </data>
+  <data name="Enums.Keyword.Guid" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="Enums.Keyword.Hash" xml:space="preserve">
+    <value>Хеш</value>
+  </data>
+  <data name="Enums.Keyword.Internet" xml:space="preserve">
+    <value>Інтернет</value>
+  </data>
+  <data name="Enums.Keyword.Ip" xml:space="preserve">
+    <value>IP-адреса</value>
+  </data>
+  <data name="Enums.Keyword.Json" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="Enums.Keyword.Network" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="Enums.Keyword.Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Enums.Keyword.String" xml:space="preserve">
+    <value>Рядок</value>
+  </data>
+  <data name="Enums.Keyword.Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Enums.Keyword.Token" xml:space="preserve">
+    <value>Токен</value>
+  </data>
+  <data name="Enums.Keyword.Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Enums.Keyword.Uuid" xml:space="preserve">
+    <value>UUID</value>
+  </data>
+  <data name="Enums.Keyword.Web" xml:space="preserve">
+    <value>Веб</value>
+  </data>
+  <data name="Enums.Keyword.Xml" xml:space="preserve">
+    <value>XML</value>
+  </data>
+
+  <!-- Base64 Decoder Tool -->
+  <data name="Tools.Base64Decoder.Name" xml:space="preserve">
+    <value>Декодер Base64</value>
+  </data>
+  <data name="Tools.Base64Decoder.Description" xml:space="preserve">
+    <value>Декодує текст з формату Base64 назад до оригінального рядка з використанням кодування UTF-8</value>
+  </data>
+  <data name="Tools.Base64Decoder.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.Base64Decoder.Args.Text.Description" xml:space="preserve">
+    <value>Текст у форматі Base64 для декодування</value>
+  </data>
+  <data name="Tools.Base64Decoder.Result.Data.Name" xml:space="preserve">
+    <value>Декодований текст</value>
+  </data>
+  <data name="Tools.Base64Decoder.Result.Data.Description" xml:space="preserve">
+    <value>Декодований текст у оригінальному форматі</value>
+  </data>
+
+  <!-- Base64 Encoder Tool -->
+  <data name="Tools.Base64Encoder.Name" xml:space="preserve">
+    <value>Кодер Base64</value>
+  </data>
+  <data name="Tools.Base64Encoder.Description" xml:space="preserve">
+    <value>Кодує текст у формат Base64 з опціональним URL-безпечним кодуванням та переносами рядків для сумісності з різними системами</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.Text.Description" xml:space="preserve">
+    <value>Текст для кодування у формат Base64</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.InsertLineBreaks.Name" xml:space="preserve">
+    <value>Вставити переноси рядків</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.InsertLineBreaks.Description" xml:space="preserve">
+    <value>Вставляти переноси рядків кожні 76 символів для кращої читабельності</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.UrlSafe.Name" xml:space="preserve">
+    <value>Безпечний URL</value>
+  </data>
+  <data name="Tools.Base64Encoder.Args.UrlSafe.Description" xml:space="preserve">
+    <value>Використовувати URL-безпечне кодування (заміна + на -, / на _, та видалення заповнення)</value>
+  </data>
+  <data name="Tools.Base64Encoder.Result.Text.Name" xml:space="preserve">
+    <value>Закодований текст</value>
+  </data>
+  <data name="Tools.Base64Encoder.Result.Text.Description" xml:space="preserve">
+    <value>Текст, закодований у Base64</value>
+  </data>
+
+  <!-- Case Converter Tool -->
+  <data name="Tools.CaseConverter.Name" xml:space="preserve">
+    <value>Конвертер регістру</value>
+  </data>
+  <data name="Tools.CaseConverter.Description" xml:space="preserve">
+    <value>Конвертує текст між різними форматами регістру, включаючи camelCase, PascalCase, snake_case, kebab-case та багато інших</value>
+  </data>
+  <data name="Tools.CaseConverter.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.CaseConverter.Args.Text.Description" xml:space="preserve">
+    <value>Текст для конвертації у інший формат регістру</value>
+  </data>
+  <data name="Tools.CaseConverter.Args.Type.Name" xml:space="preserve">
+    <value>Тип регістру</value>
+  </data>
+  <data name="Tools.CaseConverter.Args.Type.Description" xml:space="preserve">
+    <value>Цільовий формат регістру для конвертації</value>
+  </data>
+  <data name="Tools.CaseConverter.Result.Text.Name" xml:space="preserve">
+    <value>Конвертований текст</value>
+  </data>
+  <data name="Tools.CaseConverter.Result.Text.Description" xml:space="preserve">
+    <value>Текст у запитаному форматі регістру</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.None" xml:space="preserve">
+    <value>Без змін</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.LowerCase" xml:space="preserve">
+    <value>малі літери</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.UpperCase" xml:space="preserve">
+    <value>ВЕЛИКІ ЛІТЕРИ</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.CamelCase" xml:space="preserve">
+    <value>camelCase</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.CapitalCase" xml:space="preserve">
+    <value>Регістр З Великої Літери</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.ConstantCase" xml:space="preserve">
+    <value>CONSTANT_CASE</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.DotCase" xml:space="preserve">
+    <value>dot.case</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.HeaderCase" xml:space="preserve">
+    <value>Header-Case</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.NoCase" xml:space="preserve">
+    <value>без регістру</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.ParamCase" xml:space="preserve">
+    <value>param-case (kebab-case)</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.PascalCase" xml:space="preserve">
+    <value>PascalCase</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.PathForwardCase" xml:space="preserve">
+    <value>шлях/прямий/регістр</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.PathBackwardCase" xml:space="preserve">
+    <value>шлях\зворотний\регістр</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.SentenceCase" xml:space="preserve">
+    <value>Регістр речення</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.SnakeCase" xml:space="preserve">
+    <value>snake_case</value>
+  </data>
+  <data name="Tools.CaseConverter.Enums.CaseType.MockingCase" xml:space="preserve">
+    <value>нАсМіШлИвИй РеГіСтР</value>
+  </data>
+
+  <!-- Character Viewer Tool -->
+  <data name="Tools.CharacterViewer.Name" xml:space="preserve">
+    <value>Переглядач символів</value>
+  </data>
+  <data name="Tools.CharacterViewer.Description" xml:space="preserve">
+    <value>Аналізує та візуалізує нестандартні, керуючі та спеціальні символи в тексті, виявляючи приховані символи Unicode з детальною інформацією</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.Text.Description" xml:space="preserve">
+    <value>Текст для аналізу спеціальних символів</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.ViewType.Name" xml:space="preserve">
+    <value>Тип перегляду</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.ViewType.Description" xml:space="preserve">
+    <value>Як відображати спеціальні та керуючі символи</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.IncludeCharInfo.Name" xml:space="preserve">
+    <value>Включити інформацію про символи</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.IncludeCharInfo.Description" xml:space="preserve">
+    <value>Включити детальну інформацію про кожен символ (категорія Unicode, hex-коди тощо)</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.TreatAsStandardHexCodes.Name" xml:space="preserve">
+    <value>Вважати стандартними</value>
+  </data>
+  <data name="Tools.CharacterViewer.Args.TreatAsStandardHexCodes.Description" xml:space="preserve">
+    <value>Список символів Unicode (напр., U+00A0) для обробки як стандартних символів</value>
+  </data>
+  <data name="Tools.CharacterViewer.Result.Text.Name" xml:space="preserve">
+    <value>Оброблений текст</value>
+  </data>
+  <data name="Tools.CharacterViewer.Result.Text.Description" xml:space="preserve">
+    <value>Текст після обробки на основі обраного типу перегляду</value>
+  </data>
+  <data name="Tools.CharacterViewer.Result.CharInfos.Name" xml:space="preserve">
+    <value>Деталі символів</value>
+  </data>
+  <data name="Tools.CharacterViewer.Result.CharInfos.Description" xml:space="preserve">
+    <value>Детальна інформація про кожен символ у тексті</value>
+  </data>
+  <data name="Tools.CharacterViewer.Enums.ViewType.None" xml:space="preserve">
+    <value>Без змін</value>
+  </data>
+  <data name="Tools.CharacterViewer.Enums.ViewType.RevealAll" xml:space="preserve">
+    <value>Показати всі спеціальні символи</value>
+  </data>
+  <data name="Tools.CharacterViewer.Enums.ViewType.RevealNonStandard" xml:space="preserve">
+    <value>Показати нестандартні символи</value>
+  </data>
+  <data name="Tools.CharacterViewer.Enums.ViewType.RemoveAll" xml:space="preserve">
+    <value>Видалити всі спеціальні символи</value>
+  </data>
+  <data name="Tools.CharacterViewer.Enums.ViewType.RemoveNonStandard" xml:space="preserve">
+    <value>Видалити нестандартні символи</value>
+  </data>
+
+  <!-- DateTime Converter Tool -->
+  <data name="Tools.DateTimeConverter.Name" xml:space="preserve">
+    <value>Конвертер дати/часу</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Description" xml:space="preserve">
+    <value>Конвертує дати та час між різними форматами, включаючи Unix timestamps, ISO 8601, RFC стандарти, дати Excel та MongoDB ObjectIds</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.Date.Name" xml:space="preserve">
+    <value>Дата/Час</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.Date.Description" xml:space="preserve">
+    <value>Значення дати/часу для конвертації (залиште порожнім для поточної дати/часу)</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.From.Name" xml:space="preserve">
+    <value>Вихідний формат</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.From.Description" xml:space="preserve">
+    <value>Вихідний формат вхідної дати/часу</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.To.Name" xml:space="preserve">
+    <value>Цільовий формат</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Args.To.Description" xml:space="preserve">
+    <value>Цільовий формат для вихідної дати/часу</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Result.Time.Name" xml:space="preserve">
+    <value>Конвертований час</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Result.Time.Description" xml:space="preserve">
+    <value>Дата/час у запитаному форматі</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Iso8601" xml:space="preserve">
+    <value>ISO 8601</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Iso8601Utc" xml:space="preserve">
+    <value>ISO 8601 UTC</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Iso9075" xml:space="preserve">
+    <value>ISO 9075</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Rfc3339" xml:space="preserve">
+    <value>RFC 3339</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Rfc7231" xml:space="preserve">
+    <value>RFC 7231</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Unix" xml:space="preserve">
+    <value>Unix timestamp (секунди)</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.Timestamp" xml:space="preserve">
+    <value>Timestamp (мілісекунди)</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.MongoObjectId" xml:space="preserve">
+    <value>MongoDB ObjectId</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.ExcelDateTime" xml:space="preserve">
+    <value>Дата/час Excel</value>
+  </data>
+  <data name="Tools.DateTimeConverter.Enums.DateFormatType.JsDateTime" xml:space="preserve">
+    <value>Дата/час JavaScript</value>
+  </data>
+
+  <!-- Hash Text Tool -->
+  <data name="Tools.HashText.Name" xml:space="preserve">
+    <value>Генератор хешів</value>
+  </data>
+  <data name="Tools.HashText.Description" xml:space="preserve">
+    <value>Генерує криптографічні хеш-значення з тексту, використовуючи різні алгоритми, включаючи MD5, SHA-1, SHA-256, SHA-384 та SHA-512</value>
+  </data>
+  <data name="Tools.HashText.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.HashText.Args.Text.Description" xml:space="preserve">
+    <value>Текст для генерації хешу</value>
+  </data>
+  <data name="Tools.HashText.Args.Algorithm.Name" xml:space="preserve">
+    <value>Алгоритм</value>
+  </data>
+  <data name="Tools.HashText.Args.Algorithm.Description" xml:space="preserve">
+    <value>Алгоритм хешування для використання</value>
+  </data>
+  <data name="Tools.HashText.Result.Data.Name" xml:space="preserve">
+    <value>Хеш-значення</value>
+  </data>
+  <data name="Tools.HashText.Result.Data.Description" xml:space="preserve">
+    <value>Згенерований хеш у шістнадцятковому форматі</value>
+  </data>
+  <data name="Tools.HashText.Enums.HashAlgorithm.Md5" xml:space="preserve">
+    <value>MD5</value>
+  </data>
+  <data name="Tools.HashText.Enums.HashAlgorithm.Sha1" xml:space="preserve">
+    <value>SHA-1</value>
+  </data>
+  <data name="Tools.HashText.Enums.HashAlgorithm.Sha256" xml:space="preserve">
+    <value>SHA-256</value>
+  </data>
+  <data name="Tools.HashText.Enums.HashAlgorithm.Sha384" xml:space="preserve">
+    <value>SHA-384</value>
+  </data>
+  <data name="Tools.HashText.Enums.HashAlgorithm.Sha512" xml:space="preserve">
+    <value>SHA-512</value>
+  </data>
+
+  <!-- Integer Base Converter Tool -->
+  <data name="Tools.IntegerBaseConverter.Name" xml:space="preserve">
+    <value>Конвертер систем числення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Description" xml:space="preserve">
+    <value>Конвертує цілі числа між різними системами числення, включаючи двійкову, вісімкову, десяткову, шістнадцяткову, Base64 та інші системи (2-64)</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.InputValue.Name" xml:space="preserve">
+    <value>Вхідне значення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.InputValue.Description" xml:space="preserve">
+    <value>Число для конвертації</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.InputBase.Name" xml:space="preserve">
+    <value>Вхідна система</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.InputBase.Description" xml:space="preserve">
+    <value>Система числення вхідного значення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.TargetBase.Name" xml:space="preserve">
+    <value>Цільова система</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Args.TargetBase.Description" xml:space="preserve">
+    <value>Система числення для вихідного значення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Result.Data.Name" xml:space="preserve">
+    <value>Конвертоване значення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Result.Data.Description" xml:space="preserve">
+    <value>Число у цільовій системі числення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Result.Base.Name" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Result.Base.Description" xml:space="preserve">
+    <value>Система числення конвертованого значення</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Enums.BaseType.Binary" xml:space="preserve">
+    <value>Двійкова (основа 2)</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Enums.BaseType.Octal" xml:space="preserve">
+    <value>Вісімкова (основа 8)</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Enums.BaseType.Decimal" xml:space="preserve">
+    <value>Десяткова (основа 10)</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Enums.BaseType.Hexadecimal" xml:space="preserve">
+    <value>Шістнадцяткова (основа 16)</value>
+  </data>
+  <data name="Tools.IntegerBaseConverter.Enums.BaseType.Base64" xml:space="preserve">
+    <value>Base64 (основа 64)</value>
+  </data>
+
+  <!-- Integer to Roman Converter Tool -->
+  <data name="Tools.IntegerToRomanConverter.Name" xml:space="preserve">
+    <value>Конвертер римських чисел</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Description" xml:space="preserve">
+    <value>Конвертує між десятковими цілими числами (1-3999) та римськими цифрами (I, V, X, L, C, D, M)</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Args.Number.Name" xml:space="preserve">
+    <value>Число</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Args.Number.Description" xml:space="preserve">
+    <value>Десяткове число або римська цифра для конвертації</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Args.Transcoding.Name" xml:space="preserve">
+    <value>Напрямок</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Args.Transcoding.Description" xml:space="preserve">
+    <value>Конвертувати у римські цифри або з римських цифр</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Result.Number.Name" xml:space="preserve">
+    <value>Конвертоване значення</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Result.Number.Description" xml:space="preserve">
+    <value>Конвертована римська цифра або десяткове число</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Enums.TranscodingType.Encode" xml:space="preserve">
+    <value>У римські цифри</value>
+  </data>
+  <data name="Tools.IntegerToRomanConverter.Enums.TranscodingType.Decode" xml:space="preserve">
+    <value>З римських цифр</value>
+  </data>
+
+  <!-- IP Details Tool -->
+  <data name="Tools.IpDetails.Name" xml:space="preserve">
+    <value>Детектор IP-адрес</value>
+  </data>
+  <data name="Tools.IpDetails.Description" xml:space="preserve">
+    <value>Отримує ваші поточні публічні IPv4 та IPv6 адреси, запитуючи зовнішні сервіси</value>
+  </data>
+  <data name="Tools.IpDetails.Result.IpV4.Name" xml:space="preserve">
+    <value>IPv4 адреса</value>
+  </data>
+  <data name="Tools.IpDetails.Result.IpV4.Description" xml:space="preserve">
+    <value>Ваша публічна IPv4 адреса</value>
+  </data>
+  <data name="Tools.IpDetails.Result.IpV6.Name" xml:space="preserve">
+    <value>IPv6 адреса</value>
+  </data>
+  <data name="Tools.IpDetails.Result.IpV6.Description" xml:space="preserve">
+    <value>Ваша публічна IPv6 адреса</value>
+  </data>
+
+  <!-- JSON Formatter Tool -->
+  <data name="Tools.JsonFormatter.Name" xml:space="preserve">
+    <value>Форматувальник JSON</value>
+  </data>
+  <data name="Tools.JsonFormatter.Description" xml:space="preserve">
+    <value>Форматує та прикрашує JSON з опціями для відступів, сортування ключів, конвертації регістру та видалення порожніх значень</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.Json.Name" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.Json.Description" xml:space="preserve">
+    <value>JSON-текст для форматування</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.IndentSize.Name" xml:space="preserve">
+    <value>Розмір відступу</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.IndentSize.Description" xml:space="preserve">
+    <value>Кількість пробілів для відступу</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.SortKeys.Name" xml:space="preserve">
+    <value>Сортувати ключі</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.SortKeys.Description" xml:space="preserve">
+    <value>Сортувати ключі об'єктів за абеткою</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.KeyFormat.Name" xml:space="preserve">
+    <value>Формат ключів</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.KeyFormat.Description" xml:space="preserve">
+    <value>Формат регістру для застосування до всіх ключів</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.ExcludeEmpty.Name" xml:space="preserve">
+    <value>Виключити порожні</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.ExcludeEmpty.Description" xml:space="preserve">
+    <value>Видалити null та порожні значення з виводу</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.Compact.Name" xml:space="preserve">
+    <value>Компактний</value>
+  </data>
+  <data name="Tools.JsonFormatter.Args.Compact.Description" xml:space="preserve">
+    <value>Мінімізувати JSON, видаливши всі пробіли</value>
+  </data>
+  <data name="Tools.JsonFormatter.Result.Json.Name" xml:space="preserve">
+    <value>Форматований JSON</value>
+  </data>
+  <data name="Tools.JsonFormatter.Result.Json.Description" xml:space="preserve">
+    <value>Форматований вихідний JSON</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.SortDirection.None" xml:space="preserve">
+    <value>Без сортування</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.SortDirection.Ascending" xml:space="preserve">
+    <value>За зростанням (А-Я)</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.SortDirection.Descending" xml:space="preserve">
+    <value>За спаданням (Я-А)</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.TextCase.None" xml:space="preserve">
+    <value>Без змін</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.TextCase.LowerCase" xml:space="preserve">
+    <value>малі літери</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.TextCase.UpperCase" xml:space="preserve">
+    <value>ВЕЛИКІ ЛІТЕРИ</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.TextCase.CamelCase" xml:space="preserve">
+    <value>camelCase</value>
+  </data>
+  <data name="Tools.JsonFormatter.Enums.TextCase.PascalCase" xml:space="preserve">
+    <value>PascalCase</value>
+  </data>
+
+  <!-- Passphrase Generator Tool -->
+  <data name="Tools.PassphraseGenerator.Name" xml:space="preserve">
+    <value>Генератор парольних фраз</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Description" xml:space="preserve">
+    <value>Генерує запам'ятовувані та безпечні парольні фрази, об'єднуючи випадкові слова з опціональними роздільниками, великими літерами та сіллю</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.PhraseCount.Name" xml:space="preserve">
+    <value>Кількість фраз</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.PhraseCount.Description" xml:space="preserve">
+    <value>Кількість парольних фраз для генерації</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.WordCount.Name" xml:space="preserve">
+    <value>Кількість слів</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.WordCount.Description" xml:space="preserve">
+    <value>Кількість слів у кожній парольній фразі</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Separator.Name" xml:space="preserve">
+    <value>Роздільник</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Separator.Description" xml:space="preserve">
+    <value>Символ для розділення слів (напр., -, _, пробіл)</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Capitalize.Name" xml:space="preserve">
+    <value>Велика перша літера</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Capitalize.Description" xml:space="preserve">
+    <value>Писати першу літеру парольної фрази з великої літери</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Salt.Name" xml:space="preserve">
+    <value>Сіль</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Args.Salt.Description" xml:space="preserve">
+    <value>Користувацький текст для додавання в кінці кожної парольної фрази</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Result.Phrases.Name" xml:space="preserve">
+    <value>Парольні фрази</value>
+  </data>
+  <data name="Tools.PassphraseGenerator.Result.Phrases.Description" xml:space="preserve">
+    <value>Згенеровані парольні фрази</value>
+  </data>
+
+  <!-- Safe URL Transcoder Tool -->
+  <data name="Tools.SafeUrlTranscoder.Name" xml:space="preserve">
+    <value>Кодер/Декодер URL</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Description" xml:space="preserve">
+    <value>Кодує або декодує URL, конвертуючи спеціальні символи у відсотково-кодований формат для безпечної передачі</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Args.Url.Name" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Args.Url.Description" xml:space="preserve">
+    <value>URL або текст для кодування/декодування</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Args.Transcoding.Name" xml:space="preserve">
+    <value>Операція</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Args.Transcoding.Description" xml:space="preserve">
+    <value>Кодувати або декодувати URL</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Result.Url.Name" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Result.Url.Description" xml:space="preserve">
+    <value>Закодований або декодований URL</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Enums.TranscodingType.Encode" xml:space="preserve">
+    <value>Кодувати</value>
+  </data>
+  <data name="Tools.SafeUrlTranscoder.Enums.TranscodingType.Decode" xml:space="preserve">
+    <value>Декодувати</value>
+  </data>
+
+  <!-- String to NATO Alphabet Tool -->
+  <data name="Tools.StringToNatoAlphabet.Name" xml:space="preserve">
+    <value>Фонетичний алфавіт НАТО</value>
+  </data>
+  <data name="Tools.StringToNatoAlphabet.Description" xml:space="preserve">
+    <value>Конвертує текст у слова фонетичного алфавіту НАТО (Alfa, Bravo, Charlie тощо) для чіткої голосової комунікації</value>
+  </data>
+  <data name="Tools.StringToNatoAlphabet.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.StringToNatoAlphabet.Args.Text.Description" xml:space="preserve">
+    <value>Текст для конвертації у фонетичний алфавіт НАТО</value>
+  </data>
+  <data name="Tools.StringToNatoAlphabet.Result.Words.Name" xml:space="preserve">
+    <value>Слова НАТО</value>
+  </data>
+  <data name="Tools.StringToNatoAlphabet.Result.Words.Description" xml:space="preserve">
+    <value>Представлення у фонетичному алфавіті НАТО</value>
+  </data>
+
+  <!-- Token Generator Tool -->
+  <data name="Tools.TokenGenerator.Name" xml:space="preserve">
+    <value>Генератор токенів</value>
+  </data>
+  <data name="Tools.TokenGenerator.Description" xml:space="preserve">
+    <value>Генерує випадкові безпечні токени з налаштовуваною довжиною, наборами символів (великі літери, малі літери, цифри, символи) та власними алфавітами</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.TokenLength.Name" xml:space="preserve">
+    <value>Довжина токена</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.TokenLength.Description" xml:space="preserve">
+    <value>Довжина кожного згенерованого токена</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.TokenCount.Name" xml:space="preserve">
+    <value>Кількість токенів</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.TokenCount.Description" xml:space="preserve">
+    <value>Кількість токенів для генерації</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Uppercase.Name" xml:space="preserve">
+    <value>Великі літери</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Uppercase.Description" xml:space="preserve">
+    <value>Включити великі літери (A-Z)</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Lowercase.Name" xml:space="preserve">
+    <value>Малі літери</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Lowercase.Description" xml:space="preserve">
+    <value>Включити малі літери (a-z)</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Numbers.Name" xml:space="preserve">
+    <value>Цифри</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Numbers.Description" xml:space="preserve">
+    <value>Включити цифри (0-9)</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Symbols.Name" xml:space="preserve">
+    <value>Символи</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Symbols.Description" xml:space="preserve">
+    <value>Включити спеціальні символи (!@#$%^&amp;*...)</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.ExcludeSymbols.Name" xml:space="preserve">
+    <value>Виключити символи</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.ExcludeSymbols.Description" xml:space="preserve">
+    <value>Конкретні символи для виключення з генерації</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Alphabet.Name" xml:space="preserve">
+    <value>Власний алфавіт</value>
+  </data>
+  <data name="Tools.TokenGenerator.Args.Alphabet.Description" xml:space="preserve">
+    <value>Власний набір символів для використання (замінює інші опції, якщо вказано)</value>
+  </data>
+  <data name="Tools.TokenGenerator.Result.Tokens.Name" xml:space="preserve">
+    <value>Згенеровані токени</value>
+  </data>
+  <data name="Tools.TokenGenerator.Result.Tokens.Description" xml:space="preserve">
+    <value>Згенеровані випадкові токени</value>
+  </data>
+
+  <!-- ULID Generator Tool -->
+  <data name="Tools.UlidGenerator.Name" xml:space="preserve">
+    <value>Генератор ULID</value>
+  </data>
+  <data name="Tools.UlidGenerator.Description" xml:space="preserve">
+    <value>Генерує універсальні унікальні лексикографічно сортовані ідентифікатори (ULID), які є сортованими, URL-безпечними та базуються на часовій мітці</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Type.Name" xml:space="preserve">
+    <value>Тип ULID</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Type.Description" xml:space="preserve">
+    <value>Тип ULID для генерації</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Count.Name" xml:space="preserve">
+    <value>Кількість</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Count.Description" xml:space="preserve">
+    <value>Кількість ULID для генерації</value>
+  </data>
+  <data name="Tools.UlidGenerator.Result.Data.Name" xml:space="preserve">
+    <value>ULID</value>
+  </data>
+  <data name="Tools.UlidGenerator.Result.Data.Description" xml:space="preserve">
+    <value>Згенеровані ULID</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidType.Random" xml:space="preserve">
+    <value>Випадковий ULID</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidType.Min" xml:space="preserve">
+    <value>Мінімальне значення</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidType.Max" xml:space="preserve">
+    <value>Максимальне значення</value>
+  </data>
+
+  <!-- URL Parser Tool -->
+  <data name="Tools.UrlParser.Name" xml:space="preserve">
+    <value>Парсер URL</value>
+  </data>
+  <data name="Tools.UrlParser.Description" xml:space="preserve">
+    <value>Парсить та витягає всі компоненти з URL, включаючи схему, ім'я хоста, порт, шлях, параметри запиту та облікові дані</value>
+  </data>
+  <data name="Tools.UrlParser.Args.Url.Name" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="Tools.UrlParser.Args.Url.Description" xml:space="preserve">
+    <value>URL для парсингу та аналізу</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Schema.Name" xml:space="preserve">
+    <value>Схема</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Schema.Description" xml:space="preserve">
+    <value>Схема URL (http, https, ftp тощо)</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Username.Name" xml:space="preserve">
+    <value>Ім'я користувача</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Username.Description" xml:space="preserve">
+    <value>Ім'я користувача з URL (якщо присутнє)</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Password.Name" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Password.Description" xml:space="preserve">
+    <value>Пароль з URL (якщо присутній)</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Hostname.Name" xml:space="preserve">
+    <value>Ім'я хоста</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Hostname.Description" xml:space="preserve">
+    <value>Доменне ім'я або IP-адреса</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Port.Name" xml:space="preserve">
+    <value>Порт</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Port.Description" xml:space="preserve">
+    <value>Номер порту (якщо вказано)</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Path.Name" xml:space="preserve">
+    <value>Шлях</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Path.Description" xml:space="preserve">
+    <value>Компонент шляху URL</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Query.Name" xml:space="preserve">
+    <value>Рядок запиту</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Query.Description" xml:space="preserve">
+    <value>Повний рядок запиту</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Parameters.Name" xml:space="preserve">
+    <value>Параметри</value>
+  </data>
+  <data name="Tools.UrlParser.Result.Parameters.Description" xml:space="preserve">
+    <value>Розпарсені параметри рядка запиту як пари ключ-значення</value>
+  </data>
+
+  <!-- UUID Generator Tool -->
+  <data name="Tools.UuidGenerator.Name" xml:space="preserve">
+    <value>Генератор UUID</value>
+  </data>
+  <data name="Tools.UuidGenerator.Description" xml:space="preserve">
+    <value>Генерує універсальні унікальні ідентифікатори (UUID/GUID) різних версій, включаючи V3 (MD5), V4 (випадковий), V5 (SHA-1) та V7 (базований на часовій мітці)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Type.Name" xml:space="preserve">
+    <value>Версія UUID</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Type.Description" xml:space="preserve">
+    <value>Версія UUID для генерації</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Count.Name" xml:space="preserve">
+    <value>Кількість</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Count.Description" xml:space="preserve">
+    <value>Кількість UUID для генерації</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Namespace.Name" xml:space="preserve">
+    <value>Простір імен</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Namespace.Description" xml:space="preserve">
+    <value>UUID простору імен (обов'язковий для V3 та V5)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Name.Name" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Name.Description" xml:space="preserve">
+    <value>Назва для хешування з простором імен (для V3 та V5)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Time.Name" xml:space="preserve">
+    <value>Часова мітка</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Time.Description" xml:space="preserve">
+    <value>Власна часова мітка (для V7, за замовчуванням поточний час)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Result.Data.Name" xml:space="preserve">
+    <value>UUID</value>
+  </data>
+  <data name="Tools.UuidGenerator.Result.Data.Description" xml:space="preserve">
+    <value>Згенеровані UUID</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.Nil" xml:space="preserve">
+    <value>Nil UUID (всі нулі)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.V3" xml:space="preserve">
+    <value>Версія 3 (MD5 хеш)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.V4" xml:space="preserve">
+    <value>Версія 4 (випадковий)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.V5" xml:space="preserve">
+    <value>Версія 5 (SHA-1 хеш)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.V7" xml:space="preserve">
+    <value>Версія 7 (базований на часовій мітці)</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidType.Max" xml:space="preserve">
+    <value>Max UUID (всі одиниці)</value>
+  </data>
+
+  <!-- XML Formatter Tool -->
+  <data name="Tools.XmlFormatter.Name" xml:space="preserve">
+    <value>Форматувальник XML</value>
+  </data>
+  <data name="Tools.XmlFormatter.Description" xml:space="preserve">
+    <value>Форматує та прикрашує XML з опціями для відступів, сортування елементів, конвертації регістру та видалення порожніх елементів</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.Xml.Name" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.Xml.Description" xml:space="preserve">
+    <value>XML-текст для форматування</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.IndentSize.Name" xml:space="preserve">
+    <value>Розмір відступу</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.IndentSize.Description" xml:space="preserve">
+    <value>Кількість пробілів для відступу</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.SortKeys.Name" xml:space="preserve">
+    <value>Сортувати елементи</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.SortKeys.Description" xml:space="preserve">
+    <value>Сортувати XML-елементи за абеткою</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.KeyFormat.Name" xml:space="preserve">
+    <value>Формат імен елементів</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.KeyFormat.Description" xml:space="preserve">
+    <value>Формат регістру для застосування до всіх імен елементів</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.ExcludeEmpty.Name" xml:space="preserve">
+    <value>Виключити порожні</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.ExcludeEmpty.Description" xml:space="preserve">
+    <value>Видалити порожні елементи з виводу</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.Compact.Name" xml:space="preserve">
+    <value>Компактний</value>
+  </data>
+  <data name="Tools.XmlFormatter.Args.Compact.Description" xml:space="preserve">
+    <value>Мінімізувати XML, видаливши всі пробіли</value>
+  </data>
+  <data name="Tools.XmlFormatter.Result.Xml.Name" xml:space="preserve">
+    <value>Форматований XML</value>
+  </data>
+  <data name="Tools.XmlFormatter.Result.Xml.Description" xml:space="preserve">
+    <value>Форматований вихідний XML</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.SortDirection.None" xml:space="preserve">
+    <value>Без сортування</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.SortDirection.Ascending" xml:space="preserve">
+    <value>За зростанням (А-Я)</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.SortDirection.Descending" xml:space="preserve">
+    <value>За спаданням (Я-А)</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.TextCase.None" xml:space="preserve">
+    <value>Без змін</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.TextCase.LowerCase" xml:space="preserve">
+    <value>малі літери</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.TextCase.UpperCase" xml:space="preserve">
+    <value>ВЕЛИКІ ЛІТЕРИ</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.TextCase.CamelCase" xml:space="preserve">
+    <value>camelCase</value>
+  </data>
+  <data name="Tools.XmlFormatter.Enums.TextCase.PascalCase" xml:space="preserve">
+    <value>PascalCase</value>
+  </data>
+</root>

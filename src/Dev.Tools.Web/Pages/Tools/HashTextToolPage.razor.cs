@@ -1,6 +1,6 @@
-using Dev.Tools.Tools;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
@@ -10,11 +10,13 @@ public partial class HashTextToolPage : ComponentBase
     private HashTextTool _tool = null!;
     private readonly HashTextTool.Args _args = new();
     private Dictionary<HashTextTool.HashAlgorithm, HashTextTool.Result?> _results = new();
+    private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
-    
+
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.PageLocalizer<HashTextToolPage>();
         _tool = Context.ToolsProvider.GetTool<HashTextTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<HashTextTool>();
         _results = Enum.GetValues<HashTextTool.HashAlgorithm>()
@@ -43,15 +45,5 @@ public partial class HashTextToolPage : ComponentBase
         }
         
         await Task.WhenAll(tasks);
-    }
-
-    private string ErrorMessage()
-    {
-        return string.Join(
-            "; ",
-            _results
-                .Where(it => it.Value?.HasErrors ?? false)
-                .Select(it => $"{it.Key.ToString()}: {it.Value!.ErrorCodes[0]}")
-        );
     }
 }

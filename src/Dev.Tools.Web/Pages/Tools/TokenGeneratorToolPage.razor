@@ -10,7 +10,7 @@
                     <MudItem xs="12" md="6">
                         <DtSlider
                             T="int"
-                            Label="Token Length"
+                            Label="@_localizer["Slider.TokenLength.Label"]"
                             Value="@_args.TokenLength"
                             MinValue="1"
                             MaxValue="512"
@@ -20,7 +20,7 @@
                     <MudItem xs="12" md="6">
                         <DtTextField
                             T="string"
-                            Label="Alphabet"
+                            Label="@_localizer["TextField.Alphabet.Label"]"
                             @bind-Value="@_args.Alphabet"
                             ShowCopyButton="false"
                             OnDebounceIntervalElapsed="OnValueChangedAsync"/>
@@ -33,7 +33,7 @@
                     <MudItem xs="12" md="6">
                         <DtSlider
                             T="int"
-                            Label="Token Count"
+                            Label="@_localizer["Slider.TokenCount.Label"]"
                             Value="@_args.TokenCount"
                             MinValue="1"
                             MaxValue="100"
@@ -43,7 +43,7 @@
                     <MudItem xs="12" md="6">
                         <DtTextField
                             T="string"
-                            Label="Exclude Symbols"
+                            Label="@_localizer["TextField.ExcludeSymbols.Label"]"
                             @bind-Value="@_args.ExcludeSymbols"
                             ShowCopyButton="false"
                             OnDebounceIntervalElapsed="OnValueChangedAsync"/>
@@ -56,25 +56,25 @@
                     <MudSwitch
                         T="bool"
                         Value="@_args.Lowercase"
-                        Label="Lowercase"
+                        Label="@_localizer["Switch.Lowercase.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnLowercaseValueChangedAsync"/>
                     <MudSwitch
                         T="bool"
                         Value="@_args.Uppercase"
-                        Label="Uppercase"
+                        Label="@_localizer["Switch.Uppercase.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnUppercaseValueChangedAsync"/>
                     <MudSwitch
                         T="bool"
                         Value="@_args.Numbers"
-                        Label="Numbers"
+                        Label="@_localizer["Switch.Numbers.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnNumbersValueChangedAsync"/>
                     <MudSwitch
                         T="bool"
                         Value="@_args.Symbols"
-                        Label="Symbols"
+                        Label="@_localizer["Switch.Symbols.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnSymbolsValueChangedAsync"/>
                 </MudStack>
@@ -90,7 +90,7 @@
                 <DtTextField
                     T="string"
                     Value="@GetTokens()"
-                    Label="Tokens"
+                    Label="@_localizer["TextField.Result.Label"]"
                     ReadOnly="true"
                     Lines="10"
                     LabelPosition="LabelPositionType.Inline"
