@@ -1,9 +1,7 @@
-<MudCard @onclick="NavigateToToolPage">
+<MudCard @onclick="NavigateToToolPage" Elevation="1" Class="tool-card">
     <MudCardHeader Class="pb-0">
         <CardHeaderAvatar>
-            <MudAvatar Color="Color.Primary">
-                <MudIcon Color="Color.Dark" Icon="@Icons.Material.Outlined.Construction" Size="Size.Medium" />
-            </MudAvatar>
+            <MudIcon Class="mt-1" Color="Color.Primary" Icon="@GetToolIcon()" Size="Size.Large" />
         </CardHeaderAvatar>
         <CardHeaderContent>
             <MudText Typo="Typo.body1">@Context.Localization.GetToolTitle(Tool)</MudText>
@@ -22,3 +20,14 @@
         <KeywordChips ToolDefinition="@Tool" SingleLine="true" Class="ml-n1"/>
     </MudCardContent>
 </MudCard>
+
+<style>
+    .tool-card {
+        border: 1px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .tool-card:hover {
+        border-color: var(--mud-palette-primary);
+    }
+</style>
