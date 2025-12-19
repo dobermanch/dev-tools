@@ -14,5 +14,7 @@ public interface ILayoutService
 
     Task ToggleDarkModeAsync(CancellationToken cancellationToken = default);
 
+    Task SetThemeModeAsync(ThemeMode mode, CancellationToken cancellationToken = default);
+
     Task ToggleDrawerAsync(CancellationToken cancellationToken = default);
 }

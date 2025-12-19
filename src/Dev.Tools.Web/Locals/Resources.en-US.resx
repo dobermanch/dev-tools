@@ -266,4 +266,28 @@
     <data name="Page.XmlFormatterToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Formatted XML</value>
     </data>
+    <data name="Page.Settings.Caption" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="Page.Settings.Section.General.Label" xml:space="preserve">
+        <value>General</value>
+    </data>
+    <data name="Page.Settings.Section.General.Theme.Label" xml:space="preserve">
+        <value>Theme</value>
+    </data>
+    <data name="Page.Settings.Section.General.Language.Label" xml:space="preserve">
+        <value>Language</value>
+    </data>
+    <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
+        <value>All settings are stored locally in your browser.</value>
+    </data>
+    <data name="Enums.ThemeMode.System" xml:space="preserve">
+        <value>System</value>
+    </data>
+    <data name="Enums.ThemeMode.Light" xml:space="preserve">
+        <value>Light</value>
+    </data>
+    <data name="Enums.ThemeMode.Dark" xml:space="preserve">
+        <value>Dark</value>
+    </data>
 </root>

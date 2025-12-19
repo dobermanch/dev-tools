@@ -18,7 +18,7 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
     {
         _systemIsDarkMode = isDarkMode;
         await ApplyUserPreferencesAsync(cancellationToken);
-        await NotifyMajorUpdateOccuredAsync(cancellationToken);
+        await NotifyMajorUpdateOccurredAsync(cancellationToken);
     }
 
     public async Task SetSystemModeAsync(bool isDarkMode)
@@ -26,19 +26,23 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
         _systemIsDarkMode = isDarkMode;
         if (ThemeMode == ThemeMode.System)
         {
-            await NotifyMajorUpdateOccuredAsync(CancellationToken.None);
+            await NotifyMajorUpdateOccurredAsync(CancellationToken.None);
         }
     }
 
     public async Task ToggleDarkModeAsync(CancellationToken cancellationToken)
     {
-        ThemeMode = ThemeMode switch
+        await SetThemeModeAsync(ThemeMode switch
         {
             ThemeMode.System => ThemeMode.Light,
             ThemeMode.Light => ThemeMode.Dark,
             _ => ThemeMode.System
-        };
-        
+        }, cancellationToken);
+    }
+
+    public async Task SetThemeModeAsync(ThemeMode mode, CancellationToken cancellationToken)
+    {
+        ThemeMode = mode;
         await StoreUserPreferencesAsync(cancellationToken);
     }
 
@@ -64,6 +68,6 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
         }, cancellationToken);
     }
 
-    private async Task NotifyMajorUpdateOccuredAsync(CancellationToken cancellationToken = default) 
+    private async Task NotifyMajorUpdateOccurredAsync(CancellationToken cancellationToken = default) 
         => await messenger.Publish(new LayoutChangedNotification(), cancellationToken);
 }

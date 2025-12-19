@@ -9,6 +9,6 @@
     Margin="Margin.Dense">
     @foreach (var culture in Context.Localization.SupportedCultures)
     {
-        <MudSelectItem Value="culture">@Context.Localization.GetLocal(culture)</MudSelectItem>
+        <MudSelectItem Value="@culture">@Context.Localization.GetLocal(culture)</MudSelectItem>
     }
 </MudSelect>

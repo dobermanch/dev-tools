@@ -273,4 +273,28 @@
     <data name="Page.XmlFormatterToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Форматований XML</value>
     </data>
+    <data name="Page.Settings.Caption" xml:space="preserve">
+        <value>Налаштування</value>
+    </data>
+    <data name="Page.Settings.Section.General.Label" xml:space="preserve">
+        <value>Загальні</value>
+    </data>
+    <data name="Page.Settings.Section.General.Theme.Label" xml:space="preserve">
+        <value>Тема</value>
+    </data>
+    <data name="Page.Settings.Section.General.Language.Label" xml:space="preserve">
+        <value>Мова</value>
+    </data>
+    <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
+        <value>Всі налаштування зберігаються локально у вашому браузері.</value>
+    </data>
+    <data name="Enums.ThemeMode.System" xml:space="preserve">
+        <value>Системна</value>
+    </data>
+    <data name="Enums.ThemeMode.Light" xml:space="preserve">
+        <value>Світла</value>
+    </data>
+    <data name="Enums.ThemeMode.Dark" xml:space="preserve">
+        <value>Темна</value>
+    </data>
 </root>

@@ -2,49 +2,31 @@ using Dev.Tools.Web.Components.Layout;
 using Dev.Tools.Web.Services;
 using Dev.Tools.Web.Services.Preferences;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages;
 
 public partial class Settings
 {
     [Inject] 
-    private WebContext WebContext { get; set; } = null!;
-    
+    private WebContext Context { get; set; } = null!;
 
-    private Dev.Tools.Web.Services.Layout.ThemeMode _themeMode;
-    private string? _culture;
     private DtSectionList _sectionListRef = null!;
+    private IStringLocalizer _localizer = null!;
 
     protected override void OnInitialized()
     {
-        _themeMode = WebContext.Preferences.Preferences.Layout.ThemeMode ?? Services.Layout.ThemeMode.System;
-        _culture = WebContext.Preferences.Preferences.Localization.Culture;
+        _localizer = Context.Localization.PageLocalizer<Settings>();
     }
 
-    private async Task SaveLayout()
+    private async Task OnThemeChangedAsync(Dev.Tools.Web.Services.Layout.ThemeMode themeMode)
     {
-        await WebContext.Preferences.UpdateLayoutAsync(WebContext.Preferences.Preferences.Layout with
-        {
-            ThemeMode = _themeMode
-        }, CancellationToken.None);
-    }
-
-    private async Task SaveLocalization()
-    {
-        var pref = WebContext.Preferences.Preferences with
-        {
-            Localization = new UserPreferences.LocalizationSettings
-            {
-                Culture = _culture
-            }
-        };
-
-        await WebContext.Preferences.UpdatePreferencesAsync(pref, CancellationToken.None);
+        await Context.Layout.SetThemeModeAsync(themeMode, CancellationToken.None);
     }
 
     private async Task ScrollTo(string id)
     {
-        await WebContext.JsService.ScrollToIdAsync(id, 30, CancellationToken.None);
+        await Context.JsService.ScrollToIdAsync(id, 30, CancellationToken.None);
     }
 
     protected override void OnAfterRender(bool firstRender)

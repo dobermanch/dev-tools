@@ -1,6 +1,10 @@
 @page "/settings"
 
-<DtPageHeader Caption="Settings" ShowBackButton="false"/>
+@using Dev.Tools.Localization
+
+<DtPageHeader Caption="@_localizer["Caption"]" ShowBackButton="false"/>
+
+<MudAlert Severity="Severity.Info" Class="my-2">@_localizer["Note.BrowserStorage"]</MudAlert>
 
 <MudCard Class="my-2">
     <MudGrid Spacing="3">
@@ -17,24 +21,33 @@
                 </MudList>
             </div>
         </MudItem>
+
         <MudItem xs="12" sm="9" Class="pa-4">
             <DtSectionList @ref="_sectionListRef">
-                <DtSection Id="appearance" Caption="Appearance">
-                    <MudSelect T="Dev.Tools.Web.Services.Layout.ThemeMode" @bind-Value="@_themeMode" Label="Theme mode">
-                        <MudSelectItem Value="Services.Layout.ThemeMode.System">System</MudSelectItem>
-                        <MudSelectItem Value="Services.Layout.ThemeMode.Light">Light</MudSelectItem>
-                        <MudSelectItem Value="Services.Layout.ThemeMode.Dark">Dark</MudSelectItem>
-                    </MudSelect>
-                    <MudButton OnClick="@SaveLayout">Save appearance</MudButton>
-                </DtSection>
+                <DtSection Id="localization" Caption="@_localizer["Section.General.Label"]">
+                    <MudGrid Class="align-center">
+                        <MudItem xs="3">
+                            <MudText Typo="Typo.body1">@_localizer["Section.General.Theme.Label"]</MudText>
+                        </MudItem>
+                        <MudItem xs="9">
+                            <DtSelectEnum
+                                T="Dev.Tools.Web.Services.Layout.ThemeMode"
+                                LabelPosition="LabelPositionType.Inline"
+                                Value="@Context.Layout.ThemeMode"
+                                ValueChanged="@(async mode => await OnThemeChangedAsync(mode))"
+                            />
+                        </MudItem>
 
-                <DtSection Id="localization" Caption="Localization">
-                    <MudTextField @bind-Value="@_culture" Label="Culture (e.g. en-US)"/>
-                    <MudButton OnClick="@SaveLocalization">Save locale</MudButton>
-                </DtSection>
-                
-                <DtSection Id="providers" Caption="Providers">
-                    <MudText>The data providers configuration</MudText>
+                    </MudGrid>
+
+                    <MudGrid Class="align-center">
+                        <MudItem xs="3">
+                            <MudText Typo="Typo.body1">@_localizer["Section.General.Language.Label"]</MudText>
+                        </MudItem>
+                        <MudItem xs="9">
+                            <LanguageSelector/>
+                        </MudItem>
+                    </MudGrid>
                 </DtSection>
             </DtSectionList>
         </MudItem>

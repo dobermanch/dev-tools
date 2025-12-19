@@ -18,7 +18,7 @@
             ValueChanged="@ValueChanged">
             @foreach (var value in GetEnumValues())
             {
-                <MudSelectItem Value="@value">@(ValueToDisplay?.Invoke(value) ?? value.ToString())</MudSelectItem>
+                <MudSelectItem Value="@value">@(ValueToDisplay?.Invoke(value) ?? Context.Localization.GetEnum(value))</MudSelectItem>
             }
         </MudSelect>
     </MudItem>
