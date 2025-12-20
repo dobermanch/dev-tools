@@ -102,6 +102,7 @@ public abstract class ToolGeneratorBase
             ?.TypeArguments
             .Select(arg => new TypeDetails
             {
+                Symbol = arg,
                 Type = arg.ToDisplayString(),
                 Properties =
                     arg.GetMembers()

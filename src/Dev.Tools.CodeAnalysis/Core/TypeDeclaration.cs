@@ -8,7 +8,7 @@ public record TypeDeclaration
 {
     public TypeDeclarationSyntax Syntax { get; set; } = null!;
 
-    public INamedTypeSymbol Symbol { get; set; } = null!;
+    public ITypeSymbol Symbol { get; set; } = null!;
 
     public string Namespace => Symbol.ContainingNamespace.ToDisplayString();
 

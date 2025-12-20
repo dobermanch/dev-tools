@@ -26,17 +26,14 @@
 
   <Target Name="GenerateLocalizationResx" AfterTargets="Build">
     <PropertyGroup>
-      <ResxGeneratorExe>$(MSBuildThisFileDirectory)..\..\tools\ResxGenerator\bin\$(Configuration)\net10.0\ResxGenerator.dll</ResxGeneratorExe>
-      <LocalizationProjectDir>$(MSBuildThisFileDirectory)..\Dev.Tools.Localization</LocalizationProjectDir>
+      <ResxGeneratorScript>$(MSBuildThisFileDirectory)..\..\tools\ResxGenerator\GenerateLocalizationResx.cs</ResxGeneratorScript>
+      <LocalizationOutput>$(MSBuildThisFileDirectory)..\Dev.Tools.Localization\Resources</LocalizationOutput>
     </PropertyGroup>
 
-    <Message Importance="High" Text="Generating localization RESX files from $(TargetPath) to $(LocalizationProjectDir)" />
-
-    <!-- Build the ResxGenerator tool first -->
-    <MSBuild Projects="..\..\tools\ResxGenerator\ResxGenerator.csproj" Targets="Build" Properties="Configuration=$(Configuration)" />
+    <Message Importance="High" Text="Generating localization RESX files from $(TargetPath) to $(LocalizationOutput)" />
 
     <!-- Run ResxGenerator -->
-    <Exec Command="dotnet &quot;$(ResxGeneratorExe)&quot; &quot;$(TargetPath)&quot; &quot;$(LocalizationProjectDir)&quot;"
+    <Exec Command="dotnet &quot;$(ResxGeneratorScript)&quot; &quot;$(TargetPath)&quot; &quot;$(LocalizationOutput)&quot;"
           WorkingDirectory="$(MSBuildThisFileDirectory)" />
   </Target>
 </Project>
