@@ -10,53 +10,148 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var referencedToolTypes =
+        var compilationWithMetadata =
             context.CompilationProvider
-                .SelectMany((compilation, _) =>
-                    compilation
-                        .References
+                .Select((compilation, _) =>
+                {
+                    var assemblies = compilation.References
                         .Select(compilation.GetAssemblyOrModuleSymbol)
                         .OfType<IAssemblySymbol>()
-                        .Where(it => it.Name == CodeDefinitions.ToolsAssemblyName)
-                        .Select(it => it.GlobalNamespace)
-                        .SelectMany(it => it.GetAllTypes(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName)))
-                        .Select(it => GetToolDetails((INamedTypeSymbol)it))
-                        .Where(it => it is not null)
-                        .Select(it => it!)
-                );
+                        .ToList();
+
+                    var toolsAssembly = assemblies.FirstOrDefault(it => it.Name == CodeDefinitions.ToolsAssemblyName);
+
+                    var assemblyNames = string.Join(", ", assemblies.Select(a => a.Name));
+
+                    List<ITypeSymbol> allTypes = [];
+                    List<ITypeSymbol> typesWithAttribute = [];
+
+                    if (toolsAssembly != null)
+                    {
+                        allTypes = toolsAssembly.GlobalNamespace.GetAllTypes().ToList();
+                        typesWithAttribute = allTypes
+                            .Where(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName))
+                            .ToList();
+                    }
+
+                    return (
+                        compilation,
+                        toolsAssembly,
+                        referenceCount: assemblies.Count,
+                        assemblyNames,
+                        typeCount: allTypes.Count,
+                        attributedTypeCount: typesWithAttribute.Count,
+                        tools: typesWithAttribute
+                            .Select(t => GetToolDetails((INamedTypeSymbol)t))
+                            .Where(t => t != null)
+                            .Select(t => t!)
+                            .ToList()
+                    );
+                });
 
         var attributes = GetAssemblyAttribute<GenerateToolsCliCommandAttribute>(context.CompilationProvider);
-        
-        var compilationAndAttributes = referencedToolTypes
+
+        var compilationAndTools = compilationWithMetadata
             .Combine(attributes)
-            .Where(it => it.Right != null)
-            .Select((it, _) => it.Left)
-            .Collect();
-        
-        context.RegisterSourceOutput(compilationAndAttributes, GenerateTools);
+            .Select((pair, _) =>
+            {
+                var (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools) = pair.Left;
+                var attribute = pair.Right;
+
+                return (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools, attribute);
+            });
+
+        context.RegisterSourceOutput(compilationAndTools, (spc, data) =>
+        {
+            var (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools, attribute) = data;
+
+            if (attribute == null)
+            {
+                return; // Don't generate if attribute not present
+            }
+
+            GenerateTools(spc, tools.ToImmutableArray());
+        });
     }
 
     protected override void GenerateTools(SourceProductionContext spc, ImmutableArray<ToolDetails> tools)
     {
+        if (tools.Length <= 0)
+        {
+            spc.ReportDiagnostic(
+                Diagnostic.Create(
+                    new DiagnosticDescriptor(
+                        "DTG1002",
+                        "The tools not found by CLI Generator",
+                        "The CLI generator did not found any tools",
+                        "Generator",
+                        DiagnosticSeverity.Warning,
+                        true),
+                    Location.None)
+            );
+            return;
+        }
+
+        var commands = new List<(string, string)>();
         foreach (var tool in tools)
         {
             var code = GenerateCliCommand(tool);
+            commands.Add((code.TypeName, tool.Name));
             spc.AddSource(code.OutputFileName, code);
         }
+
+        var addCommands = GenerateCommandRegistration(commands);
+        spc.AddSource(addCommands.OutputFileName, addCommands);
     }
+
+    private CodeBlock GenerateCommandRegistration(List<(string, string)> commands)
+        => new()
+        {
+            Namespace = "Dev.Tools.Console.Commands",
+            TypeName = "CommandConfigurator",
+            GeneratorType = typeof(CliCommandGenerator),
+            Placeholders = new()
+            {
+                ["AddCommand"] = string.Join("\n        ", commands.Select(it => $"ConfigureCommand<{it.Item1}>(services, configurator, \"{it.Item2}\");"))
+            },
+            Usings = [
+                "Microsoft.Extensions.DependencyInjection",
+                "Spectre.Console.Cli"
+            ],
+            Content = 
+              """
+              internal static class CommandConfigurator
+              {
+                  public static void ConfigureCommands(IServiceCollection services, IConfigurator configurator)
+                  {
+                      {AddCommand}
+                  }
+                  
+                  private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name)
+                      where T : class, ICommand
+                  {
+                      configurator.AddCommand<T>(name);
+                      services.AddTransient<T>();
+                      services.AddTransient<ICommand, T>(provider => provider.GetRequiredService<T>());
+                  }
+              }
+              """
+        };
 
     private CodeBlock GenerateCliCommand(ToolDetails tool) =>
         new()
         {
             Namespace = "Dev.Tools.Console.Commands",
-            TypeName = tool.TypeName + "Command",
+            TypeName = tool.TypeName.Replace("Tool", "Command"),
             GeneratorType = typeof(CliCommandGenerator),
             Placeholders = new()
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
                 ["ToolArgsType"] = tool.ArgsDetails.Type,
-                ["ToolResultType"] = tool.ResultDetails.Type
+                ["ToolResultType"] = tool.ResultDetails.Type,
+                ["SettingsType"] = GenerateSettingsClass(tool),
+                ["SettingsMapping"] = GenerateMapping(tool),
             },
             Usings = [
                 "Dev.Tools.Core",
@@ -72,31 +167,134 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
               internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
                   : AsyncCommand<{TypeName}.Settings>
               {
-                  public sealed class Settings : CommandSettings
-                  {
-                  }
+                  {SettingsType}
                   
-                  public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+                  public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
                   {
                       ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
                       
                       try
                       {
                           var tool = toolProvider.GetTool<{ToolType}>();
-                          var args = new {ToolType}.Args
-                          {
-                          };
-                      
-                          var result = await tool.RunAsync(args, CancellationToken.None);
                           
-                          return responseHandler.ProcessResponse(result, definition);
+                          {SettingsMapping}
+                      
+                          var result = await tool.RunAsync(args, cancellationToken);
+                          
+                          return responseHandler.ProcessResponse(result, definition, settings);
                       }
                       catch (Exception ex)
                       {
-                          return responseHandler.ProcessError(ex, definition);
+                          return responseHandler.ProcessError(ex, definition, settings);
                       }
                   }
               }
               """
         };
+    
+    private static string GenerateSettingsClass(ToolDetails tool)
+    {
+        var properties = new System.Text.StringBuilder();
+        var map = new HashSet<string>();
+
+        for(var i = 0; i < tool.ArgsDetails.Properties.Length; i++)
+        {
+            var prop = tool.ArgsDetails.Properties[i];
+            // TODO: Extract description from ToolResources.en.resx
+            // For now, use placeholder description
+            var description = $"Tools.{tool.TypeName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
+
+            var letter = prop.Name[0].ToString().ToLower();
+            var template = $"--{letter + prop.Name.Substring(1)}";
+            if (map.Add(letter) || map.Add(letter = letter.ToUpper()))
+            {
+                template = $"-{letter}|" + template;
+            }
+
+            properties.AppendLine($$"""
+                                            [LocalizedDescription("{{description}}")]
+                                            [CommandOption("{{template}}")]
+                                            public {{prop.Type}} {{prop.Name}} { get; set; }
+
+                                    """);
+        }
+
+        return $$"""
+                 public sealed class Settings : SettingsBase
+                     {
+                 {{properties}}    }
+                 """;
+    }
+    
+    private static string GenerateMapping(ToolDetails tool)
+    {
+        // Check if Args type has a constructor matching all properties (positional record)
+        var hasMatchingConstructor = HasConstructorMatchingProperties(tool.ArgsDetails.Symbol);
+
+        if (hasMatchingConstructor)
+        {
+            // Use constructor syntax for positional records
+            var arguments = string.Join(",\n                    ",
+                tool.ArgsDetails.Properties.Select(p => $"{p.Name}: settings.{p.Name}"));
+
+            return $$"""
+                     var args = new {{tool.TypeName}}.Args(
+                                    {{arguments}}
+                                );
+                     """;
+        }
+        else
+        {
+            // Use object initializer syntax for init properties
+            var properties = string.Join(",\n                    ",
+                tool.ArgsDetails.Properties.Select(p => $"{p.Name} = settings.{p.Name}"));
+
+            return $$"""
+                     var args = new {{tool.TypeName}}.Args
+                                {
+                                    {{properties}}
+                                };
+                     """;
+        }
+    }
+
+    private static bool HasConstructorMatchingProperties(ITypeSymbol typeSymbol)
+    {
+        if (typeSymbol is not INamedTypeSymbol namedType)
+        {
+            return false;
+        }
+
+        var properties = namedType.GetMembers()
+            .OfType<IPropertySymbol>()
+            .Where(p => p.DeclaredAccessibility == Accessibility.Public)
+            .ToList();
+
+        var constructors = namedType.Constructors
+            .Where(c => c.DeclaredAccessibility == Accessibility.Public && !c.IsImplicitlyDeclared)
+            .ToList();
+
+        // Check if there's a constructor with parameters matching all properties
+        return constructors.Any(ctor =>
+        {
+            if (ctor.Parameters.Length != properties.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < ctor.Parameters.Length; i++)
+            {
+                var param = ctor.Parameters[i];
+                var matchingProp = properties.FirstOrDefault(p =>
+                    string.Equals(p.Name, param.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingProp == null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }
 }

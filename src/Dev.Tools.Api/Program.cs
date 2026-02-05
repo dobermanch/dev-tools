@@ -97,7 +97,7 @@ builder.Services
 
 var app = builder.Build();
 app.MapOpenApi();
-app.MapScalarApiReference("ui/{documentName}");
+app.MapScalarApiReference("ui");
 
 app.MapGet("/ui", [ExcludeFromDescription]() => Results.Redirect("ui/v1", true, true));
 app.MapControllers();

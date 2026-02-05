@@ -21,42 +21,135 @@ public abstract class ToolGeneratorBase
     
     protected static ToolDetails? GetToolDetails(INamedTypeSymbol symbol)
     {
+        // Try to get syntax (available for source, not for metadata references)
         var syntax = symbol.DeclaringSyntaxReferences
             .Select(it => it.GetSyntax())
             .OfType<TypeDeclarationSyntax>()
             .FirstOrDefault();
-        if (syntax == null)
+
+        // Get attribute data from symbol metadata (works for both source and referenced assemblies)
+        var attributeData = GetToolDefinitionAttributeData(symbol);
+        if (attributeData == null)
         {
             return null;
         }
-        
-        Dictionary<string, ExpressionSyntax> values = GetToolDefinitionDetails(symbol);
-        if (values.Count <= 0)
-        {
-            return null;
-        }
-        
+
         IList<TypeDetails> toolTypes = FindToolInterface(symbol);
         if (toolTypes.Count <= 0)
         {
             return null;
         }
 
-        ExpressionSyntax[] errorCodes = FindToolExceptionErrorCodes(symbol);
-        
+        // Get error codes from syntax if available (only for source files)
+        ExpressionSyntax[] errorCodes = syntax != null ? FindToolExceptionErrorCodes(symbol) : [];
+
         return new ToolDetails
         {
             Syntax = syntax,
             Symbol = symbol,
-            Name = ((LiteralExpressionSyntax)values["Name"]).Token.ValueText,
-            Categories = ((CollectionExpressionSyntax)values["Categories"]).Elements.Select(c => c.ToString()).ToArray(),
-            Keywords = ((CollectionExpressionSyntax)values["Keywords"]).Elements.Select(c => c.ToString()).ToArray(),
+            Name = attributeData.Name,
+            Categories = attributeData.Categories,
+            Keywords = attributeData.Keywords,
             ErrorCodes = ["ErrorCode.Unknown", ..errorCodes.Select(it => it.ToString())],
-            Aliases = ((CollectionExpressionSyntax)values["Aliases"]).Elements.Select(c => c.ToString()).ToArray(),
+            Aliases = attributeData.Aliases,
             ArgsDetails = toolTypes[0],
             ResultDetails = toolTypes[1],
             ExtraTypes = toolTypes.SelectMany(it => it.Enums).GroupBy(it => it.Type).Select(it => it.First()).ToArray<TypeDeclaration>()
         };
+    }
+
+    private static ToolAttributeData? GetToolDefinitionAttributeData(INamedTypeSymbol symbol)
+    {
+        var attr = symbol.GetAttributes()
+            .FirstOrDefault(x => x.AttributeClass?.ToDisplayString() == CodeDefinitions.ToolDefinitionAttribute.TypeFullName);
+
+        if (attr == null)
+        {
+            return null;
+        }
+
+        string? name = null;
+        string[] aliases = [];
+        string[] categories = [];
+        string[] keywords = [];
+
+        // Extract from named arguments
+        foreach (var namedArg in attr.NamedArguments)
+        {
+            switch (namedArg.Key)
+            {
+                case "Name":
+                    name = namedArg.Value.Value?.ToString();
+                    break;
+                case "Aliases":
+                    aliases = ExtractStringArray(namedArg.Value);
+                    break;
+                case "Categories":
+                    categories = ExtractEnumArray(namedArg.Value);
+                    break;
+                case "Keywords":
+                    keywords = ExtractEnumArray(namedArg.Value);
+                    break;
+            }
+        }
+
+        if (name == null)
+        {
+            return null;
+        }
+
+        return new ToolAttributeData(name, aliases, categories, keywords);
+    }
+
+    private static string[] ExtractStringArray(TypedConstant constant)
+    {
+        if (constant.Kind != TypedConstantKind.Array)
+        {
+            return [];
+        }
+
+        // Add quotes around string values for code generation
+        return constant.Values.Select(v => $"\"{v.Value?.ToString() ?? ""}\"").ToArray();
+    }
+
+    private static string[] ExtractEnumArray(TypedConstant constant)
+    {
+        if (constant.Kind != TypedConstantKind.Array)
+        {
+            return [];
+        }
+
+        return constant.Values
+            .Where(v => v.Type is INamedTypeSymbol enumType && enumType.TypeKind == TypeKind.Enum)
+            .Select(v =>
+            {
+                var enumType = (INamedTypeSymbol)v.Type!;
+                var enumValue = v.Value;
+                var enumMember = enumType.GetMembers()
+                    .OfType<IFieldSymbol>()
+                    .FirstOrDefault(f => f.HasConstantValue && Equals(f.ConstantValue, enumValue));
+
+                return enumMember != null
+                    ? $"{enumType.Name}.{enumMember.Name}"
+                    : enumValue?.ToString() ?? "";
+            })
+            .ToArray();
+    }
+
+    private class ToolAttributeData
+    {
+        public string Name { get; }
+        public string[] Aliases { get; }
+        public string[] Categories { get; }
+        public string[] Keywords { get; }
+
+        public ToolAttributeData(string name, string[] aliases, string[] categories, string[] keywords)
+        {
+            Name = name;
+            Aliases = aliases;
+            Categories = categories;
+            Keywords = keywords;
+        }
     }
     
     private static Dictionary<string, ExpressionSyntax> GetToolDefinitionDetails(INamedTypeSymbol node) =>

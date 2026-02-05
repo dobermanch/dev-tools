@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
-using Dev.Tools.Console.Core;
 using Dev.Tools.Mcp.Core;
 using Microsoft.CodeAnalysis;
 
@@ -27,13 +26,13 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                 );
 
         var attributes = GetAssemblyAttribute<GenerateToolsMcpToolAttribute>(context.CompilationProvider);
-        
+
         var compilationAndAttributes = referencedToolTypes
             .Combine(attributes)
             .Where(it => it.Right != null)
             .Select((it, _) => it.Left)
             .Collect();
-        
+
         context.RegisterSourceOutput(compilationAndAttributes, GenerateTools);
     }
 
@@ -46,47 +45,157 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         }
     }
 
-    private CodeBlock GenerateTool(ToolDetails tool) =>
-        new()
+    private CodeBlock GenerateTool(ToolDetails tool)
+    {
+        var argsClass = GenerateArgsClass(tool);
+        var executeMethod = GenerateExecuteAsyncMethod(tool);
+
+        return new()
         {
             Namespace = "Dev.Tools.Mcp.Tools",
-            TypeName = tool.TypeName,
+            TypeName = tool.TypeName.Replace("Tool", "McpTool"),
             GeneratorType = typeof(McpToolGenerator),
-            Placeholders = new()
-            {
-                ["ToolName"] = tool.Name,
-                ["ToolType"] = tool.TypeName,
-                ["ToolArgsType"] = tool.ArgsDetails.TypeName,
-                ["ToolResultType"] = tool.ResultDetails.TypeName
-            },
             Usings = [
                 "System.ComponentModel",
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
                 "ModelContextProtocol.Server"
             ],
-            Content = 
-              """
+            Content =
+              $$"""
+              /// <summary>
+              /// MCP tool wrapper for {{tool.TypeName}}.
+              /// </summary>
               [McpServerToolType]
-              public static class {TypeName}
+              public static class {{tool.TypeName}}McpTool
               {
-                  [McpServerTool, Description("")]
-                  public static async Task<{ToolType}.Result> Decode1(
-                      IToolsProvider tools,
-                      [Description("")]
-                      {ToolType}.{ToolArgsType} args,
-                      CancellationToken cancellationToken)
-                  {
-                      var result = await tools
-                          .GetTool<{ToolType}>()
-                          .RunAsync(
-                              args,
-                              //new {ToolType}.{ToolArgsType} { Text = input },
-                              cancellationToken
-                          );
-                      return result;
-                  }
+              {{argsClass}}
+
+              {{executeMethod}}
               }
               """
         };
+    }
+
+    private static string GenerateArgsClass(ToolDetails tool)
+    {
+        var properties = new System.Text.StringBuilder();
+
+        foreach (var prop in tool.ArgsDetails.Properties)
+        {
+            // TODO: Extract description from ToolResources.en.resx
+            // For now, use placeholder description
+            var description = $"{prop.Name} parameter";
+
+            properties.AppendLine($$"""
+                    [Description("{{description}}")]
+                    public {{prop.Type}} {{prop.Name}} { get; set; }
+
+            """);
+        }
+
+        return $$"""
+            public sealed class Args
+            {
+        {{properties}}    }
+        """;
+    }
+
+    private static string GenerateExecuteAsyncMethod(ToolDetails tool)
+    {
+        var propertyMapping = GenerateMapping(tool);
+
+        // TODO: Extract description from ToolResources.en.resx
+        var toolDescription = $"{tool.TypeName} tool";
+
+        return $$"""
+            [McpServerTool(Name = "{{tool.Name}}")]
+            [Description("{{toolDescription}}")]
+            public static async Task<{{tool.TypeName}}.Result> ExecuteAsync(
+                IToolsProvider tools,
+                Args args,
+                CancellationToken cancellationToken = default)
+            {
+                var tool = tools.GetTool<{{tool.TypeName}}>();
+
+                {{propertyMapping}}
+
+                var result = await tool.RunAsync(toolArgs, cancellationToken);
+                return result;
+            }
+        """;
+    }
+    
+    private static string GenerateMapping(ToolDetails tool)
+    {
+        // Check if Args type has a constructor matching all properties (positional record)
+        var hasMatchingConstructor = HasConstructorMatchingProperties(tool.ArgsDetails.Symbol);
+
+        if (hasMatchingConstructor)
+        {
+            // Use constructor syntax for positional records
+            var arguments = string.Join(",\n                    ",
+                tool.ArgsDetails.Properties.Select(p => $"{p.Name}: args.{p.Name}"));
+
+            return $$"""
+                     var toolArgs = new {{tool.TypeName}}.Args(
+                                    {{arguments}}
+                                );
+                     """;
+        }
+        else
+        {
+            // Use object initializer syntax for init properties
+            var properties = string.Join(",\n                    ",
+                tool.ArgsDetails.Properties.Select(p => $"{p.Name} = args.{p.Name}"));
+
+            return $$"""
+                     var toolArgs = new {{tool.TypeName}}.Args
+                                {
+                                    {{properties}}
+                                };
+                     """;
+        }
+    }
+    
+    
+    private static bool HasConstructorMatchingProperties(ITypeSymbol typeSymbol)
+    {
+        if (typeSymbol is not INamedTypeSymbol namedType)
+        {
+            return false;
+        }
+
+        var properties = namedType.GetMembers()
+            .OfType<IPropertySymbol>()
+            .Where(p => p.DeclaredAccessibility == Accessibility.Public)
+            .ToList();
+
+        var constructors = namedType.Constructors
+            .Where(c => c.DeclaredAccessibility == Accessibility.Public && !c.IsImplicitlyDeclared)
+            .ToList();
+
+        // Check if there's a constructor with parameters matching all properties
+        return constructors.Any(ctor =>
+        {
+            if (ctor.Parameters.Length != properties.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < ctor.Parameters.Length; i++)
+            {
+                var param = ctor.Parameters[i];
+                var matchingProp = properties.FirstOrDefault(p =>
+                    string.Equals(p.Name, param.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingProp == null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }
 }

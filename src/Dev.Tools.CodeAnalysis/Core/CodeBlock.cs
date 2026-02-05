@@ -55,6 +55,7 @@ public record CodeBlock
             [nameof(Namespace)] = Namespace,
             [nameof(TypeName)] = TypeName,
             [nameof(TypeFullName)] = TypeFullName,
+            [nameof(GeneratorType)] = GetGeneratorAttribute()
         }.Concat(Placeholders);
 
         var builder = new StringBuilder("""
@@ -63,6 +64,7 @@ public record CodeBlock
                                         {Usings}
                                         namespace {Namespace};
                                         
+                                        {GeneratorType}
                                         {Content}
                                         """);
         foreach (var token in replacements)
@@ -72,6 +74,11 @@ public record CodeBlock
 
         return builder.ToString();
     }
+
+    private string GetGeneratorAttribute() =>
+        GeneratorType is not null 
+            ? $"[System.CodeDom.Compiler.GeneratedCode(\"{GeneratorType?.FullName}\", \"1.0.0\")]"
+            : string.Empty;
 
     private string GetHeader() =>
         Header ??

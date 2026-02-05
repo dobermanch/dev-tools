@@ -59,6 +59,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["ToolResultType"] = tool.ResultDetails.Type
             },
             Usings = [
+                "Dev.Tools.Tools",
                 "Dev.Tools.Api.Core",
                 "Microsoft.AspNetCore.Mvc",
                 "System.Net",
@@ -80,7 +81,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                           {ToolResultType} result = await tool.RunAsync(request, cancellationToken);
                           if (result.HasErrors)
                           {
-                              return Problem(type: result.ErrorCodes[0], statusCode: (int)HttpStatusCode.BadRequest);
+                              return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
                           }
                   
                           return Ok(result);

@@ -1,17 +1,11 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Core.DI;
 
-public sealed class TypeRegistrar : ITypeRegistrar
+public sealed class TypeRegistrar(IServiceCollection? builder = null) : ITypeRegistrar
 {
-    private readonly IServiceCollection _builder;
-
-    public TypeRegistrar(IServiceCollection? builder = null)
-    {
-        _builder = builder ?? new ServiceCollection();
-    }
+    private readonly IServiceCollection _builder = builder ?? new ServiceCollection();
 
     public ITypeResolver Build()
     {
@@ -35,6 +29,6 @@ public sealed class TypeRegistrar : ITypeRegistrar
             throw new ArgumentNullException(nameof(func));
         }
 
-        _builder.AddSingleton(service, (provider) => func());
+        _builder.AddSingleton(service, _ => func());
     }
 }
