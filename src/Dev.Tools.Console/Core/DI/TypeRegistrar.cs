@@ -3,23 +3,21 @@ using Spectre.Console.Cli;
 
 namespace Dev.Tools.Console.Core.DI;
 
-public sealed class TypeRegistrar(IServiceCollection? builder = null) : ITypeRegistrar
+public sealed class TypeRegistrar(IServiceCollection builder) : ITypeRegistrar
 {
-    private readonly IServiceCollection _builder = builder ?? new ServiceCollection();
-
     public ITypeResolver Build()
     {
-        return new TypeResolver(_builder.BuildServiceProvider());
+        return new TypeResolver(builder.BuildServiceProvider());
     }
 
     public void Register(Type service, Type implementation)
     {
-        _builder.AddSingleton(service, implementation);
+        builder.AddSingleton(service, implementation);
     }
 
     public void RegisterInstance(Type service, object implementation)
     {
-        _builder.AddSingleton(service, implementation);
+        builder.AddSingleton(service, implementation);
     }
 
     public void RegisterLazy(Type service, Func<object> func)
@@ -29,6 +27,6 @@ public sealed class TypeRegistrar(IServiceCollection? builder = null) : ITypeReg
             throw new ArgumentNullException(nameof(func));
         }
 
-        _builder.AddSingleton(service, _ => func());
+        builder.AddSingleton(service, _ => func());
     }
 }

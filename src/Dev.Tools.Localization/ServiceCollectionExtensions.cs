@@ -1,46 +1,54 @@
 using System.Reflection;
-using Dev.Tools.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Dev.Tools.Localization;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDevToolsLocalization(this IServiceCollection services, Assembly? assembly = null)
+    extension(IServiceCollection services)
     {
-        services.TryAddSingleton<ILocalizationProvider, LocalizationProvider>();
-        services.RegisterResourcesForAssembly(assembly);
-        services.RegisterResourcesForAssembly(Assembly.GetExecutingAssembly());
-        services.AddLocalization();
-        return services;
-    }
-
-    private static void RegisterResourcesForAssembly(this IServiceCollection services, Assembly? assembly)
-    {
-        if (assembly is null)
+        public IServiceCollection AddDevToolsLocalization(Assembly? assembly = null)
         {
-            return;
+            services.TryAddSingleton<ILocalizationProvider, LocalizationProvider>();
+            services.RegisterResourcesForAssembly(assembly);
+            services.RegisterResourcesForAssembly(Assembly.GetExecutingAssembly());
+            services.AddLocalization();
+
+            LocalizationProvider.SetProviderResolver(() =>
+                services.BuildServiceProvider().GetRequiredService<ILocalizationProvider>());
+
+            return services;
         }
-        
-        const string resourceSuffix = ".resources";
-        string[] resourceNames = assembly.GetManifestResourceNames();
-        foreach (var resource in resourceNames)
+
+        private void RegisterResourcesForAssembly(Assembly? assembly)
         {
-            if (!resource.EndsWith(resourceSuffix, StringComparison.Ordinal))
+            if (assembly is null)
             {
-                continue;
+                return;
             }
 
-            var resourceType = assembly.GetType(resource.Replace(resourceSuffix, string.Empty, StringComparison.Ordinal));
-            if (resourceType is null)
+            const string resourceSuffix = ".resources";
+            string[] resourceNames = assembly.GetManifestResourceNames();
+            foreach (var resource in resourceNames)
             {
-                continue;
-            }
+                if (!resource.EndsWith(resourceSuffix, StringComparison.Ordinal))
+                {
+                    continue;
+                }
 
-            resourceType = typeof(IStringLocalizer<>).MakeGenericType(resourceType);
-            services.AddTransient<IStringLocalizer>(provider => (IStringLocalizer)provider.GetRequiredService(resourceType));
+                var resourceType =
+                    assembly.GetType(resource.Replace(resourceSuffix, string.Empty, StringComparison.Ordinal));
+                if (resourceType is null)
+                {
+                    continue;
+                }
+
+                resourceType = typeof(IStringLocalizer<>).MakeGenericType(resourceType);
+                services.AddTransient<IStringLocalizer>(provider =>
+                    (IStringLocalizer)provider.GetRequiredService(resourceType));
+            }
         }
     }
 }

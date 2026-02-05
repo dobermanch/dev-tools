@@ -154,9 +154,8 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["SettingsMapping"] = GenerateMapping(tool),
             },
             Usings = [
-                "Dev.Tools.Core",
                 "Dev.Tools.Console.Core",
-                "Dev.Tools.Core.Localization",
+                "Dev.Tools.Localization",
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
                 "Spectre.Console",
@@ -200,9 +199,10 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
         for(var i = 0; i < tool.ArgsDetails.Properties.Length; i++)
         {
             var prop = tool.ArgsDetails.Properties[i];
+            var toolName = tool.TypeName.Replace("Tool", "");
             // TODO: Extract description from ToolResources.en.resx
             // For now, use placeholder description
-            var description = $"Tools.{tool.TypeName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
+            var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
 
             var letter = prop.Name[0].ToString().ToLower();
             var template = $"--{letter + prop.Name.Substring(1)}";
