@@ -3,6 +3,7 @@ using Dev.Tools;
 using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using Dev.Tools.Localization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Scalar.AspNetCore;
@@ -24,27 +25,9 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
-    options.CreateSchemaReferenceId = jsonTypeInfo =>
-    {
-        var type = jsonTypeInfo.Type;
-        return type switch
-        {
-            { Name: "Args", DeclaringType: not null } => $"{type.DeclaringType.Name}Request",
-            { Name: "Result", DeclaringType: not null } => $"{type.DeclaringType.Name}Response",
-            _ => type.Name
-        };
-    };
-
     options.AddSchemaTransformer((schema, context, ctx) =>
     {
         var type = context.JsonTypeInfo.Type;
-
-        // Remove internal properties from Result types
-        if (type is { Name: "Result", DeclaringType: not null })
-        {
-            schema.Properties?.Remove("hasErrors");
-            schema.Properties?.Remove("errorCodes");
-        }
 
         // Customize enum values
         if (type.IsEnum)
@@ -78,7 +61,8 @@ builder.Services
     });
 
 builder.Services
-    .AddDevTools();
+    .AddDevTools()
+    .AddDevToolsLocalization();
 
 var app = builder.Build();
 app.MapOpenApi();

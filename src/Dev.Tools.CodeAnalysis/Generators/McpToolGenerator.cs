@@ -157,45 +157,4 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                      """;
         }
     }
-    
-    
-    private static bool HasConstructorMatchingProperties(ITypeSymbol typeSymbol)
-    {
-        if (typeSymbol is not INamedTypeSymbol namedType)
-        {
-            return false;
-        }
-
-        var properties = namedType.GetMembers()
-            .OfType<IPropertySymbol>()
-            .Where(p => p.DeclaredAccessibility == Accessibility.Public)
-            .ToList();
-
-        var constructors = namedType.Constructors
-            .Where(c => c.DeclaredAccessibility == Accessibility.Public && !c.IsImplicitlyDeclared)
-            .ToList();
-
-        // Check if there's a constructor with parameters matching all properties
-        return constructors.Any(ctor =>
-        {
-            if (ctor.Parameters.Length != properties.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < ctor.Parameters.Length; i++)
-            {
-                var param = ctor.Parameters[i];
-                var matchingProp = properties.FirstOrDefault(p =>
-                    string.Equals(p.Name, param.Name, StringComparison.OrdinalIgnoreCase));
-
-                if (matchingProp == null)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }
 }

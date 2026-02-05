@@ -49,18 +49,24 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
         new()
         {
             Namespace = "Dev.Tools.Api.Endpoints",
-            TypeName = tool.TypeName + "Endpoint",
+            TypeName = tool.TypeName.Replace("Tool", "") + "Endpoint",
             GeneratorType = typeof(ApiEndpointGenerator),
             Placeholders = new()
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolArgsType"] = tool.ArgsDetails.Type,
-                ["ToolResultType"] = tool.ResultDetails.Type
+                ["ToolLocalizationName"] = tool.TypeName.Replace("Tool", ""),
+                ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
+                ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
+                ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
+                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool, tool.ArgsDetails, "args", "request"),
+                ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
+                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool, tool.ResultDetails, "response", "result")
             },
             Usings = [
                 "Dev.Tools.Tools",
                 "Dev.Tools.Api.Core",
+                "Dev.Tools.Localization",
                 "Microsoft.AspNetCore.Mvc",
                 "System.Net",
                 "System.Net.Mime"
@@ -69,7 +75,13 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
               """
               public class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider) : EndpointBase
               {
+                  {RequestType}
+                  
+                  {ResultType}
+                    
                   [HttpPost("{ToolName}")]
+                  [LocalizedEndpointSummary("Tools.{ToolLocalizationName}.Name")]
+                  [LocalizedEndpointDescription("Tools.{ToolLocalizationName}.Description")]
                   [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
                   [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
                   [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
@@ -77,14 +89,19 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                   {
                       try 
                       {  
-                          var tool = toolProvider.GetTool<{ToolType}>();  
-                          {ToolResultType} result = await tool.RunAsync(request, cancellationToken);
+                          var tool = toolProvider.GetTool<{ToolType}>();
+                          
+                          {RequestTypeMapping}
+                          
+                          var result = await tool.RunAsync(args, cancellationToken);
                           if (result.HasErrors)
                           {
                               return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
                           }
-                  
-                          return Ok(result);
+                          
+                          {ResultTypeMapping}
+                          
+                          return Ok(response);
                       }
                       catch (Exception e)
                       {
@@ -94,4 +111,83 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
               }
               """
         };
+    
+    private static string GenerateRequestClass(ToolDetails tool)
+    {
+        var properties = new System.Text.StringBuilder();
+        var toolName = tool.TypeName.Replace("Tool", "");
+        
+        for(var i = 0; i < tool.ArgsDetails.Properties.Length; i++)
+        {
+            var prop = tool.ArgsDetails.Properties[i];
+            var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
+
+            properties.AppendLine($$"""
+                                            [LocalizedDescription("{{description}}")]
+                                            public {{prop.Type}} {{prop.Name}} { get; set; }
+
+                                    """);
+        }
+
+        return $$"""
+                 public sealed class {{toolName}}Request
+                     {
+                 {{properties}}    }
+                 """;
+    }
+    
+    private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
+    {
+        var properties = new System.Text.StringBuilder();
+        var toolName = tool.TypeName.Replace("Tool", "");
+        
+        foreach (var prop in typeDetails.Properties)
+        {
+            var description = $"Tools.{toolName}.{typeDetails.TypeName}.{prop.Name}.Description";
+            
+            properties.AppendLine($$"""
+                                            [LocalizedDescription("{{description}}")]
+                                            public {{prop.Type}} {{prop.Name}} { get; set; }
+
+                                    """);
+        }
+
+        return $$"""
+                 public sealed class {{toolName}}{{toolNameSuffix}}
+                     {
+                 {{properties}}    }
+                 """;
+    }
+    
+    private static string GenerateDataTypeMapping(ToolDetails tool, TypeDetails typeDetails, string targetVariableName, string sourceVariableName)
+    {
+        // Check if Args type has a constructor matching all properties (positional record)
+        var hasMatchingConstructor = HasConstructorMatchingProperties(typeDetails.Symbol);
+
+        if (hasMatchingConstructor)
+        {
+            // Use constructor syntax for positional records
+            var arguments = string.Join(",\n                    ",
+                typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
+
+            return $$"""
+                     var {{targetVariableName}} = new {{typeDetails.Type}}(
+                                    {{arguments}}
+                                );
+                     """;
+        }
+        else
+        {
+            // Use object initializer syntax for init properties
+            var properties = string.Join(",\n                    ",
+                typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
+
+            return $$"""
+                     var {{targetVariableName}} = new {{typeDetails.Type}}
+                                {
+                                    {{properties}}
+                                };
+                     """;
+        }
+    }
 }
