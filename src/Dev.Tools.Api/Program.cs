@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using System.Text.Json.Nodes;
 using Dev.Tools;
 using Dev.Tools.Api.Core;
@@ -7,7 +6,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Scalar.AspNetCore;
-using Microsoft.OpenApi;
 
 [assembly: GenerateToolsApiEndpoint]
 
@@ -26,42 +24,29 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
-    options.AddDocumentTransformer((document, context, ctx) => { return Task.CompletedTask; });
-
-    options.AddOperationTransformer((operation, context, ctx) =>
+    options.CreateSchemaReferenceId = jsonTypeInfo =>
     {
-        foreach (var response in operation.Responses ?? [])
+        var type = jsonTypeInfo.Type;
+        return type switch
         {
-            if (response.Value.Content != null && response.Value.Content.TryGetValue(MediaTypeNames.Application.Json, out var content))
-            {
-            }
-        }
-
-        return Task.CompletedTask;
-    });
+            { Name: "Args", DeclaringType: not null } => $"{type.DeclaringType.Name}Request",
+            { Name: "Result", DeclaringType: not null } => $"{type.DeclaringType.Name}Response",
+            _ => type.Name
+        };
+    };
 
     options.AddSchemaTransformer((schema, context, ctx) =>
     {
         var type = context.JsonTypeInfo.Type;
 
-        if (type is { Name: "Args", DeclaringType: not null })
-        {
-            var title = $"{type.DeclaringType.Name}Request";
-            schema.Title = title;
-            schema.Extensions?["x-schema-id"] = new JsonNodeExtension(JsonValue.Create(title));
-
-        }
-
+        // Remove internal properties from Result types
         if (type is { Name: "Result", DeclaringType: not null })
         {
-            var title = $"{type.DeclaringType.Name}Response";
-            schema.Title = title;
-            schema.Extensions?["x-schema-id"] = new JsonNodeExtension(JsonValue.Create(title));
-
             schema.Properties?.Remove("hasErrors");
             schema.Properties?.Remove("errorCodes");
         }
 
+        // Customize enum values
         if (type.IsEnum)
         {
             schema.Enum = Enum.GetNames(type)
