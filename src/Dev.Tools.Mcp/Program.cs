@@ -1,4 +1,5 @@
 ﻿using Dev.Tools;
+using Dev.Tools.Localization;
 using Dev.Tools.Mcp.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,7 @@ builder.Logging.AddConsole(consoleLogOptions =>
 
 builder.Services
     .AddDevTools()
+    .AddDevToolsLocalization()
     .AddMcpServer()
     .WithStdioServerTransport()
     .WithToolsFromAssembly();

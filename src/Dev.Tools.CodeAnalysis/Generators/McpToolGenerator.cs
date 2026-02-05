@@ -47,98 +47,95 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
 
     private CodeBlock GenerateTool(ToolDetails tool)
     {
-        var argsClass = GenerateArgsClass(tool);
-        var executeMethod = GenerateExecuteAsyncMethod(tool);
-
         return new()
         {
             Namespace = "Dev.Tools.Mcp.Tools",
             TypeName = tool.TypeName.Replace("Tool", "McpTool"),
             GeneratorType = typeof(McpToolGenerator),
+            Placeholders = new()
+            {
+                ["ToolName"] = tool.Name,
+                ["ToolType"] = tool.TypeName,
+                ["ToolLocalizationName"] = tool.TypeName.Replace("Tool", ""),
+                ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
+                ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
+                ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
+                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool.ArgsDetails, tool.ArgsDetails.Type, "args", "request", false),
+                ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
+                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"), "response", "result", true)
+            },
             Usings = [
                 "System.ComponentModel",
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
+                "Dev.Tools.Localization",
                 "ModelContextProtocol.Server"
             ],
             Content =
               $$"""
-              /// <summary>
-              /// MCP tool wrapper for {{tool.TypeName}}.
-              /// </summary>
               [McpServerToolType]
               public static class {{tool.TypeName}}McpTool
               {
-              {{argsClass}}
+                  {RequestType}
+                  
+                  {ResultType}
 
-              {{executeMethod}}
+                  [McpServerTool(Name = "{ToolName}")]
+                  [LocalizedDescription("Tools.{ToolLocalizationName}.Description")]
+                  public static async Task<{ToolResultType}> ExecuteAsync(
+                      IToolsProvider tools,
+                      {ToolArgsType} request,
+                      CancellationToken cancellationToken = default)
+                  {
+                      var tool = tools.GetTool<{ToolType}>();
+                  
+                      {RequestTypeMapping}
+                  
+                      var result = await tool.RunAsync(args, cancellationToken);
+                      
+                      {ResultTypeMapping}
+                      
+                      return response;
+                  }
               }
               """
         };
     }
-
-    private static string GenerateArgsClass(ToolDetails tool)
+    
+   private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
     {
         var properties = new System.Text.StringBuilder();
-
-        foreach (var prop in tool.ArgsDetails.Properties)
+        var toolName = tool.TypeName.Replace("Tool", "");
+        
+        foreach (var prop in typeDetails.Properties)
         {
-            // TODO: Extract description from ToolResources.en.resx
-            // For now, use placeholder description
-            var description = $"{prop.Name} parameter";
-
+            var description = $"Tools.{toolName}.{typeDetails.TypeName}.{prop.Name}.Description";
+            
             properties.AppendLine($$"""
-                    [Description("{{description}}")]
-                    public {{prop.Type}} {{prop.Name}} { get; set; }
+                                            [LocalizedDescription("{{description}}")]
+                                            public {{prop.Type}} {{prop.Name}} { get; set; }
 
-            """);
+                                    """);
         }
 
         return $$"""
-            public sealed class Args
-            {
-        {{properties}}    }
-        """;
-    }
-
-    private static string GenerateExecuteAsyncMethod(ToolDetails tool)
-    {
-        var propertyMapping = GenerateMapping(tool);
-
-        // TODO: Extract description from ToolResources.en.resx
-        var toolDescription = $"{tool.TypeName} tool";
-
-        return $$"""
-            [McpServerTool(Name = "{{tool.Name}}")]
-            [Description("{{toolDescription}}")]
-            public static async Task<{{tool.TypeName}}.Result> ExecuteAsync(
-                IToolsProvider tools,
-                Args args,
-                CancellationToken cancellationToken = default)
-            {
-                var tool = tools.GetTool<{{tool.TypeName}}>();
-
-                {{propertyMapping}}
-
-                var result = await tool.RunAsync(toolArgs, cancellationToken);
-                return result;
-            }
-        """;
+                 public sealed class {{toolName}}{{toolNameSuffix}}
+                     {
+                 {{properties}}    }
+                 """;
     }
     
-    private static string GenerateMapping(ToolDetails tool)
+    private static string GenerateDataTypeMapping(TypeDetails typeDetails, string typeName, string targetVariableName, string sourceVariableName, bool useParameterInitializer)
     {
         // Check if Args type has a constructor matching all properties (positional record)
-        var hasMatchingConstructor = HasConstructorMatchingProperties(tool.ArgsDetails.Symbol);
-
-        if (hasMatchingConstructor)
+        if (!useParameterInitializer && HasConstructorMatchingProperties(typeDetails.Symbol))
         {
             // Use constructor syntax for positional records
             var arguments = string.Join(",\n                    ",
-                tool.ArgsDetails.Properties.Select(p => $"{p.Name}: args.{p.Name}"));
+                typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
 
             return $$"""
-                     var toolArgs = new {{tool.TypeName}}.Args(
+                     var {{targetVariableName}} = new {{typeName}}(
                                     {{arguments}}
                                 );
                      """;
@@ -147,10 +144,10 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         {
             // Use object initializer syntax for init properties
             var properties = string.Join(",\n                    ",
-                tool.ArgsDetails.Properties.Select(p => $"{p.Name} = args.{p.Name}"));
+                typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
 
             return $$"""
-                     var toolArgs = new {{tool.TypeName}}.Args
+                     var {{targetVariableName}} = new {{typeName}}
                                 {
                                     {{properties}}
                                 };

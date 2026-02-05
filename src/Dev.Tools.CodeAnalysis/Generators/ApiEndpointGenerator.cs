@@ -59,9 +59,9 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
                 ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
                 ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
-                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool, tool.ArgsDetails, "args", "request"),
+                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool.ArgsDetails, tool.ArgsDetails.Type, "args", "request", false),
                 ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
-                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool, tool.ResultDetails, "response", "result")
+                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"),"response", "result", true)
             },
             Usings = [
                 "Dev.Tools.Tools",
@@ -112,30 +112,6 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
               """
         };
     
-    private static string GenerateRequestClass(ToolDetails tool)
-    {
-        var properties = new System.Text.StringBuilder();
-        var toolName = tool.TypeName.Replace("Tool", "");
-        
-        for(var i = 0; i < tool.ArgsDetails.Properties.Length; i++)
-        {
-            var prop = tool.ArgsDetails.Properties[i];
-            var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
-
-            properties.AppendLine($$"""
-                                            [LocalizedDescription("{{description}}")]
-                                            public {{prop.Type}} {{prop.Name}} { get; set; }
-
-                                    """);
-        }
-
-        return $$"""
-                 public sealed class {{toolName}}Request
-                     {
-                 {{properties}}    }
-                 """;
-    }
-    
     private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
     {
         var properties = new System.Text.StringBuilder();
@@ -159,19 +135,17 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                  """;
     }
     
-    private static string GenerateDataTypeMapping(ToolDetails tool, TypeDetails typeDetails, string targetVariableName, string sourceVariableName)
+    private static string GenerateDataTypeMapping(TypeDetails typeDetails, string typeName, string targetVariableName, string sourceVariableName, bool useParameterInitializer)
     {
         // Check if Args type has a constructor matching all properties (positional record)
-        var hasMatchingConstructor = HasConstructorMatchingProperties(typeDetails.Symbol);
-
-        if (hasMatchingConstructor)
+        if (!useParameterInitializer && HasConstructorMatchingProperties(typeDetails.Symbol))
         {
             // Use constructor syntax for positional records
             var arguments = string.Join(",\n                    ",
                 typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
 
             return $$"""
-                     var {{targetVariableName}} = new {{typeDetails.Type}}(
+                     var {{targetVariableName}} = new {{typeName}}(
                                     {{arguments}}
                                 );
                      """;
@@ -183,7 +157,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
 
             return $$"""
-                     var {{targetVariableName}} = new {{typeDetails.Type}}
+                     var {{targetVariableName}} = new {{typeName}}
                                 {
                                     {{properties}}
                                 };
