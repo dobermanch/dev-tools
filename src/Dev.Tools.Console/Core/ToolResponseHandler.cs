@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json;
 using Spectre.Console;
 
 namespace Dev.Tools.Console.Core;
@@ -7,7 +7,7 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
 {
     public int ProcessResponse(ToolResult result, ToolDefinition definition, SettingsBase settings)
     {
-        AnsiConsole.WriteLine(JsonConvert.SerializeObject(result));
+        AnsiConsole.WriteLine(JsonSerializer.Serialize(result));
         return 0;
     }
 
