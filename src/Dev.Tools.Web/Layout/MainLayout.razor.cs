@@ -1,6 +1,7 @@
 ﻿using Dev.Tools.Web.Services;
 using Dev.Tools.Web.Services.Layout;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace Dev.Tools.Web.Layout;
@@ -8,9 +9,13 @@ namespace Dev.Tools.Web.Layout;
 public partial class MainLayout
 {
     private MudThemeProvider _themeProvider = null!;
-    
+    private IStringLocalizer _localizer = null!;
+
     [Inject]
     private WebContext Context { get; set; } = null!;
+
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
 
     private bool ObserveSystemThemeChange => true;
 
@@ -28,6 +33,7 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
+        _localizer = Context.Localization.CreateScopedLocalizer("Layout.MainLayout");
         await Context.InitializeAsync(CancellationToken.None).ConfigureAwait(false);
         Context.Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
         Context.Messenger.Subscribe<LocalHasChangedNotification>(HandlerLocalHasChanged);
@@ -56,4 +62,16 @@ public partial class MainLayout
     
     private void HandlerLocalHasChanged(LocalHasChangedNotification _)
         => StateHasChanged();
+
+    private async Task OpenSearchDialogAsync()
+    {
+        var options = new DialogOptions
+        {
+            NoHeader = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            Position = DialogPosition.TopCenter
+        };
+        await DialogService.ShowAsync<Components.Inputs.SearchDialog>(null, options);
+    }
 }

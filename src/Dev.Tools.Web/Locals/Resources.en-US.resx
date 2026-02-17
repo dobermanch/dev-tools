@@ -281,6 +281,33 @@
     <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
         <value>All settings are stored locally in your browser.</value>
     </data>
+    <data name="Page.Home.Hero.Subtitle" xml:space="preserve">
+        <value>The Swiss Army Knife for Developers</value>
+    </data>
+    <data name="Page.Home.Hero.ToolCount" xml:space="preserve">
+        <value>{0} tools across {1} categories</value>
+    </data>
+    <data name="Page.Home.Section.Favorites" xml:space="preserve">
+        <value>Favorites</value>
+    </data>
+    <data name="Page.Home.Section.AllTools" xml:space="preserve">
+        <value>All Tools</value>
+    </data>
+    <data name="Page.Home.Search.Placeholder" xml:space="preserve">
+        <value>Search tools... (e.g. JSON, Base64, UUID)</value>
+    </data>
+    <data name="Layout.MainLayout.Subtitle" xml:space="preserve">
+        <value>The Swiss Army Knife for Developers</value>
+    </data>
+    <data name="Layout.NavMenu.Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="Layout.NavMenu.Favorites" xml:space="preserve">
+        <value>Favorites</value>
+    </data>
+    <data name="Layout.NavMenu.Settings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
     <data name="Enums.ThemeMode.System" xml:space="preserve">
         <value>System</value>
     </data>

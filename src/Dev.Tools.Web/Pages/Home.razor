@@ -1,5 +1,98 @@
-﻿@page "/"
+@page "/"
+@using Dev.Tools.Web.Services.Layout
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Dev Tools</PageTitle>
 
-<ToolsList />
+@* ===== HERO SECTION ===== *@
+<MudPaper Class="pa-6 mt-4 mb-6 rounded-lg" Elevation="0"
+          Style="background: linear-gradient(135deg, var(--mud-palette-primary) 0%, var(--mud-palette-primary-darken) 100%);">
+    <MudStack AlignItems="AlignItems.Center" Spacing="3">
+        <MudText Typo="Typo.h4" Align="Align.Center"
+                 Style="color: var(--mud-palette-primary-text);">
+            DEV TOOLS
+        </MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center"
+                 Style="color: var(--mud-palette-primary-text); opacity: 0.85;">
+            @_localizer["Hero.Subtitle"]
+        </MudText>
+        <MudPaper Class="pa-0 rounded-lg" Elevation="4" Style="width: 100%; max-width: 560px;">
+            <HomeSearchBar Placeholder="@_localizer["Search.Placeholder"]" />
+        </MudPaper>
+        <MudText Typo="Typo.caption" Align="Align.Center"
+                 Style="color: var(--mud-palette-primary-text); opacity: 0.6;">
+            @string.Format(_localizer["Hero.ToolCount"], _toolCount, _categoryCount)
+        </MudText>
+    </MudStack>
+</MudPaper>
+
+@* ===== FAVORITES SECTION ===== *@
+@if (_favoriteTools.Any())
+{
+    <MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-2" Spacing="2">
+        <MudIcon Icon="@Icons.Material.Outlined.Star" Size="Size.Small" Color="Color.Warning" />
+        <MudText Typo="Typo.h6">@_localizer["Section.Favorites"]</MudText>
+    </MudStack>
+    <MudDivider Class="mb-4" />
+
+    @if (_viewMode == ViewMode.Cards)
+    {
+        <MudGrid Spacing="4" Class="mb-6">
+            @foreach (var tool in _favoriteTools)
+            {
+                <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
+                    <ToolCard Tool="@tool" />
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <ToolListView Tools="@_favoriteTools" Class="mb-6" />
+    }
+}
+
+@* ===== ALL TOOLS SECTION ===== *@
+<MudToolBar Dense="true" Class="mb-4">
+    <MudText Typo="Typo.h6">@_localizer["Section.AllTools"]</MudText>
+    <MudSpacer />
+    <MudToggleGroup T="ViewMode" Value="@_viewMode" ValueChanged="OnViewModeChangedAsync"
+                    Outlined="true" Delimiters="true" Size="Size.Small" Color="Color.Primary">
+        <MudToggleItem Value="@ViewMode.Cards" aria-label="Card view">
+            <MudIcon Icon="@Icons.Material.Outlined.Apps" />
+        </MudToggleItem>
+        <MudToggleItem Value="@ViewMode.List" aria-label="List view">
+            <MudIcon Icon="@Icons.Material.Outlined.ViewList" />
+        </MudToggleItem>
+    </MudToggleGroup>
+</MudToolBar>
+
+@foreach (var group in _toolsByCategory)
+{
+    <MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-4 mb-2" Spacing="2">
+        <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(group.Key)"
+                 Color="Color.Primary" Size="Size.Small" />
+        <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+            @Context.Localization.GetCategory(group.Key)
+        </MudText>
+        <MudText Typo="Typo.caption" Color="Color.Tertiary">
+            (@group.Data.Count)
+        </MudText>
+    </MudStack>
+    <MudDivider Class="mb-3" />
+
+    @if (_viewMode == ViewMode.Cards)
+    {
+        <MudGrid Spacing="4" Class="mb-4">
+            @foreach (var tool in group)
+            {
+                <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
+                    <ToolCard Tool="@tool" />
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <ToolListView Tools="@group.Data" Class="mb-4" />
+    }
+}

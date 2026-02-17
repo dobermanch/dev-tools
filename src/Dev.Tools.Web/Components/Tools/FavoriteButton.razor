@@ -31,7 +31,9 @@
         }
         
         await Context.Preferences.UpdateFavoriteAsync(Context.Preferences.Preferences.Favorite, CancellationToken.None);
-   
+
         _isFavorite = Context.Preferences.Preferences.Favorite.Tools.Contains(ToolDefinition.Name);
+
+        await Context.Messenger.Publish(new Notifications.FavoritesChangedNotification());
     }
 }

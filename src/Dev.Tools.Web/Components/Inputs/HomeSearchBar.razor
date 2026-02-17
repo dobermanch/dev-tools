@@ -1,0 +1,59 @@
+@using Dev.Tools.Web.Services
+@using Dev.Tools.Web.Services.Search
+
+<MudAutocomplete
+    T="SearchResult.Item"
+    Placeholder="@Placeholder"
+    ValueChanged="OnSearchItemSelectedAsync"
+    SearchFunc="@SearchAsync"
+    ResetValueOnEmptyText="true"
+    CoerceText="true"
+    CoerceValue="true"
+    Clearable="true"
+    Variant="Variant.Outlined"
+    Adornment="Adornment.Start"
+    AdornmentIcon="@Icons.Material.Filled.Search"
+    DebounceInterval="300"
+    ToStringFunc="@(e => e?.Title ?? "")">
+    <ItemTemplate Context="e">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@Icons.Material.Filled.Construction" Size="Size.Small" Color="Color.Primary" />
+            <MudStack Spacing="0">
+                <MudText Typo="Typo.body1">@e.Title</MudText>
+                @if (e.Details?.Any() == true)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Tertiary">
+                        @e.Details.First().Value
+                    </MudText>
+                }
+            </MudStack>
+        </MudStack>
+    </ItemTemplate>
+    <ItemSelectedTemplate Context="e">
+        <MudText>@e.Title</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter] public string? Placeholder { get; set; }
+
+    [Inject] private ISearchProvider SearchProvider { get; set; } = null!;
+    [Inject] private WebContext Context { get; set; } = null!;
+
+    private Task OnSearchItemSelectedAsync(SearchResult.Item? item)
+    {
+        if (item is not null)
+        {
+            Context.Navigation.NavigateTo(item.Link);
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task<IEnumerable<SearchResult.Item>> SearchAsync(string query, CancellationToken cancellationToken)
+    {
+        var combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        combinedTokenSource.CancelAfter(TimeSpan.FromMilliseconds(300));
+        var result = await SearchProvider.SearchAsync(new SearchContext(query, combinedTokenSource.Token));
+        return result.OrderBy(it => it.Rank).Take(10);
+    }
+}

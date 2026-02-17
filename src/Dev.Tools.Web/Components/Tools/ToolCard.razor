@@ -1,7 +1,7 @@
 <MudCard @onclick="NavigateToToolPage" Elevation="1" Class="tool-card">
     <MudCardHeader Class="pb-0">
         <CardHeaderAvatar>
-            <MudIcon Class="mt-1" Color="Color.Primary" Icon="@GetToolIcon()" Size="Size.Large" />
+            <MudIcon Class="mt-1" Color="Color.Primary" Icon="@ToolIconProvider.GetToolIcon(Tool)" Size="Size.Large" />
         </CardHeaderAvatar>
         <CardHeaderContent>
             <MudText Typo="Typo.body1">@Context.Localization.GetToolTitle(Tool)</MudText>

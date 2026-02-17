@@ -1,12 +1,45 @@
-﻿@using Dev.Tools.Providers
+@using Dev.Tools.Providers
+@using Dev.Tools.Web.Core.Messaging
+@using Dev.Tools.Web.Notifications
+
 <MudNavMenu>
+    <MudNavLink Href="/"
+                Icon="@Icons.Material.Outlined.Home"
+                IconColor="Color.Primary"
+                Match="NavLinkMatch.All">
+        @_localizer["Home"]
+    </MudNavLink>
+
+    @if (_favoriteTools.Any())
+    {
+        <MudNavGroup Title="@_localizer["Favorites"]"
+                     Icon="@Icons.Material.Outlined.Star"
+                     IconColor="Color.Warning"
+                     Expanded="true">
+            @foreach (var tool in _favoriteTools)
+            {
+                <MudNavLink
+                    Icon="@ToolIconProvider.GetToolIcon(tool)"
+                    IconColor="Color.Primary"
+                    Href="@($"/tools/{tool.Name}")"
+                    Match="NavLinkMatch.Prefix">
+                    @Context.Localization.GetToolTitle(tool)
+                </MudNavLink>
+            }
+        </MudNavGroup>
+    }
+
+    <MudDivider Class="my-2" />
+
     @foreach (var group in _tools)
     {
-        <MudNavGroup Title="@Context.Localization.GetCategory(group.Key)" Expanded="true">
+        <MudNavGroup Title="@Context.Localization.GetCategory(group.Key)"
+                     Icon="@ToolIconProvider.GetCategoryIcon(group.Key)"
+                     Expanded="false">
             @foreach (var tool in group)
             {
                 <MudNavLink
-                    Icon="@GetToolIcon(tool.Item2)"
+                    Icon="@ToolIconProvider.GetToolIcon(tool.Item2)"
                     IconColor="Color.Primary"
                     Href="@($"/tools/{tool.Item2.Name}")"
                     Match="NavLinkMatch.Prefix">
@@ -15,18 +48,26 @@
             }
         </MudNavGroup>
     }
-    <MudNavLink Href="/settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">Settings</MudNavLink>
+
+    <MudDivider Class="my-2" />
+
+    <MudNavLink Href="/settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">
+        @_localizer["Settings"]
+    </MudNavLink>
 </MudNavMenu>
 
-@code{
-
+@code {
     [Inject] private IToolsProvider ToolsProvider { get; set; } = null!;
     [Inject] private WebContext Context { get; set; } = null!;
 
+    private Microsoft.Extensions.Localization.IStringLocalizer _localizer = null!;
     private GroupedList<Category, (Category, ToolDefinition)> _tools = GroupedList<Category, (Category, ToolDefinition)>.Empty;
+    private IReadOnlyList<ToolDefinition> _favoriteTools = [];
+    private IDisposable? _subscription;
 
     protected override void OnInitialized()
     {
+        _localizer = Context.Localization.CreateScopedLocalizer("Layout.NavMenu");
         var tools = ToolsProvider.GetToolDefinitions();
 
         (Category category, ToolDefinition tools)[] grouped =
@@ -35,33 +76,26 @@
                 .ToArray();
 
         _tools = new GroupedList<Category, (Category, ToolDefinition)>(it => it.Item1, grouped);
-        
+
+        LoadFavorites(tools);
+
+        _subscription = Context.Messenger.Subscribe<FavoritesChangedNotification>(OnFavoritesChanged);
+
         base.OnInitialized();
     }
 
-    private string GetToolIcon(ToolDefinition tool)
+    private void LoadFavorites(IReadOnlyCollection<ToolDefinition>? allTools = null)
     {
-        return tool.Name switch
-        {
-            "base64-encoder" => Icons.Material.Outlined.DataObject,
-            "base64-decoder" => Icons.Material.Outlined.DataArray,
-            "case-converter" => Icons.Material.Outlined.TextFormat,
-            "char-viewer" => Icons.Material.Outlined.Visibility,
-            "date-convert" => Icons.Material.Outlined.Schedule,
-            "hash" => Icons.Material.Outlined.Tag,
-            "int-base-converter" => Icons.Material.Outlined.Calculate,
-            "roman-converter" => Icons.Material.Outlined.FormatListNumbered,
-            "ip-details" => Icons.Material.Outlined.Lan,
-            "json-formatter" => Icons.Material.Outlined.Code,
-            "passphrase-generator" => Icons.Material.Outlined.VpnKey,
-            "rsa-generator" => Icons.Material.Outlined.Key,
-            "url-transcoder" => Icons.Material.Outlined.Link,
-            "nato" => Icons.Material.Outlined.RecordVoiceOver,
-            "token-generator" => Icons.Material.Outlined.Token,
-            "ulid-generator" => Icons.Material.Outlined.Fingerprint,
-            "url-parser" => Icons.Material.Outlined.TravelExplore,
-            "uuid-generator" => Icons.Material.Outlined.QrCode2,
-            _ => Icons.Material.Outlined.Construction
-        };
+        allTools ??= ToolsProvider.GetToolDefinitions();
+        var favoriteNames = Context.Preferences.Preferences.Favorite.Tools;
+        _favoriteTools = allTools
+            .Where(t => favoriteNames.Contains(t.Name))
+            .ToList();
+    }
+
+    private void OnFavoritesChanged(FavoritesChangedNotification _)
+    {
+        LoadFavorites();
+        InvokeAsync(StateHasChanged);
     }
 }

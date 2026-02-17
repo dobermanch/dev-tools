@@ -13,6 +13,7 @@ public sealed record UserPreferences
     {
         public ThemeMode? ThemeMode { get; init; }
         public bool? IsDrawerOpen { get; init; }
+        public ViewMode ViewMode { get; init; } = ViewMode.Cards;
     }
 
     public sealed record FavoriteDetails

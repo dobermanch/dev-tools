@@ -1,0 +1,50 @@
+@using Dev.Tools.Web.Services
+
+<MudList T="string" Dense="true" Class="@Class" Padding="false">
+    @foreach (var tool in Tools)
+    {
+        <MudListItem T="string" OnClick="@(() => NavigateTo(tool))"
+                     Class="tool-list-item rounded mb-1"
+                     Icon="@ToolIconProvider.GetToolIcon(tool)"
+                     IconColor="Color.Primary">
+            <ChildContent>
+                <MudStack Row="true" Justify="Justify.SpaceBetween"
+                          AlignItems="AlignItems.Center" Style="width: 100%;">
+                    <MudStack Spacing="0">
+                        <MudText Typo="Typo.body2">
+                            @Context.Localization.GetToolTitle(tool)
+                        </MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Tertiary"
+                                 Style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                            @Context.Localization.GetToolDescription(tool)
+                        </MudText>
+                    </MudStack>
+                    <FavoriteButton ToolDefinition="@tool" />
+                </MudStack>
+            </ChildContent>
+        </MudListItem>
+    }
+</MudList>
+
+<style>
+    .tool-list-item {
+        border: 1px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .tool-list-item:hover {
+        border-color: var(--mud-palette-primary);
+    }
+</style>
+
+@code {
+    [Inject] private WebContext Context { get; set; } = null!;
+
+    [Parameter] public IEnumerable<ToolDefinition> Tools { get; set; } = [];
+    [Parameter] public string? Class { get; set; }
+
+    private void NavigateTo(ToolDefinition tool)
+    {
+        Context.Navigation.NavigateTo($"/tools/{tool.Name}");
+    }
+}

@@ -288,6 +288,33 @@
     <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
         <value>Всі налаштування зберігаються локально у вашому браузері.</value>
     </data>
+    <data name="Page.Home.Hero.Subtitle" xml:space="preserve">
+        <value>Швейцарський ніж для розробників</value>
+    </data>
+    <data name="Page.Home.Hero.ToolCount" xml:space="preserve">
+        <value>{0} інструментів у {1} категоріях</value>
+    </data>
+    <data name="Page.Home.Section.Favorites" xml:space="preserve">
+        <value>Обрані</value>
+    </data>
+    <data name="Page.Home.Section.AllTools" xml:space="preserve">
+        <value>Усі інструменти</value>
+    </data>
+    <data name="Page.Home.Search.Placeholder" xml:space="preserve">
+        <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
+    </data>
+    <data name="Layout.MainLayout.Subtitle" xml:space="preserve">
+        <value>Швейцарський ніж для розробників</value>
+    </data>
+    <data name="Layout.NavMenu.Home" xml:space="preserve">
+        <value>Головна</value>
+    </data>
+    <data name="Layout.NavMenu.Favorites" xml:space="preserve">
+        <value>Обрані</value>
+    </data>
+    <data name="Layout.NavMenu.Settings" xml:space="preserve">
+        <value>Налаштування</value>
+    </data>
     <data name="Enums.ThemeMode.System" xml:space="preserve">
         <value>Системна</value>
     </data>

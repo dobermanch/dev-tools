@@ -7,38 +7,34 @@
 <MudSnackbarProvider />
 
 <MudLayout @key="CultureInfo.CurrentUICulture.Name">
-    <MudAppBar 
-        Elevation="0" 
-        Dense="true" 
-        Class="pb-2"
-        Style="background-color: var(--mud-palette-background)">
-        <MudIconButton 
+    <MudAppBar Elevation="0" Dense="true"
+               Style="background-color: var(--mud-palette-background)">
+        <MudIconButton
             Icon="@Icons.Material.Outlined.Menu"
             Size="Size.Medium"
             Variant="Variant.Text"
             DropShadow="false"
             Edge="Edge.Start"
-            Class="ml-n6"
             OnClick="@DrawerToggle"/>
 
-        @if(!IsDrawerOpen)
+        @if (!IsDrawerOpen)
         {
             <MudLink Underline="Underline.None" Href="/">
-                <MudText Typo="Typo.h5"  Color="Color.Primary">DEV TOOLS</MudText>
+                <MudText Typo="Typo.h6" Color="Color.Primary">DEV TOOLS</MudText>
             </MudLink>
         }
 
-        <MudSpacer/>
+        <MudSpacer />
 
-        <SearchTextField/>
-
-        <MudSpacer/>
-        <LanguageSelector/>
+        <MudIconButton Icon="@Icons.Material.Outlined.Search"
+                       Color="Color.Inherit"
+                       OnClick="@OpenSearchDialogAsync" />
+        <LanguageSelector />
         <MudLink Href="https://github.com/dobermanch/dev-tools" Target="_blank">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github"/>
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
         </MudLink>
-        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ChangeThemeModeAsync"/>
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" Edge="Edge.End" Href="/settings"/>
+        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" OnClick="@ChangeThemeModeAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" Edge="Edge.End" Href="/settings" />
     </MudAppBar>
 
     <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">
@@ -46,7 +42,7 @@
             <MudStack>
                 <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">DEV TOOLS</MudText>
 
-                <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Default">The Swiss Army Knife for Developers</MudText>
+                <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Default">@_localizer["Subtitle"]</MudText>
             </MudStack>
         </MudDrawerHeader>
         <MudDrawerContainer Class="mt-4" Style="flex-grow: 1; overflow-y: auto;">
