@@ -315,6 +315,12 @@
     <data name="Layout.NavMenu.Settings" xml:space="preserve">
         <value>Налаштування</value>
     </data>
+    <data name="Locals.en-US.Name" xml:space="preserve">
+        <value>Англійська</value>
+    </data>
+    <data name="Locals.uk-UA.Name" xml:space="preserve">
+        <value>Українська</value>
+    </data>
     <data name="Enums.ThemeMode.System" xml:space="preserve">
         <value>Системна</value>
     </data>

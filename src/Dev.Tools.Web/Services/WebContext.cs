@@ -38,15 +38,13 @@ public class WebContext(
     {
         await Preferences.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
-        // Initialize preferences and set culture before RunAsync() so the WASM runtime
-        // loads the correct satellite assemblies for resource localization.
-        if (Preferences.Preferences.Localization.Culture is not null)
-        {
-            await Localization
-                .SetCurrentCultureInfo(new CultureInfo(Preferences.Preferences.Localization.Culture), false,
-                    cancellationToken)
-                .ConfigureAwait(false);
-        }
+        // Set culture before RunAsync() so the WASM runtime loads the correct satellite
+        // assemblies for resource localization. Fall back to the provider's default culture
+        // (en-US) when no preference is saved, to ensure a supported culture is always set.
+        var cultureName = Preferences.Preferences.Localization.Culture ?? Localization.CurrentCulture.Name;
+        await Localization
+            .SetCurrentCultureInfo(new CultureInfo(cultureName), false, cancellationToken)
+            .ConfigureAwait(false);
     }
 
     public record AppInfo
