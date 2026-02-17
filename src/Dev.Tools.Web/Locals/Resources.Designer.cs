@@ -60,182 +60,929 @@ namespace Dev.Tools.Web.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decode base64 representation into string.
+        ///   Looks up a localized string similar to :Search tools... (e.g. JSON, Base64, UUID):.
         /// </summary>
-        internal static string Base64DecoderTool_Description {
+        internal static string Component_SearchBar_Placeholder {
             get {
-                return ResourceManager.GetString("Base64DecoderTool_Description", resourceCulture);
+                return ResourceManager.GetString("Component.SearchBar.Placeholder", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Base64 Decoder.
+        ///   Looks up a localized string similar to :Dark:.
         /// </summary>
-        internal static string Base64DecoderTool_Title {
+        internal static string Enums_ThemeMode_Dark {
             get {
-                return ResourceManager.GetString("Base64DecoderTool_Title", resourceCulture);
+                return ResourceManager.GetString("Enums.ThemeMode.Dark", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encode strings into their base64 representation.
+        ///   Looks up a localized string similar to :Light:.
         /// </summary>
-        internal static string Base64EncoderTool_Description {
+        internal static string Enums_ThemeMode_Light {
             get {
-                return ResourceManager.GetString("Base64EncoderTool_Description", resourceCulture);
+                return ResourceManager.GetString("Enums.ThemeMode.Light", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Base64 Encoder.
+        ///   Looks up a localized string similar to :System:.
         /// </summary>
-        internal static string Base64EncoderTool_Title {
+        internal static string Enums_ThemeMode_System {
             get {
-                return ResourceManager.GetString("Base64EncoderTool_Title", resourceCulture);
+                return ResourceManager.GetString("Enums.ThemeMode.System", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Convert date and time into the various different formats.
+        ///   Looks up a localized string similar to :The Swiss Army Knife for Developers:.
         /// </summary>
-        internal static string DateTimeConverterTool_Description {
+        internal static string Layout_MainLayout_Subtitle {
             get {
-                return ResourceManager.GetString("DateTimeConverterTool_Description", resourceCulture);
+                return ResourceManager.GetString("Layout.MainLayout.Subtitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DateTime Converter.
+        ///   Looks up a localized string similar to :Favorites:.
         /// </summary>
-        internal static string DateTimeConverterTool_Title {
+        internal static string Layout_NavMenu_Favorites {
             get {
-                return ResourceManager.GetString("DateTimeConverterTool_Title", resourceCulture);
+                return ResourceManager.GetString("Layout.NavMenu.Favorites", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hash a text string using the different functions.
+        ///   Looks up a localized string similar to :Home:.
         /// </summary>
-        internal static string HashTextTool_Description {
+        internal static string Layout_NavMenu_Home {
             get {
-                return ResourceManager.GetString("HashTextTool_Description", resourceCulture);
+                return ResourceManager.GetString("Layout.NavMenu.Home", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hash Text.
+        ///   Looks up a localized string similar to :Settings:.
         /// </summary>
-        internal static string HashTextTool_Title {
+        internal static string Layout_NavMenu_Settings {
             get {
-                return ResourceManager.GetString("HashTextTool_Title", resourceCulture);
+                return ResourceManager.GetString("Layout.NavMenu.Settings", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide IP address details.
+        ///   Looks up a localized string similar to :Input:.
         /// </summary>
-        internal static string IpDetailsTool_Description {
+        internal static string Page_Base64DecoderPage_TextField_Input_Label {
             get {
-                return ResourceManager.GetString("IpDetailsTool_Description", resourceCulture);
+                return ResourceManager.GetString("Page.Base64DecoderPage.TextField.Input.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IP Details.
+        ///   Looks up a localized string similar to :Result:.
         /// </summary>
-        internal static string IpDetailsTool_Title {
+        internal static string Page_Base64DecoderPage_TextField_Result_Label {
             get {
-                return ResourceManager.GetString("IpDetailsTool_Title", resourceCulture);
+                return ResourceManager.GetString("Page.Base64DecoderPage.TextField.Result.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to English.
+        ///   Looks up a localized string similar to :LineBreaks:.
         /// </summary>
-        internal static string Locals_uk_Title {
+        internal static string Page_Base64EncoderPage_Switch_LineBreaks_Label {
             get {
-                return ResourceManager.GetString("Locals_uk_Title", resourceCulture);
+                return ResourceManager.GetString("Page.Base64EncoderPage.Switch.LineBreaks.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ukrainian.
+        ///   Looks up a localized string similar to :SafeUrl:.
         /// </summary>
-        internal static string Locals_us_Title {
+        internal static string Page_Base64EncoderPage_Switch_SafeUrl_Label {
             get {
-                return ResourceManager.GetString("Locals_us_Title", resourceCulture);
+                return ResourceManager.GetString("Page.Base64EncoderPage.Switch.SafeUrl.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate random memoizable Passphrases.
+        ///   Looks up a localized string similar to :Input:.
         /// </summary>
-        internal static string PassphraseGeneratorTool_Description {
+        internal static string Page_Base64EncoderPage_TextField_Input_Label {
             get {
-                return ResourceManager.GetString("PassphraseGeneratorTool_Description", resourceCulture);
+                return ResourceManager.GetString("Page.Base64EncoderPage.TextField.Input.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Passphrase Generator.
+        ///   Looks up a localized string similar to :Result:.
         /// </summary>
-        internal static string PassphraseGeneratorTool_Title {
+        internal static string Page_Base64EncoderPage_TextField_Result_Label {
             get {
-                return ResourceManager.GetString("PassphraseGeneratorTool_Title", resourceCulture);
+                return ResourceManager.GetString("Page.Base64EncoderPage.TextField.Result.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate random string with the chars you want, uppercase or lowercase letters, numbers and/or symbols..
+        ///   Looks up a localized string similar to :Text to Convert:.
         /// </summary>
-        internal static string TokenGeneratorTool_Description {
+        internal static string Page_CaseConverterPage_TextField_Input_Label {
             get {
-                return ResourceManager.GetString("TokenGeneratorTool_Description", resourceCulture);
+                return ResourceManager.GetString("Page.CaseConverterPage.TextField.Input.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token Generator.
+        ///   Looks up a localized string similar to :Character Info:.
         /// </summary>
-        internal static string TokenGeneratorTool_Title {
+        internal static string Page_CharacterViewerPage_Section_CharacterInfo_Title {
             get {
-                return ResourceManager.GetString("TokenGeneratorTool_Title", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Section.CharacterInfo.Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate random Universally Unique Lexicographically Sortable Identifier (ULID)..
+        ///   Looks up a localized string similar to :Formatted Text with Highlights:.
         /// </summary>
-        internal static string UlidGeneratorTool_Description {
+        internal static string Page_CharacterViewerPage_Section_FormattedText_Title {
             get {
-                return ResourceManager.GetString("UlidGeneratorTool_Description", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Section.FormattedText.Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ULID Generator.
+        ///   Looks up a localized string similar to :Hide Special Symbols:.
         /// </summary>
-        internal static string UlidGeneratorTool_Title {
+        internal static string Page_CharacterViewerPage_Switch_HideSymbols_Label {
             get {
-                return ResourceManager.GetString("UlidGeneratorTool_Title", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Switch.HideSymbols.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A Universally Unique Identifier (UUID) is a 128-bit number used to identify information in computer systems. .
+        ///   Looks up a localized string similar to :ASCII:.
         /// </summary>
-        internal static string UuidGeneratorTool_Description {
+        internal static string Page_CharacterViewerPage_Table_Header_ASCII {
             get {
-                return ResourceManager.GetString("UuidGeneratorTool_Description", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.ASCII", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UUID Generator.
+        ///   Looks up a localized string similar to :Category:.
         /// </summary>
-        internal static string UuidGeneratorTool_Title {
+        internal static string Page_CharacterViewerPage_Table_Header_Category {
             get {
-                return ResourceManager.GetString("UuidGeneratorTool_Title", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Char:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_Char {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.Char", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Hex:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_Hex {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.Hex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :HTML:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_HTML {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.HTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Printable:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_Printable {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.Printable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Unicode:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_Unicode {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.Unicode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :URL:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_Table_Header_URL {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.Table.Header.URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Input Text:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Output Text:.
+        /// </summary>
+        internal static string Page_CharacterViewerPage_TextField_Output_Label {
+            get {
+                return ResourceManager.GetString("Page.CharacterViewerPage.TextField.Output.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Date Format:.
+        /// </summary>
+        internal static string Page_DateTimeConverterToolPage_Select_Format_Label {
+            get {
+                return ResourceManager.GetString("Page.DateTimeConverterToolPage.Select.Format.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Input Date:.
+        /// </summary>
+        internal static string Page_DateTimeConverterToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.DateTimeConverterToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Text to Hash:.
+        /// </summary>
+        internal static string Page_HashTextToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.HashTextToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :The Swiss Army Knife for Developers:.
+        /// </summary>
+        internal static string Page_Home_Hero_Subtitle {
+            get {
+                return ResourceManager.GetString("Page.Home.Hero.Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :{0} tools across {1} categories:.
+        /// </summary>
+        internal static string Page_Home_Hero_ToolCount {
+            get {
+                return ResourceManager.GetString("Page.Home.Hero.ToolCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Search tools... (e.g. JSON, Base64, UUID):.
+        /// </summary>
+        internal static string Page_Home_Search_Placeholder {
+            get {
+                return ResourceManager.GetString("Page.Home.Search.Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :All Tools:.
+        /// </summary>
+        internal static string Page_Home_Section_AllTools {
+            get {
+                return ResourceManager.GetString("Page.Home.Section.AllTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Favorites:.
+        /// </summary>
+        internal static string Page_Home_Section_Favorites {
+            get {
+                return ResourceManager.GetString("Page.Home.Section.Favorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Input Base:.
+        /// </summary>
+        internal static string Page_IntegerBaseConverterToolPage_Select_InputBase_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerBaseConverterToolPage.Select.InputBase.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Target Base:.
+        /// </summary>
+        internal static string Page_IntegerBaseConverterToolPage_Select_TargetBase_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerBaseConverterToolPage.Select.TargetBase.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Input Value:.
+        /// </summary>
+        internal static string Page_IntegerBaseConverterToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerBaseConverterToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Converted Value:.
+        /// </summary>
+        internal static string Page_IntegerBaseConverterToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerBaseConverterToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Direction:.
+        /// </summary>
+        internal static string Page_IntegerToRomanConverterToolPage_Select_Direction_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerToRomanConverterToolPage.Select.Direction.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Number:.
+        /// </summary>
+        internal static string Page_IntegerToRomanConverterToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerToRomanConverterToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Converted Value:.
+        /// </summary>
+        internal static string Page_IntegerToRomanConverterToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.IntegerToRomanConverterToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Your IP:.
+        /// </summary>
+        internal static string Page_IpDetailsToolPage_Label_YourIp {
+            get {
+                return ResourceManager.GetString("Page.IpDetailsToolPage.Label.YourIp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Key Format:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_Select_KeyFormat_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.Select.KeyFormat.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Sort Keys:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_Select_SortKeys_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.Select.SortKeys.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Indent Size:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_Slider_IndentSize_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.Slider.IndentSize.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Compact:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_Switch_Compact_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.Switch.Compact.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Exclude Empty:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_Switch_ExcludeEmpty_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.Switch.ExcludeEmpty.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :JSON Input:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Formatted JSON:.
+        /// </summary>
+        internal static string Page_JsonFormatterToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.JsonFormatterToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Phrase Count:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_Slider_PhraseCount_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.Slider.PhraseCount.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Word Count:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_Slider_WordCount_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.Slider.WordCount.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Capitalize first letter:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_Switch_Capitalize_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.Switch.Capitalize.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Passphrases:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Salt:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_TextField_Salt_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.TextField.Salt.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Separator:.
+        /// </summary>
+        internal static string Page_PassphraseGeneratorToolPage_TextField_Separator_Label {
+            get {
+                return ResourceManager.GetString("Page.PassphraseGeneratorToolPage.TextField.Separator.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Operation:.
+        /// </summary>
+        internal static string Page_SafeUrlTranscoderToolPage_Select_Operation_Label {
+            get {
+                return ResourceManager.GetString("Page.SafeUrlTranscoderToolPage.Select.Operation.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :URL:.
+        /// </summary>
+        internal static string Page_SafeUrlTranscoderToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.SafeUrlTranscoderToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Result:.
+        /// </summary>
+        internal static string Page_SafeUrlTranscoderToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.SafeUrlTranscoderToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Settings:.
+        /// </summary>
+        internal static string Page_Settings_Caption {
+            get {
+                return ResourceManager.GetString("Page.Settings.Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :All settings are stored locally in your browser.:.
+        /// </summary>
+        internal static string Page_Settings_Note_BrowserStorage {
+            get {
+                return ResourceManager.GetString("Page.Settings.Note.BrowserStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :General:.
+        /// </summary>
+        internal static string Page_Settings_Section_General_Label {
+            get {
+                return ResourceManager.GetString("Page.Settings.Section.General.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Language:.
+        /// </summary>
+        internal static string Page_Settings_Section_General_Language_Label {
+            get {
+                return ResourceManager.GetString("Page.Settings.Section.General.Language.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Theme:.
+        /// </summary>
+        internal static string Page_Settings_Section_General_Theme_Label {
+            get {
+                return ResourceManager.GetString("Page.Settings.Section.General.Theme.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Text:.
+        /// </summary>
+        internal static string Page_StringToNatoAlphabetToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.StringToNatoAlphabetToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :NATO Words:.
+        /// </summary>
+        internal static string Page_StringToNatoAlphabetToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.StringToNatoAlphabetToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Token Count:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Slider_TokenCount_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Slider.TokenCount.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Token Length:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Slider_TokenLength_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Slider.TokenLength.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Lowercase:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Switch_Lowercase_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Switch.Lowercase.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Numbers:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Switch_Numbers_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Switch.Numbers.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Symbols:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Switch_Symbols_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Switch.Symbols.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Uppercase:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_Switch_Uppercase_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.Switch.Uppercase.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Alphabet:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_TextField_Alphabet_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.TextField.Alphabet.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Exclude Symbols:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_TextField_ExcludeSymbols_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.TextField.ExcludeSymbols.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Tokens:.
+        /// </summary>
+        internal static string Page_TokenGeneratorToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.TokenGeneratorToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Type:.
+        /// </summary>
+        internal static string Page_UlidGeneratorToolPage_Select_Type_Label {
+            get {
+                return ResourceManager.GetString("Page.UlidGeneratorToolPage.Select.Type.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Token Count:.
+        /// </summary>
+        internal static string Page_UlidGeneratorToolPage_Slider_TokenCount_Label {
+            get {
+                return ResourceManager.GetString("Page.UlidGeneratorToolPage.Slider.TokenCount.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :ULIDs:.
+        /// </summary>
+        internal static string Page_UlidGeneratorToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.UlidGeneratorToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Query Parameters:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_Section_Parameters_Title {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.Section.Parameters.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Key:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_Table_Header_Key {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.Table.Header.Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Value:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_Table_Header_Value {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.Table.Header.Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Hostname:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Hostname_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Hostname.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :URL:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Password:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Password_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Password.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Path:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Path_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Path.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Port:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Port_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Port.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Query:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Query_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Query.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Scheme:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Schema_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Schema.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Username:.
+        /// </summary>
+        internal static string Page_UrlParserToolPage_TextField_Username_Label {
+            get {
+                return ResourceManager.GetString("Page.UrlParserToolPage.TextField.Username.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Type:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_Select_Type_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.Select.Type.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Token Count:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_Slider_TokenCount_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.Slider.TokenCount.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Name:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_TextField_Name_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.TextField.Name.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Namespace:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_TextField_Namespace_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.TextField.Namespace.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :UUIDs:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.TextField.Result.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Time:.
+        /// </summary>
+        internal static string Page_UuidGeneratorToolPage_TextField_Time_Label {
+            get {
+                return ResourceManager.GetString("Page.UuidGeneratorToolPage.TextField.Time.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Element Format:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_Select_KeyFormat_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.Select.KeyFormat.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Sort Elements:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_Select_SortKeys_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.Select.SortKeys.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Indent Size:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_Slider_IndentSize_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.Slider.IndentSize.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Compact:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_Switch_Compact_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.Switch.Compact.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Exclude Empty:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_Switch_ExcludeEmpty_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.Switch.ExcludeEmpty.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :XML Input:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_TextField_Input_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.TextField.Input.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Formatted XML:.
+        /// </summary>
+        internal static string Page_XmlFormatterToolPage_TextField_Result_Label {
+            get {
+                return ResourceManager.GetString("Page.XmlFormatterToolPage.TextField.Result.Label", resourceCulture);
             }
         }
     }

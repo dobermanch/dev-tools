@@ -324,4 +324,7 @@
     <data name="Enums.ThemeMode.Dark" xml:space="preserve">
         <value>Темна</value>
     </data>
+    <data name="Component.SearchBar.Placeholder" xml:space="preserve">
+        <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
+    </data>
 </root>

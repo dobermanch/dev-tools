@@ -20,6 +20,7 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
                 || it.Description.Contains(query, StringComparison.CurrentCultureIgnoreCase))
             .Select(it =>
                 new SearchResult.Item(
+                    it.Name,
                     it.Title,
                     it.Path,
                     1000,
@@ -37,6 +38,7 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
         return _tools ??= webContext.ToolsProvider
             .GetToolDefinitions()
             .Select(it => new ToolInfo(
+                it.Name,
                 $"/tools/{it.Name}",
                 webContext.Localization.GetToolTitle(it),
                 webContext.Localization.GetToolDescription(it)
@@ -45,6 +47,7 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
     }
 
     private record ToolInfo(
+        string Name,
         string Path,
         string Title,
         string Description

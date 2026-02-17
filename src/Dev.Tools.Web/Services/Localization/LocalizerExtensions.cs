@@ -27,9 +27,12 @@ internal static class LocalizerExtensions
             => provider.GetEnum(value);
     }
 
-    extension<TPage>(ILocalizationProvider provider)
+    extension<TComponent>(ILocalizationProvider provider)
     {
         public IStringLocalizer PageLocalizer()
-         => provider.CreateScopedLocalizer($"Page.{typeof(TPage).Name}");
+         => provider.CreateScopedLocalizer($"Page.{typeof(TComponent).Name}");
+        
+        public IStringLocalizer ComponentLocalizer()
+            => provider.CreateScopedLocalizer($"Component.{typeof(TComponent).Name}");
     }
 }

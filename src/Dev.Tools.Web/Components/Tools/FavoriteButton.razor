@@ -34,6 +34,6 @@
 
         _isFavorite = Context.Preferences.Preferences.Favorite.Tools.Contains(ToolDefinition.Name);
 
-        await Context.Messenger.Publish(new Notifications.FavoritesChangedNotification());
+        await Context.Messenger.Publish(new FavoritesChangedNotification(ToolDefinition.Name));
     }
 }

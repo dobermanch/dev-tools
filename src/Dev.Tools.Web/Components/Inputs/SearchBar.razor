@@ -1,0 +1,45 @@
+@using Dev.Tools.Web.Services.Search
+
+<MudAutocomplete
+    T="SearchResult.Item"
+    Placeholder="@(Placeholder ?? _localizer["Placeholder"])"
+    ValueChanged="OnSearchItemSelectedAsync"
+    SearchFunc="@SearchAsync"
+    ResetValueOnEmptyText="true"
+    CoerceText="true"
+    CoerceValue="true"
+    Clearable="true"
+    Variant="Variant.Outlined"
+    Adornment="Adornment.Start"
+    AdornmentIcon="@Icons.Material.Filled.Search"
+    DebounceInterval="300"
+    ToStringFunc="@(e => e?.Title ?? "")">
+    <ItemTemplate Context="e">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@ToolIconProvider.GetToolIcon(e.Key)" Size="Size.Small" Color="Color.Primary" />
+            <MudStack Spacing="0">
+                <MudText Typo="Typo.body1">@e.Title</MudText>
+                @if (e.Details?.Any() == true)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Default">
+                        @e.Details.First().Value
+                    </MudText>
+                }
+            </MudStack>
+        </MudStack>
+    </ItemTemplate>
+    <ItemSelectedTemplate Context="e">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@ToolIconProvider.GetToolIcon(e.Key)" Size="Size.Small" Color="Color.Primary" />
+            <MudStack Spacing="0">
+                <MudText Typo="Typo.body1">@e.Title</MudText>
+                @if (e.Details?.Any() == true)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Tertiary">
+                        @e.Details.First().Value
+                    </MudText>
+                }
+            </MudStack>
+        </MudStack>
+    </ItemSelectedTemplate>
+</MudAutocomplete>

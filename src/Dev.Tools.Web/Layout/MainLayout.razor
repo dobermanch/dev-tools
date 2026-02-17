@@ -20,25 +20,25 @@
         @if (!IsDrawerOpen)
         {
             <MudLink Underline="Underline.None" Href="/">
-                <MudText Typo="Typo.h6" Color="Color.Primary">DEV TOOLS</MudText>
+                <MudText Typo="Typo.h6" Color="Color.Primary">@Context.AppDetails.Name.ToUpper()</MudText>
             </MudLink>
         }
 
         <MudSpacer />
 
-        <MudIconButton Icon="@Icons.Material.Outlined.Search"
-                       Color="Color.Inherit"
-                       OnClick="@OpenSearchDialogAsync" />
-        <LanguageSelector />
-        <MudLink Href="https://github.com/dobermanch/dev-tools" Target="_blank">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
-        </MudLink>
-        <MudIconButton Icon="@LightModeIcon" Color="Color.Inherit" OnClick="@ChangeThemeModeAsync" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" Edge="Edge.End" Href="/settings" />
+        @if (!Context.Navigation.Uri.EndsWith("/"))
+        {
+            <MudIconButton Icon="@Icons.Material.Outlined.Search"
+                           Color="Color.Inherit"
+                           OnClick="@OpenSearchDialogAsync"/>
+        }
+        
+        <MudIconButton Icon="@LightModeIcon" OnClick="@ChangeThemeModeAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Edge="Edge.End" Href="/settings" />
     </MudAppBar>
 
     <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">
-        <MudDrawerHeader  LinkToIndex="true" Style="flex-shrink: 0;">
+        <MudDrawerHeader LinkToIndex="true" Style="flex-shrink: 0;">
             <MudStack>
                 <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">DEV TOOLS</MudText>
 
@@ -47,6 +47,10 @@
         </MudDrawerHeader>
         <MudDrawerContainer Class="mt-4" Style="flex-grow: 1; overflow-y: auto;">
             <NavMenu/>
+            
+            <MudStack Class="mt-10">
+                <AppDetails/>
+            </MudStack>
         </MudDrawerContainer>
     </MudDrawer>
 

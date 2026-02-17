@@ -1,0 +1,22 @@
+<MudStack Row="false" AlignItems="AlignItems.Center" Spacing="0">
+    @if (Context.AppDetails.Version is not null)
+    {
+        <MudStack AlignItems="AlignItems.Center" Row="true">
+            <MudText Typo="Typo.body2">@Context.AppDetails.Name</MudText> 
+            <MudText Typo="Typo.body2" Color="Color.Tertiary">v@(Context.AppDetails.Version)</MudText>
+        </MudStack>
+    }
+
+    <MudStack AlignItems="AlignItems.Center" Row="true">
+        <MudIcon Size="Size.Small" Icon="@Icons.Custom.Brands.GitHub" aria-label="github" />
+        <MudText Typo="Typo.body2" Color="Color.Tertiary">
+            <MudLink Color="Color.Tertiary" Href="https://github.com/dobermanch/dev-tools" Target="_blank">
+                dev-tools
+            </MudLink>
+        </MudText>
+    </MudStack>
+</MudStack>
+
+@code {
+    [Inject] private WebContext Context { get; set; } = null!;
+}
