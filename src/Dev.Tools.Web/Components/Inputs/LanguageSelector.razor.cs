@@ -11,6 +11,6 @@ public partial class LanguageSelector : ComponentBase
 
     private async Task OnLanguageChangedAsync(CultureInfo culture)
     {
-        await Context.Localization.SetCurrentCultureInfo(culture, CancellationToken.None);
+        await Context.Localization.SetCurrentCultureInfo(culture, true, CancellationToken.None);
     }
 }

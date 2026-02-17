@@ -34,7 +34,6 @@ public partial class MainLayout
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.CreateScopedLocalizer("Layout.MainLayout");
-        await Context.InitializeAsync(CancellationToken.None).ConfigureAwait(false);
         Context.Messenger.Subscribe<LayoutChangedNotification>(HandlerUpdateRequest);
         Context.Messenger.Subscribe<LocalHasChangedNotification>(HandlerLocalHasChanged);
         await base.OnInitializedAsync();

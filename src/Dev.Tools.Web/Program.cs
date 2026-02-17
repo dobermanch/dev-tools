@@ -1,3 +1,4 @@
+using System.Globalization;
 using Dev.Tools.Cryptography;
 using Dev.Tools.Web;
 using Dev.Tools.Web.Core;
@@ -30,6 +31,5 @@ builder.Services.AddDevTools();
 builder.Services.AddDevToolsLocalization(typeof(Program).Assembly);
 
 var app = builder.Build();
-// TODO: make it work properly. 
-//await app.Services.GetRequiredService<WebContext>().InitializeAsync(CancellationToken.None);
+await app.Services.GetRequiredService<WebContext>().InitializeAsync(CancellationToken.None);
 await app.RunAsync();

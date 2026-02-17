@@ -50,7 +50,7 @@ public class LocalizationProvider : ILocalizationProvider
 
     public static void SetProviderResolver(Func<ILocalizationProvider> resolver) => _resolver = resolver;
 
-    public virtual Task SetCurrentCultureInfo(CultureInfo culture, CancellationToken cancellationToken)
+    public virtual Task SetCurrentCultureInfo(CultureInfo culture, bool reload, CancellationToken cancellationToken)
     {
         SetCulture(culture);
 

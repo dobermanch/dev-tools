@@ -18,27 +18,29 @@ public class WebContext(
 )
 {
     public NavigationManager Navigation { get; } = navigation;
-    
+
     public IToolsProvider ToolsProvider { get; } = toolsProvider;
-    
+
     public IMessenger Messenger { get; } = messenger;
-    
+
     public IJsServices JsService { get; } = jsService;
-    
+
     public ILocalizationProvider Localization { get; } = localization;
-    
+
     public IPreferencesService Preferences { get; } = preferences;
-    
+
     public ILayoutService Layout { get; } = layout;
 
     public async Task InitializeAsync(CancellationToken cancellationToken)
     {
         await Preferences.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
+        // Initialize preferences and set culture before RunAsync() so the WASM runtime
+        // loads the correct satellite assemblies for resource localization.
         if (Preferences.Preferences.Localization.Culture is not null)
         {
             await Localization
-                .SetCurrentCultureInfo(new CultureInfo(Preferences.Preferences.Localization.Culture), cancellationToken)
+                .SetCurrentCultureInfo(new CultureInfo(Preferences.Preferences.Localization.Culture), false, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

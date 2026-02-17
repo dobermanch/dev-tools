@@ -9,7 +9,7 @@ public interface ILocalizationProvider : IStringLocalizer
     
     CultureInfo CurrentCulture { get; }
 
-    public Task SetCurrentCultureInfo(CultureInfo culture, CancellationToken cancellationToken);
+    public Task SetCurrentCultureInfo(CultureInfo culture, bool reload, CancellationToken cancellationToken);
     
     IStringLocalizer CreateScopedLocalizer(string prefix);
 }
