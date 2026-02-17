@@ -2,87 +2,76 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid Class="align-center">
-            <MudItem xs="12">
-                <MudGrid Class="align-center">
-                    <MudItem xs="12" md="6">
-                        <DtSlider
-                            T="int"
-                            Label="@_localizer["Slider.TokenCount.Label"]"
-                            Value="@_args.Count"
-                            MinValue="1"
-                            MaxValue="100"
-                            ValueChanged="@OnCountValueChangedAsync"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtSelectEnum
-                            T="UuidGeneratorTool.UuidType"
-                            Label="@_localizer["Select.Type.Label"]"
-                            Value="@_args.Type"
-                            ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                            ValueChanged="OnTypeValueChangedAsync"
-                        />
-                    </MudItem>
-                </MudGrid>
-            </MudItem>
-
-            @if (_args.Type is UuidGeneratorTool.UuidType.V3 or UuidGeneratorTool.UuidType.V5)
-            {
-                <MudItem xs="12">
-                    <MudGrid Class="align-center">
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Label="@_localizer["TextField.Name.Label"]"
-                                @bind-Value="@_args.Name"
-                                OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                            />
-                        </MudItem>
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="Guid?"
-                                Label="@_localizer["TextField.Namespace.Label"]"
-                                @bind-Value="@_args.Namespace"
-                                OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                            />
-                        </MudItem>
-                    </MudGrid>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtSlider
+                        T="int"
+                        Label="@_localizer["Slider.TokenCount.Label"]"
+                        Value="@_args.Count"
+                        MinValue="1"
+                        MaxValue="100"
+                        ValueChanged="@OnCountValueChangedAsync"/>
                 </MudItem>
-            }
-
-            @if (_args.Type == UuidGeneratorTool.UuidType.V7)
-            {
-                <MudItem xs="12">
-                    <DtTextField
-                        T="DateTime?"
-                        @bind-Value="@_args.Time"
-                        Label="@_localizer["TextField.Time.Label"]"
-                        Format="s"
-                        InputType="InputType.DateTimeLocal"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="UuidGeneratorTool.UuidType"
+                        Label="@_localizer["Select.Type.Label"]"
+                        Value="@_args.Type"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnTypeValueChangedAsync"
                     />
                 </MudItem>
-            }
-        </MudGrid>
+                @if (_args.Type is UuidGeneratorTool.UuidType.V3 or UuidGeneratorTool.UuidType.V5)
+                {
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Label="@_localizer["TextField.Name.Label"]"
+                            @bind-Value="@_args.Name"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="Guid?"
+                            Label="@_localizer["TextField.Namespace.Label"]"
+                            @bind-Value="@_args.Namespace"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        />
+                    </MudItem>
+                }
+                @if (_args.Type == UuidGeneratorTool.UuidType.V7)
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="DateTime?"
+                            @bind-Value="@_args.Time"
+                            Label="@_localizer["TextField.Time.Label"]"
+                            Format="s"
+                            InputType="InputType.DateTimeLocal"
+                            OnDebounceIntervalElapsed="OnValueChangedAsync"
+                        />
+                    </MudItem>
+                }
+            </MudGrid>
+        </DtSection>
 
-
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="12">
-                <DtTextField
-                    T="string"
-                    Value="@GetUuids()"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="10"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Value="@GetUuids()"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="10"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

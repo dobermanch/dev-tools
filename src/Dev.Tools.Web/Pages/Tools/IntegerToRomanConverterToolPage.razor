@@ -2,43 +2,43 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid Class="align-center">
-            <MudItem xs="12" md="6">
-                <DtTextField
-                    T="string"
-                    Label="@_localizer["TextField.Input.Label"]"
-                    @bind-Value="@_number"
-                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                />
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <DtSelectEnum
-                    T="IntegerToRomanConverterTool.TranscodingType"
-                    Label="@_localizer["Select.Direction.Label"]"
-                    Value="@_transcoding"
-                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                    ValueChanged="OnTranscodingValueChangedAsync"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_number"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="IntegerToRomanConverterTool.TranscodingType"
+                        Label="@_localizer["Select.Direction.Label"]"
+                        Value="@_transcoding"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnTranscodingValueChangedAsync"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
 
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="12">
-                <DtTextField
-                    T="string"
-                    Value="@(_result?.Number ?? string.Empty)"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="3"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Number ?? string.Empty)"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="3"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

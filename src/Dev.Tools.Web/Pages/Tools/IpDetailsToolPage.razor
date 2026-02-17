@@ -2,16 +2,17 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid>
-            <MudItem xs="12">
-                <MudStack Row="true" Spacing="5">
-                    <MudText Typo="Typo.body1">@_localizer["Label.YourIp"]</MudText>
-                    <MudText Typo="Typo.body1">@_result.IpV4</MudText>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="output" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <MudStack Row="true" Spacing="5">
+                        <MudText Typo="Typo.body1">@_localizer["Label.YourIp"]</MudText>
+                        <MudText Typo="Typo.body1">@_result.IpV4</MudText>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

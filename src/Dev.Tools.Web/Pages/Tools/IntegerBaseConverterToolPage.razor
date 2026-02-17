@@ -2,52 +2,52 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid Class="align-center">
-            <MudItem xs="12" md="4">
-                <DtTextField
-                    T="string"
-                    Label="@_localizer["TextField.Input.Label"]"
-                    @bind-Value="@_inputValue"
-                    OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <DtSelectEnum
-                    T="IntegerBaseConverterTool.BaseType"
-                    Label="@_localizer["Select.InputBase.Label"]"
-                    Value="@_inputBase"
-                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                    ValueChanged="OnInputBaseValueChangedAsync"
-                />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <DtSelectEnum
-                    T="IntegerBaseConverterTool.BaseType"
-                    Label="@_localizer["Select.TargetBase.Label"]"
-                    Value="@_targetBase"
-                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                    ValueChanged="OnTargetBaseValueChangedAsync"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="4">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_inputValue"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="IntegerBaseConverterTool.BaseType"
+                        Label="@_localizer["Select.InputBase.Label"]"
+                        Value="@_inputBase"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnInputBaseValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="IntegerBaseConverterTool.BaseType"
+                        Label="@_localizer["Select.TargetBase.Label"]"
+                        Value="@_targetBase"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnTargetBaseValueChangedAsync"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
 
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="12">
-                <DtTextField
-                    T="string"
-                    Value="@(_result?.Data ?? string.Empty)"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="3"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Data ?? string.Empty)"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="3"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

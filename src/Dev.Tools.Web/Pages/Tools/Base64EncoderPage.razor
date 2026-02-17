@@ -2,63 +2,44 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid>
-            <MudItem xs="12">
-                <MudGrid>
-                    <MudItem xs="6">
-                        <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]" Color="Color.Primary"/>
-                    </MudItem>
-                </MudGrid>
-                @* <MudStack AlignItems="AlignItems.Start">
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" sm="6" md="6">
                     <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
-                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]"
-                               Color="Color.Primary"/>
-                </MudStack> *@
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <DtTextField
-                    T="string"
-                    Label="@_localizer["TextField.Input.Label"]"
-                    Value="@_args.Text"
-                    Error="@_result.HasErrors"
-                    ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
-                    Lines="10"
-                    OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <DtTextField
-                    T="string"
-                    Value="@_result.Text"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="10"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid>
-@* 
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="6">
+                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]" Color="Color.Primary"/>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
 
-        <MudGrid Spacing="3">
-            <MudItem xs="12" md="6">
-                <DtTextField
-                    T="string"
-                    Value="@_result.Text"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="10"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid> *@
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        Value="@_args.Text"
+                        Error="@_result.HasErrors"
+                        ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
+                        Lines="10"
+                        OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@_result.Text"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="10"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

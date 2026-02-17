@@ -2,47 +2,44 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid>
-            <MudItem xs="12" md="6">
-                <DtTextField
-                    T="string"
-                    Value="@_args.Date"
-                    Label="@_localizer["TextField.Input.Label"]"
-                    OnDebounceIntervalElapsed="OnValueChangedAsync"
-                    Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                    ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"/>
-
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <DtSelectEnum
-                    T="DateTimeConverterTool.DateFormatType"
-                    Label="@_localizer["Select.Format.Label"]"
-                    Value="@_args.From"
-                    ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                    ValueChanged="OnFromFormatSelectedAsync"
-                />
-            </MudItem>
-            
-        </MudGrid>
-
-        <MudDivider 
-            Class="my-5"
-            DividerType="DividerType.FullWidth"
-        />
-
-        <MudGrid Spacing="3">
-            @foreach (var result in _results)
-            {
-                <MudItem xs="12">
-                    <DtTextField 
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
                         T="string"
-                        Value="@result.Value?.Time" 
-                        Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
-                        ReadOnly="true"/>
+                        Value="@_args.Date"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"
+                        Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
+                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"/>
                 </MudItem>
-            }
-        </MudGrid>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="DateTimeConverterTool.DateFormatType"
+                        Label="@_localizer["Select.Format.Label"]"
+                        Value="@_args.From"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnFromFormatSelectedAsync"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                @foreach (var result in _results)
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Value="@result.Value?.Time"
+                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                            ReadOnly="true"/>
+                    </MudItem>
+                }
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

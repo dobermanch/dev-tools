@@ -2,100 +2,92 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid Class="align-center">
-            <MudItem xs="12">
-                <MudGrid>
-                    <MudItem xs="12" md="6">
-                        <DtSlider
-                            T="int"
-                            Label="@_localizer["Slider.TokenLength.Label"]"
-                            Value="@_args.TokenLength"
-                            MinValue="1"
-                            MaxValue="512"
-                            ValueChanged="OnTokenLengthValueChangedAsync"/>
-                    </MudItem>
-
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Label="@_localizer["TextField.Alphabet.Label"]"
-                            @bind-Value="@_args.Alphabet"
-                            ShowCopyButton="false"
-                            OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                    </MudItem>
-                </MudGrid>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudGrid>
-                    <MudItem xs="12" md="6">
-                        <DtSlider
-                            T="int"
-                            Label="@_localizer["Slider.TokenCount.Label"]"
-                            Value="@_args.TokenCount"
-                            MinValue="1"
-                            MaxValue="100"
-                            ValueChanged="OnTokenCountValueChangedAsync"/>
-                    </MudItem>
-
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Label="@_localizer["TextField.ExcludeSymbols.Label"]"
-                            @bind-Value="@_args.ExcludeSymbols"
-                            ShowCopyButton="false"
-                            OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                    </MudItem>
-                </MudGrid>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudStack Row="true" AlignItems="AlignItems.Center">
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtSlider
+                        T="int"
+                        Label="@_localizer["Slider.TokenLength.Label"]"
+                        Value="@_args.TokenLength"
+                        MinValue="1"
+                        MaxValue="512"
+                        ValueChanged="OnTokenLengthValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Alphabet.Label"]"
+                        @bind-Value="@_args.Alphabet"
+                        ShowCopyButton="false"
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSlider
+                        T="int"
+                        Label="@_localizer["Slider.TokenCount.Label"]"
+                        Value="@_args.TokenCount"
+                        MinValue="1"
+                        MaxValue="100"
+                        ValueChanged="OnTokenCountValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.ExcludeSymbols.Label"]"
+                        @bind-Value="@_args.ExcludeSymbols"
+                        ShowCopyButton="false"
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
                     <MudSwitch
                         T="bool"
                         Value="@_args.Lowercase"
                         Label="@_localizer["Switch.Lowercase.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnLowercaseValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
                     <MudSwitch
                         T="bool"
                         Value="@_args.Uppercase"
                         Label="@_localizer["Switch.Uppercase.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnUppercaseValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
                     <MudSwitch
                         T="bool"
                         Value="@_args.Numbers"
                         Label="@_localizer["Switch.Numbers.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnNumbersValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
                     <MudSwitch
                         T="bool"
                         Value="@_args.Symbols"
                         Label="@_localizer["Switch.Symbols.Label"]"
                         Color="Color.Primary"
                         ValueChanged="OnSymbolsValueChangedAsync"/>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
 
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="12">
-                <DtTextField
-                    T="string"
-                    Value="@GetTokens()"
-                    Label="@_localizer["TextField.Result.Label"]"
-                    ReadOnly="true"
-                    Lines="10"
-                    LabelPosition="LabelPositionType.Inline"
-                />
-            </MudItem>
-        </MudGrid>
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Value="@GetTokens()"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="10"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>

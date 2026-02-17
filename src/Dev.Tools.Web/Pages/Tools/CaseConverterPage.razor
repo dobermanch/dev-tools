@@ -2,39 +2,38 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-2">
+<MudCard Class="my-4">
     <MudCardContent>
-        <MudGrid>
-            <MudItem xs="12">
-                <DtTextField
-                    T="string"
-                    Value="@_args.Text"
-                    OnDebounceIntervalElapsed="OnValueChangedAsync"
-                    Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                    ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
-                    Label="@_localizer["TextField.Input.Label"]"
-                    LabelPosition="LabelPositionType.Inline"
-                    Lines="5"
-                />
-            </MudItem>
-        </MudGrid>
-
-        <MudDivider
-            Class="my-5"
-            DividerType="DividerType.FullWidth"/>
-
-        <MudGrid Spacing="3">
-            @foreach (var result in _results)
-            {
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
                 <MudItem xs="12">
                     <DtTextField
                         T="string"
-                        Value="@result.Value?.Text"
-                        Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
-                        ReadOnly="true"/>
+                        Value="@_args.Text"
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"
+                        Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
+                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        LabelPosition="LabelPositionType.Inline"
+                        Lines="5"
+                    />
                 </MudItem>
-            }
-        </MudGrid>
+            </MudGrid>
+        </DtSection>
 
+        <DtSection Id="output" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                @foreach (var result in _results)
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Value="@result.Value?.Text"
+                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                            ReadOnly="true"/>
+                    </MudItem>
+                }
+            </MudGrid>
+        </DtSection>
     </MudCardContent>
 </MudCard>
