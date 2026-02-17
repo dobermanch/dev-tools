@@ -23,7 +23,7 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
         ArgumentNullException.ThrowIfNull(preferences);
         
         Interlocked.Exchange(ref _userPreferences, preferences);
-        await storageProvider.SetItemAsync(PreferenceKey, _userPreferences, cancellationToken);
+        await storageProvider.SetItemAsync(PreferenceKey, preferences, cancellationToken);
     }
 
     public async Task UpdateLayoutAsync(UserPreferences.LayoutSettings settings, CancellationToken cancellationToken)
