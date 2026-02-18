@@ -53,6 +53,9 @@ public partial class DtTextField<T> : ComponentBase
 
     [Parameter] 
     public int Lines { get; set; } = 1;
+    
+    [Parameter] 
+    public Func<T, bool>? Validation { get; set; }
 
     private async Task OnCopyToClipboardAsync()
     {

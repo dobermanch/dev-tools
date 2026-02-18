@@ -6,26 +6,23 @@
     <MudCardContent>
         <DtSection Id="input" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Label="@_localizer["TextField.Input.Label"]"
                         @bind-Value="@_text"
                         OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                    />
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"/>
                 </MudItem>
-            </MudGrid>
-        </DtSection>
-
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
+                
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Value="@GetNatoWords()"
                         Label="@_localizer["TextField.Result.Label"]"
                         ReadOnly="true"
-                        Lines="10"
+                        Lines="15"
                         LabelPosition="LabelPositionType.Inline"
                     />
                 </MudItem>

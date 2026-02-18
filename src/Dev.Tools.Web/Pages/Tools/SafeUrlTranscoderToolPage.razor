@@ -6,15 +6,7 @@
     <MudCardContent>
         <DtSection Id="input" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="8">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_url"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="4">
+                <MudItem xs="12" md="6">
                     <DtSelectEnum
                         T="SafeUrlTranscoderTool.TranscodingType"
                         Label="@_localizer["Select.Operation.Label"]"
@@ -28,15 +20,24 @@
 
         <DtSection Id="output" ShowDivider="true">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_url"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Lines="5"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Value="@(_result?.Url ?? string.Empty)"
                         Label="@_localizer["TextField.Result.Label"]"
                         ReadOnly="true"
-                        Lines="3"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
+                        Lines="5"
+                        LabelPosition="LabelPositionType.Inline"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

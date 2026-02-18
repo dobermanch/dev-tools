@@ -12,14 +12,17 @@
                         Label="@_localizer["TextField.Input.Label"]"
                         @bind-Value="@_url"
                         OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Lines="5"
+                        LabelPosition="LabelPositionType.Inline"
                     />
                 </MudItem>
             </MudGrid>
         </DtSection>
 
-        <DtSection Id="output" ShowDivider="true">
-            @if (_result != null)
-            {
+        @if (_result != null)
+        {
+            <DtSection Id="output" ShowDivider="true">
+
                 <MudGrid Class="align-center" Spacing="4">
                     <MudItem xs="12" md="6">
                         <DtTextField
@@ -27,8 +30,7 @@
                             Value="@(_result.Schema ?? string.Empty)"
                             Label="@_localizer["TextField.Schema.Label"]"
                             ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"
-                        />
+                            LabelPosition="LabelPositionType.Inline"/>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <DtTextField
@@ -36,8 +38,7 @@
                             Value="@(_result.Hostname ?? string.Empty)"
                             Label="@_localizer["TextField.Hostname.Label"]"
                             ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"
-                        />
+                            LabelPosition="LabelPositionType.Inline"/>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <DtTextField
@@ -45,8 +46,7 @@
                             Value="@(_result.Port?.ToString() ?? string.Empty)"
                             Label="@_localizer["TextField.Port.Label"]"
                             ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"
-                        />
+                            LabelPosition="LabelPositionType.Inline"/>
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <DtTextField
@@ -54,8 +54,7 @@
                             Value="@(_result.Path ?? string.Empty)"
                             Label="@_localizer["TextField.Path.Label"]"
                             ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"
-                        />
+                            LabelPosition="LabelPositionType.Inline"/>
                     </MudItem>
                     @if (!string.IsNullOrEmpty(_result.Username))
                     {
@@ -65,8 +64,7 @@
                                 Value="@(_result.Username ?? string.Empty)"
                                 Label="@_localizer["TextField.Username.Label"]"
                                 ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"
-                            />
+                                LabelPosition="LabelPositionType.Inline"/>
                         </MudItem>
                     }
                     @if (!string.IsNullOrEmpty(_result.Password))
@@ -77,8 +75,7 @@
                                 Value="@(_result.Password ?? string.Empty)"
                                 Label="@_localizer["TextField.Password.Label"]"
                                 ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"
-                            />
+                                LabelPosition="LabelPositionType.Inline"/>
                         </MudItem>
                     }
                     @if (!string.IsNullOrEmpty(_result.Query))
@@ -89,35 +86,30 @@
                                 Value="@(_result.Query ?? string.Empty)"
                                 Label="@_localizer["TextField.Query.Label"]"
                                 ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"
-                            />
+                                LabelPosition="LabelPositionType.Inline"/>
                         </MudItem>
                     }
                     @if (_result.Parameters?.Count > 0)
                     {
                         <MudItem xs="12">
                             <MudText Typo="Typo.h6">@_localizer["Section.Parameters.Title"]</MudText>
-                            <MudSimpleTable Dense="true" Hover="true" Bordered="true">
-                                <thead>
-                                <tr>
-                                    <th>@_localizer["Table.Header.Key"]</th>
-                                    <th>@_localizer["Table.Header.Value"]</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var param in _result.Parameters)
-                                {
-                                    <tr>
-                                        <td>@param.Key</td>
-                                        <td>@param.Value</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </MudSimpleTable>
+                            <MudTable Items="@_result.Parameters" Elevation="0" Dense="true" Hover="true"
+                                      Bordered="true"
+                                      Striped="false" Height="600" HorizontalScrollbar="true">
+                                <HeaderContent>
+                                    <MudTh>@_localizer["Table.Header.Key"]</MudTh>
+                                    <MudTh>@_localizer["Table.Header.Value"]</MudTh>
+                                </HeaderContent>
+
+                                <RowTemplate>
+                                    <MudTd>@context.Key</MudTd>
+                                    <MudTd>@context.Value</MudTd>
+                                </RowTemplate>
+                            </MudTable>
                         </MudItem>
                     }
                 </MudGrid>
-            }
-        </DtSection>
+            </DtSection>
+        }
     </MudCardContent>
 </MudCard>

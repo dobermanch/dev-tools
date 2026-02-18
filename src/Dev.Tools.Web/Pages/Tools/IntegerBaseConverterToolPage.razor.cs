@@ -8,12 +8,16 @@ public partial class IntegerBaseConverterToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private IntegerBaseConverterTool _tool = null!;
-    private IntegerBaseConverterTool.Result? _result;
     private IStringLocalizer _localizer = null!;
 
     private string _inputValue = string.Empty;
     private IntegerBaseConverterTool.BaseType _inputBase = IntegerBaseConverterTool.BaseType.Decimal;
-    private IntegerBaseConverterTool.BaseType _targetBase = IntegerBaseConverterTool.BaseType.Binary;
+
+    private readonly Dictionary<IntegerBaseConverterTool.BaseType, IntegerBaseConverterTool.Result?> _results =
+        Enum
+            .GetValues<IntegerBaseConverterTool.BaseType>()
+            .ToDictionary(it => it, _ => (IntegerBaseConverterTool.Result?)null);
+
 
     [Inject] private WebContext Context { get; set; } = null!;
 
@@ -31,23 +35,33 @@ public partial class IntegerBaseConverterToolPage : ComponentBase
     {
         if (string.IsNullOrWhiteSpace(_inputValue))
         {
-            _result = null;
+            foreach (var baseType in _results.Keys)
+            {
+                _results[baseType] = null;
+            }
             return;
         }
+        
+        var tasks = new  List<Task>();
+        foreach (var targetBaseType in _results.Keys)
+        {
+            tasks.Add(_tool.RunAsync(new IntegerBaseConverterTool.Args(
+                        _inputValue, 
+                        _inputBase, 
+                        targetBaseType),
+                    CancellationToken.None)
+                .ContinueWith(it =>
+                {
+                    _results[targetBaseType] = it.Result;
+                }));
+        }
 
-        var args = new IntegerBaseConverterTool.Args(_inputValue, _inputBase, _targetBase);
-        _result = await _tool.RunAsync(args, CancellationToken.None);
+        await Task.WhenAll(tasks);
     }
 
     private async Task OnInputBaseValueChangedAsync(IntegerBaseConverterTool.BaseType value)
     {
         _inputBase = value;
-        await OnValueChangedAsync();
-    }
-
-    private async Task OnTargetBaseValueChangedAsync(IntegerBaseConverterTool.BaseType value)
-    {
-        _targetBase = value;
         await OnValueChangedAsync();
     }
 }

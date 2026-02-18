@@ -6,15 +6,16 @@
     <MudCardContent>
         <DtSection Id="input" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="4">
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Label="@_localizer["TextField.Input.Label"]"
                         @bind-Value="@_inputValue"
+                        InputType="InputType.Number"
                         OnDebounceIntervalElapsed="@OnValueChangedAsync"
                     />
                 </MudItem>
-                <MudItem xs="12" md="4">
+                <MudItem xs="12" md="6">
                     <DtSelectEnum
                         T="IntegerBaseConverterTool.BaseType"
                         Label="@_localizer["Select.InputBase.Label"]"
@@ -23,30 +24,21 @@
                         ValueChanged="OnInputBaseValueChangedAsync"
                     />
                 </MudItem>
-                <MudItem xs="12" md="4">
-                    <DtSelectEnum
-                        T="IntegerBaseConverterTool.BaseType"
-                        Label="@_localizer["Select.TargetBase.Label"]"
-                        Value="@_targetBase"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnTargetBaseValueChangedAsync"
-                    />
-                </MudItem>
             </MudGrid>
         </DtSection>
 
         <DtSection Id="output" ShowDivider="true">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@(_result?.Data ?? string.Empty)"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="3"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
+                @foreach (var result in _results)
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Value="@result.Value?.Data"
+                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                            ReadOnly="true"/>
+                    </MudItem>
+                }
             </MudGrid>
         </DtSection>
     </MudCardContent>

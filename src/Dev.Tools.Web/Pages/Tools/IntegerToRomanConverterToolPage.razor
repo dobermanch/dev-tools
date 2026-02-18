@@ -7,14 +7,6 @@
         <DtSection Id="input" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
                 <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_number"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
                     <DtSelectEnum
                         T="IntegerToRomanConverterTool.TranscodingType"
                         Label="@_localizer["Select.Direction.Label"]"
@@ -28,15 +20,36 @@
 
         <DtSection Id="output" ShowDivider="true">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
+                    @if (_transcoding == IntegerToRomanConverterTool.TranscodingType.Encode)
+                    {
+                        <DtTextField
+                            T="string"
+                            Label="@_localizer["TextField.Input.Label"]"
+                            @bind-Value="@_number"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            InputType="InputType.Number"
+                            Validation="@(s => 1 <= int.Parse(s) && int.Parse(s) <= 3999)"
+                            LabelPosition="LabelPositionType.Inline"/>
+                    }
+                    else
+                    {
+                        <DtTextField
+                            T="string"
+                            Label="@_localizer["TextField.Input.Label"]"
+                            @bind-Value="@_number"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            InputType="InputType.Text"
+                            LabelPosition="LabelPositionType.Inline"/>
+                    }
+                </MudItem>
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Value="@(_result?.Number ?? string.Empty)"
                         Label="@_localizer["TextField.Result.Label"]"
                         ReadOnly="true"
-                        Lines="3"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
+                        LabelPosition="LabelPositionType.Inline"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

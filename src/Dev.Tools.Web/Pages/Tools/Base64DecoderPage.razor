@@ -14,7 +14,7 @@
                         Error="@_result.HasErrors"
                         ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
                         LabelPosition="LabelPositionType.Inline"
-                        Lines="10"
+                        Lines="15"
                         OnDebounceIntervalElapsed="OnDecodeStringValueChangedAsync"
                     />
                 </MudItem>
@@ -24,7 +24,7 @@
                         Value="@_result.Data"
                         Label="@_localizer["TextField.Result.Label"]"
                         ReadOnly="true"
-                        Lines="10"
+                        Lines="15"
                         LabelPosition="LabelPositionType.Inline"
                     />
                 </MudItem>

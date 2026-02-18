@@ -36,7 +36,7 @@
                         Error="@_result.HasErrors"
                         ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
                         LabelPosition="LabelPositionType.Inline"
-                        Lines="12"
+                        Lines="15"
                         OnDebounceIntervalElapsed="OnTextValueChangedAsync"
                     />
                 </MudItem>
@@ -45,7 +45,7 @@
                         Label="@_localizer["TextField.Output.Label"]"
                         FormattedValue="@FormatText(_result.Text)"
                         Value="@_result.Text"
-                        Lines="12"/>
+                        Lines="15"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

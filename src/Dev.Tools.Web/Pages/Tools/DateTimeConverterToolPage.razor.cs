@@ -80,7 +80,7 @@ public partial class DateTimeConverterToolPage : ComponentBase
         _timer?.Dispose();
     }
     
-    public record Args
+    private record Args
     {
         public string Date { get; set; } = DateTime.Now.ToString("O");
         public DateTimeConverterTool.DateFormatType From { get; set; } = DateTimeConverterTool.DateFormatType.Iso8601;
