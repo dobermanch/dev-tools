@@ -39,17 +39,17 @@
     <data name="Page.CaseConverterPage.TextField.Input.Label" xml:space="preserve">
         <value>Текст для перетворення</value>
     </data>
-    <data name="Page.CharacterViewerPage.Switch.HideSymbols.Label" xml:space="preserve">
-        <value>Приховати спеціальні символи</value>
+    <data name="Page.CharacterViewerPage.Select.ViewType.Label" xml:space="preserve">
+        <value>Тип перегляду</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Switch.ShowSymbols.Label" xml:space="preserve">
+        <value>Показати стандартні символи</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Input.Label" xml:space="preserve">
         <value>Вхідний текст</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Output.Label" xml:space="preserve">
         <value>Вихідний текст</value>
-    </data>
-    <data name="Page.CharacterViewerPage.Section.FormattedText.Title" xml:space="preserve">
-        <value>Форматований текст з підсвічуванням</value>
     </data>
     <data name="Page.CharacterViewerPage.Section.CharacterInfo.Title" xml:space="preserve">
         <value>Інформація про символи</value>

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
@@ -12,12 +13,12 @@ public partial class CharacterViewerPage : ComponentBase
     private readonly Args _args = new();
     private CharacterViewerTool.Result _result = new();
     private Dictionary<char, CharacterViewerTool.CharInfo> _charMap = new();
-    private bool _hideSymbols = false;
+    private bool _showSymbols;
     private IStringLocalizer _localizer = null!;
 
     private bool HideSymbolsOptions =>
-        _args.ViewType is not CharacterViewerTool.ViewType.RemoveAll
-            and CharacterViewerTool.ViewType.RemoveNonStandard;
+        _args.ViewType is CharacterViewerTool.ViewType.RevealNonStandard 
+            or CharacterViewerTool.ViewType.RemoveNonStandard;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
@@ -30,14 +31,6 @@ public partial class CharacterViewerPage : ComponentBase
         base.OnInitialized();
     }
 
-    private async Task OnCopyToClipboardAsync(string? textToCopy)
-    {
-        if (!string.IsNullOrEmpty(textToCopy))
-        {
-            await Context.JsService.CopyToClipboardAsync(textToCopy);
-        }
-    }
-    
     private async Task OnTextValueChangedAsync(string text)
     {
         _args.Text = text;
@@ -61,82 +54,104 @@ public partial class CharacterViewerPage : ComponentBase
         _charMap = _result.CharInfos.ToDictionary(it => it.Char, it => it);
         StateHasChanged();
     }
-    
-    private string FormatText(string input)
+
+    private MarkupString FormatText(string input)
     {
         var builder = new System.Text.StringBuilder();
 
         var unescaped = Regex.Unescape(input);
         foreach (char ch in unescaped)
         {
-            builder.Append(CharToDisplay(ch));
+            var style = GetStyle(ch);
+            var print = style is not null 
+                ? $"<span style=\"{style}\" title=\"{DescribeChar(ch)}\">{CharToDisplay(ch)}</span>" 
+                : CharToDisplay(ch);
+            
+            builder.Append(print);
         }
 
-        return builder.ToString();
+        return (MarkupString)builder.ToString();
     }
 
     private string CharToDisplay(char c)
     {
-        if (_hideSymbols)
+        if (!_showSymbols && !IsNonStandard(c))
         {
-            return _charMap.TryGetValue(c, out var value1) ? value1.NonStandard ? "" : value1.Printable : c.ToString();
+            return _charMap.TryGetValue(c, out var info) ? info.NonStandard ? "" : info.Printable : c.ToString();
         }
 
-        if (_args.ViewType != CharacterViewerTool.ViewType.RevealAll)
+        return c switch
         {
-            var result = c switch
-            {
-                '\n' => "↵\n", // Line Feed (LF)
-                '\r' => "␍", // Carriage Return (CR)
-                '\t' => "→", // Horizontal Tab
-                '\b' => "⇤", // Backspace
-                '\f' => "␌", // Form Feed
-                ' ' => "·", // Space
-                '\u00A0' => "⍽", // Non-breaking space
-                '\u2000' => " ", // En quad
-                '\u2001' => " ", // Em quad
-                '\u2002' => " ", // En space
-                '\u2003' => " ", // Em space
-                '\u2004' => " ", // Three-per-em space
-                '\u2005' => " ", // Four-per-em space
-                '\u2006' => " ", // Six-per-em space
-                '\u2007' => " ", // Figure space
-                '\u2008' => " ", // Punctuation space
-                '\u2009' => " ", // Thin space
-                '\u200A' => " ", // Hair space
-                '\u200B' => "⁚", // Zero-width space
-                '\u202F' => " ", // Narrow no-break space
-                '\u2060' => "⏸", // Word joiner
-                '\uFEFF' => "﻿", // Zero-width no-break space (BOM)
-                '\\' => "⧵", // Backslash
-                _ => _charMap.TryGetValue(c, out var value1) ? value1.Printable : c.ToString()
-            };
-        }
+            '\n' => "\u21b5\n",  // ↵ + newline
+            '\r' => "\u240d",    // ␍ Carriage Return
+            '\t' => "\u2192\t",  // → + tab
+            '\b' => "\u2408",    // ␈ Backspace
+            '\f' => "\u240c",    // ␌ Form Feed
+            '\0' => "\u2400",    // ␀ Null
+            ' '  => "\u00b7",    // · Middle dot for space
+            '\u00A0' => "\u237d", // ⍽ Non-breaking space
+            '\u200B' => "\u200b\u20da", // Zero-width space (show marker)
+            '\u200C' => "\u200c\u20e3", // Zero-width non-joiner
+            '\u200D' => "\u200d\u20e3", // Zero-width joiner
+            '\u2060' => "\u2060\u20e3", // Word joiner
+            '\uFEFF' => "[BOM]",        // Byte order mark
+            '\u202F' => "\u237d",       // Narrow no-break space
+            _ => IsNonStandard(c)
+                ? $"\\u{(int)c:X4}"
+                : c.ToString()
+        };
+    }
 
-        return _charMap.TryGetValue(c, out var value) ? value.Printable : c.ToString();
+    private bool IsNonStandard(char c)
+    {
+        if (_charMap.TryGetValue(c, out var info))
+            return info.NonStandard;
+
+        return char.IsControl(c) || char.GetUnicodeCategory(c) is
+            UnicodeCategory.Format or
+            UnicodeCategory.Surrogate or
+            UnicodeCategory.PrivateUse;
     }
 
     private string DescribeChar(char c) => ((int)c) switch
     {
+        0x0000 => "Null (NUL)",
+        0x0008 => "Backspace (BS)",
+        0x0009 => "Tab (HT)",
         0x000A => "Line Feed (LF)",
+        0x000B => "Vertical Tab (VT)",
+        0x000C => "Form Feed (FF)",
         0x000D => "Carriage Return (CR)",
-        0x0009 => "Tab",
-        0x0008 => "Backspace",
-        0x000C => "Form Feed",
-        0x00A0 => "Non-breaking space",
-        0x200B => "Zero-width space",
-        _ => char.IsControl(c) ? "Control character" : "Visible character"
+        0x001B => "Escape (ESC)",
+        0x0020 => "Space (SP)",
+        0x00A0 => "Non-breaking space (NBSP)",
+        0x200B => "Zero-width space (ZWSP)",
+        0x200C => "Zero-width non-joiner (ZWNJ)",
+        0x200D => "Zero-width joiner (ZWJ)",
+        0x2028 => "Line separator",
+        0x2029 => "Paragraph separator",
+        0x202F => "Narrow no-break space (NNBSP)",
+        0x2060 => "Word joiner (WJ)",
+        0xFEFF => "Byte order mark (BOM)",
+        _ when char.IsControl(c) => $"Control character (U+{(int)c:X4})",
+        _ when IsNonStandard(c) => $"Non-standard (U+{(int)c:X4})",
+        _ => $"U+{(int)c:X4}"
     };
 
-    private string GetStyle(char c)
+    private string? GetStyle(char c)
     {
-        if (char.IsControl(c) || c == '\u200B' || c == '\u00A0')
-            return "background-color: #ffeb3b; color: #d32f2f; padding: 0 2px; border-radius: 2px;";
-        if (c == ' ')
-            return "color: #9e9e9e;";
-        return "";
-    }
+        if (!_showSymbols && !IsNonStandard(c))
+        {
+            return null;
+        }
 
+        if (char.IsControl(c) || IsNonStandard(c))
+        {
+            return "background-color: var(--mud-palette-warning-lighten); color: var(--mud-palette-error-darken); padding: 0 2px; border-radius: 2px; font-weight: bold;";
+        }
+
+        return c == ' ' ? "color: var(--mud-palette-text-disabled);" : null;
+    }
 
     public sealed record Args
     {

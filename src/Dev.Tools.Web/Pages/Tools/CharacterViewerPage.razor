@@ -1,134 +1,85 @@
 @page "/tools/char-viewer"
 
-<DtToolPageHeader ToolDefinition="@_toolDefinition" />
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
 <MudCard Class="my-4">
     <MudCardContent>
         <DtSection Id="config" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <MudToggleGroup
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
                         T="CharacterViewerTool.ViewType"
-                        SelectionMode="SelectionMode.SingleSelection"
+                        Label="@_localizer["Select.ViewType.Label"]"
                         Value="@_args.ViewType"
-                        Color="Color.Primary"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
                         ValueChanged="OnViewTypeChangedAsync"
-                        FixedContent>
-                        @foreach (var type in Enum.GetValues<CharacterViewerTool.ViewType>())
-                        {
-                            <MudToggleItem Value="@type" Text="@Context.Localization.GetToolEnum(_toolDefinition, type)"/>
-                        }
-                    </MudToggleGroup>
+                    />
                 </MudItem>
+
                 @if (HideSymbolsOptions)
                 {
-                    <MudItem xs="12" sm="6" md="6">
-                        <MudSwitch T="bool" @bind-Value="@_hideSymbols" Label="@_localizer["Switch.HideSymbols.Label"]" Color="Color.Primary"/>
+                    <MudItem xs="12" md="6">
+                        <MudSwitch T="bool" @bind-Value="@_showSymbols" Label="@_localizer["Switch.ShowSymbols.Label"]"
+                                   Color="Color.Primary"/>
                     </MudItem>
                 }
             </MudGrid>
         </DtSection>
 
-        <DtSection Id="input">
+        <DtSection Id="io" ShowDivider="true">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <MudTextField
+                <MudItem xs="12" md="6">
+                    <DtTextField
                         T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
                         Value="@_args.Text"
-                        DebounceInterval="500"
-                        OnDebounceIntervalElapsed="OnTextValueChangedAsync"
                         Error="@_result.HasErrors"
                         ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        Lines="5"
-                        AutoGrow="true"
-                        MaxLines="10"
-                        Variant="Variant.Outlined"
-                        Margin="Margin.Dense"
-                        Adornment="Adornment.End"
-                        AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                        OnAdornmentClick="async () => await OnCopyToClipboardAsync(_args.Text)"/>
+                        LabelPosition="LabelPositionType.Inline"
+                        Lines="12"
+                        OnDebounceIntervalElapsed="OnTextValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtHtmlField
+                        Label="@_localizer["TextField.Output.Label"]"
+                        FormattedValue="@FormatText(_result.Text)"
+                        Value="@_result.Text"
+                        Lines="12"/>
                 </MudItem>
             </MudGrid>
         </DtSection>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudStack Spacing="4">
-                <MudPaper Class="pa-4">
-                    <MudText Typo="Typo.caption" Class="mud-input-label mud-input-label-shrink">
-                        @_localizer["TextField.Output.Label"]
-                    </MudText>
+        @if (_result.CharInfos.Count > 0)
+        {
+            <DtSection Id="output" ShowDivider="true">
+                <MudText Typo="Typo.h6">@_localizer["Section.CharacterInfo.Title"]</MudText>
 
-                    <div class="mud-input-control mud-input-root mud-input mud-input-outlined mud-input-margin-dense"
-                         style="max-height: 300px; overflow-y: auto; font-family: monospace; padding: 12px;">
+                <MudTable Items="@_result.CharInfos" Elevation="0" Dense="true" Hover="true" Bordered="true"
+                          Striped="false" Height="600" HorizontalScrollbar="true">
+                    <HeaderContent>
+                        <MudTh>@_localizer["Table.Header.Char"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.Category"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.Printable"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.Hex"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.Unicode"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.ASCII"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.HTML"]</MudTh>
+                        <MudTh>@_localizer["Table.Header.URL"]</MudTh>
+                    </HeaderContent>
 
-                        <MudHighlighter Text="@FormatText(_result.Text)"
-                                        Markup="true"
-                        />
-
-                        <MudIconButton Icon="@Icons.Material.Outlined.CopyAll"
-                                       Size="Size.Small"
-                                       Color="Color.Default"
-                                       Style="position: absolute; top: 4px; right: 4px;"
-                                       OnClick="async () => await OnCopyToClipboardAsync(_result.Text)" />
-                    </div>
-                </MudPaper>
-
-                <MudPaper Class="pa-4">
-                    <MudText Typo="Typo.h6">@_localizer["Section.FormattedText.Title"]</MudText>
-
-                    <div style="white-space: pre-wrap; font-family: monospace; min-height: 100px; max-height: 300px; overflow-y: auto; padding: 12px;">
-                        @foreach (var c in _result.Text)
-                        {
-                            <span style="@GetStyle(c)" title="@DescribeChar(c)">
-                                @CharToDisplay(c)
-                            </span>
-                        }
-                    </div>
-                </MudPaper>
-
-                <MudTextField
-                    T="string"
-                    Value="@FormatText(_result.Text)"
-                    Label="@_localizer["TextField.Output.Label"]"
-                    ReadOnly="true"
-                    Lines="5"
-                    AutoGrow="true"
-                    MaxLines="10"
-                    Variant="Variant.Outlined"
-                    Margin="Margin.Dense"
-                    Adornment="Adornment.End"
-                    AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                    OnAdornmentClick="async () => await OnCopyToClipboardAsync(_result.Text)"/>
-
-                <MudPaper>
-                    <MudText Typo="Typo.h5">@_localizer["Section.CharacterInfo.Title"]</MudText>
-
-                    <MudTable Items="@_result.CharInfos" Dense="true" Hover="true" Bordered="true" Striped="true">
-                        <HeaderContent>
-                            <MudTh>@_localizer["Table.Header.Char"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.Category"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.Printable"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.Hex"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.Unicode"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.ASCII"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.HTML"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.URL"]</MudTh>
-                        </HeaderContent>
-
-                        <RowTemplate>
-                            <MudTd>@context.Char</MudTd>
-                            <MudTd>@context.UnicodeCategory</MudTd>
-                            <MudTd>@CharToDisplay(context.Char)</MudTd>
-                            <MudTd>@context.HexCode</MudTd>
-                            <MudTd>@context.UnicodeDisplayString</MudTd>
-                            <MudTd>@context.AsciiCode</MudTd>
-                            <MudTd>@context.HtmlString</MudTd>
-                            <MudTd>@context.UrlString</MudTd>
-                        </RowTemplate>
-                    </MudTable>
-                </MudPaper>
-            </MudStack>
-        </DtSection>
+                    <RowTemplate>
+                        <MudTd>@context.Char</MudTd>
+                        <MudTd>@context.UnicodeCategory</MudTd>
+                        <MudTd>@CharToDisplay(context.Char)</MudTd>
+                        <MudTd>@context.HexCode</MudTd>
+                        <MudTd>@context.UnicodeDisplayString</MudTd>
+                        <MudTd>@context.AsciiCode</MudTd>
+                        <MudTd>@context.HtmlString</MudTd>
+                        <MudTd>@context.UrlString</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </DtSection>
+        }
     </MudCardContent>
 </MudCard>

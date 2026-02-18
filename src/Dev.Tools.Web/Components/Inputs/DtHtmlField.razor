@@ -1,0 +1,23 @@
+<div class="mt-1 mud-input-control mud-input-input-control">
+    <div class="mud-input-control-input-container">
+        <div class="mud-input mud-input-outlined mud-input-adorned-end mud-input-margin-dense mud-shrink">
+            <div class="mud-input-slot mud-input-root mud-input-root-outlined mud-input-root-adorned-end mud-input-root-margin-dense"
+                 style="white-space: pre-wrap; font-family: monospace; min-height: @($"{Height}px"); max-height: @($"{Height}px"); overflow-y: auto; line-height: 1.6;">
+                @(FormattedValue ?? (MarkupString)(Value ?? ""))
+            </div>
+            @if (ShowCopyButton)
+            {
+                <div class="mud-input-adornment mud-input-adornment-end">
+                    <MudIconButton Icon="@Icons.Material.Outlined.CopyAll"
+                                   Size="Size.Small"
+                                   OnClick="OnCopyToClipboardAsync"/>
+                </div>
+            }
+            <div class="mud-input-outlined-border"></div>
+        </div>
+        <label class="mud-input-label mud-input-label-animated mud-input-label-outlined mud-input-label-inputcontrol mud-input-label-margin-dense"
+               style="pointer-events: none; background: var(--mud-palette-surface); padding: 0 4px;">
+            @Label
+        </label>
+    </div>
+</div>

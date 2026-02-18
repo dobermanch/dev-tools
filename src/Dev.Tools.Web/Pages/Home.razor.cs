@@ -17,6 +17,8 @@ public partial class Home : ComponentBase, IDisposable
 
     private IStringLocalizer _localizer = null!;
     private ViewMode _viewMode;
+    private bool _groupByCategory;
+    private IReadOnlyList<ToolDefinition> _allTools = [];
     private IReadOnlyList<ToolDefinition> _favoriteTools = [];
     private GroupedList<Category, ToolDefinition> _toolsByCategory = GroupedList<Category, ToolDefinition>.Empty;
     private int _toolCount;
@@ -27,6 +29,7 @@ public partial class Home : ComponentBase, IDisposable
     {
         _localizer = Context.Localization.PageLocalizer<Home>();
         _viewMode = Context.Preferences.Preferences.Layout.ViewMode;
+        _groupByCategory = Context.Preferences.Preferences.Layout.GroupByCategory;
         _subscription = Context.Messenger.Subscribe<FavoritesChangedNotification>(OnFavoritesChanged);
         LoadTools();
         base.OnInitialized();
@@ -35,6 +38,7 @@ public partial class Home : ComponentBase, IDisposable
     private void LoadTools()
     {
         var allTools = ToolsProvider.GetToolDefinitions();
+        _allTools = allTools as IReadOnlyList<ToolDefinition> ?? [.. allTools];
         _toolCount = allTools.Count;
 
         var favoriteNames = Context.Preferences.Preferences.Favorite.Tools;
@@ -60,6 +64,13 @@ public partial class Home : ComponentBase, IDisposable
     {
         _viewMode = mode;
         var settings = Context.Preferences.Preferences.Layout with { ViewMode = mode };
+        await Context.Preferences.UpdateLayoutAsync(settings);
+    }
+
+    private async Task OnGroupByCategoryChangedAsync(bool grouped)
+    {
+        _groupByCategory = grouped;
+        var settings = Context.Preferences.Preferences.Layout with { GroupByCategory = grouped };
         await Context.Preferences.UpdateLayoutAsync(settings);
     }
 

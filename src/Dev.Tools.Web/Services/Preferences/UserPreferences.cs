@@ -14,6 +14,7 @@ public sealed record UserPreferences
         public ThemeMode? ThemeMode { get; init; }
         public bool? IsDrawerOpen { get; init; }
         public ViewMode ViewMode { get; init; } = ViewMode.Cards;
+        public bool GroupByCategory { get; init; } = true;
     }
 
     public sealed record FavoriteDetails

@@ -132,6 +132,24 @@ namespace Dev.Tools.Web.Locals {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to :English:.
+        /// </summary>
+        internal static string Locals_en_US_Name {
+            get {
+                return ResourceManager.GetString("Locals.en-US.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to :Ukrainian:.
+        /// </summary>
+        internal static string Locals_uk_UA_Name {
+            get {
+                return ResourceManager.GetString("Locals.uk-UA.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :Input:.
         /// </summary>
         internal static string Page_Base64DecoderPage_TextField_Input_Label {
@@ -204,20 +222,20 @@ namespace Dev.Tools.Web.Locals {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to :Formatted Text with Highlights:.
+        ///   Looks up a localized string similar to :Select View Type:.
         /// </summary>
-        internal static string Page_CharacterViewerPage_Section_FormattedText_Title {
+        internal static string Page_CharacterViewerPage_Select_ViewType_Label {
             get {
-                return ResourceManager.GetString("Page.CharacterViewerPage.Section.FormattedText.Title", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Select.ViewType.Label", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to :Hide Special Symbols:.
+        ///   Looks up a localized string similar to :Show Special Symbols:.
         /// </summary>
-        internal static string Page_CharacterViewerPage_Switch_HideSymbols_Label {
+        internal static string Page_CharacterViewerPage_Switch_ShowSymbols_Label {
             get {
-                return ResourceManager.GetString("Page.CharacterViewerPage.Switch.HideSymbols.Label", resourceCulture);
+                return ResourceManager.GetString("Page.CharacterViewerPage.Switch.ShowSymbols.Label", resourceCulture);
             }
         }
         

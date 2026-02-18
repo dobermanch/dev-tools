@@ -32,17 +32,17 @@
     <data name="Page.CaseConverterPage.TextField.Input.Label" xml:space="preserve">
         <value>Text to Convert</value>
     </data>
-    <data name="Page.CharacterViewerPage.Switch.HideSymbols.Label" xml:space="preserve">
-        <value>Hide Special Symbols</value>
+    <data name="Page.CharacterViewerPage.Select.ViewType.Label" xml:space="preserve">
+        <value>View Type</value>
+    </data>
+    <data name="Page.CharacterViewerPage.Switch.ShowSymbols.Label" xml:space="preserve">
+        <value>Show Standard Symbols</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Input.Label" xml:space="preserve">
         <value>Input Text</value>
     </data>
     <data name="Page.CharacterViewerPage.TextField.Output.Label" xml:space="preserve">
         <value>Output Text</value>
-    </data>
-    <data name="Page.CharacterViewerPage.Section.FormattedText.Title" xml:space="preserve">
-        <value>Formatted Text with Highlights</value>
     </data>
     <data name="Page.CharacterViewerPage.Section.CharacterInfo.Title" xml:space="preserve">
         <value>Character Info</value>
