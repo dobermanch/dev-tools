@@ -53,9 +53,9 @@ public sealed class StringToNatoAlphabetTool : ToolBase<StringToNatoAlphabetTool
         return new(words);
     }
 
-    public record Args(string Text);
+    public record Args([property: PipeInput] string Text);
 
-    public record Result(IReadOnlyCollection<string> Words) : ToolResult
+    public record Result([property: PipeOutput] IReadOnlyCollection<string> Words) : ToolResult
     {
         public Result() : this([]) { }
     }

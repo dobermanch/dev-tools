@@ -27,7 +27,9 @@ public sealed record ToolDefinition(
         string Name,
         Type PropertyType,
         bool IsRequired,
-        bool IsNullable
+        bool IsNullable,
+        bool IsPipeInput = false,
+        bool IsPipeOutput = false
     );
 
     public sealed record EnumDetails(

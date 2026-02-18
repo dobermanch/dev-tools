@@ -84,7 +84,7 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         public string? Alphabet { get; set; }
     }
 
-    public record Result(string[] Tokens) : ToolResult
+    public record Result([property: PipeOutput] string[] Tokens) : ToolResult
     {
         public Result() : this([])
         {

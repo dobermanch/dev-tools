@@ -247,6 +247,8 @@ public abstract class ToolGeneratorBase
                             Type = it.Type.ToDisplayString(),
                             IsRequired = it.IsRequired,
                             IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
+                            IsPipeInput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeInputAttribute"),
+                            IsPipeOutput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
                         })
                         .ToArray(),
                 Enums = ExtractEnumsFromType(arg)
@@ -318,6 +320,8 @@ public abstract class ToolGeneratorBase
         public string Type { get; set; } = null!;
         public bool IsRequired { get; set; }
         public bool IsNullable { get; set; }
+        public bool IsPipeInput { get; set; }
+        public bool IsPipeOutput { get; set; }
     }
 
     protected record EnumDetails : TypeDeclaration

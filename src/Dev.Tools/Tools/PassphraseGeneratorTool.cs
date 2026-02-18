@@ -56,7 +56,7 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
         public bool Capitalize { get; set; }
     }
 
-    public record Result(string[] Phrases) : ToolResult
+    public record Result([property: PipeOutput] string[] Phrases) : ToolResult
     {
         public Result() : this([]) { }
     }

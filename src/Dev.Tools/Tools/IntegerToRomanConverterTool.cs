@@ -81,9 +81,9 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
         Decode
     }
     
-    public record Args(string Number, TranscodingType Transcoding);
+    public record Args([property: PipeInput] string Number, TranscodingType Transcoding);
 
-    public record Result(string? Number) : ToolResult
+    public record Result([property: PipeOutput] string? Number) : ToolResult
     {
         public Result() : this(Number: null) { }
     }

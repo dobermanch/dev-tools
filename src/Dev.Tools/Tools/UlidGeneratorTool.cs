@@ -41,7 +41,7 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         public int Count { get; set; } = 1;
     }
 
-    public record Result(IReadOnlyCollection<Ulid> Data) : ToolResult
+    public record Result([property: PipeOutput] IReadOnlyCollection<Ulid> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

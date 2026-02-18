@@ -37,12 +37,13 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
 
     public record Args
     {
+        [PipeInput]
         public string? Text { get; set; }
         public bool InsertLineBreaks { get; set; }
         public bool UrlSafe { get; set; }
     }
 
-    public record Result(string Text) : ToolResult
+    public record Result([property: PipeOutput] string Text) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

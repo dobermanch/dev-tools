@@ -77,11 +77,12 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
 
     public sealed record Args
     {
+        [PipeInput]
         public string? Text { get; set; }
         public HashAlgorithm Algorithm { get; set; }
     }
 
-    public record Result(string Data) : ToolResult
+    public record Result([property: PipeOutput] string Data) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

@@ -113,12 +113,13 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
     
     public record Args
     {
+        [PipeInput]
         public string? Date { get; set; }
         public DateFormatType From { get; set; }
         public DateFormatType To { get; set; }
     }
 
-    public record Result(string Time) : ToolResult
+    public record Result([property: PipeOutput] string Time) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

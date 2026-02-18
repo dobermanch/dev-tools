@@ -149,11 +149,12 @@ public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseCon
 
     public record Args
     {
+        [PipeInput]
         public string Text { get; init; } = null!;
         public CaseType Type { get; init; }
     }
 
-    public record Result(string Text) : ToolResult
+    public record Result([property: PipeOutput] string Text) : ToolResult
     {
         public Result() : this(string.Empty){}
     }

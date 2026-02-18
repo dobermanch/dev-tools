@@ -117,7 +117,7 @@ public sealed class CharacterViewerTool : ToolBase<CharacterViewerTool.Args, Cha
     }
 
     public sealed record Args(
-        string Text,
+        [property: PipeInput] string Text,
         ViewType ViewType,
         bool IncludeCharInfo = false,
         IList<string>? TreatAsStandardHexCodes = null
@@ -139,7 +139,7 @@ public sealed class CharacterViewerTool : ToolBase<CharacterViewerTool.Args, Cha
     }
 
     public sealed record Result(
-        string Text,
+        [property: PipeOutput] string Text,
         IList<CharInfo> CharInfos
     ) : ToolResult
     {

@@ -136,7 +136,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         public DateTime? Time { get; set; }
     }
 
-    public record Result(IReadOnlyCollection<Guid> Data) : ToolResult
+    public record Result([property: PipeOutput] IReadOnlyCollection<Guid> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

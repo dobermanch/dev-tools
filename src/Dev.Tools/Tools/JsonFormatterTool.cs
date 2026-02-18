@@ -114,6 +114,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
 
     public record Args
     {
+        [PipeInput]
         public required string Json { get; init; } = null!;
         public int IndentSize { get; init; } = 2;
         public SortDirection SortKeys { get; init; } = SortDirection.None;
@@ -124,6 +125,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
 
     public record Result : ToolResult
     {
+        [PipeOutput]
         public string Json { get; init; } = null!;
     }
 

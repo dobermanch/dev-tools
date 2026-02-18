@@ -96,9 +96,9 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
         Base64 = 64
     }
 
-    public record Args(string InputValue, BaseType InputBase, BaseType TargetBase);
+    public record Args([property: PipeInput] string InputValue, BaseType InputBase, BaseType TargetBase);
 
-    public record Result(string? Data, BaseType Base) : ToolResult
+    public record Result([property: PipeOutput] string? Data, BaseType Base) : ToolResult
     {
         public Result() : this(null!, default) { }
     }
