@@ -30,6 +30,7 @@ public static class ToolIconProvider
             "uuid-generator" => Icons.Material.Outlined.QrCode2,
             "jwt-parser" => Icons.Material.Outlined.Badge,
             "lorem-ipsum" => Icons.Material.Outlined.Article,
+            "text-encryptor" => Icons.Material.Outlined.Lock,
             _ => Icons.Material.Outlined.Construction
         };
     }

@@ -389,4 +389,19 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Page.TextEncryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Algorithm</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.Select.OutputFormat.Label" xml:space="preserve">
+        <value>Output Format</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Secret Key</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Text to Encrypt</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Encrypted Text</value>
+    </data>
 </root>

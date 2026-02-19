@@ -1,0 +1,65 @@
+@page "/tools/text-encryptor"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="4">
+                    <DtTextField
+                        T="string"
+                        Value="@_args.Key"
+                        Label="@_localizer["TextField.Key.Label"]"
+                        OnDebounceIntervalElapsed="OnKeyChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="TextEncryptorTool.EncryptionAlgorithm"
+                        Label="@_localizer["Select.Algorithm.Label"]"
+                        Value="@_args.Algorithm"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnAlgorithmChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="TextEncryptorTool.OutputFormat"
+                        Label="@_localizer["Select.OutputFormat.Label"]"
+                        Value="@_args.OutputFormat"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnOutputFormatChangedAsync"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@_args.Text"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        Error="@(_result?.HasErrors ?? false)"
+                        ErrorText="@(_result?.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault(""))"
+                        Lines="15"
+                        OnDebounceIntervalElapsed="OnTextChangedAsync"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@GetEncryptedText()"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+    </MudCardContent>
+</MudCard>

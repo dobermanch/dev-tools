@@ -396,4 +396,19 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Page.TextEncryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Алгоритм</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.Select.OutputFormat.Label" xml:space="preserve">
+        <value>Формат виводу</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Секретний ключ</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Текст для шифрування</value>
+    </data>
+    <data name="Page.TextEncryptorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Зашифрований текст</value>
+    </data>
 </root>

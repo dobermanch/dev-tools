@@ -69,6 +69,9 @@
   <data name="Enums.Keyword.Encode" xml:space="preserve">
     <value>:Encode:</value>
   </data>
+  <data name="Enums.Keyword.Encrypt" xml:space="preserve">
+    <value>:Encrypt:</value>
+  </data>
   <data name="Enums.Keyword.Format" xml:space="preserve">
     <value>:Format:</value>
   </data>
@@ -785,6 +788,63 @@
   </data>
   <data name="Tools.StringToNatoAlphabet.Result.Words.Name" xml:space="preserve">
     <value>:Words:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Algorithm.Description" xml:space="preserve">
+    <value>:Algorithm description:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Algorithm.Name" xml:space="preserve">
+    <value>:Algorithm:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Key.Description" xml:space="preserve">
+    <value>:Key description:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Key.Name" xml:space="preserve">
+    <value>:Key:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.OutputFormat.Description" xml:space="preserve">
+    <value>:OutputFormat description:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.OutputFormat.Name" xml:space="preserve">
+    <value>:OutputFormat:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Text.Description" xml:space="preserve">
+    <value>:Text description:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Args.Text.Name" xml:space="preserve">
+    <value>:Text:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Description" xml:space="preserve">
+    <value>:Description for TextEncryptor:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
+    <value>:Aes128 Cbc:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
+    <value>:Aes256 Cbc:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
+    <value>:Aes256 Gcm:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
+    <value>:Rc4:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
+    <value>:Triple Des:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.OutputFormat.Base64" xml:space="preserve">
+    <value>:Base64:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Enums.OutputFormat.Hex" xml:space="preserve">
+    <value>:Hex:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Name" xml:space="preserve">
+    <value>:TextEncryptor:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Result.EncryptedText.Description" xml:space="preserve">
+    <value>:EncryptedText description:</value>
+  </data>
+  <data name="Tools.TextEncryptor.Result.EncryptedText.Name" xml:space="preserve">
+    <value>:EncryptedText:</value>
   </data>
   <data name="Tools.TokenGenerator.Args.Alphabet.Description" xml:space="preserve">
     <value>:Alphabet description:</value>

@@ -24,5 +24,6 @@ public enum Keyword
     Token,
     Web,
     Jwt,
-    Lorem
+    Lorem,
+    Encrypt
 }
