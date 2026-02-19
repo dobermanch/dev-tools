@@ -28,6 +28,7 @@ public static class ToolIconProvider
             "ulid-generator" => Icons.Material.Outlined.Fingerprint,
             "url-parser" => Icons.Material.Outlined.TravelExplore,
             "uuid-generator" => Icons.Material.Outlined.QrCode2,
+            "jwt-parser" => Icons.Material.Outlined.Badge,
             _ => Icons.Material.Outlined.Construction
         };
     }

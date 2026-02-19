@@ -1,0 +1,186 @@
+@page "/tools/jwt-parser"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_token"
+                        Error="@(_result != null && _result.HasErrors)"
+                        ErrorText="@(_result?.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault(""))"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Lines="5"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        @if (_result != null && !_result.HasErrors)
+        {
+            <DtSection Id="header" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    @if (!string.IsNullOrEmpty(_result.Algorithm))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.Algorithm ?? string.Empty)"
+                                Label="@_localizer["TextField.Algorithm.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.TokenType))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.TokenType ?? string.Empty)"
+                                Label="@_localizer["TextField.TokenType.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </DtSection>
+
+            <DtSection Id="claims" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    @if (!string.IsNullOrEmpty(_result.Issuer))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.Issuer ?? string.Empty)"
+                                Label="@_localizer["TextField.Issuer.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.Subject))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.Subject ?? string.Empty)"
+                                Label="@_localizer["TextField.Subject.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.Audience))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.Audience ?? string.Empty)"
+                                Label="@_localizer["TextField.Audience.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.IssuedAt))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.IssuedAt ?? string.Empty)"
+                                Label="@_localizer["TextField.IssuedAt.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.NotBefore))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.NotBefore ?? string.Empty)"
+                                Label="@_localizer["TextField.NotBefore.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.ExpiresAt))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.ExpiresAt ?? string.Empty)"
+                                Label="@_localizer["TextField.ExpiresAt.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_result.JwtId))
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField
+                                T="string"
+                                Value="@(_result.JwtId ?? string.Empty)"
+                                Label="@_localizer["TextField.JwtId.Label"]"
+                                ReadOnly="true"
+                                LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </DtSection>
+
+            <DtSection Id="raw" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.HeaderJson ?? string.Empty)"
+                            Label="@_localizer["TextField.HeaderJson.Label"]"
+                            ReadOnly="true"
+                            Lines="8"
+                            LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.PayloadJson ?? string.Empty)"
+                            Label="@_localizer["TextField.PayloadJson.Label"]"
+                            ReadOnly="true"
+                            Lines="8"
+                            LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Value="@(_result.Signature ?? string.Empty)"
+                            Label="@_localizer["TextField.Signature.Label"]"
+                            ReadOnly="true"
+                            LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                </MudGrid>
+            </DtSection>
+
+            @if (_result.Claims?.Count > 0)
+            {
+                <DtSection Id="claimsTable" ShowDivider="true">
+                    <MudText Typo="Typo.h6">@_localizer["Section.Claims.Title"]</MudText>
+                    <MudTable Items="@_result.Claims" Elevation="0" Dense="true" Hover="true"
+                              Bordered="true"
+                              Striped="false" HorizontalScrollbar="true">
+                        <HeaderContent>
+                            <MudTh>@_localizer["Table.Header.Claim"]</MudTh>
+                            <MudTh>@_localizer["Table.Header.Value"]</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@context.Key</MudTd>
+                            <MudTd>@context.Value</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </DtSection>
+            }
+        }
+    </MudCardContent>
+</MudCard>

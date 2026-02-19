@@ -90,6 +90,9 @@
   <data name="Enums.Keyword.Json" xml:space="preserve">
     <value>:Json:</value>
   </data>
+  <data name="Enums.Keyword.Jwt" xml:space="preserve">
+    <value>:Jwt:</value>
+  </data>
   <data name="Enums.Keyword.Network" xml:space="preserve">
     <value>:Network:</value>
   </data>
@@ -563,6 +566,96 @@
   </data>
   <data name="Tools.JsonFormatter.Result.Json.Name" xml:space="preserve">
     <value>:Json:</value>
+  </data>
+  <data name="Tools.JwtParser.Args.Token.Description" xml:space="preserve">
+    <value>:Token description:</value>
+  </data>
+  <data name="Tools.JwtParser.Args.Token.Name" xml:space="preserve">
+    <value>:Token:</value>
+  </data>
+  <data name="Tools.JwtParser.Description" xml:space="preserve">
+    <value>:Description for JwtParser:</value>
+  </data>
+  <data name="Tools.JwtParser.Name" xml:space="preserve">
+    <value>:JwtParser:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Algorithm.Description" xml:space="preserve">
+    <value>:Algorithm description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Algorithm.Name" xml:space="preserve">
+    <value>:Algorithm:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Audience.Description" xml:space="preserve">
+    <value>:Audience description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Audience.Name" xml:space="preserve">
+    <value>:Audience:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Claims.Description" xml:space="preserve">
+    <value>:Claims description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Claims.Name" xml:space="preserve">
+    <value>:Claims:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.ExpiresAt.Description" xml:space="preserve">
+    <value>:ExpiresAt description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.ExpiresAt.Name" xml:space="preserve">
+    <value>:ExpiresAt:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.HeaderJson.Description" xml:space="preserve">
+    <value>:HeaderJson description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.HeaderJson.Name" xml:space="preserve">
+    <value>:HeaderJson:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.IssuedAt.Description" xml:space="preserve">
+    <value>:IssuedAt description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.IssuedAt.Name" xml:space="preserve">
+    <value>:IssuedAt:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Issuer.Description" xml:space="preserve">
+    <value>:Issuer description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Issuer.Name" xml:space="preserve">
+    <value>:Issuer:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.JwtId.Description" xml:space="preserve">
+    <value>:JwtId description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.JwtId.Name" xml:space="preserve">
+    <value>:JwtId:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.NotBefore.Description" xml:space="preserve">
+    <value>:NotBefore description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.NotBefore.Name" xml:space="preserve">
+    <value>:NotBefore:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.PayloadJson.Description" xml:space="preserve">
+    <value>:PayloadJson description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.PayloadJson.Name" xml:space="preserve">
+    <value>:PayloadJson:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Signature.Description" xml:space="preserve">
+    <value>:Signature description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Signature.Name" xml:space="preserve">
+    <value>:Signature:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Subject.Description" xml:space="preserve">
+    <value>:Subject description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Subject.Name" xml:space="preserve">
+    <value>:Subject:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.TokenType.Description" xml:space="preserve">
+    <value>:TokenType description:</value>
+  </data>
+  <data name="Tools.JwtParser.Result.TokenType.Name" xml:space="preserve">
+    <value>:TokenType:</value>
   </data>
   <data name="Tools.PassphraseGenerator.Args.Capitalize.Description" xml:space="preserve">
     <value>:Capitalize description:</value>

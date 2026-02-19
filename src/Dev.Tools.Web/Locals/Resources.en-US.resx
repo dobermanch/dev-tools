@@ -212,6 +212,54 @@
     <data name="Page.StringToNatoAlphabetToolPage.TextField.Result.Label" xml:space="preserve">
         <value>NATO Words</value>
     </data>
+    <data name="Page.JwtParserToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>JWT Token</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Algorithm.Label" xml:space="preserve">
+        <value>Algorithm</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.TokenType.Label" xml:space="preserve">
+        <value>Token Type</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Issuer.Label" xml:space="preserve">
+        <value>Issuer (iss)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Subject.Label" xml:space="preserve">
+        <value>Subject (sub)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Audience.Label" xml:space="preserve">
+        <value>Audience (aud)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.IssuedAt.Label" xml:space="preserve">
+        <value>Issued At (iat)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.NotBefore.Label" xml:space="preserve">
+        <value>Not Before (nbf)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.ExpiresAt.Label" xml:space="preserve">
+        <value>Expires At (exp)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.JwtId.Label" xml:space="preserve">
+        <value>JWT ID (jti)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.HeaderJson.Label" xml:space="preserve">
+        <value>Header</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.PayloadJson.Label" xml:space="preserve">
+        <value>Payload</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Signature.Label" xml:space="preserve">
+        <value>Signature</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Section.Claims.Title" xml:space="preserve">
+        <value>Claims</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Table.Header.Claim" xml:space="preserve">
+        <value>Claim</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Table.Header.Value" xml:space="preserve">
+        <value>Value</value>
+    </data>
     <data name="Page.UrlParserToolPage.TextField.Input.Label" xml:space="preserve">
         <value>URL</value>
     </data>

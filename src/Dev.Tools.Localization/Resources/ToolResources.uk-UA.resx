@@ -121,6 +121,9 @@
   <data name="Enums.Keyword.Web" xml:space="preserve">
     <value>Веб</value>
   </data>
+  <data name="Enums.Keyword.Jwt" xml:space="preserve">
+    <value>JWT</value>
+  </data>
   <data name="Enums.Keyword.Xml" xml:space="preserve">
     <value>XML</value>
   </data>
@@ -907,6 +910,98 @@
   </data>
   <data name="Tools.UuidGenerator.Enums.UuidType.Max" xml:space="preserve">
     <value>Max UUID (всі одиниці)</value>
+  </data>
+
+  <!-- JWT Parser Tool -->
+  <data name="Tools.JwtParser.Name" xml:space="preserve">
+    <value>Парсер JWT</value>
+  </data>
+  <data name="Tools.JwtParser.Description" xml:space="preserve">
+    <value>Парсить та декодує JWT токени, витягуючи заголовок, клейми пейлоду, підпис та всі стандартні зареєстровані поля</value>
+  </data>
+  <data name="Tools.JwtParser.Args.Token.Name" xml:space="preserve">
+    <value>JWT Токен</value>
+  </data>
+  <data name="Tools.JwtParser.Args.Token.Description" xml:space="preserve">
+    <value>JWT токен для парсингу (три частини, закодовані Base64url, розділені крапками)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.HeaderJson.Name" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+  <data name="Tools.JwtParser.Result.HeaderJson.Description" xml:space="preserve">
+    <value>Декодований та відформатований JSON заголовка з алгоритмом та типом токена</value>
+  </data>
+  <data name="Tools.JwtParser.Result.PayloadJson.Name" xml:space="preserve">
+    <value>Пейлод</value>
+  </data>
+  <data name="Tools.JwtParser.Result.PayloadJson.Description" xml:space="preserve">
+    <value>Декодований та відформатований JSON пейлода з усіма клеймами</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Signature.Name" xml:space="preserve">
+    <value>Підпис</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Signature.Description" xml:space="preserve">
+    <value>Необроблений підпис у кодуванні Base64url (третя частина токена)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Algorithm.Name" xml:space="preserve">
+    <value>Алгоритм</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Algorithm.Description" xml:space="preserve">
+    <value>Алгоритм підпису з заголовка (клейм alg)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.TokenType.Name" xml:space="preserve">
+    <value>Тип токена</value>
+  </data>
+  <data name="Tools.JwtParser.Result.TokenType.Description" xml:space="preserve">
+    <value>Тип токена з заголовка (клейм typ)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Issuer.Name" xml:space="preserve">
+    <value>Видавець</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Issuer.Description" xml:space="preserve">
+    <value>Видавець токена (клейм iss)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Subject.Name" xml:space="preserve">
+    <value>Суб'єкт</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Subject.Description" xml:space="preserve">
+    <value>Суб'єкт токена (клейм sub)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Audience.Name" xml:space="preserve">
+    <value>Аудиторія</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Audience.Description" xml:space="preserve">
+    <value>Призначені одержувачі токена (клейм aud)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.IssuedAt.Name" xml:space="preserve">
+    <value>Видано о</value>
+  </data>
+  <data name="Tools.JwtParser.Result.IssuedAt.Description" xml:space="preserve">
+    <value>Час видачі токена (клейм iat)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.NotBefore.Name" xml:space="preserve">
+    <value>Не раніше</value>
+  </data>
+  <data name="Tools.JwtParser.Result.NotBefore.Description" xml:space="preserve">
+    <value>Час, до якого токен є недійсним (клейм nbf)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.ExpiresAt.Name" xml:space="preserve">
+    <value>Закінчується о</value>
+  </data>
+  <data name="Tools.JwtParser.Result.ExpiresAt.Description" xml:space="preserve">
+    <value>Час закінчення дії токена (клейм exp)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.JwtId.Name" xml:space="preserve">
+    <value>ID JWT</value>
+  </data>
+  <data name="Tools.JwtParser.Result.JwtId.Description" xml:space="preserve">
+    <value>Унікальний ідентифікатор токена (клейм jti)</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Claims.Name" xml:space="preserve">
+    <value>Клейми</value>
+  </data>
+  <data name="Tools.JwtParser.Result.Claims.Description" xml:space="preserve">
+    <value>Усі клейми пейлода у вигляді пар ключ-значення</value>
   </data>
 
   <!-- XML Formatter Tool -->

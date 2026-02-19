@@ -219,6 +219,54 @@
     <data name="Page.StringToNatoAlphabetToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Слова НАТО</value>
     </data>
+    <data name="Page.JwtParserToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>JWT Токен</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Algorithm.Label" xml:space="preserve">
+        <value>Алгоритм</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.TokenType.Label" xml:space="preserve">
+        <value>Тип токена</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Issuer.Label" xml:space="preserve">
+        <value>Видавець (iss)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Subject.Label" xml:space="preserve">
+        <value>Суб'єкт (sub)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Audience.Label" xml:space="preserve">
+        <value>Аудиторія (aud)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.IssuedAt.Label" xml:space="preserve">
+        <value>Видано о (iat)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.NotBefore.Label" xml:space="preserve">
+        <value>Не раніше (nbf)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.ExpiresAt.Label" xml:space="preserve">
+        <value>Закінчується о (exp)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.JwtId.Label" xml:space="preserve">
+        <value>ID JWT (jti)</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.HeaderJson.Label" xml:space="preserve">
+        <value>Заголовок</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.PayloadJson.Label" xml:space="preserve">
+        <value>Пейлод</value>
+    </data>
+    <data name="Page.JwtParserToolPage.TextField.Signature.Label" xml:space="preserve">
+        <value>Підпис</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Section.Claims.Title" xml:space="preserve">
+        <value>Клейми</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Table.Header.Claim" xml:space="preserve">
+        <value>Клейм</value>
+    </data>
+    <data name="Page.JwtParserToolPage.Table.Header.Value" xml:space="preserve">
+        <value>Значення</value>
+    </data>
     <data name="Page.UrlParserToolPage.TextField.Input.Label" xml:space="preserve">
         <value>URL</value>
     </data>
