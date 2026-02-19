@@ -1180,4 +1180,63 @@
   <data name="Enums.Keyword.Encrypt" xml:space="preserve">
     <value>Encrypt</value>
   </data>
+
+  <!-- Text Decryptor Tool -->
+  <data name="Tools.TextDecryptor.Name" xml:space="preserve">
+    <value>Text Decryptor</value>
+  </data>
+  <data name="Tools.TextDecryptor.Description" xml:space="preserve">
+    <value>Decrypts encrypted text. Supports AES, TripleDES, and RC4 algorithms.</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.EncryptedText.Name" xml:space="preserve">
+    <value>Encrypted Text</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.EncryptedText.Description" xml:space="preserve">
+    <value>Base64 or Hex encoded encrypted text to decrypt</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Key.Name" xml:space="preserve">
+    <value>Secret Key</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Key.Description" xml:space="preserve">
+    <value>Secret key used for decryption (must match the key used for encryption)</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Algorithm.Name" xml:space="preserve">
+    <value>Algorithm</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Algorithm.Description" xml:space="preserve">
+    <value>Encryption algorithm that was used to encrypt the text</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.InputFormat.Name" xml:space="preserve">
+    <value>Input Format</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.InputFormat.Description" xml:space="preserve">
+    <value>Encoding format of the encrypted input (must match the output format used during encryption)</value>
+  </data>
+  <data name="Tools.TextDecryptor.Result.DecryptedText.Name" xml:space="preserve">
+    <value>Decrypted Text</value>
+  </data>
+  <data name="Tools.TextDecryptor.Result.DecryptedText.Description" xml:space="preserve">
+    <value>Plain text recovered from decryption</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
+    <value>AES-128 CBC</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
+    <value>AES-256 CBC</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
+    <value>AES-256 GCM</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
+    <value>TripleDES CBC</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
+    <value>RC4</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.InputFormat.Base64" xml:space="preserve">
+    <value>Base64</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.InputFormat.Hex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
 </root>

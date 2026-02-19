@@ -411,4 +411,19 @@
     <data name="Page.TextEncryptorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Зашифрований текст</value>
     </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Секретний ключ</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Алгоритм</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.Select.InputFormat.Label" xml:space="preserve">
+        <value>Формат вхідних даних</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Зашифрований текст</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Розшифрований текст</value>
+    </data>
 </root>

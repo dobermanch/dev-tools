@@ -404,4 +404,19 @@
     <data name="Page.TextEncryptorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Encrypted Text</value>
     </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Secret Key</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Algorithm</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.Select.InputFormat.Label" xml:space="preserve">
+        <value>Input Format</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Encrypted Text</value>
+    </data>
+    <data name="Page.TextDecryptorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Decrypted Text</value>
+    </data>
 </root>

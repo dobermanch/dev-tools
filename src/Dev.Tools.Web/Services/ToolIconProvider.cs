@@ -31,6 +31,7 @@ public static class ToolIconProvider
             "jwt-parser" => Icons.Material.Outlined.Badge,
             "lorem-ipsum" => Icons.Material.Outlined.Article,
             "text-encryptor" => Icons.Material.Outlined.Lock,
+            "text-decryptor" => Icons.Material.Outlined.LockOpen,
             _ => Icons.Material.Outlined.Construction
         };
     }

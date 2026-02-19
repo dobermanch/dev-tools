@@ -789,6 +789,63 @@
   <data name="Tools.StringToNatoAlphabet.Result.Words.Name" xml:space="preserve">
     <value>:Words:</value>
   </data>
+  <data name="Tools.TextDecryptor.Args.Algorithm.Description" xml:space="preserve">
+    <value>:Algorithm description:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Algorithm.Name" xml:space="preserve">
+    <value>:Algorithm:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.EncryptedText.Description" xml:space="preserve">
+    <value>:EncryptedText description:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.EncryptedText.Name" xml:space="preserve">
+    <value>:EncryptedText:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.InputFormat.Description" xml:space="preserve">
+    <value>:InputFormat description:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.InputFormat.Name" xml:space="preserve">
+    <value>:InputFormat:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Key.Description" xml:space="preserve">
+    <value>:Key description:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Args.Key.Name" xml:space="preserve">
+    <value>:Key:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Description" xml:space="preserve">
+    <value>:Description for TextDecryptor:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
+    <value>:Aes128 Cbc:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
+    <value>:Aes256 Cbc:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
+    <value>:Aes256 Gcm:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
+    <value>:Rc4:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
+    <value>:Triple Des:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.InputFormat.Base64" xml:space="preserve">
+    <value>:Base64:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Enums.InputFormat.Hex" xml:space="preserve">
+    <value>:Hex:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Name" xml:space="preserve">
+    <value>:TextDecryptor:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Result.DecryptedText.Description" xml:space="preserve">
+    <value>:DecryptedText description:</value>
+  </data>
+  <data name="Tools.TextDecryptor.Result.DecryptedText.Name" xml:space="preserve">
+    <value>:DecryptedText:</value>
+  </data>
   <data name="Tools.TextEncryptor.Args.Algorithm.Description" xml:space="preserve">
     <value>:Algorithm description:</value>
   </data>
