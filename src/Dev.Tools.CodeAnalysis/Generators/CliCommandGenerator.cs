@@ -148,6 +148,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
+                ["ToolDescriptionLocalizationKey"] = $"Tools.{tool.TypeName.Replace("Tool", "")}.Description",
                 ["ToolArgsType"] = tool.ArgsDetails.Type,
                 ["ToolResultType"] = tool.ResultDetails.Type,
                 ["SettingsType"] = GenerateSettingsClass(tool),
@@ -162,33 +163,34 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 "Spectre.Console.Cli",
             ],
             Content = 
-              """
-              internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
-                  : AsyncCommand<{TypeName}.Settings>
-              {
-                  {SettingsType}
-                  
-                  public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
-                  {
-                      ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
-                      
-                      try
-                      {
-                          var tool = toolProvider.GetTool<{ToolType}>();
-                          
-                          {SettingsMapping}
-                      
-                          var result = await tool.RunAsync(args, cancellationToken);
-                          
-                          return responseHandler.ProcessResponse(result, definition, settings);
-                      }
-                      catch (Exception ex)
-                      {
-                          return responseHandler.ProcessError(ex, definition, settings);
-                      }
-                  }
-              }
-              """
+              $$"""
+                [LocalizedDescription("{ToolDescriptionLocalizationKey}")]
+                internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
+                    : AsyncCommand<{TypeName}.Settings>
+                {
+                    {SettingsType}
+                    
+                    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+                    {
+                        ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
+                        
+                        try
+                        {
+                            var tool = toolProvider.GetTool<{ToolType}>();
+                            
+                            {SettingsMapping}
+                        
+                            var result = await tool.RunAsync(args, cancellationToken);
+                            
+                            return responseHandler.ProcessResponse(result, definition, settings);
+                        }
+                        catch (Exception ex)
+                        {
+                            return responseHandler.ProcessError(ex, definition, settings);
+                        }
+                    }
+                }
+                """
         };
     
     private static string GenerateSettingsClass(ToolDetails tool)
@@ -201,20 +203,33 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             var prop = tool.ArgsDetails.Properties[i];
             var toolName = tool.TypeName.Replace("Tool", "");
             var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
-
+            
             var letter = prop.Name[0].ToString().ToLower();
-            var template = $"--{letter + prop.Name.Substring(1)}";
-            if (map.Add(letter) || map.Add(letter = letter.ToUpper()))
+            var template = $"{letter + prop.Name.Substring(1)}";
+            if (prop.IsPipeInput)
             {
-                template = $"-{letter}|" + template;
+                properties.AppendLine($$"""
+                                                [LocalizedDescription("{{description}}")]
+                                                [CommandArgument(0, "<{{template}}>")]
+                                                public {{prop.Type}} {{prop.Name}} { get; set; }
+
+                                        """);
             }
+            else
+            {
+                template = $"--{template}";
+                if (map.Add(letter) || map.Add(letter = letter.ToUpper()))
+                {
+                    template = $"-{letter}|{template}";
+                }
 
-            properties.AppendLine($$"""
-                                            [LocalizedDescription("{{description}}")]
-                                            [CommandOption("{{template}}")]
-                                            public {{prop.Type}} {{prop.Name}} { get; set; }
+                properties.AppendLine($$"""
+                                                [LocalizedDescription("{{description}}")]
+                                                [CommandOption("{{template}}")]
+                                                public {{prop.Type}} {{prop.Name}} { get; set; }
 
-                                    """);
+                                        """);
+            }
         }
 
         return $$"""

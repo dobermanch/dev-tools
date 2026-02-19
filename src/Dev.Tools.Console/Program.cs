@@ -18,4 +18,11 @@ services
     .AddDevToolsLocalization()
     .AddCommands(app);
 
-return app.Run(args);
+var cancellationTokenSource = new CancellationTokenSource();
+Console.CancelKeyPress += (sender, eventArgs) =>
+{
+    eventArgs.Cancel = true;
+    cancellationTokenSource.Cancel();
+};
+
+await app.RunAsync(args, cancellationTokenSource.Token);
