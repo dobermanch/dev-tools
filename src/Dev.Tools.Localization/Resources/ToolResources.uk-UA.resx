@@ -124,6 +124,9 @@
   <data name="Enums.Keyword.Jwt" xml:space="preserve">
     <value>JWT</value>
   </data>
+  <data name="Enums.Keyword.Lorem" xml:space="preserve">
+    <value>Lorem Ipsum</value>
+  </data>
   <data name="Enums.Keyword.Xml" xml:space="preserve">
     <value>XML</value>
   </data>
@@ -910,6 +913,44 @@
   </data>
   <data name="Tools.UuidGenerator.Enums.UuidType.Max" xml:space="preserve">
     <value>Max UUID (всі одиниці)</value>
+  </data>
+
+  <!-- Lorem Ipsum Generator Tool -->
+  <data name="Tools.LoremIpsumGenerator.Name" xml:space="preserve">
+    <value>Генератор Lorem Ipsum</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Description" xml:space="preserve">
+    <value>Генерує текст-заповнювач Lorem Ipsum з налаштовуваною кількістю абзаців, речень та слів</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Name" xml:space="preserve">
+    <value>Абзаци</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Description" xml:space="preserve">
+    <value>Кількість абзаців для генерації</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Name" xml:space="preserve">
+    <value>Речень в абзаці</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Description" xml:space="preserve">
+    <value>Кількість речень у кожному абзаці</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Name" xml:space="preserve">
+    <value>Слів у реченні</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Description" xml:space="preserve">
+    <value>Кількість слів у кожному реченні</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Name" xml:space="preserve">
+    <value>Починати з Lorem Ipsum</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Description" xml:space="preserve">
+    <value>Починати перше речення з класичного "Lorem ipsum dolor sit amet..."</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Name" xml:space="preserve">
+    <value>Згенерований текст</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Description" xml:space="preserve">
+    <value>Згенерований текст-заповнювач Lorem Ipsum</value>
   </data>
 
   <!-- JWT Parser Tool -->

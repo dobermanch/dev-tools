@@ -219,6 +219,21 @@
     <data name="Page.StringToNatoAlphabetToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Слова НАТО</value>
     </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.Paragraphs.Label" xml:space="preserve">
+        <value>Абзаци</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.SentencesPerParagraph.Label" xml:space="preserve">
+        <value>Речень в абзаці</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.WordsPerSentence.Label" xml:space="preserve">
+        <value>Слів у реченні</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Switch.StartWithLoremIpsum.Label" xml:space="preserve">
+        <value>Починати з Lorem Ipsum</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Згенерований текст</value>
+    </data>
     <data name="Page.JwtParserToolPage.TextField.Input.Label" xml:space="preserve">
         <value>JWT Токен</value>
     </data>

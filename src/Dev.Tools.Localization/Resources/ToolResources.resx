@@ -93,6 +93,9 @@
   <data name="Enums.Keyword.Jwt" xml:space="preserve">
     <value>:Jwt:</value>
   </data>
+  <data name="Enums.Keyword.Lorem" xml:space="preserve">
+    <value>:Lorem:</value>
+  </data>
   <data name="Enums.Keyword.Network" xml:space="preserve">
     <value>:Network:</value>
   </data>
@@ -656,6 +659,42 @@
   </data>
   <data name="Tools.JwtParser.Result.TokenType.Name" xml:space="preserve">
     <value>:TokenType:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Description" xml:space="preserve">
+    <value>:Paragraphs description:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Name" xml:space="preserve">
+    <value>:Paragraphs:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Description" xml:space="preserve">
+    <value>:SentencesPerParagraph description:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Name" xml:space="preserve">
+    <value>:SentencesPerParagraph:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Description" xml:space="preserve">
+    <value>:StartWithLoremIpsum description:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Name" xml:space="preserve">
+    <value>:StartWithLoremIpsum:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Description" xml:space="preserve">
+    <value>:WordsPerSentence description:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Name" xml:space="preserve">
+    <value>:WordsPerSentence:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Description" xml:space="preserve">
+    <value>:Description for LoremIpsumGenerator:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Name" xml:space="preserve">
+    <value>:LoremIpsumGenerator:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Description" xml:space="preserve">
+    <value>:Text description:</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Name" xml:space="preserve">
+    <value>:Text:</value>
   </data>
   <data name="Tools.PassphraseGenerator.Args.Capitalize.Description" xml:space="preserve">
     <value>:Capitalize description:</value>

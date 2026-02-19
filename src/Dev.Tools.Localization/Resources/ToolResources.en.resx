@@ -124,6 +124,9 @@
   <data name="Enums.Keyword.Jwt" xml:space="preserve">
     <value>JWT</value>
   </data>
+  <data name="Enums.Keyword.Lorem" xml:space="preserve">
+    <value>Lorem Ipsum</value>
+  </data>
   <data name="Enums.Keyword.Xml" xml:space="preserve">
     <value>XML</value>
   </data>
@@ -910,6 +913,44 @@
   </data>
   <data name="Tools.UuidGenerator.Enums.UuidType.Max" xml:space="preserve">
     <value>Max UUID (all ones)</value>
+  </data>
+
+  <!-- Lorem Ipsum Generator Tool -->
+  <data name="Tools.LoremIpsumGenerator.Name" xml:space="preserve">
+    <value>Lorem Ipsum Generator</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Description" xml:space="preserve">
+    <value>Generates Lorem Ipsum placeholder text with configurable number of paragraphs, sentences, and words</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Name" xml:space="preserve">
+    <value>Paragraphs</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.Paragraphs.Description" xml:space="preserve">
+    <value>Number of paragraphs to generate</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Name" xml:space="preserve">
+    <value>Sentences per Paragraph</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.SentencesPerParagraph.Description" xml:space="preserve">
+    <value>Number of sentences in each paragraph</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Name" xml:space="preserve">
+    <value>Words per Sentence</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.WordsPerSentence.Description" xml:space="preserve">
+    <value>Number of words in each sentence</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Name" xml:space="preserve">
+    <value>Start with Lorem Ipsum</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Args.StartWithLoremIpsum.Description" xml:space="preserve">
+    <value>Begin the first sentence with the classic "Lorem ipsum dolor sit amet..." opening</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Name" xml:space="preserve">
+    <value>Generated Text</value>
+  </data>
+  <data name="Tools.LoremIpsumGenerator.Result.Text.Description" xml:space="preserve">
+    <value>The generated Lorem Ipsum placeholder text</value>
   </data>
 
   <!-- JWT Parser Tool -->

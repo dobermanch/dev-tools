@@ -29,6 +29,7 @@ public static class ToolIconProvider
             "url-parser" => Icons.Material.Outlined.TravelExplore,
             "uuid-generator" => Icons.Material.Outlined.QrCode2,
             "jwt-parser" => Icons.Material.Outlined.Badge,
+            "lorem-ipsum" => Icons.Material.Outlined.Article,
             _ => Icons.Material.Outlined.Construction
         };
     }

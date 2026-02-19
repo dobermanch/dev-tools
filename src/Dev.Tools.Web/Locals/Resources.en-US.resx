@@ -212,6 +212,21 @@
     <data name="Page.StringToNatoAlphabetToolPage.TextField.Result.Label" xml:space="preserve">
         <value>NATO Words</value>
     </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.Paragraphs.Label" xml:space="preserve">
+        <value>Paragraphs</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.SentencesPerParagraph.Label" xml:space="preserve">
+        <value>Sentences per Paragraph</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Slider.WordsPerSentence.Label" xml:space="preserve">
+        <value>Words per Sentence</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.Switch.StartWithLoremIpsum.Label" xml:space="preserve">
+        <value>Start with Lorem Ipsum</value>
+    </data>
+    <data name="Page.LoremIpsumGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Generated Text</value>
+    </data>
     <data name="Page.JwtParserToolPage.TextField.Input.Label" xml:space="preserve">
         <value>JWT Token</value>
     </data>
