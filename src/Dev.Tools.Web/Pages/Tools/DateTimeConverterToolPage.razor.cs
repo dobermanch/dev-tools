@@ -20,45 +20,42 @@ public partial class DateTimeConverterToolPage : ComponentBase
         _localizer = Context.Localization.PageLocalizer<DateTimeConverterToolPage>();
         _tool = Context.ToolsProvider.GetTool<DateTimeConverterTool>();
         _toolDefinition = Context.ToolsProvider.GetToolDefinition<DateTimeConverterTool>();
-        
+
         _results = Enum
             .GetValues<DateTimeConverterTool.DateFormatType>()
             .ToDictionary(it => it, _ => (DateTimeConverterTool.Result?)null);
 
         await base.OnInitializedAsync();
-        
+
         _timer = new System.Timers.Timer(1000);
         _timer.Elapsed += UpdateTime;
         _timer.AutoReset = true;
         _timer.Enabled = true;
     }
-    
+
     private async Task OnValueChangedAsync(string value)
     {
         _args.Date = value;
         _timer!.Enabled = string.IsNullOrEmpty(value);
-        
+
         await ConvertAsync();
     }
-    
+
     private async Task ConvertAsync()
     {
         var tasks = new List<Task>();
         foreach (var format in _results.Keys)
         {
             tasks.Add(_tool.RunAsync(new DateTimeConverterTool.Args
-                    {
-                        Date = _args.Date,
-                        From = _args.From,
-                        To = format
-                    },
+                    (
+                        Date: _args.Date,
+                        From: _args.From,
+                        To: format
+                    ),
                     CancellationToken.None)
-                .ContinueWith(it =>
-                {
-                    _results[format] = it.Result;
-                }));
+                .ContinueWith(it => { _results[format] = it.Result; }));
         }
-        
+
         await Task.WhenAll(tasks);
     }
 
@@ -67,7 +64,7 @@ public partial class DateTimeConverterToolPage : ComponentBase
         _args.From = format;
         return ConvertAsync();
     }
-    
+
     private async void UpdateTime(object? source, System.Timers.ElapsedEventArgs e)
     {
         _args.Date = DateTime.Now.ToString("O");
@@ -79,7 +76,7 @@ public partial class DateTimeConverterToolPage : ComponentBase
     {
         _timer?.Dispose();
     }
-    
+
     private record Args
     {
         public string Date { get; set; } = DateTime.Now.ToString("O");

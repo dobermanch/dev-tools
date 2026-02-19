@@ -37,13 +37,13 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
         var customTargetBase = standardBases.All(it => it != args.TargetBase);
 
         var input = args.InputBase == BaseType.Base64
-            ? BitConverter.ToInt64(Convert.FromBase64String(args.InputValue))
+            ? int.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(args.InputValue)))
             : customInputBase
                 ? FromCustomBase(args.InputValue, (int)args.InputBase)
                 : Convert.ToInt64(args.InputValue, (int)args.InputBase);
 
         var result = args.TargetBase == BaseType.Base64
-            ? Convert.ToBase64String(BitConverter.GetBytes(input), 0)
+            ? Convert.ToBase64String(Encoding.UTF8.GetBytes(input.ToString()))
             : customTargetBase
                 ? ToCustomBase((int)input, (int)args.TargetBase)
                 : Convert.ToString(input, (int)args.TargetBase);
@@ -96,9 +96,13 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
         Base64 = 64
     }
 
-    public record Args([property: PipeInput] string InputValue, BaseType InputBase, BaseType TargetBase);
+    public readonly record struct Args(
+        [property: PipeInput] string InputValue,
+        BaseType InputBase,
+        BaseType TargetBase
+    );
 
-    public record Result([property: PipeOutput] string? Data, BaseType Base) : ToolResult
+    public sealed record Result([property: PipeOutput] string? Data, BaseType Base) : ToolResult
     {
         public Result() : this(null!, default) { }
     }

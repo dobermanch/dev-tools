@@ -25,26 +25,23 @@ public partial class CaseConverterPage : ComponentBase
 
         await base.OnInitializedAsync();
     }
-    
+
     private async Task OnValueChangedAsync(string value)
     {
         _args.Text = value;
-        
+
         var tasks = new List<Task>();
         foreach (var caseType in _results.Keys)
         {
-            tasks.Add(_tool.RunAsync(new CaseConverterTool.Args()
-                    {
-                        Text = _args.Text,
-                        Type = caseType
-                    },
+            tasks.Add(_tool.RunAsync(
+                    new CaseConverterTool.Args(_args.Text, caseType),
                     CancellationToken.None)
                 .ContinueWith(it =>
                 {
                     _results[caseType] = it.Result;
                 }));
         }
-        
+
         await Task.WhenAll(tasks);
     }
 

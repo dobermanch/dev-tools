@@ -14,9 +14,9 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_Should_Fail(string? xml, ErrorCode errorCode)
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = xml!
-        }, CancellationToken.None);
+        (
+            Xml: xml!
+        ), CancellationToken.None);
 
         await Assert.That(result.ErrorCodes.First()).IsEqualTo(errorCode);
     }
@@ -25,9 +25,9 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml
-        }, CancellationToken.None);
+        (
+            Xml: TestXml
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -36,10 +36,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_With_Right_Indent()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            IndentSize = 3
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            IndentSize: 3
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -48,10 +48,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_And_Sort_Keys_Asc()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            SortKeys = XmlFormatterTool.SortDirection.Ascending
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            SortKeys: XmlFormatterTool.SortDirection.Ascending
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -60,10 +60,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_And_Sort_Keys_Desc()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            SortKeys = XmlFormatterTool.SortDirection.Descending
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            SortKeys: XmlFormatterTool.SortDirection.Descending
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -72,10 +72,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_And_Exclude_Nulls()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            ExcludeEmpty = true
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            ExcludeEmpty: true
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -84,10 +84,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_As_Compact()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            Compact = true
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            Compact: true
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -96,10 +96,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_With_Uppercase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            KeyFormat = XmlFormatterTool.TextCase.UpperCase
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            KeyFormat: XmlFormatterTool.TextCase.UpperCase
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -108,10 +108,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_With_Lowercase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            KeyFormat = XmlFormatterTool.TextCase.LowerCase
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            KeyFormat: XmlFormatterTool.TextCase.LowerCase
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -120,10 +120,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_With_Pascalcase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            KeyFormat = XmlFormatterTool.TextCase.PascalCase
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            KeyFormat: XmlFormatterTool.TextCase.PascalCase
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }
@@ -132,10 +132,10 @@ public class XmlFormatterToolTests
     public async Task Should_Format_Xml_With_Camelcase()
     {
         var result = await new XmlFormatterTool().RunAsync(new XmlFormatterTool.Args
-        {
-            Xml = TestXml,
-            KeyFormat = XmlFormatterTool.TextCase.CamelCase
-        }, CancellationToken.None);
+        (
+            Xml: TestXml,
+            KeyFormat: XmlFormatterTool.TextCase.CamelCase
+        ), CancellationToken.None);
 
         await Verify(result.Xml).UseSnapshotFolder();
     }

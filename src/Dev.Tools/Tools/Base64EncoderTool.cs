@@ -35,15 +35,13 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
         return new(encoded);
     }
 
-    public record Args
-    {
-        [PipeInput]
-        public string? Text { get; set; }
-        public bool InsertLineBreaks { get; set; }
-        public bool UrlSafe { get; set; }
-    }
+    public readonly record struct Args(
+        [property: PipeInput] string Text,
+        bool InsertLineBreaks = false,
+        bool UrlSafe = false
+    );
 
-    public record Result([property: PipeOutput] string Text) : ToolResult
+    public sealed record Result([property: PipeOutput] string Text) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

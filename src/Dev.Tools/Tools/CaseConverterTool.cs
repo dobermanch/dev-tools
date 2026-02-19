@@ -147,14 +147,12 @@ public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseCon
         MockingCase,        // LoReMiPsUm dOlOr
     }
 
-    public record Args
-    {
-        [PipeInput]
-        public string Text { get; init; } = null!;
-        public CaseType Type { get; init; }
-    }
+    public readonly record struct Args(
+        [property: PipeInput] string Text,
+        CaseType Type = CaseType.None
+    );
 
-    public record Result([property: PipeOutput] string Text) : ToolResult
+    public sealed record Result([property: PipeOutput] string Text) : ToolResult
     {
         public Result() : this(string.Empty){}
     }

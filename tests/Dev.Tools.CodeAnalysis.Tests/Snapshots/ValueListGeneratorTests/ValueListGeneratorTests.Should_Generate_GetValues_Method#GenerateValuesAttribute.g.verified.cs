@@ -11,5 +11,6 @@
 
 namespace Dev.Tools;
 
+[System.CodeDom.Compiler.GeneratedCode("Dev.Tools.CodeAnalysis.Generators.ValuesListGenerator", "1.0.0")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 internal class GenerateValuesAttribute: System.Attribute;

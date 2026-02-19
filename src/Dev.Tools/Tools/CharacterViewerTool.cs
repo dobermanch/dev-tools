@@ -28,7 +28,8 @@ public sealed class CharacterViewerTool : ToolBase<CharacterViewerTool.Args, Cha
             if (!details.TryGetValue(ch, out var info))
             {
                 var hexCode = $"{(int)ch:X4}";
-                var nonStandard = IsNonStandard(ch, args.ViewType is ViewType.RevealAll or ViewType.RemoveAll, standardHexCodes);
+                var nonStandard = IsNonStandard(ch, args.ViewType is ViewType.RevealAll or ViewType.RemoveAll,
+                    standardHexCodes);
 
                 details[ch] = info = new CharInfo(
                     ch,
@@ -116,14 +117,14 @@ public sealed class CharacterViewerTool : ToolBase<CharacterViewerTool.Args, Cha
         RemoveNonStandard
     }
 
-    public sealed record Args(
+    public readonly record struct Args(
         [property: PipeInput] string Text,
-        ViewType ViewType,
+        ViewType ViewType = ViewType.RevealNonStandard,
         bool IncludeCharInfo = false,
         IList<string>? TreatAsStandardHexCodes = null
     );
 
-    public record CharInfo(
+    public readonly record struct CharInfo(
         char Char,
         string HexCode,
         string AsciiCode,

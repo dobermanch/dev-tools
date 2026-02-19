@@ -8,7 +8,7 @@ public partial class Base64DecoderPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private Base64DecoderTool _tool = null!;
-    private readonly Base64DecoderTool.Args _args = new();
+    private readonly Args _args = new();
     private Base64DecoderTool.Result _result = new();
     private IStringLocalizer _localizer = null!;
 
@@ -26,6 +26,11 @@ public partial class Base64DecoderPage : ComponentBase
     private async Task OnDecodeStringValueChangedAsync(string value)
     {
         _args.Text = value;
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(new Base64DecoderTool.Args(_args.Text), CancellationToken.None);
+    }
+
+    record Args
+    {
+        public string? Text { get; set; }
     }
 }

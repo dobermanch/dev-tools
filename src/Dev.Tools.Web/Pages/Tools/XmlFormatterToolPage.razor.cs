@@ -39,14 +39,14 @@ public partial class XmlFormatterToolPage : ComponentBase
         }
 
         var args = new XmlFormatterTool.Args
-        {
-            Xml = _xml,
-            IndentSize = _indentSize,
-            SortKeys = _sortKeys,
-            KeyFormat = _keyFormat,
-            ExcludeEmpty = _excludeEmpty,
-            Compact = _compact
-        };
+        (
+            Xml: _xml,
+            IndentSize: _indentSize,
+            SortKeys: _sortKeys,
+            KeyFormat: _keyFormat,
+            ExcludeEmpty: _excludeEmpty,
+            Compact: _compact
+        );
         _result = await _tool.RunAsync(args, CancellationToken.None);
     }
 

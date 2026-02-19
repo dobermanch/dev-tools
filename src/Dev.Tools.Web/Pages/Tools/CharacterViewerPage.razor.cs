@@ -153,7 +153,7 @@ public partial class CharacterViewerPage : ComponentBase
         return c == ' ' ? "color: var(--mud-palette-text-disabled);" : null;
     }
 
-    public sealed record Args
+    sealed record Args
     {
         public string Text { get; set; } = "";
         public CharacterViewerTool.ViewType ViewType { get; set; } = CharacterViewerTool.ViewType.RevealNonStandard;

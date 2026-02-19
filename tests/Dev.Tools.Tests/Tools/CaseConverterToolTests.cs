@@ -25,11 +25,7 @@ public class CaseConverterToolTests
     [Arguments(CaseType.PathBackwardCase, TestString, "this\\is\\a\\test\\string\\123\\with\\mixed\\cases\\тестінг")]
     public async Task Should_Convert_Test_To_Specified_Case(CaseType caseType, string text, string expected)
     {
-        var args = new CaseConverterTool.Args
-        {
-            Text = text,
-            Type = caseType,
-        };
+        var args = new CaseConverterTool.Args(text, caseType);
         
         var result = await new CaseConverterTool().RunAsync(args, CancellationToken.None);
 

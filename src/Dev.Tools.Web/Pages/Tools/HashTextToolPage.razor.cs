@@ -8,7 +8,7 @@ public partial class HashTextToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private HashTextTool _tool = null!;
-    private readonly HashTextTool.Args _args = new();
+    private readonly Args _args = new();
     private Dictionary<HashTextTool.HashAlgorithm, HashTextTool.Result?> _results = new();
     private IStringLocalizer _localizer = null!;
 
@@ -32,11 +32,11 @@ public partial class HashTextToolPage : ComponentBase
         var tasks = new List<Task>();
         foreach (var algorithm in _results.Keys)
         {
-            tasks.Add(_tool.RunAsync(new HashTextTool.Args()
-                    {
-                        Text = value,
-                        Algorithm = algorithm
-                    },
+            tasks.Add(_tool.RunAsync(new HashTextTool.Args
+                    (
+                        Text: value,
+                        Algorithm: algorithm
+                    ),
                     CancellationToken.None)
                 .ContinueWith(it =>
                 {
@@ -45,5 +45,11 @@ public partial class HashTextToolPage : ComponentBase
         }
         
         await Task.WhenAll(tasks);
+    }
+    
+    private record Args
+    {
+        public string? Text { get; set; }
+        public HashTextTool.HashAlgorithm Algorithm { get; set; } = HashTextTool.HashAlgorithm.Md5;
     }
 }

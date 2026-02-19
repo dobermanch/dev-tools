@@ -8,7 +8,7 @@ public partial class UuidGeneratorToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private UuidGeneratorTool _tool = null!;
-    private readonly UuidGeneratorTool.Args _args = new();
+    private readonly Args _args = new();
     private UuidGeneratorTool.Result? _result;
     private IStringLocalizer _localizer = null!;
 
@@ -26,7 +26,14 @@ public partial class UuidGeneratorToolPage : ComponentBase
 
     private async Task OnValueChangedAsync()
     {
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(new UuidGeneratorTool.Args(
+                _args.Type,
+                _args.Count,
+                _args.Namespace,
+                _args.Name,
+                _args.Time
+            ),
+            CancellationToken.None);
     }
 
     private string GetUuids()
@@ -44,5 +51,14 @@ public partial class UuidGeneratorToolPage : ComponentBase
     {
         _args.Type = type;
         return OnValueChangedAsync();
+    }
+    
+    record Args
+    {
+        public UuidGeneratorTool.UuidType Type { get; set; } = UuidGeneratorTool.UuidType.Nil;
+        public int Count { get; set; } = 1;
+        public Guid? Namespace { get; set; }
+        public string? Name { get; set; }
+        public DateTime? Time { get; set; }
     }
 }

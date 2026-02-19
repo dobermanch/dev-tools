@@ -8,7 +8,7 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private PassphraseGeneratorTool _tool = null!;
-    private readonly PassphraseGeneratorTool.Args _args = new();
+    private readonly Args _args = new();
     private PassphraseGeneratorTool.Result? _result;
     private IStringLocalizer _localizer = null!;
 
@@ -26,7 +26,13 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
 
     private async Task OnValueChangedAsync()
     {
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(new PassphraseGeneratorTool.Args(
+                _args.PhraseCount,
+                _args.WordCount,
+                _args.Separator,
+                _args.Capitalize,
+                _args.Salt),
+            CancellationToken.None);
     }
 
     private string GetPassphrase()
@@ -39,16 +45,25 @@ public partial class PassphraseGeneratorToolPage : ComponentBase
         _args.WordCount = count;
         return OnValueChangedAsync();
     }
-    
+
     private Task OnPhraseCountValueChangedAsync(int count)
     {
         _args.PhraseCount = count;
         return OnValueChangedAsync();
     }
-    
+
     private Task OnCapitalValueChangedAsync(bool value)
     {
         _args.Capitalize = value;
         return OnValueChangedAsync();
+    }
+
+    record Args
+    {
+        public int PhraseCount { get; set; } = 1;
+        public int WordCount { get; set; } = 5;
+        public char? Separator { get; set; } = '-';
+        public bool Capitalize { get; set; }
+        public string? Salt { get; set; }
     }
 }

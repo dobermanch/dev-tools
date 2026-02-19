@@ -28,13 +28,11 @@ public sealed class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64D
         }
     }
 
-    public record Args
-    {
-        [PipeInput]
-        public string? Text { get; set; }
-    }
+    public readonly record struct Args(
+        [property: PipeInput] string Text
+    );
 
-    public record Result([property: PipeOutput] string Data) : ToolResult
+    public sealed record Result([property: PipeOutput] string Data) : ToolResult
     {
         public Result() : this(string.Empty)
         {

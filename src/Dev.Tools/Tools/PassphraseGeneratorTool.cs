@@ -47,16 +47,15 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
         return new Result(phrases);
     }
 
-    public record Args
-    {
-        public int PhraseCount { get; set; } = 1;
-        public int WordCount { get; set; } = 5;
-        public string? Salt { get; set; }
-        public char? Separator { get; set; } = '-';
-        public bool Capitalize { get; set; }
-    }
+    public readonly record struct Args(
+        int PhraseCount = 1,
+        int WordCount  = 5,
+        char? Separator  = '-',
+        bool Capitalize = false,
+        string? Salt = null
+    );
 
-    public record Result([property: PipeOutput] string[] Phrases) : ToolResult
+    public sealed record Result([property: PipeOutput] string[] Phrases) : ToolResult
     {
         public Result() : this([]) { }
     }

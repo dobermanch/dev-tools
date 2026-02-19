@@ -35,13 +35,12 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         Max
     }
 
-    public record Args
-    {
-        public UlidType Type { get; set; }
-        public int Count { get; set; } = 1;
-    }
+    public readonly record struct Args(
+        UlidType Type = UlidType.Random,
+        int Count = 1
+    );
 
-    public record Result([property: PipeOutput] IReadOnlyCollection<Ulid> Data) : ToolResult
+    public sealed record Result([property: PipeOutput] IReadOnlyCollection<Ulid> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

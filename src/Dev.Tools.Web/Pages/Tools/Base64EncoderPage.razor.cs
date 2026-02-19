@@ -6,10 +6,9 @@ namespace Dev.Tools.Web.Pages.Tools;
 
 public partial class Base64EncoderPage : ComponentBase
 {
-
     private ToolDefinition _toolDefinition = null!;
     private Base64EncoderTool _tool = null!;
-    private readonly Base64EncoderTool.Args _args = new();
+    private readonly Args _args = new();
     private Base64EncoderTool.Result _result = new();
     private IStringLocalizer _localizer = null!;
 
@@ -27,6 +26,15 @@ public partial class Base64EncoderPage : ComponentBase
     private async Task OnStringToEncodeValueChangedAsync(string value)
     {
         _args.Text = value;
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(
+            new Base64EncoderTool.Args(_args.Text, _args.InsertLineBreaks, _args.UrlSafe),
+            CancellationToken.None);
+    }
+
+    record Args
+    {
+        public string? Text { get; set; }
+        public bool InsertLineBreaks { get; set; }
+        public bool UrlSafe { get; set; }
     }
 }

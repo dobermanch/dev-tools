@@ -30,9 +30,12 @@ public sealed class SafeUrlTranscoderTool : ToolBase<SafeUrlTranscoderTool.Args,
         Decode
     }
 
-    public record Args([property: PipeInput] string Url, TranscodingType Transcoding);
+    public readonly record struct Args(
+        [property: PipeInput] string Url,
+        TranscodingType Transcoding
+    );
 
-    public record Result([property: PipeOutput] string? Url) : ToolResult
+    public sealed record Result([property: PipeOutput] string? Url) : ToolResult
     {
         public Result() : this(Url: null) { }
     }

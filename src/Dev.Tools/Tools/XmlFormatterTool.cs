@@ -138,16 +138,14 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
         Descending
     }
 
-    public record Args
-    {
-        [PipeInput]
-        public required string Xml { get; init; } = null!;
-        public int IndentSize { get; init; } = 2;
-        public SortDirection SortKeys { get; init; } = SortDirection.None;
-        public TextCase KeyFormat { get; init; } = TextCase.None;
-        public bool ExcludeEmpty { get; init; }
-        public bool Compact { get; init; }
-    }
+    public readonly record struct Args(
+        [property: PipeInput] string Xml,
+        int IndentSize = 2,
+        SortDirection SortKeys = SortDirection.None,
+        TextCase KeyFormat = TextCase.None,
+        bool ExcludeEmpty = false,
+        bool Compact = false
+    );
 
     public record Result : ToolResult
     {

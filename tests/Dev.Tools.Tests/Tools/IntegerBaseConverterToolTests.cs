@@ -10,12 +10,12 @@ public class IntegerBaseConverterToolTests
     [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, Octal, "2322")]
     [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
     [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, Hexadecimal, "4d2")]
-    [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, Base64, "0gQAAA==")]
+    [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, Base64, "MTIzNA==")]
     [Arguments("1234", IntegerBaseConverterTool.BaseType.Decimal, 40, "ei")]
     [Arguments("10011010010", Binary, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
     [Arguments("2322", Octal, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
     [Arguments("4d2", Hexadecimal, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
-    [Arguments("0gQAAA==", Base64, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
+    [Arguments("MTIzNA==", Base64, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
     [Arguments("ei", 40, IntegerBaseConverterTool.BaseType.Decimal, "1234")]
     public async Task ShouldDecodeString_FromBase64(string inputValue, IntegerBaseConverterTool.BaseType inputBase, IntegerBaseConverterTool.BaseType targetBase, string expectedValue)
     {

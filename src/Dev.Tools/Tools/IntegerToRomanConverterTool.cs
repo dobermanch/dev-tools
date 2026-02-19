@@ -80,10 +80,13 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
         Encode,
         Decode
     }
-    
-    public record Args([property: PipeInput] string Number, TranscodingType Transcoding);
 
-    public record Result([property: PipeOutput] string? Number) : ToolResult
+    public readonly record struct Args(
+        [property: PipeInput] string Number,
+        TranscodingType Transcoding
+    );
+
+    public sealed record Result([property: PipeOutput] string? Number) : ToolResult
     {
         public Result() : this(Number: null) { }
     }

@@ -127,16 +127,15 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
 
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sense to make separate tool for each type
-    public record Args
-    {
-        public UuidType Type { get; set; }
-        public int Count { get; set; } = 1;
-        public Guid? Namespace { get; set; }
-        public string? Name { get; set; }
-        public DateTime? Time { get; set; }
-    }
+    public readonly record struct Args(
+        UuidType Type = UuidType.Nil,
+        int Count = 1,
+        Guid? Namespace = null,
+        string? Name = null,
+        DateTime? Time = null
+    );
 
-    public record Result([property: PipeOutput] IReadOnlyCollection<Guid> Data) : ToolResult
+    public sealed record Result([property: PipeOutput] IReadOnlyCollection<Guid> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

@@ -17,13 +17,13 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
         {
             throw new ToolException(ErrorCode.WrongFormat);
         }
-        
+
         var result = ConvertDateToString(date.Value, args.To);
         if (result is null)
         {
             throw new ToolException(ErrorCode.WrongFormat);
         }
-        
+
         return new Result(result);
     }
 
@@ -39,7 +39,8 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
             DateTime result;
             return formatType switch
             {
-                DateFormatType.Iso8601 or DateFormatType.JsDateTime => DateTime.TryParse(input, null, DateTimeStyles.RoundtripKind, out result)
+                DateFormatType.Iso8601 or DateFormatType.JsDateTime => DateTime.TryParse(input, null,
+                    DateTimeStyles.RoundtripKind, out result)
                     ? result
                     : null,
                 DateFormatType.Iso9075 => DateTime.TryParseExact(input, "yyyy-MM-dd HH:mm:ss",
@@ -78,7 +79,7 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
             return null;
         }
     }
-    
+
     public static string? ConvertDateToString(DateTime date, DateFormatType formatType)
     {
         return formatType switch
@@ -90,7 +91,8 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
             DateFormatType.Unix => ((DateTimeOffset)date).ToUnixTimeSeconds().ToString(),
             DateFormatType.Timestamp => ((DateTimeOffset)date).ToUnixTimeMilliseconds().ToString(),
             DateFormatType.Iso8601Utc => date.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-            DateFormatType.MongoObjectId => $"{(int)(date.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds:X8}0000000000000000",
+            DateFormatType.MongoObjectId =>
+                $"{(int)(date.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds:X8}0000000000000000",
             DateFormatType.ExcelDateTime => date.ToOADate().ToString(CultureInfo.InvariantCulture),
             DateFormatType.JsDateTime => date.ToString("o", CultureInfo.InvariantCulture),
             _ => null
@@ -110,17 +112,17 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
         ExcelDateTime,
         JsDateTime
     }
-    
-    public record Args
-    {
-        [PipeInput]
-        public string? Date { get; set; }
-        public DateFormatType From { get; set; }
-        public DateFormatType To { get; set; }
-    }
 
-    public record Result([property: PipeOutput] string Time) : ToolResult
+    public readonly record struct Args(
+        [property: PipeInput] string Date,
+        DateFormatType From = DateFormatType.Iso8601,
+        DateFormatType To = DateFormatType.Iso8601
+    );
+
+    public sealed record Result([property: PipeOutput] string Time) : ToolResult
     {
-        public Result() : this(string.Empty) { }
+        public Result() : this(string.Empty)
+        {
+        }
     }
 }

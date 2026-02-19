@@ -72,19 +72,18 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         return new Result(result);
     }
 
-    public record Args
-    {
-        public int TokenLength { get; set; } = 15;
-        public bool Lowercase { get; set; } = true;
-        public bool Numbers { get; set; } = true;
-        public bool Uppercase { get; set; } = true;
-        public bool Symbols { get; set; } = true;
-        public int TokenCount { get; set; } = 1;
-        public string? ExcludeSymbols { get; set; }
-        public string? Alphabet { get; set; }
-    }
+    public readonly record struct Args(
+        int TokenLength = 15,
+        bool Lowercase = true,
+        bool Numbers = true,
+        bool Uppercase = true,
+        bool Symbols = true,
+        int TokenCount = 1,
+        string? ExcludeSymbols = null,
+        string? Alphabet = null
+    );
 
-    public record Result([property: PipeOutput] string[] Tokens) : ToolResult
+    public sealed record Result([property: PipeOutput] string[] Tokens) : ToolResult
     {
         public Result() : this([])
         {

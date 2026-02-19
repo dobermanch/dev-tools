@@ -8,7 +8,7 @@ public partial class UlidGeneratorToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private UlidGeneratorTool _tool = null!;
-    private readonly UlidGeneratorTool.Args _args = new();
+    private readonly Args _args = new();
     private UlidGeneratorTool.Result? _result;
     private IStringLocalizer _localizer = null!;
 
@@ -26,7 +26,10 @@ public partial class UlidGeneratorToolPage : ComponentBase
 
     private async Task OnValueChangedAsync()
     {
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(new UlidGeneratorTool.Args(
+                _args.Type,
+                _args.Count),
+            CancellationToken.None);
     }
 
     private string GetUlids()
@@ -44,5 +47,11 @@ public partial class UlidGeneratorToolPage : ComponentBase
     {
         _args.Type = type;
         return OnValueChangedAsync();
+    }
+    
+    record Args
+    {
+        public UlidGeneratorTool.UlidType Type { get; set; } = UlidGeneratorTool.UlidType.Random;
+        public int Count { get; set; } = 1;
     }
 }

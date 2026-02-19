@@ -15,8 +15,8 @@ public partial class JsonFormatterToolPage : ComponentBase
     private int _indentSize = 2;
     private JsonFormatterTool.SortDirection _sortKeys = JsonFormatterTool.SortDirection.None;
     private JsonFormatterTool.TextCase _keyFormat = JsonFormatterTool.TextCase.None;
-    private bool _excludeEmpty = false;
-    private bool _compact = false;
+    private bool _excludeEmpty;
+    private bool _compact;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
@@ -38,15 +38,14 @@ public partial class JsonFormatterToolPage : ComponentBase
             return;
         }
 
-        var args = new JsonFormatterTool.Args
-        {
-            Json = _json,
-            IndentSize = _indentSize,
-            SortKeys = _sortKeys,
-            KeyFormat = _keyFormat,
-            ExcludeEmpty = _excludeEmpty,
-            Compact = _compact
-        };
+        var args = new JsonFormatterTool.Args(
+            Json: _json,
+            IndentSize: _indentSize,
+            SortKeys: _sortKeys,
+            KeyFormat: _keyFormat,
+            ExcludeEmpty: _excludeEmpty,
+            Compact: _compact
+        );
         _result = await _tool.RunAsync(args, CancellationToken.None);
     }
 

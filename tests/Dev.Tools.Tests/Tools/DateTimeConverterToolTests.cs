@@ -18,11 +18,11 @@ public class DateTimeConverterToolTests
     public async Task ShouldConvertDateProperly(DateTimeConverterTool.DateFormatType to, string expected)
     {
         var args = new DateTimeConverterTool.Args
-        {
-            Date = "2025-01-11T15:38:59-08:00",
-            From = DateTimeConverterTool.DateFormatType.Iso8601,
-            To = to,
-        };
+        (
+            Date: "2025-01-11T15:38:59-08:00",
+            From: DateTimeConverterTool.DateFormatType.Iso8601,
+            To: to
+        );
 
         var result = await new DateTimeConverterTool().RunAsync(args, CancellationToken.None);
 

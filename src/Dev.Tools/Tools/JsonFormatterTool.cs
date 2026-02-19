@@ -112,18 +112,16 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         Descending
     }
 
-    public record Args
-    {
-        [PipeInput]
-        public required string Json { get; init; } = null!;
-        public int IndentSize { get; init; } = 2;
-        public SortDirection SortKeys { get; init; } = SortDirection.None;
-        public TextCase KeyFormat { get; init; } = TextCase.None;
-        public bool ExcludeEmpty { get; init; }
-        public bool Compact { get; init; }
-    }
+    public readonly record struct Args(
+        [property: PipeInput] string Json,
+        int IndentSize = 2,
+        SortDirection SortKeys = SortDirection.None,
+        TextCase KeyFormat = TextCase.None,
+        bool ExcludeEmpty = false,
+        bool Compact = false
+    );
 
-    public record Result : ToolResult
+    public sealed record Result : ToolResult
     {
         [PipeOutput]
         public string Json { get; init; } = null!;

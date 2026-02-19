@@ -19,10 +19,10 @@ public class HashTextToolTests
     public async Task WhenTextIsEmpty_ShouldReturnFailure(string? text, HashTextTool.HashAlgorithm algorithm)
     {
         var args = new HashTextTool.Args
-        {
-            Text = text,
-            Algorithm = algorithm
-        };
+        (
+            Text: text,
+            Algorithm: algorithm
+        );
         
         var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
@@ -39,10 +39,10 @@ public class HashTextToolTests
     public async Task WhenTextProvided_ShouldGenerateHash(string text, HashTextTool.HashAlgorithm algorithm, string expectedHash)
     {
         var args = new HashTextTool.Args
-        {
-            Text = text,
-            Algorithm = algorithm
-        };
+        (
+            Text: text,
+            Algorithm: algorithm
+        );
 
         var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 

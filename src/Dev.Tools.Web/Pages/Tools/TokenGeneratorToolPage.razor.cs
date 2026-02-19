@@ -8,7 +8,7 @@ public partial class TokenGeneratorToolPage : ComponentBase
 {
     private ToolDefinition _toolDefinition = null!;
     private TokenGeneratorTool _tool = null!;
-    private readonly TokenGeneratorTool.Args _args = new();
+    private readonly Args _args = new();
     private TokenGeneratorTool.Result? _result;
     private IStringLocalizer _localizer = null!;
 
@@ -25,7 +25,16 @@ public partial class TokenGeneratorToolPage : ComponentBase
 
     private async Task OnValueChangedAsync()
     {
-        _result = await _tool.RunAsync(_args, CancellationToken.None);
+        _result = await _tool.RunAsync(new TokenGeneratorTool.Args(
+                _args.TokenLength,
+                _args.Lowercase,
+                _args.Numbers,
+                _args.Uppercase,
+                _args.Symbols,
+                _args.TokenCount,
+                _args.ExcludeSymbols,
+                _args.Alphabet),
+            CancellationToken.None);
     }
 
     private string GetTokens()
@@ -69,5 +78,17 @@ public partial class TokenGeneratorToolPage : ComponentBase
     {
         _args.Symbols = value;
         return OnValueChangedAsync();
+    }
+    
+    record Args
+    {
+        public int TokenLength { get; set; } = 15;
+        public bool Lowercase { get; set; } = true;
+        public bool Numbers { get; set; } = true;
+        public bool Uppercase { get; set; } = true;
+        public bool Symbols { get; set; } = true;
+        public int TokenCount { get; set; } = 1;
+        public string? ExcludeSymbols { get; set; }
+        public string? Alphabet { get; set; }
     }
 }
