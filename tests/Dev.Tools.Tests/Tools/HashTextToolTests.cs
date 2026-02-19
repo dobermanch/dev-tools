@@ -20,7 +20,7 @@ public class HashTextToolTests
     {
         var args = new HashTextTool.Args
         (
-            Text: text,
+            Text: text!,
             Algorithm: algorithm
         );
         

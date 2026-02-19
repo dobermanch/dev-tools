@@ -17,7 +17,7 @@ public class UlidGeneratorToolTests
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(count);
+        await Assert.That(result.Data).Count().IsEqualTo(count);
 
         await Assert.That(result.Data).All().Satisfy(it => it, it => it.IsEqualTo(Ulid.MinValue));
     }
@@ -35,7 +35,7 @@ public class UlidGeneratorToolTests
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(count);
+        await Assert.That(result.Data).Count().IsEqualTo(count);
         
         await Assert.That(result.Data).All().Satisfy(it => it, it => it.IsEqualTo(Ulid.MaxValue));
     }
@@ -53,9 +53,9 @@ public class UlidGeneratorToolTests
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
         
-        await Assert.That(result.Data).HasCount(count);
+        await Assert.That(result.Data).Count().IsEqualTo(count);
 
         await Assert.That(result.Data).All().Satisfy(it => it,
-            it => it.IsNotEqualTo(Ulid.MinValue).And.IsNotEqualTo<Ulid>(Ulid.MaxValue));
+            it => it.IsNotEqualTo(Ulid.MinValue).And.IsNotEqualTo(Ulid.MaxValue));
     }
 }

@@ -45,7 +45,7 @@ public abstract class ToolGeneratorBase
 
         return new ToolDetails
         {
-            Syntax = syntax,
+            Syntax = syntax!,
             Symbol = symbol,
             Name = attributeData.Name,
             Categories = attributeData.Categories,

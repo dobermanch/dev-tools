@@ -19,6 +19,6 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <NoWarn>NU5119,RS2007</NoWarn>
+    <NoWarn>NU5119,RS2007,NU1510</NoWarn>
   </PropertyGroup>
 </Project>

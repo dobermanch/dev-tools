@@ -18,7 +18,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
@@ -33,7 +33,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
         await Assert.That(result.Data).All().Satisfy(it => it.IsEqualTo(Guid.Empty));
     }
 
@@ -48,7 +48,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
@@ -63,7 +63,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Empty);
     }
 
@@ -80,7 +80,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
@@ -95,7 +95,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
         await Assert.That(result.Data).All().Satisfy(it => it.IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")));
     }
 
@@ -110,7 +110,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
@@ -125,7 +125,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
 
@@ -157,7 +157,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
@@ -173,7 +173,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
         
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
@@ -206,7 +206,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
     }
 
     // -------------------------------
@@ -222,7 +222,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
@@ -238,7 +238,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
         await Assert.That(result.Data).HasDistinctItems();
     }
 
@@ -253,7 +253,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
     }
 
     [Test]
@@ -267,7 +267,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
     }
 
     [Test]
@@ -313,7 +313,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
@@ -329,7 +329,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(args.Namespace!.Value);
     }
 
@@ -362,7 +362,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
     }
 
     // -------------------------------
@@ -378,7 +378,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
@@ -413,7 +413,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
         await Assert.That(result.Data).HasDistinctItems();
     }
 
@@ -428,7 +428,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(args.Count);
+        await Assert.That(result.Data).Count().IsEqualTo(args.Count);
     }
 
     [Test]
@@ -442,7 +442,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }
@@ -458,7 +458,7 @@ public class UuidGeneratorToolTests
 
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
-        await Assert.That(result.Data).HasCount(1);
+        await Assert.That(result.Data).Count().IsEqualTo(1);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Empty);
         await Assert.That(result.Data.First()).IsNotEqualTo(Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"));
     }

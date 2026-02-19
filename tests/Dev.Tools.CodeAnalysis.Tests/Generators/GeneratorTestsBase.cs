@@ -157,7 +157,7 @@ public abstract class GeneratorTestsBase
         // Both runs should have the same tracked steps
         await Assert.That(trackedSteps1.Keys)
             .IsNotEmpty()
-            .And.HasCount(trackedSteps2.Count)
+            .And.Count().IsEqualTo(trackedSteps2.Count)
             .And.Contains(it => trackedSteps2.Keys.Contains(it));
 
         // Get the IncrementalGeneratorRunStep collection for each run

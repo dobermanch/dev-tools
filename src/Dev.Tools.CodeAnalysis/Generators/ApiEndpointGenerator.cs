@@ -123,7 +123,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
             
             properties.AppendLine($$"""
                                             [LocalizedDescription("{{description}}")]
-                                            public {{prop.Type}} {{prop.Name}} { get; set; }
+                                            public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                     """);
         }

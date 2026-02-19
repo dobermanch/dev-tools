@@ -211,7 +211,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [LocalizedDescription("{{description}}")]
                                                 [CommandArgument(0, "<{{template}}>")]
-                                                public {{prop.Type}} {{prop.Name}} { get; set; }
+                                                public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                         """);
             }
@@ -226,7 +226,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [LocalizedDescription("{{description}}")]
                                                 [CommandOption("{{template}}")]
-                                                public {{prop.Type}} {{prop.Name}} { get; set; }
+                                                public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                         """);
             }
