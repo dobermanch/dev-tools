@@ -208,9 +208,10 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             var template = $"{letter + prop.Name.Substring(1)}";
             if (prop.IsPipeInput)
             {
+                // NOTE: use optional argument template [argument] instead of <argument> to support StdIn
                 properties.AppendLine($$"""
                                                 [LocalizedDescription("{{description}}")]
-                                                [CommandArgument(0, "<{{template}}>")]
+                                                [CommandArgument(0, "[{{template}}]")]
                                                 public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                         """);

@@ -14,6 +14,7 @@ internal static class ServiceCollectionExtensions
             services.AddTransient<IToolResponseHandler, ToolResponseHandler>();
             app.Configure(config =>
             {
+                config.SetInterceptor(new StdinInterceptor());
                 CommandConfigurator.ConfigureCommands(services, config);
             });
             

@@ -7,7 +7,20 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
 {
     public int ProcessResponse(ToolResult result, ToolDefinition definition, SettingsBase settings)
     {
-        AnsiConsole.WriteLine(JsonSerializer.Serialize(result));
+        var outputProperty = definition.ReturnType.Properties.FirstOrDefault(it => it.IsPipeOutput);
+        if (outputProperty != null)
+        {
+            var value = result.GetType().GetProperty(outputProperty.Name)!.GetValue(result, null);
+            AnsiConsole.WriteLine(value?.ToString() ?? string.Empty);
+        }
+        else
+        {
+            AnsiConsole.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
+        }
+
         return 0;
     }
 
