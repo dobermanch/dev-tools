@@ -16,12 +16,9 @@ public class UrlParserToolTests
     [Arguments("https://tools.dev/path?key1=", new []{"https", null, null, "tools.dev", "443", "/path","?key1=", "key1=", null})]
     [Arguments("https://tools.dev/path?=value1", new []{"https", null, null, "tools.dev", "443", "/path","?=value1", "=value1", null})]
     [Arguments("https://tools.dev/path?key1=value1&key1=value2", new []{"https", null, null, "tools.dev", "443", "/path","?key1=value1&key1=value2", "key1=value1", "key1=value2"})]
-    public async Task When_Url_Provided_Should_Properly_Parse_Uri(string? uri, string[] expected)
+    public async Task When_Url_Provided_Should_Properly_Parse_Uri(string uri, string[] expected)
     {
-        var args = new UrlParserTool.Args
-        {
-            Url = uri
-        };
+        var args = new UrlParserTool.Args(uri);
 
         var result = await new UrlParserTool().RunAsync(args, CancellationToken.None);
 
@@ -53,7 +50,7 @@ public class UrlParserToolTests
     [Test]
     public async Task When_Url_Not_Provided_Shout_Fail()
     {
-        var args = new UrlParserTool.Args();
+        var args = new UrlParserTool.Args(null!);
 
         var result = await new UrlParserTool().RunAsync(args, CancellationToken.None);
         await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.TextEmpty);

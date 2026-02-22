@@ -41,7 +41,7 @@ public sealed class IpDetailsTool : ToolBase<IpDetailsTool.Args, IpDetailsTool.R
         }
     }
 
-    public readonly record struct Args;
+    public sealed record Args;
 
     public sealed record Result(string? IpV4, string? IpV6) : ToolResult
     {

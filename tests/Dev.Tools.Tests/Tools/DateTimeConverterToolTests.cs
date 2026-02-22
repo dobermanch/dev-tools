@@ -4,7 +4,6 @@ namespace Dev.Tools.Tests.Tools;
 
 public class DateTimeConverterToolTests
 {
-    [Skip("It behaves differently on build machine. Need to figure out why.")]
     [Test]
     [Arguments(DateTimeConverterTool.DateFormatType.JsDateTime, "2025-01-11T15:38:59.0000000-08:00")]
     [Arguments(DateTimeConverterTool.DateFormatType.Iso8601Utc, "2025-01-11T23:38:59.0000000Z")]

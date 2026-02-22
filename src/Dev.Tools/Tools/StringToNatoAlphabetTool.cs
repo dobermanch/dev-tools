@@ -53,7 +53,7 @@ public sealed class StringToNatoAlphabetTool : ToolBase<StringToNatoAlphabetTool
         return new(words);
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text
     );
 

@@ -81,7 +81,7 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
         Decode
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Number,
         TranscodingType Transcoding
     );

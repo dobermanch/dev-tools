@@ -35,7 +35,7 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         Max
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         UlidType Type = UlidType.Random,
         int Count = 1
     );

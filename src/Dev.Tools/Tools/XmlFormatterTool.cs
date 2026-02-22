@@ -138,7 +138,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
         Descending
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Xml,
         int IndentSize = 2,
         SortDirection SortKeys = SortDirection.None,

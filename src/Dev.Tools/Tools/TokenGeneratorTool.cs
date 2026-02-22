@@ -72,7 +72,7 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         return new Result(result);
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         int TokenLength = 15,
         bool Lowercase = true,
         bool Numbers = true,

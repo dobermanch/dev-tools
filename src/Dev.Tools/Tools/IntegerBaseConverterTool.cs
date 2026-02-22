@@ -96,7 +96,7 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
         Base64 = 64
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string InputValue,
         BaseType InputBase,
         BaseType TargetBase

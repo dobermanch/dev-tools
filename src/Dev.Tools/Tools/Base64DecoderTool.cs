@@ -28,7 +28,7 @@ public sealed class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64D
         }
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text
     );
 

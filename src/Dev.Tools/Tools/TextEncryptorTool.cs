@@ -149,7 +149,7 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
         Hex
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text,
         string Key,
         EncryptionAlgorithm Algorithm = EncryptionAlgorithm.Aes256Cbc,

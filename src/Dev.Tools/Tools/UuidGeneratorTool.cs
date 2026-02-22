@@ -127,7 +127,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
 
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sense to make separate tool for each type
-    public readonly record struct Args(
+    public sealed record Args(
         UuidType Type = UuidType.Nil,
         int Count = 1,
         Guid? Namespace = null,

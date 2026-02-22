@@ -69,8 +69,8 @@ public sealed class UrlParserTool : ToolBase<UrlParserTool.Args, UrlParserTool.R
         }
     }
 
-    public readonly record struct Args(
-        [property: PipeInput] string? Url
+    public sealed record Args(
+        [property: PipeInput] string Url
     );
 
     public sealed record Result : ToolResult

@@ -112,7 +112,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         Descending
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Json,
         int IndentSize = 2,
         SortDirection SortKeys = SortDirection.None,

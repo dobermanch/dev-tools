@@ -117,7 +117,7 @@ public sealed class CharacterViewerTool : ToolBase<CharacterViewerTool.Args, Cha
         RemoveNonStandard
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text,
         ViewType ViewType = ViewType.RevealNonStandard,
         bool IncludeCharInfo = false,

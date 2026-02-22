@@ -35,7 +35,7 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
         return new(encoded);
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text,
         bool InsertLineBreaks = false,
         bool UrlSafe = false

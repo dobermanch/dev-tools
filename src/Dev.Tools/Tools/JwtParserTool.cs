@@ -108,7 +108,7 @@ public sealed class JwtParserTool : ToolBase<JwtParserTool.Args, JwtParserTool.R
             .Select(p => new KeyValuePair<string, string>(p.Name, p.Value.ToString()))
             .ToList();
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string? Token
     );
 

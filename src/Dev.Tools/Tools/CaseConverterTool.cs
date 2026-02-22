@@ -147,7 +147,7 @@ public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseCon
         MockingCase,        // LoReMiPsUm dOlOr
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text,
         CaseType Type = CaseType.None
     );

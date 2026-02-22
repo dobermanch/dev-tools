@@ -78,7 +78,7 @@ public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.A
         "necessitatibus", "saepe", "eveniet", "repudiandae", "itaque", "earum"
     ];
 
-    public readonly record struct Args(
+    public sealed record Args(
         int Paragraphs = 3,
         int SentencesPerParagraph = 5,
         int WordsPerSentence = 8,

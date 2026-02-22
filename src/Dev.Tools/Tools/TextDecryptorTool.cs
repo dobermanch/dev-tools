@@ -146,7 +146,7 @@ public sealed class TextDecryptorTool : ToolBase<TextDecryptorTool.Args, TextDec
         Hex
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string EncryptedText,
         string Key,
         EncryptionAlgorithm Algorithm = EncryptionAlgorithm.Aes256Cbc,

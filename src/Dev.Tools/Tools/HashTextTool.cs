@@ -75,7 +75,7 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
         Sha512
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string Text,
         HashAlgorithm Algorithm = HashAlgorithm.Md5
     );

@@ -28,5 +28,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dev.Tools.CodeAnalysis\Dev.Tools.CodeAnalysis.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Snapshots\ToolsCatalogGeneratorTests\" />
+  </ItemGroup>
 
 </Project>

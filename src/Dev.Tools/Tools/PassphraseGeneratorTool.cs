@@ -47,7 +47,7 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
         return new Result(phrases);
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         int PhraseCount = 1,
         int WordCount  = 5,
         char? Separator  = '-',
