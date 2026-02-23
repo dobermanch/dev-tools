@@ -13,9 +13,9 @@ public class TokenGeneratorToolTests
         var args = expectedCount is null
             ? new TokenGeneratorTool.Args()
             : new TokenGeneratorTool.Args
-            {
-                TokenCount = expectedCount.Value
-            };
+            (
+                TokenCount: expectedCount.Value
+            );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -31,9 +31,9 @@ public class TokenGeneratorToolTests
         var args = expectedLength is null
             ? new TokenGeneratorTool.Args()
             : new TokenGeneratorTool.Args
-            {
-                TokenLength = expectedLength.Value
-            };
+            (
+                TokenLength: expectedLength.Value
+            );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -45,10 +45,10 @@ public class TokenGeneratorToolTests
     {
         char[] symbols = ['B', 'C'];
         var args = new TokenGeneratorTool.Args
-        {
-            ExcludeSymbols = new string(symbols),
-            Alphabet = "ABCD"
-        };
+        (
+            ExcludeSymbols: new string(symbols),
+            Alphabet: "ABCD"
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -59,13 +59,13 @@ public class TokenGeneratorToolTests
     public async Task WhenUppercaseSpecified_TokenShouldContainsOnlyUppercase()
     {
         var args = new TokenGeneratorTool.Args
-        { 
-            Numbers = false,
-            Lowercase = false,
-            Uppercase = true,
-            Symbols = false,
-            TokenLength = 10
-        };
+        (
+            Numbers: false,
+            Lowercase: false,
+            Uppercase: true,
+            Symbols: false,
+            TokenLength: 10
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -79,13 +79,13 @@ public class TokenGeneratorToolTests
     public async Task WhenLowercaseSpecified_TokenShouldContainsOnlyLowercase()
     {
         var args = new TokenGeneratorTool.Args
-        { 
-            Numbers = false,
-            Lowercase = true,
-            Uppercase = false,
-            Symbols = false,
-            TokenLength = 10
-        };
+        (
+            Numbers: false,
+            Lowercase: true,
+            Uppercase: false,
+            Symbols: false,
+            TokenLength: 10
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -99,13 +99,13 @@ public class TokenGeneratorToolTests
     public async Task WhenNumbersSpecified_TokenShouldContainsOnlyNumbers()
     {
         var args = new TokenGeneratorTool.Args
-        { 
-            Numbers = true,
-            Lowercase = false,
-            Uppercase = false,
-            Symbols = false,
-            TokenLength = 10
-        };
+        ( 
+            Numbers: true,
+            Lowercase: false,
+            Uppercase: false,
+            Symbols: false,
+            TokenLength: 10
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -119,13 +119,13 @@ public class TokenGeneratorToolTests
     public async Task WhenSymbolsSpecified_TokenShouldContainsOnlySymbols()
     {
         var args = new TokenGeneratorTool.Args
-        { 
-            Numbers = false,
-            Lowercase = false,
-            Uppercase = false,
-            Symbols = true,
-            TokenLength = 10
-        };
+        ( 
+            Numbers: false,
+            Lowercase: false,
+            Uppercase: false,
+            Symbols: true,
+            TokenLength: 10
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -140,10 +140,10 @@ public class TokenGeneratorToolTests
     {
         char[] symbols = ['B', 'C'];
         var args = new TokenGeneratorTool.Args
-        {
-            TokenLength = 30,
-            Alphabet = new string(symbols)
-        };
+        (
+            TokenLength: 30,
+            Alphabet: new string(symbols)
+        );
 
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 

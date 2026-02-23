@@ -12,10 +12,9 @@ public class PassphraseGeneratorToolTests
     {
         var args = expectedCount is null
             ? new PassphraseGeneratorTool.Args()
-            : new PassphraseGeneratorTool.Args
-            {
-                PhraseCount = expectedCount.Value
-            };
+            : new PassphraseGeneratorTool.Args(
+                PhraseCount: expectedCount.Value
+            );
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -30,11 +29,10 @@ public class PassphraseGeneratorToolTests
     {
         var args = expectedLength is null
             ? new PassphraseGeneratorTool.Args()
-            : new PassphraseGeneratorTool.Args
-            {
-                WordCount = expectedLength.Value,
-                Separator = ' '
-            };
+            : new PassphraseGeneratorTool.Args(
+                WordCount: expectedLength.Value,
+                Separator: ' '
+            );
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -45,10 +43,10 @@ public class PassphraseGeneratorToolTests
     public async Task WhenSeparatorProvided_ShouldGeneratePhraseWithSeparator()
     {
         var args = new PassphraseGeneratorTool.Args
-        {
-            WordCount = 2,
-            Separator = '-'
-        };
+        (
+            WordCount: 2,
+            Separator: '-'
+        );
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -59,9 +57,9 @@ public class PassphraseGeneratorToolTests
     public async Task WhenSaltIsProvided_ShouldGeneratePhraseWithSalt()
     {
         var args = new PassphraseGeneratorTool.Args
-        { 
-            Salt = "slat"
-        };
+        ( 
+            Salt: "slat"
+        );
 
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 

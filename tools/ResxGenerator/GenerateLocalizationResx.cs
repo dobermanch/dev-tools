@@ -96,7 +96,7 @@ class ReflectionBasedResxGenerator(string assemblyPath, string outputDirectory)
 
         Console.WriteLine($"Successfully retrieved localization keys");
 
-        // Create RESX writer
+        // Create a RESX writer
         var toolResources = new SimpleResxWriter();
 
         // Process tool keys
@@ -145,7 +145,7 @@ class ReflectionBasedResxGenerator(string assemblyPath, string outputDirectory)
 
             Console.WriteLine($"  Tool: {toolName}");
 
-            // Generate tool name and description keys (using colon format to match existing pattern)
+            // Generate tool name and description keys (using colon format to match an existing pattern)
             toolResources.AddResource($"Tools.{toolName}.Name", $"{toolName}");
             toolResources.AddResource($"Tools.{toolName}.Description", $"Description for {toolName}");
             Console.WriteLine($"    Tools.{toolName}.Name");

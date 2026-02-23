@@ -10,10 +10,10 @@ public class UlidGeneratorToolTests
     public async Task WhenTypeIsMin_ShouldGenerateAllMinUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
-        {
-            Type = UlidGeneratorTool.UlidType.Min,
-            Count = count
-        };
+        (
+            Type: UlidGeneratorTool.UlidType.Min,
+            Count: count
+        );
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -28,10 +28,10 @@ public class UlidGeneratorToolTests
     public async Task WhenTypeIsMax_ShouldGenerateAllMaxUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
-        {
-            Type = UlidGeneratorTool.UlidType.Max,
-            Count = count
-        };
+        (
+            Type: UlidGeneratorTool.UlidType.Max,
+            Count: count
+        );
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
 
@@ -46,10 +46,10 @@ public class UlidGeneratorToolTests
     public async Task WhenTypeIsRandom_ShouldGenerateAllRandomUlid(int count)
     {
         var args = new UlidGeneratorTool.Args
-        {
-            Type = UlidGeneratorTool.UlidType.Random,
-            Count = count
-        };
+        (
+            Type: UlidGeneratorTool.UlidType.Random,
+            Count: count
+        );
 
         var result = await new UlidGeneratorTool().RunAsync(args, CancellationToken.None);
         
