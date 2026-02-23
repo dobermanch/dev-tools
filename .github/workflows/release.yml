@@ -25,6 +25,9 @@ jobs:
       - name: Restore
         run: dotnet restore
 
+      - name: Build CodeAnalysis
+        run: dotnet build src/Dev.Tools.CodeAnalysis/Dev.Tools.CodeAnalysis.csproj --no-restore -c Release
+
       - name: Build
         run: dotnet build --no-restore -c Release
 
