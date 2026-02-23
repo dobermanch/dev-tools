@@ -4,13 +4,19 @@ using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using Dev.Tools.Localization;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 
 [assembly: GenerateToolsApiEndpoint]
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services
     .AddControllers(options =>
@@ -48,16 +54,10 @@ builder.Services
         options.SuppressInferBindingSourcesForParameters = true;
     })
     .AddOptions<ScalarOptions>()
-    .Configure<IServer>((options, server) =>
+    .Configure(options =>
     {
-        options
-            .WithTitle("Dev Tools API")
-            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
-        options.Servers = server.Features
-            .Get<IServerAddressesFeature>()
-            ?.Addresses
-            .Select(it => new ScalarServer(it))
-            .ToList();
+        options.Title = "Dev Tools API";
+        options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 
 builder.Services
@@ -65,6 +65,17 @@ builder.Services
     .AddDevToolsLocalization();
 
 var app = builder.Build();
+app.UseForwardedHeaders();
+
+var localizationProvider = app.Services.GetRequiredService<ILocalizationProvider>();
+var supportedCultures = localizationProvider.SupportedCultures.Select(c => c.Name).ToArray();
+app.UseRequestLocalization(options =>
+{
+    options.SetDefaultCulture(LocalizationProvider.FallbackCulture)
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
+
 app.MapOpenApi();
 app.MapScalarApiReference("ui");
 

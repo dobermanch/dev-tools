@@ -9,7 +9,12 @@
               "--project",
               "${workspaceFolder}/src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj"
           ]
-      }
+      },
+      "DevTools-Docker": {
+        "type": "stdio",
+        "command": "docker",
+        "args": ["run", "-i", "--rm", "dev.tools.mcp:0.0.1"]
+    }
   }
 }
 

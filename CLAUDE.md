@@ -62,7 +62,7 @@ public sealed class MyTool : ToolBase<MyTool.Args, MyTool.Result>
         return new Result(/* computed value */);
     }
 
-    public readonly record struct Args(
+    public sealed record Args(
         [property: PipeInput] string? Input,   // [PipeInput] marks primary CLI-pipeable arg
         int Count = 1
     );

@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "dev-tools": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj"
+      ]
+    },
+    "dev-tools-docker": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "dev.tools.mcp:0.0.1"]
+    }
+  }
+}

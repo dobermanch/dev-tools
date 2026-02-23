@@ -1,21 +1,27 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
-USER $APP_UID
+FROM mcr.microsoft.com/dotnet/runtime:10.0-alpine AS base
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS publish
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+ARG VERSION=0.0.1
+WORKDIR /build
+COPY ["Directory.Build.props", "."]
+COPY ["Directory.Build.targets", "."]
+COPY ["Directory.Packages.props", "."]
+COPY ["global.json", "."]
+COPY ["src/Dev.Tools/Dev.Tools.csproj", "src/Dev.Tools/"]
+COPY ["src/Dev.Tools.CodeAnalysis/Dev.Tools.CodeAnalysis.csproj", "src/Dev.Tools.CodeAnalysis/"]
+COPY ["src/Dev.Tools.Localization/Dev.Tools.Localization.csproj", "src/Dev.Tools.Localization/"]
 COPY ["src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj", "src/Dev.Tools.Mcp/"]
-RUN dotnet restore "src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj"
+RUN dotnet restore -r linux-musl-x64 "src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj"
 COPY . .
-WORKDIR "/src/src/Dev.Tools.Mcp"
-RUN dotnet build "Dev.Tools.Mcp.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Dev.Tools.Mcp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+WORKDIR "/build/src/Dev.Tools.Mcp"
+RUN dotnet publish "Dev.Tools.Mcp.csproj" --no-restore -r linux-musl-x64 -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:Version=$VERSION
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish --chown=app:app /app/publish .
+USER app
 ENTRYPOINT ["dotnet", "Dev.Tools.Mcp.dll"]
