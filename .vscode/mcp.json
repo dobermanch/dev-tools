@@ -1,7 +1,7 @@
 {
   "inputs": [],
   "servers": {
-      "DevTools1": {
+      "DevTools": {
           "type": "stdio",
           "command": "dotnet",
           "args": [
@@ -13,8 +13,12 @@
       "DevTools-Docker": {
         "type": "stdio",
         "command": "docker",
-        "args": ["run", "-i", "--rm", "dev.tools.mcp:0.0.1"]
-    }
+        "args": ["run", "-i", "--rm", "-e", "MCP_TRANSPORT=stdio", "dev.tools.mcp:0.0.1"]
+      },
+      "DevTools-HTTP": {
+        "type": "http",
+        "url": "http://localhost:8080/mcp"
+      }
   }
 }
 

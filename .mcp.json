@@ -12,7 +12,11 @@
     "dev-tools-docker": {
       "type": "stdio",
       "command": "docker",
-      "args": ["run", "-i", "--rm", "dev.tools.mcp:0.0.1"]
+      "args": ["run", "-i", "--rm", "-e", "MCP_TRANSPORT=stdio", "dev.tools.mcp:0.0.1"]
+    },
+    "dev-tools-http": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
     }
   }
 }

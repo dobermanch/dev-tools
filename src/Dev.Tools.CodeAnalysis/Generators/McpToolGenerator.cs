@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.Mcp.Core;
 using Microsoft.CodeAnalysis;
@@ -57,10 +57,9 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
                 ["ToolLocalizationName"] = tool.TypeName.Replace("Tool", ""),
-                ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
                 ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
-                ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
-                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool.ArgsDetails, tool.ArgsDetails.Type, "args", "request", false),
+                ["ToolArgsParameters"] = GenerateIndividualParameters(tool, tool.ArgsDetails),
+                ["RequestTypeMapping"] = GenerateArgsFromIndividualParameters(tool.ArgsDetails),
                 ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
                 ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"), "response", "result", true)
             },
@@ -76,41 +75,115 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
               [McpServerToolType]
               public static class {{tool.TypeName}}McpTool
               {
-                  {RequestType}
-                  
                   {ResultType}
 
                   [McpServerTool(Name = "{ToolName}")]
                   [LocalizedDescription("Tools.{ToolLocalizationName}.Description")]
                   public static async Task<{ToolResultType}> ExecuteAsync(
                       IToolsProvider tools,
-                      {ToolArgsType} request,
+                      {ToolArgsParameters}
                       CancellationToken cancellationToken = default)
                   {
                       var tool = tools.GetTool<{ToolType}>();
-                  
+
                       {RequestTypeMapping}
-                  
+
                       var result = await tool.RunAsync(args, cancellationToken);
-                      
+
                       {ResultTypeMapping}
-                      
+
                       return response;
                   }
               }
               """
         };
     }
-    
-   private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
+
+    private static readonly HashSet<string> s_csharpKeywords = new HashSet<string>
+    {
+        "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+        "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else",
+        "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for",
+        "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock",
+        "long", "namespace", "new", "null", "object", "operator", "out", "override", "params",
+        "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short",
+        "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true",
+        "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual",
+        "void", "volatile", "while"
+    };
+
+    private static string ToParamName(string propertyName)
+    {
+        var name = char.ToLowerInvariant(propertyName[0]) + propertyName.Substring(1);
+        return s_csharpKeywords.Contains(name) ? "@" + name : name;
+    }
+
+    private static string GenerateIndividualParameters(ToolDetails tool, TypeDetails argsDetails)
+    {
+        if (argsDetails.Properties.Length == 0) return string.Empty;
+
+        var toolName = tool.TypeName.Replace("Tool", "");
+
+        var paramsText = string.Join(",\n        ",
+            argsDetails.Properties.Select(prop =>
+            {
+                var description = $"Tools.{toolName}.{argsDetails.TypeName}.{prop.Name}.Description";
+                var paramName = ToParamName(prop.Name);
+                var paramDecl = $"[LocalizedDescription(\"{description}\")] {prop.Type} {paramName}";
+
+                if (prop.DefaultValue != null)
+                    paramDecl += $" = {prop.DefaultValue}";
+
+                return paramDecl;
+            }));
+
+        return paramsText + ",";
+    }
+
+    private static string GenerateArgsFromIndividualParameters(TypeDetails argsDetails)
+    {
+        if (HasConstructorMatchingProperties(argsDetails.Symbol))
+        {
+            var arguments = string.Join(",\n                    ",
+                argsDetails.Properties.Select(p =>
+                {
+                    var paramName = ToParamName(p.Name);
+                    return $"{p.Name}: {paramName}";
+                }));
+
+            return $$"""
+                     var args = new {{argsDetails.Type}}(
+                                    {{arguments}}
+                                );
+                     """;
+        }
+        else
+        {
+            var properties = string.Join(",\n                    ",
+                argsDetails.Properties.Select(p =>
+                {
+                    var paramName = ToParamName(p.Name);
+                    return $"{p.Name} = {paramName}";
+                }));
+
+            return $$"""
+                     var args = new {{argsDetails.Type}}
+                                {
+                                    {{properties}}
+                                };
+                     """;
+        }
+    }
+
+    private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
     {
         var properties = new System.Text.StringBuilder();
         var toolName = tool.TypeName.Replace("Tool", "");
-        
+
         foreach (var prop in typeDetails.Properties)
         {
             var description = $"Tools.{toolName}.{typeDetails.TypeName}.{prop.Name}.Description";
-            
+
             properties.AppendLine($$"""
                                             [LocalizedDescription("{{description}}")]
                                             public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
@@ -124,13 +197,12 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                  {{properties}}    }
                  """;
     }
-    
+
     private static string GenerateDataTypeMapping(TypeDetails typeDetails, string typeName, string targetVariableName, string sourceVariableName, bool useParameterInitializer)
     {
-        // Check if Args type has a constructor matching all properties (positional record)
+        // Check if Result type has a constructor matching all properties (positional record)
         if (!useParameterInitializer && HasConstructorMatchingProperties(typeDetails.Symbol))
         {
-            // Use constructor syntax for positional records
             var arguments = string.Join(",\n                    ",
                 typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
 
@@ -142,7 +214,6 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         }
         else
         {
-            // Use object initializer syntax for init properties
             var properties = string.Join(",\n                    ",
                 typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
 

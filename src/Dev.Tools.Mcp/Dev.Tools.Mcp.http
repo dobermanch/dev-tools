@@ -1,0 +1,174 @@
+@baseUrl = http://localhost:8080
+
+### 1. Initialize session
+# @name init
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {},
+    "clientInfo": { "name": "http-test", "version": "1.0" }
+  },
+  "id": 1
+}
+
+### 2. Notify initialized (no response expected)
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized",
+  "params": {}
+}
+
+### 3. List all available tools
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "params": {},
+  "id": 3
+}
+
+### 4. Encode text to Base64
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "base64-encoder",
+    "arguments": {
+      "text": "Hello, World!",
+      "urlSafe": false,
+      "insertLineBreaks": false
+    }
+  },
+  "id": 4
+}
+
+### 5. Decode Base64
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "base64-decoder",
+    "arguments": {
+      "text": "SGVsbG8sIFdvcmxkIQ=="
+    }
+  },
+  "id": 5
+}
+
+### 6. Generate a UUID v4
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "uuid-generator",
+    "arguments": {
+      "type": "V4",
+      "count": 3
+    }
+  },
+  "id": 6
+}
+
+### 7. Hash text with SHA-256
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "hash",
+    "arguments": {
+      "text": "Hello, World!",
+      "algorithm": "Sha256"
+    }
+  },
+  "id": 7
+}
+
+### 8. Parse a URL
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "url-parser",
+    "arguments": {
+      "url": "https://user:pass@example.com:8080/path/to/page?foo=bar&baz=qux#section"
+    }
+  },
+  "id": 8
+}
+
+### 9. Convert text case to snake_case
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "case-converter",
+    "arguments": {
+      "text": "Hello World From MCP",
+      "type": "SnakeCase"
+    }
+  },
+  "id": 9
+}
+
+### 10. Call tool with invalid input (error handling)
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Mcp-Session-Id: {{init.response.headers.mcp-session-id}}
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "base64-decoder",
+    "arguments": {
+      "text": ""
+    }
+  },
+  "id": 10
+}

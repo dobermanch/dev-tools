@@ -1,6 +1,9 @@
-FROM mcr.microsoft.com/dotnet/runtime:10.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS base
 RUN apk add --no-cache icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV MCP_TRANSPORT=http
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS publish

@@ -233,27 +233,84 @@ public abstract class ToolGeneratorBase
 
         return toolInterface
             ?.TypeArguments
-            .Select(arg => new TypeDetails
+            .Select(arg =>
             {
-                Symbol = arg,
-                Type = arg.ToDisplayString(),
-                Properties =
-                    arg.GetMembers()
-                        .OfType<IPropertySymbol>()
-                        .Where(it => it.DeclaredAccessibility == Accessibility.Public)
-                        .Select(it => new PropertyDetails
-                        {
-                            Name = it.Name,
-                            Type = it.Type.ToDisplayString(),
-                            IsRequired = it.IsRequired,
-                            IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
-                            IsPipeInput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeInputAttribute"),
-                            IsPipeOutput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
-                        })
-                        .ToArray(),
-                Enums = ExtractEnumsFromType(arg)
+                var defaults = GetConstructorDefaultValues(arg);
+                return new TypeDetails
+                {
+                    Symbol = arg,
+                    Type = arg.ToDisplayString(),
+                    Properties =
+                        arg.GetMembers()
+                            .OfType<IPropertySymbol>()
+                            .Where(it => it.DeclaredAccessibility == Accessibility.Public)
+                            .Select(it => new PropertyDetails
+                            {
+                                Name = it.Name,
+                                Type = it.Type.ToDisplayString(),
+                                IsRequired = it.IsRequired,
+                                IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
+                                IsPipeInput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeInputAttribute"),
+                                IsPipeOutput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
+                                DefaultValue = defaults.TryGetValue(it.Name, out var defVal) ? defVal : null
+                            })
+                            .ToArray(),
+                    Enums = ExtractEnumsFromType(arg)
+                };
             })
             .ToArray() ?? [];
+    }
+
+    private static Dictionary<string, string> GetConstructorDefaultValues(ITypeSymbol typeSymbol)
+    {
+        var defaults = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        if (typeSymbol is not INamedTypeSymbol namedType)
+            return defaults;
+
+        var ctor = namedType.Constructors
+            .FirstOrDefault(c => c.DeclaredAccessibility == Accessibility.Public && !c.IsImplicitlyDeclared);
+
+        if (ctor == null) return defaults;
+
+        foreach (var param in ctor.Parameters.Where(p => p.HasExplicitDefaultValue))
+        {
+            var defaultValue = param.ExplicitDefaultValue;
+
+            // Unwrap Nullable<T> to detect underlying enum type
+            ITypeSymbol paramType = param.Type;
+            if (paramType is INamedTypeSymbol nt && nt.IsGenericType &&
+                nt.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+            {
+                paramType = nt.TypeArguments[0];
+            }
+
+            string defaultStr;
+            if (paramType is INamedTypeSymbol { TypeKind: TypeKind.Enum } enumType && defaultValue != null)
+            {
+                var enumMember = enumType.GetMembers()
+                    .OfType<IFieldSymbol>()
+                    .FirstOrDefault(f => f.HasConstantValue && Equals(f.ConstantValue, defaultValue));
+                defaultStr = enumMember != null
+                    ? $"{enumType.ToDisplayString()}.{enumMember.Name}"
+                    : (defaultValue?.ToString() ?? "default");
+            }
+            else
+            {
+                defaultStr = defaultValue switch
+                {
+                    null => "null",
+                    bool b => b ? "true" : "false",
+                    char c => $"'{c}'",
+                    string s => $"\"{s}\"",
+                    _ => defaultValue?.ToString() ?? "default"
+                };
+            }
+
+            defaults[param.Name] = defaultStr;
+        }
+
+        return defaults;
     }
 
     private static EnumDetails[] ExtractEnumsFromType(ITypeSymbol typeSymbol)
@@ -322,6 +379,7 @@ public abstract class ToolGeneratorBase
         public bool IsNullable { get; set; }
         public bool IsPipeInput { get; set; }
         public bool IsPipeOutput { get; set; }
+        public string? DefaultValue { get; set; }
     }
 
     protected record EnumDetails : TypeDeclaration
