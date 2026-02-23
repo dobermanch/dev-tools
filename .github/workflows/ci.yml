@@ -36,10 +36,11 @@ jobs:
         run: dotnet test --no-build -c Release --verbosity normal -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=./coverage/ -p:MergeWith=./coverage/coverage.json
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: actions/upload-artifact@v4
         with:
-          files: 'coverage/coverage.xml'
-          fail_ci_if_error: false
+          name: coverage
+          path: '**/coverage.json'
+
 
   build-docker:
     runs-on: ubuntu-latest
