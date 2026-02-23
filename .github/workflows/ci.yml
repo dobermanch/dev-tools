@@ -33,12 +33,12 @@ jobs:
         run: dotnet build --no-restore -c Release
 
       - name: Test
-        run: dotnet test --no-build -c Release --verbosity normal -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=TestResults/coverage.xml
+        run: dotnet test --no-build -c Release --verbosity normal -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=./coverage/ -p:MergeWith=./coverage/coverage.json
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
-          files: '**/TestResults/coverage.xml'
+          files: 'coverage/coverage.xml'
           fail_ci_if_error: false
 
   build-docker:
