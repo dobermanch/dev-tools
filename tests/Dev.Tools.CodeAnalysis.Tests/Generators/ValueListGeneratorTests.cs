@@ -5,6 +5,7 @@ namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
 public class ValueListGeneratorTests : GeneratorTestsBase
 {
+    [Skip("Generator is disabled for this Attribute")]
     [Test]
     public async Task Should_Generate_GetValues_Method()
     {
