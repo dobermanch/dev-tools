@@ -7,10 +7,20 @@
         <DtSection Id="config" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
                 <MudItem xs="12" sm="6" md="6">
-                    <MudSwitch T="bool" @bind-Value="@_args.UrlSafe" Label="@_localizer["Switch.SafeUrl.Label"]" Color="Color.Primary"/>
+                    <MudSwitch 
+                        T="bool" 
+                        Value="@_args.UrlSafe" 
+                        Label="@_localizer["Switch.SafeUrl.Label"]" 
+                        Color="Color.Primary"
+                        ValueChanged="@OnUrlSafeValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="6">
-                    <MudSwitch T="bool" @bind-Value="@_args.InsertLineBreaks" Label="@_localizer["Switch.LineBreaks.Label"]" Color="Color.Primary"/>
+                    <MudSwitch 
+                        T="bool" 
+                        Value="@_args.InsertLineBreaks" 
+                        Label="@_localizer["Switch.LineBreaks.Label"]" 
+                        Color="Color.Primary"
+                        ValueChanged="@OnInsertLineBreaksValueChangedAsync"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

@@ -53,7 +53,9 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
                 break;
         }
 
-        return new(guids);
+        string[] formattedGuids = guids.Select(g => FormatGuid(g, args)).ToArray();
+
+        return new(formattedGuids);
     }
 
     private static Guid[] Generate(Args args, Func<long, Guid> getGuid)
@@ -115,6 +117,25 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         return new Guid(bytes, true);
     }
 
+    private static string FormatGuid(Guid guid, Args args)
+    {
+        string format = args.Hyphens ? "D" : "N";
+        var uuidString = guid.ToString(format);
+
+        if (args.Case == UuidCase.Uppercase)
+        {
+            uuidString = uuidString.ToUpperInvariant();
+        }
+
+        return args.Brackets switch
+        {
+            UuidBrackets.Braces => $"{{{uuidString}}}",
+            UuidBrackets.Parentheses => $"({uuidString})",
+            UuidBrackets.SquareBrackets => $"[{uuidString}]",
+            _ => uuidString
+        };
+    }
+
     public enum UuidType : byte
     {
         Nil,
@@ -125,6 +146,20 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         Max
     }
 
+    public enum UuidCase
+    {
+        Lowercase,
+        Uppercase
+    }
+
+    public enum UuidBrackets
+    {
+        None,
+        Braces,
+        Parentheses,
+        SquareBrackets
+    }
+
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sense to make separate tool for each type
     public sealed record Args(
@@ -132,10 +167,13 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         int Count = 1,
         Guid? Namespace = null,
         string? Name = null,
-        DateTime? Time = null
+        DateTime? Time = null,
+        bool Hyphens = true,
+        UuidCase Case = UuidCase.Lowercase,
+        UuidBrackets Brackets = UuidBrackets.None
     );
 
-    public sealed record Result([property: PipeOutput] IReadOnlyCollection<Guid> Data) : ToolResult
+    public sealed record Result([property: PipeOutput] IReadOnlyCollection<string> Data) : ToolResult
     {
         public Result() : this([]) { }
     }

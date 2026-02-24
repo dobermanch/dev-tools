@@ -146,6 +146,15 @@
     <data name="Page.UuidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>UUIDs</value>
     </data>
+    <data name="Page.UuidGeneratorToolPage.Select.Brackets.Label" xml:space="preserve">
+        <value>Brackets</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Select.Case.Label" xml:space="preserve">
+        <value>Case</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Switch.Hyphens.Label" xml:space="preserve">
+        <value>Hyphens</value>
+    </data>
     <data name="Page.UlidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
         <value>ULID Count</value>
     </data>
@@ -154,6 +163,12 @@
     </data>
     <data name="Page.UlidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>ULIDs</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Select.Brackets.Label" xml:space="preserve">
+        <value>Brackets</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Select.Case.Label" xml:space="preserve">
+        <value>Case</value>
     </data>
     <data name="Page.IntegerBaseConverterToolPage.TextField.Input.Label" xml:space="preserve">
         <value>Input Value</value>

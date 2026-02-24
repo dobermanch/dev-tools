@@ -25,6 +25,24 @@
                         ValueChanged="OnTypeValueChangedAsync"
                     />
                 </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="UlidGeneratorTool.UlidCase"
+                        Label="@_localizer["Select.Case.Label"]"
+                        Value="@_args.Case"
+                        ValueToDisplay="@(c => Context.Localization.GetToolEnum(_toolDefinition, c))"
+                        ValueChanged="OnCaseValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="UlidGeneratorTool.UlidBrackets"
+                        Label="@_localizer["Select.Brackets.Label"]"
+                        Value="@_args.Brackets"
+                        ValueToDisplay="@(b => Context.Localization.GetToolEnum(_toolDefinition, b))"
+                        ValueChanged="OnBracketsValueChangedAsync"
+                    />
+                </MudItem>
             </MudGrid>
         </DtSection>
 

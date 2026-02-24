@@ -153,6 +153,15 @@
     <data name="Page.UuidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>UUID</value>
     </data>
+    <data name="Page.UuidGeneratorToolPage.Select.Brackets.Label" xml:space="preserve">
+        <value>Дужки</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Select.Case.Label" xml:space="preserve">
+        <value>Регістр</value>
+    </data>
+    <data name="Page.UuidGeneratorToolPage.Switch.Hyphens.Label" xml:space="preserve">
+        <value>Дефіси</value>
+    </data>
     <data name="Page.UlidGeneratorToolPage.Slider.TokenCount.Label" xml:space="preserve">
         <value>Кількість ULID</value>
     </data>
@@ -161,6 +170,12 @@
     </data>
     <data name="Page.UlidGeneratorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>ULID</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Select.Brackets.Label" xml:space="preserve">
+        <value>Дужки</value>
+    </data>
+    <data name="Page.UlidGeneratorToolPage.Select.Case.Label" xml:space="preserve">
+        <value>Регістр</value>
     </data>
     <data name="Page.IntegerBaseConverterToolPage.TextField.Input.Label" xml:space="preserve">
         <value>Вхідне значення</value>

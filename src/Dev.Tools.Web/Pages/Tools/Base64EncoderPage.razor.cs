@@ -31,6 +31,18 @@ public partial class Base64EncoderPage : ComponentBase
             CancellationToken.None);
     }
 
+    private async Task OnUrlSafeValueChangedAsync(bool value)
+    {
+        _args.UrlSafe = value;
+        await OnStringToEncodeValueChangedAsync(_args.Text!);
+    }
+
+    private async Task OnInsertLineBreaksValueChangedAsync(bool value)
+    {
+        _args.InsertLineBreaks = value;
+        await OnStringToEncodeValueChangedAsync(_args.Text!);
+    }
+
     record Args
     {
         public string? Text { get; set; }

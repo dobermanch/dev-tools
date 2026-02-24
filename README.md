@@ -4,7 +4,7 @@
 
 > A growing collection of developer utility tools — available as a CLI, REST API, and MCP server, all powered by a single .NET library.
 
-Dev Tools is built around one idea: **write a tool once, expose it everywhere**. Every tool is a single C# class decorated with `[ToolDefinition]`. At build time, Roslyn source generators automatically produce a CLI command, an API endpoint, a Blazor page, and an MCP tool definition — no boilerplate, no duplication.
+Dev Tools is built around one idea: **write a tool once, expose it everywhere**. Every tool is a single C# class decorated with `[ToolDefinition]`. At build time, Roslyn source generators automatically produce a CLI command, an API endpoint, and an MCP tool definition - no boilerplate, no duplication.
 
 The library covers everyday developer tasks: encoding and decoding (Base64, URL, case formats), cryptographic operations (hashing, encryption, JWT parsing), identifier generation (UUID v3-v7, ULID, tokens, passphrases), data formatting (JSON, XML), and more. Tools are independently installable and usable across all four frontends:
 
@@ -16,7 +16,7 @@ The library covers everyday developer tasks: encoding and decoding (Base64, URL,
 
 Tools are localized (English and Ukrainian), multi-arch Docker images are published on every release.
 
-Try the **[live demo](https://dobermanch.github.io/dev-tools/)** — no installation needed.
+Try the **[live demo](https://dobermanch.github.io/dev-tools/)** - no installation needed.
 
 ---
 

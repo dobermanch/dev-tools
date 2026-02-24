@@ -56,6 +56,31 @@
                         />
                     </MudItem>
                 }
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="UuidGeneratorTool.UuidCase"
+                        Label="@_localizer["Select.Case.Label"]"
+                        Value="@_args.Case"
+                        ValueToDisplay="@(c => Context.Localization.GetToolEnum(_toolDefinition, c))"
+                        ValueChanged="OnCaseValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="UuidGeneratorTool.UuidBrackets"
+                        Label="@_localizer["Select.Brackets.Label"]"
+                        Value="@_args.Brackets"
+                        ValueToDisplay="@(b => Context.Localization.GetToolEnum(_toolDefinition, b))"
+                        ValueChanged="OnBracketsValueChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudSwitch 
+                        Value="@_args.Hyphens" 
+                        Label="@_localizer["Switch.Hyphens.Label"]" 
+                        Color="Color.Primary" T="bool" 
+                        ValueChanged="OnHyphensValueChangedAsync" />
+                </MudItem>
             </MudGrid>
         </DtSection>
 

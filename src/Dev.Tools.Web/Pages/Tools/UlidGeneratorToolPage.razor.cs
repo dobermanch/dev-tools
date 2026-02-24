@@ -28,7 +28,9 @@ public partial class UlidGeneratorToolPage : ComponentBase
     {
         _result = await _tool.RunAsync(new UlidGeneratorTool.Args(
                 _args.Type,
-                _args.Count),
+                _args.Count,
+                _args.Case,
+                _args.Brackets),
             CancellationToken.None);
     }
 
@@ -48,10 +50,24 @@ public partial class UlidGeneratorToolPage : ComponentBase
         _args.Type = type;
         return OnValueChangedAsync();
     }
+
+    private Task OnCaseValueChangedAsync(UlidGeneratorTool.UlidCase value)
+    {
+        _args.Case = value;
+        return OnValueChangedAsync();
+    }
+
+    private Task OnBracketsValueChangedAsync(UlidGeneratorTool.UlidBrackets value)
+    {
+        _args.Brackets = value;
+        return OnValueChangedAsync();
+    }
     
     record Args
     {
         public UlidGeneratorTool.UlidType Type { get; set; } = UlidGeneratorTool.UlidType.Random;
         public int Count { get; set; } = 1;
+        public UlidGeneratorTool.UlidCase Case { get; set; } = UlidGeneratorTool.UlidCase.Uppercase;
+        public UlidGeneratorTool.UlidBrackets Brackets { get; set; } = UlidGeneratorTool.UlidBrackets.None;
     }
 }

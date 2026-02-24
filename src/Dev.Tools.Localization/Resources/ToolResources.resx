@@ -963,6 +963,18 @@
   <data name="Tools.TokenGenerator.Result.Tokens.Name" xml:space="preserve">
     <value>:Tokens:</value>
   </data>
+  <data name="Tools.UlidGenerator.Args.Brackets.Description" xml:space="preserve">
+    <value>:Brackets description:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Brackets.Name" xml:space="preserve">
+    <value>:Brackets:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Case.Description" xml:space="preserve">
+    <value>:Case description:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Args.Case.Name" xml:space="preserve">
+    <value>:Case:</value>
+  </data>
   <data name="Tools.UlidGenerator.Args.Count.Description" xml:space="preserve">
     <value>:Count description:</value>
   </data>
@@ -977,6 +989,24 @@
   </data>
   <data name="Tools.UlidGenerator.Description" xml:space="preserve">
     <value>:Description for UlidGenerator:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidBrackets.Braces" xml:space="preserve">
+    <value>:Braces:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidBrackets.None" xml:space="preserve">
+    <value>:None:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidBrackets.Parentheses" xml:space="preserve">
+    <value>:Parentheses:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidBrackets.SquareBrackets" xml:space="preserve">
+    <value>:Square Brackets:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidCase.Lowercase" xml:space="preserve">
+    <value>:Lowercase:</value>
+  </data>
+  <data name="Tools.UlidGenerator.Enums.UlidCase.Uppercase" xml:space="preserve">
+    <value>:Uppercase:</value>
   </data>
   <data name="Tools.UlidGenerator.Enums.UlidType.Max" xml:space="preserve">
     <value>:Max:</value>
@@ -1056,11 +1086,29 @@
   <data name="Tools.UrlParser.Result.Username.Name" xml:space="preserve">
     <value>:Username:</value>
   </data>
+  <data name="Tools.UuidGenerator.Args.Brackets.Description" xml:space="preserve">
+    <value>:Brackets description:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Brackets.Name" xml:space="preserve">
+    <value>:Brackets:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Case.Description" xml:space="preserve">
+    <value>:Case description:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Case.Name" xml:space="preserve">
+    <value>:Case:</value>
+  </data>
   <data name="Tools.UuidGenerator.Args.Count.Description" xml:space="preserve">
     <value>:Count description:</value>
   </data>
   <data name="Tools.UuidGenerator.Args.Count.Name" xml:space="preserve">
     <value>:Count:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Hyphens.Description" xml:space="preserve">
+    <value>:Hyphens description:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Args.Hyphens.Name" xml:space="preserve">
+    <value>:Hyphens:</value>
   </data>
   <data name="Tools.UuidGenerator.Args.Name.Description" xml:space="preserve">
     <value>:Name description:</value>
@@ -1088,6 +1136,24 @@
   </data>
   <data name="Tools.UuidGenerator.Description" xml:space="preserve">
     <value>:Description for UuidGenerator:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidBrackets.Braces" xml:space="preserve">
+    <value>:Braces:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidBrackets.None" xml:space="preserve">
+    <value>:None:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidBrackets.Parentheses" xml:space="preserve">
+    <value>:Parentheses:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidBrackets.SquareBrackets" xml:space="preserve">
+    <value>:Square Brackets:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidCase.Lowercase" xml:space="preserve">
+    <value>:Lowercase:</value>
+  </data>
+  <data name="Tools.UuidGenerator.Enums.UuidCase.Uppercase" xml:space="preserve">
+    <value>:Uppercase:</value>
   </data>
   <data name="Tools.UuidGenerator.Enums.UuidType.Max" xml:space="preserve">
     <value>:Max:</value>

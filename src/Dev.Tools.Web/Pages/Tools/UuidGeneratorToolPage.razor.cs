@@ -31,7 +31,10 @@ public partial class UuidGeneratorToolPage : ComponentBase
                 _args.Count,
                 _args.Namespace,
                 _args.Name,
-                _args.Time
+                _args.Time,
+                _args.Hyphens,
+                _args.Case,
+                _args.Brackets
             ),
             CancellationToken.None);
     }
@@ -52,13 +55,34 @@ public partial class UuidGeneratorToolPage : ComponentBase
         _args.Type = type;
         return OnValueChangedAsync();
     }
+
+    private Task OnHyphensValueChangedAsync(bool value)
+    {
+        _args.Hyphens = value;
+        return OnValueChangedAsync();
+    }
+
+    private Task OnCaseValueChangedAsync(UuidGeneratorTool.UuidCase value)
+    {
+        _args.Case = value;
+        return OnValueChangedAsync();
+    }
+
+    private Task OnBracketsValueChangedAsync(UuidGeneratorTool.UuidBrackets value)
+    {
+        _args.Brackets = value;
+        return OnValueChangedAsync();
+    }
     
     record Args
     {
-        public UuidGeneratorTool.UuidType Type { get; set; } = UuidGeneratorTool.UuidType.Nil;
+        public UuidGeneratorTool.UuidType Type { get; set; } = UuidGeneratorTool.UuidType.V4;
         public int Count { get; set; } = 1;
         public Guid? Namespace { get; set; }
         public string? Name { get; set; }
         public DateTime? Time { get; set; }
+        public bool Hyphens { get; set; } = true;
+        public UuidGeneratorTool.UuidCase Case { get; set; } = UuidGeneratorTool.UuidCase.Lowercase;
+        public UuidGeneratorTool.UuidBrackets Brackets { get; set; } = UuidGeneratorTool.UuidBrackets.None;
     }
 }
