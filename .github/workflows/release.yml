@@ -40,6 +40,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write  # enable GitHub OIDC token issuance for this job
     steps:
       - uses: actions/checkout@v4
 
@@ -60,16 +61,26 @@ jobs:
         run: dotnet restore
 
       - name: Pack Dev.Tools
-        run: dotnet pack src/Dev.Tools/Dev.Tools.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
+        run: dotnet pack src/Dev.Tools/Dev.Tools.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
 
       - name: Pack Dev.Tools.Console
-        run: dotnet pack src/Dev.Tools.Console/Dev.Tools.Console.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
+        run: dotnet pack src/Dev.Tools.Console/Dev.Tools.Console.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
 
       - name: Pack Dev.Tools.Mcp
-        run: dotnet pack src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
+        run: dotnet pack src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
+
+      - name: Publish to GitHub
+        run: dotnet nuget push ".build/nugets/*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/dobermanch/index.json --skip-duplicate
+
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
 
       - name: Publish to NuGet.org
-        run: dotnet nuget push ".build/nugets/*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/dobermanch/index.json --skip-duplicate
+        run: dotnet nuget push ".build/nugets/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
   publish-docker:
     needs: test
