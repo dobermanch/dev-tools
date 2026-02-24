@@ -6,6 +6,8 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dev-tools</ToolCommandName>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Description>A dotnet global tool exposing all Dev.Tools utilities as a pipeable CLI. Install with `dotnet tool install -g Dev.Tools.Console` and invoke as `dev-tools`. Supports Unix-style piping between commands.</Description>
+    <PackageTags>dotnet;global-tool;developer-tools;helpers;utility;console;cli</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

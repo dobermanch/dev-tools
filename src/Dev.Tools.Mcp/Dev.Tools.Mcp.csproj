@@ -7,6 +7,8 @@
     <ToolCommandName>dev-tools-mcp</ToolCommandName>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <Description>A Model Context Protocol (MCP) server exposing all Dev.Tools utilities to AI assistants (Claude, Cursor, and any MCP-compatible host). Install with `dotnet tool install -g Dev.Tools.Mcp` and register as `dev-tools-mcp` in your AI config.</Description>
+    <PackageTags>dotnet-tool;global-tool;mcp;model-context-protocol;ai;claude;cursor;developer-tools;utility;helpers</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,6 +11,8 @@
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>latest</LangVersion>
     <RepositoryUrl>https://github.com/dobermanch/dev-tools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/dobermanch/dev-tools</PackageProjectUrl>
     <Version>0.0.1</Version>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>

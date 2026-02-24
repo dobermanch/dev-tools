@@ -4,6 +4,8 @@
     <IsPackable>true</IsPackable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <Description>A .NET library of developer utility tools — Base64, hashing, encryption, UUID/ULID generation, JWT parsing, JSON/XML formatting, Lorem Ipsum, and more. Embed and invoke tools programmatically via a simple async API.</Description>
+    <PackageTags>dotnet;dotnet;developer-tools;helpers;utility;</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
