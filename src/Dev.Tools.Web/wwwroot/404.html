@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev Tools</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #1e1e2e; color: #cdd6f4; }
+    .box { text-align: center; }
+    .box h1 { font-size: 5rem; margin: 0; color: #89b4fa; }
+    .box p { margin: 0.5rem 0 1.5rem; color: #a6adc8; }
+    .box a { color: #89b4fa; text-decoration: none; border: 1px solid #89b4fa; padding: 0.4rem 1rem; border-radius: 4px; }
+  </style>
+  <script>
+    // SPA routing fix for GitHub Pages.
+    // Encodes the current path into a query param and redirects to index.html,
+    // which restores it via history.replaceState before Blazor boots.
+    (function () {
+      var base = '/dev-tools';
+      var l = window.location;
+      var path = l.pathname.slice(base.length) || '/';
+      var query = (path !== '/' ? '?path=' + encodeURIComponent(path) : '') +
+                  (l.search ? (path !== '/' ? '&' : '?') + l.search.slice(1) : '') +
+                  l.hash;
+      l.replace(l.origin + base + '/' + query);
+    })();
+  </script>
+</head>
+<body>
+  <div class="box">
+    <h1>404</h1>
+    <p>Redirecting&hellip;</p>
+    <a href="/dev-tools/">Go to Home</a>
+  </div>
+</body>
+</html>
