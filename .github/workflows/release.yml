@@ -61,13 +61,13 @@ jobs:
         run: dotnet restore
 
       - name: Pack Dev.Tools
-        run: dotnet pack src/Dev.Tools/Dev.Tools.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
+        run: dotnet pack src/Dev.Tools/Dev.Tools.csproj --no-restore  --include-symbols -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
 
       - name: Pack Dev.Tools.Console
-        run: dotnet pack src/Dev.Tools.Console/Dev.Tools.Console.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
+        run: dotnet pack src/Dev.Tools.Console/Dev.Tools.Console.csproj --no-restore  --include-symbols -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
 
       - name: Pack Dev.Tools.Mcp
-        run: dotnet pack src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj --no-restore -c Release -o .build/nugets /p:Version=${{ env.VERSION }} --include-symbols --symbol-package-format snupkg
+        run: dotnet pack src/Dev.Tools.Mcp/Dev.Tools.Mcp.csproj --no-restore  --include-symbols -c Release -o .build/nugets /p:Version=${{ env.VERSION }}
 
       - name: Publish to GitHub
         run: dotnet nuget push ".build/nugets/*.nupkg" -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/dobermanch/index.json --skip-duplicate
