@@ -38,8 +38,9 @@
             if (path) {
                 params.delete('path');
                 var qs = params.toString();
+                var base = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
                 window.history.replaceState(null, '',
-                    path + (qs ? '?' + qs : '') + window.location.hash);
+                    base + path + (qs ? '?' + qs : '') + window.location.hash);
             }
         })();
     </script>
