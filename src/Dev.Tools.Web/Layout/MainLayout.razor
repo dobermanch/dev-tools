@@ -39,13 +39,12 @@
 
     <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">
         <MudDrawerHeader Style="flex-shrink: 0;">
-            <MudLink Href="./" Underline="Underline.None" Style="width: 100%;">
                 <MudStack>
-                    <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">DEV TOOLS</MudText>
-
+                    <MudLink Href="./" Underline="Underline.None" Style="width: 100%;">
+                        <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">DEV TOOLS</MudText>
+                    </MudLink>
                     <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Default">@_localizer["Subtitle"]</MudText>
                 </MudStack>
-            </MudLink>
         </MudDrawerHeader>
         <MudDrawerContainer Class="mt-4" Style="flex-grow: 1; overflow-y: auto;">
             <NavMenu/>

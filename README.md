@@ -1,6 +1,6 @@
 # Dev Tools
 
-[![CI](https://github.com/dobermanch/dev-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/dobermanch/dev-tools/actions/workflows/ci.yml) [![Release](https://github.com/dobermanch/dev-tools/actions/workflows/release.yml/badge.svg)](https://github.com/dobermanch/dev-tools/actions/workflows/release.yml) [![GitHub Release](https://img.shields.io/github/v/release/dobermanch/dev-tools)](https://github.com/dobermanch/dev-tools/releases/latest) [![.NET](https://img.shields.io/badge/.NET-10.0-512bd4)](https://dotnet.microsoft.com/download/dotnet/10.0) [![License: MIT](https://img.shields.io/github/license/dobermanch/dev-tools)](LICENSE)
+[![CI](https://github.com/dobermanch/dev-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/dobermanch/dev-tools/actions/workflows/ci.yml) [![Release](https://github.com/dobermanch/dev-tools/actions/workflows/release.yml/badge.svg)](https://github.com/dobermanch/dev-tools/actions/workflows/release.yml) [![GitHub Release](https://img.shields.io/github/v/release/dobermanch/dev-tools)](https://github.com/dobermanch/dev-tools/releases/latest) [![.NET](https://img.shields.io/badge/.NET-10.0-512bd4)](https://dotnet.microsoft.com/download/dotnet/10.0) [![License: MIT](https://img.shields.io/github/license/dobermanch/dev-tools)](LICENSE) [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://dobermanch.github.io/dev-tools/)
 
 > A growing collection of developer utility tools — available as a CLI, REST API, and MCP server, all powered by a single .NET library.
 
@@ -15,6 +15,8 @@ The library covers everyday developer tasks: encoding and decoding (Base64, URL,
 - **NuGet**: embed the tools directly in your .NET application
 
 Tools are localized (English and Ukrainian), multi-arch Docker images are published on every release.
+
+Try the **[live demo](https://dobermanch.github.io/dev-tools/)** — no installation needed.
 
 ---
 
@@ -62,6 +64,8 @@ See [docs/tools.md](docs/tools.md) for the full categorized reference with alias
 ## Usage
 
 ### Web UI
+
+Run locally with Docker:
 
 ```bash
 docker run -p 8080:8080 ghcr.io/dobermanch/dev-tools-web

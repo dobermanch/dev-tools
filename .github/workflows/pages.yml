@@ -2,6 +2,11 @@ name: Deploy to GitHub Pages
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to embed (e.g. 1.2.3). Defaults to the latest git tag.'
+        required: false
+        default: ''
 
 jobs:
   publish-pages:
@@ -26,6 +31,14 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props') }}
           restore-keys: ${{ runner.os }}-nuget-
 
+      - name: Resolve version
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Restore
         run: dotnet restore
 
@@ -33,7 +46,7 @@ jobs:
         run: dotnet build src/Dev.Tools.CodeAnalysis/Dev.Tools.CodeAnalysis.csproj --no-restore -c Release
 
       - name: Publish Blazor WASM
-        run: dotnet publish src/Dev.Tools.Web/Dev.Tools.Web.csproj -c Release -o .build/web --no-restore
+        run: dotnet publish src/Dev.Tools.Web/Dev.Tools.Web.csproj -c Release -o .build/web --no-restore /p:Version=$VERSION
 
       - name: Fix base href for GitHub Pages
         run: sed -i 's|<base href="/" />|<base href="/dev-tools/" />|g' .build/web/wwwroot/index.html

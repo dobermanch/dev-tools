@@ -138,8 +138,58 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: VERSION=${{ env.VERSION }}
 
+  publish-pages:
+    needs: test
+    runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Extract version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build CodeAnalysis
+        run: dotnet build src/Dev.Tools.CodeAnalysis/Dev.Tools.CodeAnalysis.csproj --no-restore -c Release
+
+      - name: Publish Blazor WASM
+        run: dotnet publish src/Dev.Tools.Web/Dev.Tools.Web.csproj -c Release -o .build/web --no-restore /p:Version=${{ env.VERSION }}
+
+      - name: Fix base href for GitHub Pages
+        run: sed -i 's|<base href="/" />|<base href="/dev-tools/" />|g' .build/web/wwwroot/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .build/web/wwwroot
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+
   create-release:
-    needs: [publish-nuget, publish-docker]
+    needs: [publish-nuget, publish-docker, publish-pages]
     runs-on: ubuntu-latest
     permissions:
       contents: write
