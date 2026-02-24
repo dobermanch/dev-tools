@@ -39,7 +39,7 @@ internal sealed class ToolsSearchProvider(WebContext webContext) : ISearchProvid
             .GetToolDefinitions()
             .Select(it => new ToolInfo(
                 it.Name,
-                $"/tools/{it.Name}",
+                $"tools/{it.Name}",
                 webContext.Localization.GetToolTitle(it),
                 webContext.Localization.GetToolDescription(it)
             ))
