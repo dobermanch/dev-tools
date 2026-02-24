@@ -19,7 +19,7 @@
 
         @if (!IsDrawerOpen)
         {
-            <MudLink Underline="Underline.None" Href="/">
+            <MudLink Underline="Underline.None" Href="./">
                 <MudText Typo="Typo.h6" Color="Color.Primary">@Context.AppDetails.Name.ToUpper()</MudText>
             </MudLink>
         }
@@ -34,7 +34,7 @@
         }
         
         <MudIconButton Icon="@LightModeIcon" OnClick="@ChangeThemeModeAsync" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Edge="Edge.End" Href="/settings" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Edge="Edge.End" Href="settings" />
     </MudAppBar>
 
     <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">

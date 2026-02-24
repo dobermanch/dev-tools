@@ -13,6 +13,6 @@ public partial class ToolCard : ComponentBase
 
     private void NavigateToToolPage()
     {
-        Context.Navigation.NavigateTo($"/tools/{Tool.Name}");
+        Context.Navigation.NavigateTo($"tools/{Tool.Name}");
     }
 }

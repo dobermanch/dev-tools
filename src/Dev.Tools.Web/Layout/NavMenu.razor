@@ -3,7 +3,7 @@
 @using Dev.Tools.Web.Notifications
 
 <MudNavMenu>
-    <MudNavLink Href="/"
+    <MudNavLink Href="./"
                 Icon="@Icons.Material.Outlined.Home"
                 IconColor="Color.Primary"
                 Match="NavLinkMatch.All">
@@ -21,7 +21,7 @@
                 <MudNavLink
                     Icon="@ToolIconProvider.GetToolIcon(tool)"
                     IconColor="Color.Primary"
-                    Href="@($"/tools/{tool.Name}")"
+                    Href="@($"tools/{tool.Name}")"
                     Match="NavLinkMatch.Prefix">
                     @Context.Localization.GetToolTitle(tool)
                 </MudNavLink>
@@ -41,7 +41,7 @@
                 <MudNavLink
                     Icon="@ToolIconProvider.GetToolIcon(tool.Item2)"
                     IconColor="Color.Primary"
-                    Href="@($"/tools/{tool.Item2.Name}")"
+                    Href="@($"tools/{tool.Item2.Name}")"
                     Match="NavLinkMatch.Prefix">
                     @Context.Localization.GetToolTitle(tool.Item2)
                 </MudNavLink>
@@ -51,7 +51,7 @@
 
     <MudDivider Class="my-2" />
 
-    <MudNavLink Href="/settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">
+    <MudNavLink Href="settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">
         @_localizer["Settings"]
     </MudNavLink>
 </MudNavMenu>
