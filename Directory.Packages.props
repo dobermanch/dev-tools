@@ -19,7 +19,7 @@
     <PackageVersion Include="MudBlazor" Version="8.15.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.12.41" />
     <PackageVersion Include="Spectre.Console.Cli" Version="0.53.1" />
-    <PackageVersion Include="TUnit" Version="1.15.0" />
+    <PackageVersion Include="TUnit" Version="1.17.7" />
     <PackageVersion Include="Ulid" Version="1.4.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.103" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
