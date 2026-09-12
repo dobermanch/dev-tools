@@ -92,14 +92,14 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
                              Name: "{it.ArgsDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ArgsDetails.Type}),
                              Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\")"))}
+                                 {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\", \"{EscapeLiteral(x.DisplayName)}\")"))}
                              ]
                          ),
                          ReturnType: new ToolDefinition.TypeDetails(
                              Name: "{it.ResultDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ResultDetails.Type}),
                              Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\")"))}
+                                 {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\", \"{EscapeLiteral(x.DisplayName)}\")"))}
                              ]
                          ),
                          ExtraTypes: [

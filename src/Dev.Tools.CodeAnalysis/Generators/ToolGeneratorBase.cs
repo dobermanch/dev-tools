@@ -66,8 +66,18 @@ public abstract class ToolGeneratorBase
     /// assembly metadata, so this works for referenced assemblies as well as source.
     /// </summary>
     private static string GetDescription(ISymbol symbol)
+        => GetAttributeText(symbol, "System.ComponentModel.DescriptionAttribute");
+
+    /// <summary>
+    /// Reads [System.ComponentModel.DisplayName] - the human label for a property, used where the
+    /// property name alone reads badly.
+    /// </summary>
+    private static string GetDisplayName(ISymbol symbol)
+        => GetAttributeText(symbol, "System.ComponentModel.DisplayNameAttribute");
+
+    private static string GetAttributeText(ISymbol symbol, string attributeFullName)
         => Normalize(symbol.GetAttributes()
-            .FirstOrDefault(it => it.AttributeClass?.ToDisplayString() == "System.ComponentModel.DescriptionAttribute")
+            .FirstOrDefault(it => it.AttributeClass?.ToDisplayString() == attributeFullName)
             ?.ConstructorArguments.FirstOrDefault().Value?.ToString());
 
     /// <summary>
@@ -290,6 +300,7 @@ public abstract class ToolGeneratorBase
                                 IsPipeInput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeInputAttribute"),
                                 IsPipeOutput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
                                 Description = GetDescription(it),
+                                DisplayName = GetDisplayName(it),
                                 DefaultValue = defaults.TryGetValue(it.Name, out var defVal) ? defVal : null
                             })
                             .ToArray(),
@@ -421,6 +432,7 @@ public abstract class ToolGeneratorBase
         public bool IsPipeInput { get; set; }
         public bool IsPipeOutput { get; set; }
         public string Description { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
         public string? DefaultValue { get; set; }
     }
 

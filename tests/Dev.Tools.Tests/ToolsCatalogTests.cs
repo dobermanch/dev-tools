@@ -48,6 +48,30 @@ public class ToolsCatalogTests
     }
 
     [Test]
+    public async Task ShouldExposeAuthoredPropertyLabels()
+    {
+        var definition = Definition<Base64EncoderTool>();
+
+        // "Text" on the result means "Encoded Text" to a reader - that is what DisplayName is for.
+        var encoded = definition.ReturnType.Properties.Single(it => it.Name == "Text");
+
+        await Assert.That(encoded.DisplayName).IsEqualTo("Encoded Text");
+        await Assert.That(encoded.Label).IsEqualTo("Encoded Text");
+    }
+
+    [Test]
+    [Arguments("Count", "Count")]
+    [Arguments("InsertLineBreaks", "Insert Line Breaks")]
+    [Arguments("UrlSafe", "Url Safe")]
+    [Arguments("IPv4", "IPv4")]
+    public async Task LabelShouldFallBackToTheSplitPropertyNameWhenNoDisplayNameIsAuthored(string propertyName, string expected)
+    {
+        var property = new ToolDefinition.TypeProperty(propertyName, typeof(string), false, false);
+
+        await Assert.That(property.Label).IsEqualTo(expected);
+    }
+
+    [Test]
     public async Task ShouldExposeEnumValueNames()
     {
         var definition = Definition<UuidGeneratorTool>();

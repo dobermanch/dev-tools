@@ -47,8 +47,34 @@ public sealed record ToolDefinition(
         bool IsNullable,
         bool IsPipeInput = false,
         bool IsPipeOutput = false,
-        string Description = ""
-    );
+        string Description = "",
+        string DisplayName = ""
+    )
+    {
+        /// <summary>
+        /// Human label for the property: the authored <see cref="DisplayName"/> when there is one,
+        /// otherwise the property name split into words. Most labels read fine when derived
+        /// ("InsertLineBreaks"), but some do not ("Data" is really "Decoded Text"), which is what
+        /// <see cref="DisplayName"/> is for.
+        /// </summary>
+        public string Label => string.IsNullOrEmpty(DisplayName) ? SplitWords(Name) : DisplayName;
+
+        private static string SplitWords(string name)
+        {
+            var builder = new StringBuilder(name.Length + 8);
+            for (var i = 0; i < name.Length; i++)
+            {
+                if (i > 0 && char.IsUpper(name[i]) && !char.IsUpper(name[i - 1]))
+                {
+                    builder.Append(' ');
+                }
+
+                builder.Append(name[i]);
+            }
+
+            return builder.ToString();
+        }
+    }
 
     public sealed record EnumDetails(
         string Name,

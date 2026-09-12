@@ -3,7 +3,8 @@
 [ToolDefinition(
     Name = "base64-encoder",
     Title = "Base64 Encoder",
-    Description = "Encodes text to Base64 format with optional URL-safe encoding and line breaks for compatibility with various systems",
+    Description =
+        "Encodes text to Base64 format with optional URL-safe encoding and line breaks for compatibility with various systems",
     Aliases = ["64e"],
     Keywords = [Keyword.Base64, Keyword.Encode, Keyword.Url, Keyword.Text, Keyword.String],
     Categories = [Category.Converter]
@@ -20,11 +21,11 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
         byte[] bytes = Encoding.UTF8.GetBytes(args.Text);
 
         string encoded = Convert.ToBase64String(
-                bytes,
-                args.InsertLineBreaks
-                    ? Base64FormattingOptions.InsertLineBreaks
-                    : Base64FormattingOptions.None
-            );
+            bytes,
+            args.InsertLineBreaks
+                ? Base64FormattingOptions.InsertLineBreaks
+                : Base64FormattingOptions.None
+        );
 
         if (args.UrlSafe)
         {
@@ -38,19 +39,27 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
     }
 
     public sealed record Args(
-        [property: PipeInput, Description("Text to encode to Base64 format")]
+        [property: PipeInput,
+                   DisplayName("Text"),
+                   Description("Text to encode to Base64 format")]
         string Text,
-        [property: Description("Insert line breaks every 76 characters for better readability")]
+        [property: DisplayName("Insert Line Breaks"),
+                   Description("Insert line breaks every 76 characters for better readability")]
         bool InsertLineBreaks = false,
-        [property: Description("Use URL-safe encoding (replaces + with -, / with _, and removes padding)")]
+        [property: DisplayName("URL Safe"),
+                   Description("Use URL-safe encoding (replaces + with -, / with _, and removes padding)")]
         bool UrlSafe = false
     );
 
     public sealed record Result(
-        [property: PipeOutput, Description("The Base64-encoded text")]
+        [property: PipeOutput,
+                   DisplayName("Encoded Text"),
+                   Description("The Base64-encoded text")]
         string Text
     ) : ToolResult
     {
-        public Result() : this(string.Empty) { }
+        public Result() : this(string.Empty)
+        {
+        }
     }
 }
