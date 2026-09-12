@@ -127,55 +127,86 @@ public class LocalizationTests
     }
 
     [Test]
-    public async Task EveryEnglishKeyShouldHaveAUkrainianTranslation()
+    public async Task EveryTranslatedCultureShouldBeComplete()
     {
-        var english = CatalogLocalizer()
-            .GetAllStrings(false)
-            .Select(it => it.Name)
-            .ToHashSet(StringComparer.Ordinal);
+        var english = EnglishKeys();
 
-        var manager = new ResourceManager(
-            "Dev.Tools.Localization.Resources.ToolResources",
-            typeof(ToolResources).Assembly);
+        var report = TranslatedCultures()
+            .SelectMany(culture => english
+                .Except(TranslatedKeys(culture), StringComparer.Ordinal)
+                .Order(StringComparer.Ordinal)
+                .Select(key => $"  {culture}  {key}\n    dotnet run --project tools/Translations -- {culture} --write"))
+            .ToArray();
 
-        using var translated = manager.GetResourceSet(
-            new CultureInfo("uk-UA"),
-            createIfNotExists: true,
-            tryParents: false);
-
-        var translatedKeys = translated!
-            .Cast<System.Collections.DictionaryEntry>()
-            .Select(it => (string)it.Key)
-            .ToHashSet(StringComparer.Ordinal);
-
-        english.ExceptWith(translatedKeys);
-
-        await Assert.That(english).IsEmpty();
+        await Assert.That(string.Join("\n", report)).IsEmpty();
     }
 
     [Test]
-    public async Task TheUkrainianFileShouldNotCarryKeysNothingAsksFor()
+    public async Task NoTranslatedCultureShouldCarryKeysNothingAsksFor()
     {
-        var english = CatalogLocalizer()
-            .GetAllStrings(false)
-            .Select(it => it.Name)
-            .ToHashSet(StringComparer.Ordinal);
+        var english = EnglishKeys();
 
-        var manager = new ResourceManager(
-            "Dev.Tools.Localization.Resources.ToolResources",
-            typeof(ToolResources).Assembly);
-
-        using var translated = manager.GetResourceSet(
-            new CultureInfo("uk-UA"),
-            createIfNotExists: true,
-            tryParents: false);
-
-        var stale = translated!
-            .Cast<System.Collections.DictionaryEntry>()
-            .Select(it => (string)it.Key)
-            .Where(it => !english.Contains(it))
+        var report = TranslatedCultures()
+            .SelectMany(culture => TranslatedKeys(culture)
+                .Except(english, StringComparer.Ordinal)
+                .Order(StringComparer.Ordinal)
+                .Select(key => $"  {culture}  {key}\n    dotnet run --project tools/Translations -- {culture} --write"))
             .ToArray();
 
-        await Assert.That(stale).IsEmpty();
+        await Assert.That(string.Join("\n", report)).IsEmpty();
     }
+
+    [Test]
+    public async Task ShouldBeCheckingAtLeastOneTranslation()
+    {
+        // The two tests above pass vacuously if no satellite is found, which would quietly
+        // stop translations being checked at all.
+        await Assert.That(TranslatedCultures()).IsNotEmpty();
+    }
+
+    private static IReadOnlyCollection<string> EnglishKeys()
+        => CatalogLocalizer().GetAllStrings(false).Select(it => it.Name).ToHashSet(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Every culture whose satellite assembly carries a ToolResources set, so a newly added
+    /// translation is checked the moment it exists without this test naming cultures. Cultures with
+    /// only other resources - "en" has Locals but no ToolResources - are not translations of the
+    /// tool text and are skipped.
+    /// </summary>
+    private static IEnumerable<CultureInfo> TranslatedCultures()
+    {
+        foreach (var directory in new DirectoryInfo(AppContext.BaseDirectory).EnumerateDirectories())
+        {
+            CultureInfo culture;
+            try
+            {
+                culture = CultureInfo.GetCultureInfo(directory.Name);
+            }
+            catch (CultureNotFoundException)
+            {
+                continue;
+            }
+
+            using var set = ToolResourceSet(culture);
+            if (set is not null)
+            {
+                yield return culture;
+            }
+        }
+    }
+
+    private static IReadOnlyCollection<string> TranslatedKeys(CultureInfo culture)
+    {
+        using var set = ToolResourceSet(culture);
+
+        return set is null
+            ? []
+            : set.Cast<System.Collections.DictionaryEntry>()
+                .Select(it => (string)it.Key)
+                .ToHashSet(StringComparer.Ordinal);
+    }
+
+    private static ResourceSet? ToolResourceSet(CultureInfo culture)
+        => new ResourceManager("Dev.Tools.Localization.Resources.ToolResources", typeof(ToolResources).Assembly)
+            .GetResourceSet(culture, createIfNotExists: true, tryParents: false);
 }
