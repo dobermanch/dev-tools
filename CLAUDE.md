@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 See [.github/instructions/code.instructions.md](.github/instructions/code.instructions.md) for coding principles, architecture rules, and testing strategy.
 
+## In-Flight Design Work
+
+[docs/design-review.md](docs/design-review.md) — **temporary** working document: a design review of the solution (localization scope, generator duplication, tool-contract seams for connectors and stream payloads, known bugs) plus a phased roadmap. Read it before reshaping the tool abstraction, the source generators, or the localization layout, and keep it current as phases land. **Delete it once the roadmap is done** — it is not permanent documentation and is deliberately not linked from the README.
+
 ## Build & Test Commands
 
 ```bash
