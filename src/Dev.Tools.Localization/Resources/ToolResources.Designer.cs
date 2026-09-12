@@ -1,7 +1,8 @@
-namespace Dev.Tools.Localization.Resources;
+﻿namespace Dev.Tools.Localization.Resources;
 
 /// <summary>
 /// Marker class for ToolResources localization.
-/// The actual resources are in ToolResources.resx and ToolResources.en.resx files.
+/// English comes from the tool sources through ToolCatalogStringLocalizer; the
+/// ToolResources.&lt;culture&gt;.resx files hold the translations of it.
 /// </summary>
 public sealed class ToolResources { }

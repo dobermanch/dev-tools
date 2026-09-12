@@ -25,17 +25,4 @@
       OutputItemType="Analyzer" 
       SetTargetFramework="TargetFramework=netstandard2.0" />
   </ItemGroup>
-
-  <Target Name="GenerateLocalizationResx" AfterTargets="Build">
-    <PropertyGroup>
-      <ResxGeneratorScript>$(MSBuildThisFileDirectory)..\..\tools\ResxGenerator\GenerateLocalizationResx.cs</ResxGeneratorScript>
-      <LocalizationOutput>$(MSBuildThisFileDirectory)..\Dev.Tools.Localization\Resources</LocalizationOutput>
-    </PropertyGroup>
-
-    <Message Importance="High" Text="Generating localization RESX files from $(TargetPath) to $(LocalizationOutput)" />
-
-    <!-- Run ResxGenerator -->
-    <Exec Command="dotnet &quot;$(ResxGeneratorScript)&quot; &quot;$(TargetPath)&quot; &quot;$(LocalizationOutput)&quot;"
-          WorkingDirectory="$(MSBuildThisFileDirectory)" />
-  </Target>
 </Project>

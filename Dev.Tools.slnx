@@ -1,4 +1,4 @@
-<Solution>
+﻿<Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
@@ -22,6 +22,6 @@
     <Project Path="tests/Dev.Tools.Tests/Dev.Tools.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
-    <Project Path="tools/ResxGenerator/ResxGenerator.csproj" />
+    <Project Path="tools/Translations/Translations.csproj" />
   </Folder>
 </Solution>

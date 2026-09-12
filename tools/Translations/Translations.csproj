@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dev.Tools\Dev.Tools.csproj" />
+    <ProjectReference Include="..\..\src\Dev.Tools.Localization\Dev.Tools.Localization.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -10,8 +10,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- English is authored in the tools themselves; this project translates it. -->
+    <ProjectReference Include="..\Dev.Tools\Dev.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\ToolResources.resx">
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>ToolResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
 
     <EmbeddedResource Update="Resources\ToolResources.*.resx">
@@ -27,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Resources.Designer.cs">
+    <Compile Update="Resources\ToolResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ToolResources.resx</DependentUpon>

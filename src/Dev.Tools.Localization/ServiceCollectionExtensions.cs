@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
@@ -16,8 +16,9 @@ public static class ServiceCollectionExtensions
             services.RegisterResourcesForAssembly(Assembly.GetExecutingAssembly());
             services.AddLocalization();
 
-            LocalizationProvider.SetProviderResolver(() =>
-                services.BuildServiceProvider().GetRequiredService<ILocalizationProvider>());
+            // Registered after the RESX localizers so a translation always wins;
+            // this one is what a key with no translation falls through to.
+            services.AddTransient<IStringLocalizer, ToolCatalogStringLocalizer>();
 
             return services;
         }

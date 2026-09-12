@@ -19,6 +19,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dev.Tools\Dev.Tools.csproj" />
+    <ProjectReference Include="..\..\src\Dev.Tools.Localization\Dev.Tools.Localization.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Dev.Tools.Localization.Resources;
 using Microsoft.Extensions.Localization;
 
@@ -8,10 +8,6 @@ public class LocalizationProvider : ILocalizationProvider
 {
     public const string FallbackCulture = "en-US";
     public const char KeyDelimiter = '.';
-
-    private static Func<ILocalizationProvider>? _resolver;
-    private static readonly Lazy<ILocalizationProvider> _lazyResolver = new(() =>
-        (_resolver ?? throw new ArgumentNullException("_resolver", "The localization Service Resolver is not set"))());
 
     private readonly Dictionary<string, CultureInfo> _supportedCultures;
     private readonly bool _setThreadDefaultCulture;
@@ -40,15 +36,11 @@ public class LocalizationProvider : ILocalizationProvider
         }
     }
 
-    public static ILocalizationProvider Current => _lazyResolver.Value;
-
     protected IStringLocalizer Localizer { get; }
 
     public IReadOnlyCollection<CultureInfo> SupportedCultures { get; }
 
     public CultureInfo CurrentCulture => CultureInfo.CurrentUICulture;
-
-    public static void SetProviderResolver(Func<ILocalizationProvider> resolver) => _resolver = resolver;
 
     public virtual Task SetCurrentCultureInfo(CultureInfo culture, bool reload, CancellationToken cancellationToken)
     {
