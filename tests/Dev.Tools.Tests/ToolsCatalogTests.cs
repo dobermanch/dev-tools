@@ -28,6 +28,9 @@ public class ToolsCatalogTests
         await Assert.That(encoded.Description).IsEqualTo("The Base64-encoded text");
     }
 
+    // DT1004-DT1007 stop undescribed text being written; the tests below check the other half -
+    // that what was written survives the generator and reaches the catalog every frontend reads.
+
     [Test]
     public async Task EveryToolShouldCarryATitleAndADescription()
     {

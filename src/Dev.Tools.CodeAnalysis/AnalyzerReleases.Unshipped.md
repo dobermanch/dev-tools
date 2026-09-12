@@ -10,3 +10,7 @@
 | DT1001  | Naming      | Error    | The tool name should be unique                                        |
 | DT1002  | Naming      | Error    | The tool name is not valid                                            |
 | DT1003  | Declaration | Error    | Class marked with ToolDefinitionAttribute should be public and sealed |
+| DT1004  | Documentation | Error  | A tool must describe itself                                           |
+| DT1005  | Documentation | Error  | A tool title must be a single line                                    |
+| DT1006  | Documentation | Error  | Tool arguments and results must be described                          |
+| DT1007  | Documentation | Error  | Tool enum values must be described                                    |

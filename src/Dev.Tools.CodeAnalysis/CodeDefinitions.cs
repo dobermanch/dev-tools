@@ -20,6 +20,9 @@ public static class CodeDefinitions
                   internal sealed class {TypeName} : Attribute
                   {
                       public required string Name { get; set; }
+                      public string? Title { get; set; }
+                      public string? Description { get; set; }
+                      public string? Usage { get; set; }
                       public string[] Aliases { get; set; } = [];
                       public Category[] Categories { get; set; } = [];
                       public Keyword[] Keywords { get; set; } = [];
