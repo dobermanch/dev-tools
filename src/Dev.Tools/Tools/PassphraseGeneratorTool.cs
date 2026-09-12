@@ -1,3 +1,4 @@
+﻿using System.Security.Cryptography;
 using Dev.Tools.Providers;
 
 namespace Dev.Tools.Tools;
@@ -14,7 +15,6 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
     {
         var wordCount = Math.Max(1, args.WordCount);
         var phraseCount = Math.Max(1, args.PhraseCount);
-        var rand = new Random();
 
         var phrases = new string[phraseCount];
         Parallel.For(0, phraseCount, index =>
@@ -27,7 +27,9 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
                     : i == 0 
                         ? WordProvider.Attributes 
                         : WordProvider.Words;
-                parts[i] = source[rand.Next(source.Length)];
+                // RandomNumberGenerator is thread-safe and cryptographically secure;
+                // a shared System.Random is neither, and this generates passphrases.
+                parts[i] = source[RandomNumberGenerator.GetInt32(source.Length)];
             }
 
             var pass = string.Join(args.Separator?.ToString() ?? "", parts).ToLower();

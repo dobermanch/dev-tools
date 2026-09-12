@@ -1,4 +1,4 @@
-using Dev.Tools.CodeAnalysis.Core;
+﻿using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.CodeAnalysis.Generators;
 
 namespace Dev.Tools.CodeAnalysis;
@@ -119,18 +119,6 @@ public static class CodeDefinitions
         Content = """
                   [AttributeUsage(AttributeTargets.Assembly)]
                   internal class {TypeName} : Attribute;
-                  """
-    };
-    
-    public static readonly CodeBlock GenerateValuesAttribute = new ()
-    {
-        Namespace = ToolsGlobalNamespace,
-        TypeName = "GenerateValuesAttribute",
-        SyntaxTypeName = "GenerateValues",
-        Usings = ["System"],
-        Content = """
-                  [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-                  internal class {TypeName}: Attribute;
                   """
     };
     

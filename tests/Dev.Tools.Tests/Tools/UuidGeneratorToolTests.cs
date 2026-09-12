@@ -518,4 +518,39 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
         await Assert.That(result.Data.First()).Matches(@"^\{[A-F0-9]{32}\}$");
     }
+
+    // -------------------------------
+    // RFC 9562 known answers (namespace DNS, name "www.example.com")
+
+    [Test]
+    [Arguments(UuidGeneratorTool.UuidType.V3, "5df41881-3aed-3515-88a7-2f4a814cf09e")]
+    [Arguments(UuidGeneratorTool.UuidType.V5, "2ed6657d-e927-568b-95e1-2665a8aea6a2")]
+    public async Task WhenTypeIsNameBased_ShouldMatchRfcTestVector(UuidGeneratorTool.UuidType type, string expected)
+    {
+        var args = new UuidGeneratorTool.Args(
+            Type: type,
+            Namespace: Guid.Parse("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
+            Name: "www.example.com"
+        );
+
+        var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data.First()).IsEqualTo(expected);
+    }
+
+    [Test]
+    [Arguments(UuidGeneratorTool.UuidType.V3, '3')]
+    [Arguments(UuidGeneratorTool.UuidType.V5, '5')]
+    public async Task WhenTypeIsNameBased_ShouldStampMatchingVersionNibble(UuidGeneratorTool.UuidType type, char version)
+    {
+        var args = new UuidGeneratorTool.Args(
+            Type: type,
+            Namespace: Guid.NewGuid(),
+            Name: "any-name"
+        );
+
+        var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data.First()[14]).IsEqualTo(version);
+    }
 }

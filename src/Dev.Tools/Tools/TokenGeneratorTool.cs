@@ -1,4 +1,6 @@
-﻿namespace Dev.Tools.Tools;
+﻿using System.Security.Cryptography;
+
+namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "token-generator",
@@ -35,13 +37,9 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         }
 
         var alphabet = alphabetBuilder.ToString().ToHashSet();
-        
+
         var count = args.TokenCount <= 1 ? 1 : args.TokenCount;
         var length = args.TokenLength <= 0 ? 0 : args.TokenLength;
-        if (alphabet.Count <= 0)
-        {
-            return new Result(Enumerable.Repeat(new string(' ', length), count).ToArray());
-        }
 
         if (!string.IsNullOrEmpty(args.ExcludeSymbols))
         {
@@ -54,8 +52,13 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
             }
         }
 
+        // Checked after exclusions: excluding every character leaves nothing to pick from.
+        if (alphabet.Count <= 0)
+        {
+            return new Result(Enumerable.Repeat(new string(' ', length), count).ToArray());
+        }
+
         var finalAlphabet = alphabet.ToArray();
-        var random = new Random();
 
         var result = new string[count];
         Parallel.For(0, count, index =>
@@ -63,7 +66,9 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
             var builder = new StringBuilder(length);
             for (int i = 0; i < length; i++)
             {
-                builder.Append(finalAlphabet[random.Next(alphabet.Count)]);
+                // RandomNumberGenerator is thread-safe and cryptographically secure;
+                // a shared System.Random is neither, and this generates passwords.
+                builder.Append(finalAlphabet[RandomNumberGenerator.GetInt32(finalAlphabet.Length)]);
             }
 
             result[index] = builder.ToString();

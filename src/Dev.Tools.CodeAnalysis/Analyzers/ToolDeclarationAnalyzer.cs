@@ -1,3 +1,4 @@
+﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.CodeAnalysis.Generators;
@@ -52,7 +53,9 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
 
         context.RegisterCompilationStartAction(compilationContext =>
         {
-            var attributeList = new List<(string name, Location location)>();
+            // Syntax node actions run concurrently (EnableConcurrentExecution),
+            // so the collection they feed has to be thread-safe.
+            var attributeList = new ConcurrentBag<(string name, Location location)>();
 
             compilationContext.RegisterSyntaxNodeAction(syntaxContext =>
             {
@@ -122,7 +125,7 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
                 type.TypeName));
     }
 
-    private static void CheckNameIsUnique(List<(string name, Location location)> attributeList,
+    private static void CheckNameIsUnique(ConcurrentBag<(string name, Location location)> attributeList,
         CompilationAnalysisContext compilationEndContext)
     {
         var duplicateNames = attributeList

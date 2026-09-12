@@ -68,25 +68,27 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
 
     private Guid NewUuidV3(Guid namespaceUuid, string name)
     {
-        return NewHashBasedUuid(md5Hash.ComputeHash, namespaceUuid, name);
+        return NewHashBasedUuid(md5Hash.ComputeHash, namespaceUuid, name, version: 3);
     }
 
     private static Guid NewUuidV5(Guid namespaceUuid, string name)
     {
-        return NewHashBasedUuid(SHA1.HashData, namespaceUuid, name);
+        return NewHashBasedUuid(SHA1.HashData, namespaceUuid, name, version: 5);
     }
 
-    private static Guid NewHashBasedUuid(Func<byte[], byte[]> computeHash, Guid namespaceUuid, string name)
+    private static Guid NewHashBasedUuid(Func<byte[], byte[]> computeHash, Guid namespaceUuid, string name, byte version)
     {
-        byte[] namespaceBytes = namespaceUuid.ToByteArray();
+        // The namespace is hashed in RFC 4122 network byte order, not in Guid's
+        // little-endian layout, otherwise the result differs from every other implementation.
+        byte[] namespaceBytes = namespaceUuid.ToByteArray(bigEndian: true);
         byte[] nameBytes = Encoding.UTF8.GetBytes(name);
         byte[] bytes = [.. namespaceBytes, .. nameBytes];
 
         byte[] hash = computeHash(bytes);
-        hash[6] = (byte)((hash[6] & 0x0F) | 0x50); // Set version to 5 (0b0101)
+        hash[6] = (byte)((hash[6] & 0x0F) | (version << 4)); // Set version (3 for MD5, 5 for SHA-1)
         hash[8] = (byte)((hash[8] & 0x3F) | 0x80); // Set variant to RFC 4122
 
-        return new Guid(hash[0..16]);
+        return new Guid(hash.AsSpan(0, 16), bigEndian: true);
     }
 
     private static Guid NewUuidV7(long timeStampInMs)

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -191,17 +191,6 @@ public abstract class ToolGeneratorBase
             Keywords = keywords;
         }
     }
-    
-    private static Dictionary<string, ExpressionSyntax> GetToolDefinitionDetails(INamedTypeSymbol node) =>
-        node.GetAttributes()
-            .Where(x => x.AttributeClass?.ToDisplayString() == CodeDefinitions.ToolDefinitionAttribute.TypeFullName)
-            .Select(it => it.ApplicationSyntaxReference)
-            .Select(it => it?.GetSyntax())
-            .OfType<AttributeSyntax>()
-            .SelectMany(it => it.ArgumentList?.Arguments ?? [])
-            .Select(it => (it.NameEquals?.Name.Identifier.Text, it.Expression))
-            .Where(it => it.Text != null)
-            .ToDictionary(it => it.Text!, it => it.Expression);
     
     private static ExpressionSyntax[] FindToolExceptionErrorCodes(INamedTypeSymbol node) =>
         node.GetMembers()

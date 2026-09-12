@@ -68,6 +68,7 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
                 "Dev.Tools.Localization",
+                "ModelContextProtocol",
                 "ModelContextProtocol.Server"
             ],
             Content =
@@ -89,6 +90,11 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                       {RequestTypeMapping}
 
                       var result = await tool.RunAsync(args, cancellationToken);
+
+                      if (result.HasErrors)
+                      {
+                          throw new McpException("Tool '{ToolName}' failed: " + string.Join(", ", result.ErrorCodes));
+                      }
 
                       {ResultTypeMapping}
 

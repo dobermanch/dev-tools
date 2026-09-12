@@ -1,4 +1,4 @@
-# Design Review & Improvement Roadmap
+﻿# Design Review & Improvement Roadmap
 
 > Reviewed 2026-09-11 against commit `41f65a1`. Analysis only — no code changes were made in this pass.
 > Every claim below is grounded in the code at the time of review (`file:line` references throughout).
@@ -192,25 +192,37 @@ What resists generation, and therefore needs UI-hint metadata or an opt-out: sli
 
 ---
 
-## 7. Concrete bugs found during review
+## 7. Concrete bugs (Phase 0 — completed 2026-09-11)
 
-Independent of any redesign; each is small and self-contained.
+All of the following were fixed, verified by `dotnet build`, 307 tests (305 pass / 2 pre-existing skips, green on three consecutive runs), and live CLI + MCP probes. Two review items turned out to be false positives and are recorded as such; five further defects surfaced only once the code was built and run.
 
-| # | Issue | Location |
-|---|---|---|
-| 1 | **UUID v3 is stamped as version 5.** `NewHashBasedUuid` hardcodes `hash[6] = (hash[6] & 0x0F) \| 0x50` for both v3 and v5, so MD5-based UUIDs claim version 5. Also the v3/v5 namespace bytes come from `Guid.ToByteArray()` (little-endian) instead of RFC 4122 big-endian order, so hashes don't match other implementations. | `UuidGeneratorTool.cs:79-92` |
-| 2 | **`System.Random` shared across `Parallel.For`** — a data race that can return zeros/duplicates, in a *password* generator. Also non-cryptographic for `passphrase-generator` and `token-generator`. | `PassphraseGeneratorTool.cs:17-30`, `TokenGeneratorTool.cs:58-70`, `LoremIpsumGeneratorTool.cs:16` |
-| 3 | **CLI exits 0 on tool failure** and prints an empty line instead of the error. | `Console/Core/ToolResponseHandler.cs:8-25` |
-| 4 | **MCP returns an empty success on failure** — no `HasErrors` check in generated code. | `McpToolGenerator.cs:252-262` |
-| 5 | **`new HttpClient()` per call, never disposed**; hardcoded endpoints; `catch { return null; }` hides failures *and* cancellation. | `IpDetailsTool.cs:15-41` |
-| 6 | **`IpDetailsToolTests` calls the live network** in the unit test suite. | `tests/.../IpDetailsToolTests.cs` |
-| 7 | `TokenGeneratorTool` indexes `finalAlphabet[random.Next(alphabet.Count)]` — bound taken from the pre-materialized collection, not the array. | `TokenGeneratorTool.cs:65` |
-| 8 | CLI short-alias allocation short-circuits: `if (map.Add(letter) \|\| map.Add(letter = letter.ToUpper()))` never reserves the uppercase variant when the lowercase succeeds. | `CliCommandGenerator.cs:222` |
-| 9 | `FormatKey` indexes `key[0]` with no empty-key guard. | `JsonFormatterTool.cs:92-93` |
-| 10 | Generated file headers embed `DateTime.Now` → every build re-emits every generated file. | `Core/CodeBlock.cs:88` |
-| 11 | `ToolIconProvider` maps `"rsa-generator"`, which doesn't exist; web neutral `Resources.resx` is 36 keys behind `en-US`/`uk-UA`. | `Services/ToolIconProvider.cs:24`, `Web/Locals/Resources.resx` |
-| 12 | Stale csproj metadata: `Resources.Designer.cs` referenced but absent; `Dev.Tools.slnx:26` lists the MCP project as `Type="Classic C#"` with a backslash path. | `Dev.Tools.Localization.csproj:14,30-34` |
-| 13 | `TextEncryptorTool` derives a key with bare `SHA256.HashData(key)` — no KDF, no salt; and maps any encryption failure to `ErrorCode.FailedToDecrypt`. | `TextEncryptorTool.cs:27,52-55` |
+| # | Issue | Location | Status |
+|---|---|---|---|
+| 1 | **UUID v3 was stamped as version 5.** `NewHashBasedUuid` hardcoded `0x50` for both v3 and v5, and hashed the namespace in `Guid.ToByteArray()` little-endian order instead of RFC 4122 network order, so no value matched any other implementation. | `UuidGeneratorTool.cs:79-92` | **Fixed** — version is now a parameter, namespace and result use `bigEndian: true`. Locked down by RFC 9562 known-answer tests (`5df41881-3aed-3515-88a7-2f4a814cf09e` / `2ed6657d-e927-568b-95e1-2665a8aea6a2`). |
+| 2 | **`System.Random` shared across `Parallel.For`** — a data race, and non-cryptographic, in two *password* generators. | `PassphraseGeneratorTool.cs:17-30`, `TokenGeneratorTool.cs:58-70` | **Fixed** — both use `RandomNumberGenerator.GetInt32`, which is thread-safe and cryptographic. `LoremIpsumGeneratorTool` was also listed in the review but is **sequential**, so it had no race; plain `Random` is appropriate there and was left alone. |
+| 3 | **CLI exited 0 on tool failure** and printed an empty line instead of the error. | `Console/Core/ToolResponseHandler.cs`, `Console/Program.cs` | **Fixed** — two layers: the handler ignored `HasErrors`, *and* `Program.cs` discarded `app.RunAsync`'s return value, so the process could never exit non-zero. Errors now go to stderr, exit code 1. |
+| 4 | **MCP returned an empty success on failure** — no `HasErrors` check in generated code. | `McpToolGenerator.cs` | **Fixed** — generated tools throw `McpException` with the error codes; verified over stdio: `isError: true`, `"Tool 'base64-decoder' failed: InputNotValid"`. |
+| 5 | **`new HttpClient()` per call, never disposed**; `catch { return null; }` hid failures *and* cancellation. | `IpDetailsTool.cs` | **Fixed** — one shared client with a 10s timeout, optional injected client, cancellation rethrown. `ToolBase` also no longer converts `OperationCanceledException` into `ErrorCode.Unknown` (pulled forward from §5b). |
+| 6 | **`IpDetailsToolTests` called the live network.** | `tests/.../IpDetailsToolTests.cs` | **Fixed** — four hermetic tests over a stub `HttpMessageHandler` (success, HTTP failure, non-IP body, cancellation). |
+| 7 | `TokenGeneratorTool` indexing bound read from the pre-materialized set rather than the array. | `TokenGeneratorTool.cs:65` | **False positive** — exclusions run before `ToArray()`, so the two counts are always equal. It did expose a real bug next to it: the empty-alphabet guard ran *before* exclusions, so excluding every character threw `IndexOutOfRangeException` (surfacing as `ErrorCode.Unknown`). Guard moved after exclusions. |
+| 8 | CLI short-alias allocation short-circuiting on `\|\|`. | `CliCommandGenerator.cs:222` | **False positive** — not reserving the uppercase variant when the lowercase one succeeds is the intended behaviour; `-L` stays free for the next property. The real nit there was culture-sensitive `ToLower()`/`ToUpper()` (Turkish-I), now invariant. |
+| 9 | `FormatKey` indexed `key[0]` with no empty-key guard. | `JsonFormatterTool.cs:92-93` | **Fixed** — empty keys pass through unchanged. |
+
+### Surfaced during implementation (not in the original review)
+
+These were invisible to a read-only review; the first appeared on the first `dotnet build`, the rest on the first real CLI/test run.
+
+| # | Issue | Location | Status |
+|---|---|---|---|
+| 14 | **The Console project did not compile at `41f65a1`** — 22 × CS0507. Spectre.Console.Cli 0.55 made `AsyncCommand<T>.ExecuteAsync(..., CancellationToken)` `protected`, while the generator emitted `public override`. `dotnet build` was red on `main` before any change in this pass. | `CliCommandGenerator.cs` | **Fixed** — template emits `protected override`. |
+| 15 | **Every collection `[PipeOutput]` printed `System.String[]`** — affected `uuid-generator`, `ulid-generator`, `token-generator`, `passphrase-generator`, `nato`, `char-viewer`. | `Console/Core/ToolResponseHandler.cs` | **Fixed** — collections render one value per line, keeping the CLI line-oriented for pipes. |
+| 16 | **The CLI dropped every `Args` default** (§4.2's "emitted as `= default!`" in practice): `uuid-generator --type V4` produced un-hyphenated UUIDs, `token-generator` produced strings of spaces (empty alphabet), `passphrase-generator` produced one word instead of five. | `CliCommandGenerator.cs` | **Fixed** (pulled forward from Phase 2) — settings carry the record's default as both an initializer *and* `[System.ComponentModel.DefaultValue]`, because Spectre binds absent bool flags to `false` and only honours the default through the attribute. |
+| 17 | **`ToolDeclarationAnalyzer` had a data race** — it calls `EnableConcurrentExecution()` but accumulated tool names into a plain `List<>` from concurrent syntax-node callbacks, so DT1001 intermittently reported nothing. Visible as a flaky `Should_report_diagnostic_When_name_is_not_unique` that passed in isolation and failed under full-suite load. | `ToolDeclarationAnalyzer.cs:58` | **Fixed** — `ConcurrentBag`. Suite now green on three consecutive full runs. |
+| 18 | Review items #10-#13 (generated-header `DateTime.Now`, stale `ToolIconProvider`/RESX entries, csproj metadata, `TextEncryptorTool` key derivation) were deliberately left for Phases 2-3 as planned. | — | Deferred |
+
+### Also removed in this pass
+
+Dead generator code, as planned: `ValuesListGenerator` (its `[Generator]` was commented out) with its `GenerateValuesAttribute` definition, skipped test and snapshots, and the DT2001 row in `AnalyzerReleases.Unshipped.md`; the unused `GetToolDefinitionDetails` helper; the commented-out inert `.Where` guard in `ToolsCatalogGenerator`; and `CliCommandGenerator`'s leftover debug-scaffolding pipeline (6-field tuple whose values were never used), now matching the clean `ApiEndpointGenerator` shape while keeping the attribute gate that suppresses DTG1002 for assemblies that don't opt in.
 
 ---
 
@@ -218,7 +230,7 @@ Independent of any redesign; each is small and self-contained.
 
 Each phase is independently shippable.
 
-**Phase 0 — correctness, no design change.** Items §7.1-§7.9 + remove dead generator code. Highest value per line changed; #1, #2 and #3 are user-visible defects.
+**Phase 0 — correctness, no design change. ✅ Done 2026-09-11.** §7 items 1-9 + dead generator code, plus five defects found only by building and running (§7.14-§7.17), plus the CLI-defaults fix pulled forward from Phase 2 and the cancellation rethrow pulled forward from Phase 3.
 
 **Phase 1 — English metadata in core; localization becomes Web-only.** XML-doc harvesting into `ToolsCatalog`; generators emit `[Description]`; drop `.AddDevToolsLocalization()` from CLI/API/MCP; Web falls back to catalog English; retire the neutral placeholder RESX and the `AfterTargets="Build"` RESX write. *Removes 2 files × ~19 keys from the add-a-tool checklist and deletes the static-provider/second-container machinery.*
 

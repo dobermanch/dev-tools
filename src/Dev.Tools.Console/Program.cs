@@ -25,4 +25,4 @@ Console.CancelKeyPress += (sender, eventArgs) =>
     cancellationTokenSource.Cancel();
 };
 
-await app.RunAsync(args, cancellationTokenSource.Token);
+return await app.RunAsync(args, cancellationTokenSource.Token);

@@ -10,67 +10,35 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var compilationWithMetadata =
+        var referencedToolTypes =
             context.CompilationProvider
-                .Select((compilation, _) =>
-                {
-                    var assemblies = compilation.References
+                .SelectMany((compilation, _) =>
+                    compilation
+                        .References
                         .Select(compilation.GetAssemblyOrModuleSymbol)
                         .OfType<IAssemblySymbol>()
-                        .ToList();
-
-                    var toolsAssembly = assemblies.FirstOrDefault(it => it.Name == CodeDefinitions.ToolsAssemblyName);
-
-                    var assemblyNames = string.Join(", ", assemblies.Select(a => a.Name));
-
-                    List<ITypeSymbol> allTypes = [];
-                    List<ITypeSymbol> typesWithAttribute = [];
-
-                    if (toolsAssembly != null)
-                    {
-                        allTypes = toolsAssembly.GlobalNamespace.GetAllTypes().ToList();
-                        typesWithAttribute = allTypes
-                            .Where(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName))
-                            .ToList();
-                    }
-
-                    return (
-                        compilation,
-                        toolsAssembly,
-                        referenceCount: assemblies.Count,
-                        assemblyNames,
-                        typeCount: allTypes.Count,
-                        attributedTypeCount: typesWithAttribute.Count,
-                        tools: typesWithAttribute
-                            .Select(t => GetToolDetails((INamedTypeSymbol)t))
-                            .Where(t => t != null)
-                            .Select(t => t!)
-                            .ToList()
-                    );
-                });
+                        .Where(it => it.Name == CodeDefinitions.ToolsAssemblyName)
+                        .Select(it => it.GlobalNamespace)
+                        .SelectMany(it => it.GetAllTypes(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName)))
+                        .Select(it => GetToolDetails((INamedTypeSymbol)it))
+                        .Where(it => it is not null)
+                        .Select(it => it!)
+                );
 
         var attributes = GetAssemblyAttribute<GenerateToolsCliCommandAttribute>(context.CompilationProvider);
 
-        var compilationAndTools = compilationWithMetadata
-            .Combine(attributes)
-            .Select((pair, _) =>
-            {
-                var (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools) = pair.Left;
-                var attribute = pair.Right;
+        var toolsAndAttribute = referencedToolTypes
+            .Collect()
+            .Combine(attributes);
 
-                return (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools, attribute);
-            });
-
-        context.RegisterSourceOutput(compilationAndTools, (spc, data) =>
+        context.RegisterSourceOutput(toolsAndAttribute, (spc, data) =>
         {
-            var (compilation, toolsAssembly, refCount, asmNames, typeCount, attrTypeCount, tools, attribute) = data;
-
-            if (attribute == null)
+            if (data.Right is null)
             {
                 return; // Don't generate if attribute not present
             }
 
-            GenerateTools(spc, tools.ToImmutableArray());
+            GenerateTools(spc, data.Left);
         });
     }
 
@@ -170,7 +138,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 {
                     {SettingsType}
                     
-                    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
+                    protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
                     {
                         ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
                         
@@ -204,7 +172,16 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             var toolName = tool.TypeName.Replace("Tool", "");
             var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
             
-            var letter = prop.Name[0].ToString().ToLower();
+            // An option the user did not pass must keep the Args record's own default,
+            // otherwise every unspecified option silently becomes default(T).
+            // The property initializer is not enough on its own: Spectre binds absent
+            // flags to false, and only honours the default through DefaultValueAttribute.
+            var initializer = prop.DefaultValue ?? "default!";
+            var defaultAttribute = prop.DefaultValue is null or "null"
+                ? string.Empty
+                : $"[System.ComponentModel.DefaultValue({prop.DefaultValue})]\n            ";
+
+            var letter = prop.Name[0].ToString().ToLowerInvariant();
             var template = $"{letter + prop.Name.Substring(1)}";
             if (prop.IsPipeInput)
             {
@@ -212,14 +189,14 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [LocalizedDescription("{{description}}")]
                                                 [CommandArgument(0, "[{{template}}]")]
-                                                public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
+                                                public {{prop.Type}} {{prop.Name}} { get; set; } = {{initializer}};
 
                                         """);
             }
             else
             {
                 template = $"--{template}";
-                if (map.Add(letter) || map.Add(letter = letter.ToUpper()))
+                if (map.Add(letter) || map.Add(letter = letter.ToUpperInvariant()))
                 {
                     template = $"-{letter}|{template}";
                 }
@@ -227,7 +204,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [LocalizedDescription("{{description}}")]
                                                 [CommandOption("{{template}}")]
-                                                public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
+                                                {{defaultAttribute}}public {{prop.Type}} {{prop.Name}} { get; set; } = {{initializer}};
 
                                         """);
             }

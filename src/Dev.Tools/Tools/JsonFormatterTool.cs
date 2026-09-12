@@ -87,6 +87,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
     private static string FormatKey(string key, TextCase format) =>
         format switch
         {
+            _ when key.Length == 0 => key,
             TextCase.LowerCase => key.ToLowerInvariant(),
             TextCase.UpperCase => key.ToUpperInvariant(),
             TextCase.CamelCase => char.ToLower(key[0]) + key[1..],

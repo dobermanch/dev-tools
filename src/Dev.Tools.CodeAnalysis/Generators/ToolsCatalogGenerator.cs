@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -53,8 +53,6 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
         IncrementalValueProvider<ImmutableArray<ToolDetails>> toolsDeclarations =
             toolsProvider
                 .Combine(assemblyProvider)
-                //.Where(it => it.Right is not null)
-                //.Where(it => it.Right)
                 .Select((it, _) => it.Left)
                 .Collect()
                 .WithTrackingName(TrackingNames.Combine);

@@ -13,6 +13,11 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
         {
             return Failed1(ex.ErrorCode);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // Cancellation is the caller's decision, not a tool failure.
+            throw;
+        }
         catch (Exception)
         {
             return Failed1(ErrorCode.Unknown);
