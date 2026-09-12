@@ -1,5 +1,4 @@
-using Dev.Tools;
-using Dev.Tools.Localization;
+﻿using Dev.Tools;
 using Dev.Tools.Mcp.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +16,6 @@ if (useHttp)
     builder.Logging.SetMinimumLevel(LogLevel.Debug);
     builder.Services
         .AddDevTools()
-        .AddDevToolsLocalization()
         .AddMcpServer()
         .WithHttpTransport()
         .WithToolsFromAssembly();
@@ -35,7 +33,6 @@ else
     });
     builder.Services
         .AddDevTools()
-        .AddDevToolsLocalization()
         .AddMcpServer()
         .WithStdioServerTransport()
         .WithToolsFromAssembly();

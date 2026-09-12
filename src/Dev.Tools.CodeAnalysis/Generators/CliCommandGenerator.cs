@@ -70,6 +70,45 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
 
         var addCommands = GenerateCommandRegistration(commands);
         spc.AddSource(addCommands.OutputFileName, addCommands);
+
+        var details = GenerateDetailedDescriptions(tools);
+        spc.AddSource(details.OutputFileName, details);
+    }
+
+    /// <summary>
+    /// The full text of the tools whose description runs to more than one line. Spectre reads one
+    /// description for both the command list and a single command's help, and the list only has room
+    /// for a line, so the help provider reads the detail from here instead.
+    /// </summary>
+    private CodeBlock GenerateDetailedDescriptions(ImmutableArray<ToolDetails> tools)
+    {
+        var detailed = tools
+            .Where(it => it.Description.Contains('\n'))
+            .Select(it => $"[\"{it.Name}\"] = \"{EscapeLiteral(it.Description)}\",")
+            .ToArray();
+
+        return new()
+        {
+            Namespace = "Dev.Tools.Console.Commands",
+            TypeName = "ToolDescriptions",
+            GeneratorType = typeof(CliCommandGenerator),
+            Placeholders = new()
+            {
+                ["Entries"] = string.Join("\n        ", detailed)
+            },
+            Usings = ["System.Collections.Generic"],
+            Content =
+              """
+              internal static class ToolDescriptions
+              {
+                  public static readonly IReadOnlyDictionary<string, string> DetailedByCommandName =
+                      new Dictionary<string, string>
+                      {
+                          {Entries}
+                      };
+              }
+              """
+        };
     }
 
     private CodeBlock GenerateCommandRegistration(List<(string, string)> commands)
@@ -116,15 +155,17 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolDescriptionLocalizationKey"] = $"Tools.{tool.TypeName.Replace("Tool", "")}.Description",
+                // Spectre shows this both as the DESCRIPTION block and as the row in the
+                // root command list, so only the first line fits.
+                ["ToolDescription"] = EscapeLiteral(FirstLine(tool.Description)),
                 ["ToolArgsType"] = tool.ArgsDetails.Type,
                 ["ToolResultType"] = tool.ResultDetails.Type,
                 ["SettingsType"] = GenerateSettingsClass(tool),
                 ["SettingsMapping"] = GenerateMapping(tool),
             },
             Usings = [
+                "System.ComponentModel",
                 "Dev.Tools.Console.Core",
-                "Dev.Tools.Localization",
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
                 "Spectre.Console",
@@ -132,7 +173,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             ],
             Content = 
               $$"""
-                [LocalizedDescription("{ToolDescriptionLocalizationKey}")]
+                [Description("{ToolDescription}")]
                 internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
                     : AsyncCommand<{TypeName}.Settings>
                 {
@@ -169,8 +210,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
         for(var i = 0; i < tool.ArgsDetails.Properties.Length; i++)
         {
             var prop = tool.ArgsDetails.Properties[i];
-            var toolName = tool.TypeName.Replace("Tool", "");
-            var description = $"Tools.{toolName}.{tool.ArgsDetails.TypeName}.{prop.Name}.Description";
+            var description = EscapeLiteral(prop.Description);
             
             // An option the user did not pass must keep the Args record's own default,
             // otherwise every unspecified option silently becomes default(T).
@@ -187,7 +227,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
             {
                 // NOTE: use optional argument template [argument] instead of <argument> to support StdIn
                 properties.AppendLine($$"""
-                                                [LocalizedDescription("{{description}}")]
+                                                [Description("{{description}}")]
                                                 [CommandArgument(0, "[{{template}}]")]
                                                 public {{prop.Type}} {{prop.Name}} { get; set; } = {{initializer}};
 
@@ -202,7 +242,7 @@ public class CliCommandGenerator : ToolGeneratorBase, IIncrementalGenerator
                 }
 
                 properties.AppendLine($$"""
-                                                [LocalizedDescription("{{description}}")]
+                                                [Description("{{description}}")]
                                                 [CommandOption("{{template}}")]
                                                 {{defaultAttribute}}public {{prop.Type}} {{prop.Name}} { get; set; } = {{initializer}};
 

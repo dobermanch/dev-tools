@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.Mcp.Core;
 using Microsoft.CodeAnalysis;
@@ -56,7 +56,9 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolLocalizationName"] = tool.TypeName.Replace("Tool", ""),
+                ["ToolTitle"] = EscapeLiteral(TitleOf(tool)),
+                // A model reads the whole thing, usage note included.
+                ["ToolDescription"] = EscapeLiteral(ModelDescription(tool)),
                 ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
                 ["ToolArgsParameters"] = GenerateIndividualParameters(tool, tool.ArgsDetails),
                 ["RequestTypeMapping"] = GenerateArgsFromIndividualParameters(tool.ArgsDetails),
@@ -67,7 +69,6 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                 "System.ComponentModel",
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
-                "Dev.Tools.Localization",
                 "ModelContextProtocol",
                 "ModelContextProtocol.Server"
             ],
@@ -78,8 +79,10 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
               {
                   {ResultType}
 
-                  [McpServerTool(Name = "{ToolName}")]
-                  [LocalizedDescription("Tools.{ToolLocalizationName}.Description")]
+                  // UseStructuredContent makes the SDK publish an output schema for the response
+                  // type, which is the only way the result descriptions reach the model.
+                  [McpServerTool(Name = "{ToolName}", Title = "{ToolTitle}", UseStructuredContent = true)]
+                  [Description("{ToolDescription}")]
                   public static async Task<{ToolResultType}> ExecuteAsync(
                       IToolsProvider tools,
                       {ToolArgsParameters}
@@ -128,14 +131,12 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
     {
         if (argsDetails.Properties.Length == 0) return string.Empty;
 
-        var toolName = tool.TypeName.Replace("Tool", "");
-
         var paramsText = string.Join(",\n        ",
             argsDetails.Properties.Select(prop =>
             {
-                var description = $"Tools.{toolName}.{argsDetails.TypeName}.{prop.Name}.Description";
+                var description = EscapeLiteral(prop.Description + EnumOptions(argsDetails, prop));
                 var paramName = ToParamName(prop.Name);
-                var paramDecl = $"[LocalizedDescription(\"{description}\")] {prop.Type} {paramName}";
+                var paramDecl = $"[Description(\"{description}\")] {prop.Type} {paramName}";
 
                 if (prop.DefaultValue != null)
                     paramDecl += $" = {prop.DefaultValue}";
@@ -144,6 +145,31 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
             }));
 
         return paramsText + ",";
+    }
+
+    /// <summary>
+    /// What each value of an enum parameter means, folded into the parameter description.
+    /// JSON Schema carries no per-value documentation - an enum reaches the model as a bare list of
+    /// names - so this is the only way the authored value text gets in front of it.
+    /// </summary>
+    private static string EnumOptions(TypeDetails argsDetails, PropertyDetails prop)
+    {
+        var propertyType = prop.Type.TrimEnd('?');
+        var enumDetails = argsDetails.Enums.FirstOrDefault(it => it.Type.TrimEnd('?') == propertyType);
+        if (enumDetails is null || enumDetails.Values.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        var described = enumDetails
+            .Values
+            .Where(it => !string.IsNullOrEmpty(it.Description))
+            .Select(it => $"{it.Name} = {it.Description}")
+            .ToArray();
+
+        return described.Length == 0
+            ? string.Empty
+            : ". Options: " + string.Join("; ", described);
     }
 
     private static string GenerateArgsFromIndividualParameters(TypeDetails argsDetails)
@@ -188,10 +214,10 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
 
         foreach (var prop in typeDetails.Properties)
         {
-            var description = $"Tools.{toolName}.{typeDetails.TypeName}.{prop.Name}.Description";
+            var description = EscapeLiteral(prop.Description);
 
             properties.AppendLine($$"""
-                                            [LocalizedDescription("{{description}}")]
+                                            [Description("{{description}}")]
                                             public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                     """);

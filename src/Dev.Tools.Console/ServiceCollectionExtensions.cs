@@ -1,4 +1,4 @@
-using Dev.Tools.Console.Commands;
+﻿using Dev.Tools.Console.Commands;
 using Dev.Tools.Console.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
@@ -15,6 +15,7 @@ internal static class ServiceCollectionExtensions
             app.Configure(config =>
             {
                 config.SetInterceptor(new StdinInterceptor());
+                config.SetHelpProvider(new ToolHelpProvider(config.Settings));
                 CommandConfigurator.ConfigureCommands(services, config);
             });
             

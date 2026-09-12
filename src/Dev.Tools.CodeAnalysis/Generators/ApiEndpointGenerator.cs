@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Dev.Tools.Api.Core;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
@@ -55,7 +55,8 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolLocalizationName"] = tool.TypeName.Replace("Tool", ""),
+                ["ToolTitle"] = EscapeLiteral(TitleOf(tool)),
+                ["ToolDescription"] = EscapeLiteral(tool.Description),
                 ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
                 ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
                 ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
@@ -64,9 +65,10 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"),"response", "result", true)
             },
             Usings = [
+                "System.ComponentModel",
                 "Dev.Tools.Tools",
                 "Dev.Tools.Api.Core",
-                "Dev.Tools.Localization",
+                "Microsoft.AspNetCore.Http",
                 "Microsoft.AspNetCore.Mvc",
                 "System.Net",
                 "System.Net.Mime"
@@ -80,8 +82,8 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                   {ResultType}
                     
                   [HttpPost("{ToolName}")]
-                  [LocalizedEndpointSummary("Tools.{ToolLocalizationName}.Name")]
-                  [LocalizedEndpointDescription("Tools.{ToolLocalizationName}.Description")]
+                  [EndpointSummary("{ToolTitle}")]
+                  [EndpointDescription("{ToolDescription}")]
                   [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
                   [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
                   [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
@@ -119,10 +121,10 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
         
         foreach (var prop in typeDetails.Properties)
         {
-            var description = $"Tools.{toolName}.{typeDetails.TypeName}.{prop.Name}.Description";
+            var description = EscapeLiteral(prop.Description);
             
             properties.AppendLine($$"""
-                                            [LocalizedDescription("{{description}}")]
+                                            [Description("{{description}}")]
                                             public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
 
                                     """);

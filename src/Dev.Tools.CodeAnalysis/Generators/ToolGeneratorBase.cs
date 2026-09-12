@@ -76,7 +76,7 @@ public abstract class ToolGeneratorBase
         => GetAttributeText(symbol, "System.ComponentModel.DisplayNameAttribute");
 
     private static string GetAttributeText(ISymbol symbol, string attributeFullName)
-        => Normalize(symbol.GetAttributes()
+        => Unwrap(symbol.GetAttributes()
             .FirstOrDefault(it => it.AttributeClass?.ToDisplayString() == attributeFullName)
             ?.ConstructorArguments.FirstOrDefault().Value?.ToString());
 
@@ -88,8 +88,50 @@ public abstract class ToolGeneratorBase
         => value?.Replace("\r\n", "\n").Replace("\r", "\n") ?? string.Empty;
 
     /// <summary>
+    /// Drops the line wrapping an author used to keep a raw string literal readable in the source
+    /// file: a single newline inside a paragraph becomes a space, a blank line stays a paragraph
+    /// break. Every consumer wraps text to its own width, so hard-wrapped source would wrap twice.
+    /// </summary>
+    internal static string Unwrap(string? value)
+    {
+        var paragraphs = Normalize(value)
+            .Split(new[] { "\n\n" }, StringSplitOptions.None)
+            .Select(paragraph => string.Join(
+                " ",
+                paragraph.Split('\n').Select(line => line.Trim()).Where(line => line.Length > 0)))
+            .Where(paragraph => paragraph.Length > 0);
+
+        return string.Join("\n\n", paragraphs);
+    }
+
+    /// <summary>
     /// Escapes text for emission inside a C# string literal.
     /// </summary>
+    /// <summary>
+    /// First line of a description, for the places that have room for exactly one line:
+    /// the CLI command list and the tool lists a client renders.
+    /// </summary>
+    internal static string FirstLine(string value)
+    {
+        var end = value.IndexOf('\n');
+        return end < 0 ? value : value.Substring(0, end).TrimEnd();
+    }
+
+    /// <summary>
+    /// The English display name for a tool, falling back to its name when no title was authored.
+    /// </summary>
+    protected static string TitleOf(ToolDetails tool)
+        => string.IsNullOrEmpty(tool.Title) ? tool.Name : tool.Title;
+
+    /// <summary>
+    /// What a model calling the tool through MCP should read: the description, plus the usage note
+    /// when the tool author wrote one. Only MCP pays for the extra tokens.
+    /// </summary>
+    protected static string ModelDescription(ToolDetails tool)
+        => string.IsNullOrEmpty(tool.Usage)
+            ? tool.Description
+            : tool.Description + "\n\n" + tool.Usage;
+
     internal static string EscapeLiteral(string value)
         => value
             .Replace("\\", "\\\\")
@@ -174,13 +216,13 @@ public abstract class ToolGeneratorBase
                     keywords = ExtractEnumArray(namedArg.Value);
                     break;
                 case "Title":
-                    title = Normalize(namedArg.Value.Value?.ToString());
+                    title = Unwrap(namedArg.Value.Value?.ToString());
                     break;
                 case "Description":
-                    description = Normalize(namedArg.Value.Value?.ToString());
+                    description = Unwrap(namedArg.Value.Value?.ToString());
                     break;
                 case "Usage":
-                    usage = Normalize(namedArg.Value.Value?.ToString());
+                    usage = Unwrap(namedArg.Value.Value?.ToString());
                     break;
             }
         }

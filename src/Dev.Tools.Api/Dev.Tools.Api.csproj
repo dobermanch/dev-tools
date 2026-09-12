@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dev.Tools.CodeAnalysis\Dev.Tools.CodeAnalysis.csproj" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\Dev.Tools.Localization\Dev.Tools.Localization.csproj" />
     <ProjectReference Include="..\Dev.Tools\Dev.Tools.csproj" />
   </ItemGroup>
 

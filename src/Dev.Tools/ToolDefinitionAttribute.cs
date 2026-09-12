@@ -12,9 +12,12 @@ internal sealed class ToolDefinitionAttribute : Attribute
     public string? Title { get; set; }
 
     /// <summary>
-    /// English description of what the tool does. May span multiple lines for detailed text:
-    /// the first line is used where only one line fits (CLI command list), the full text where
-    /// there is room (API schema, Web page). Use a raw string literal for multi-line text.
+    /// English description of what the tool does. May run to several paragraphs for detailed text:
+    /// the first paragraph is used where only one line fits (the CLI command list), the full text
+    /// where there is room (API schema, MCP tool list, Web page). Use a raw string literal for
+    /// detailed text, and wrap it for readability - a single newline inside a paragraph is dropped
+    /// when the text is read, since every frontend wraps to its own width. A blank line starts a
+    /// new paragraph.
     /// </summary>
     public string? Description { get; set; }
 

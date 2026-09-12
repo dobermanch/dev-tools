@@ -1,4 +1,4 @@
-using Dev.Tools.CodeAnalysis.Generators;
+﻿using Dev.Tools.CodeAnalysis.Generators;
 
 namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
@@ -27,6 +27,20 @@ public class ToolTextEmissionTests
     public async Task ShouldEscapeTextForAStringLiteral(string value, string expected)
     {
         await Assert.That(ToolGeneratorBase.EscapeLiteral(value)).IsEqualTo(expected);
+    }
+
+    [Test]
+    [Arguments("one line", "one line")]
+    [Arguments("wrapped for\nreadability", "wrapped for readability")]
+    [Arguments("summary\n\ndetail", "summary\n\ndetail")]
+    [Arguments("summary\n\ndetail wrapped\nover two lines", "summary\n\ndetail wrapped over two lines")]
+    [Arguments("    indented\n    continuation", "indented continuation")]
+    [Arguments("summary\n\n\n\ndetail", "summary\n\ndetail")]
+    [Arguments("\n\nleading blank lines\n\n", "leading blank lines")]
+    [Arguments(null, "")]
+    public async Task ShouldDropTheLineWrappingAuthoredForTheSourceFile(string? value, string expected)
+    {
+        await Assert.That(ToolGeneratorBase.Unwrap(value)).IsEqualTo(expected);
     }
 
     [Test]

@@ -16,8 +16,8 @@ public sealed record ToolDefinition(
 )
 {
     /// <summary>
-    /// First line of <see cref="Description"/>, for places that show one line per tool
-    /// (CLI command list, MCP tool list). Multi-line descriptions keep their detail in
+    /// First paragraph of <see cref="Description"/>, for places that show one line per tool
+    /// (CLI command list, Web tool card). Detailed descriptions keep their later paragraphs in
     /// <see cref="Description"/>.
     /// </summary>
     public string Summary

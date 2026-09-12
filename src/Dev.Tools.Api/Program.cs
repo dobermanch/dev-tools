@@ -1,9 +1,8 @@
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using Dev.Tools;
 using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
-using Dev.Tools.Localization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 
@@ -60,21 +59,10 @@ builder.Services
         options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
 
-builder.Services
-    .AddDevTools()
-    .AddDevToolsLocalization();
+builder.Services.AddDevTools();
 
 var app = builder.Build();
 app.UseForwardedHeaders();
-
-var localizationProvider = app.Services.GetRequiredService<ILocalizationProvider>();
-var supportedCultures = localizationProvider.SupportedCultures.Select(c => c.Name).ToArray();
-app.UseRequestLocalization(options =>
-{
-    options.SetDefaultCulture(LocalizationProvider.FallbackCulture)
-           .AddSupportedCultures(supportedCultures)
-           .AddSupportedUICultures(supportedCultures);
-});
 
 app.MapOpenApi();
 app.MapScalarApiReference("ui");
