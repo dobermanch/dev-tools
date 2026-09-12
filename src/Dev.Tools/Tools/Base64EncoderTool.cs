@@ -2,6 +2,8 @@
 
 [ToolDefinition(
     Name = "base64-encoder",
+    Title = "Base64 Encoder",
+    Description = "Encodes text to Base64 format with optional URL-safe encoding and line breaks for compatibility with various systems",
     Aliases = ["64e"],
     Keywords = [Keyword.Base64, Keyword.Encode, Keyword.Url, Keyword.Text, Keyword.String],
     Categories = [Category.Converter]
@@ -36,12 +38,18 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
     }
 
     public sealed record Args(
-        [property: PipeInput] string Text,
+        [property: PipeInput, Description("Text to encode to Base64 format")]
+        string Text,
+        [property: Description("Insert line breaks every 76 characters for better readability")]
         bool InsertLineBreaks = false,
+        [property: Description("Use URL-safe encoding (replaces + with -, / with _, and removes padding)")]
         bool UrlSafe = false
     );
 
-    public sealed record Result([property: PipeOutput] string Text) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput, Description("The Base64-encoded text")]
+        string Text
+    ) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

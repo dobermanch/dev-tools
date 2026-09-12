@@ -80,6 +80,9 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
             $"""
                      new ToolDefinition(
                          Name: "{it.Name}",
+                         Title: "{EscapeLiteral(string.IsNullOrEmpty(it.Title) ? it.Name : it.Title)}",
+                         Description: "{EscapeLiteral(it.Description)}",
+                         Usage: "{EscapeLiteral(it.Usage)}",
                          Aliases: {Aggregate(it.Aliases)},
                          Categories: {Aggregate(it.Categories)},
                          Keywords: {Aggregate(it.Keywords)},
@@ -89,18 +92,18 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
                              Name: "{it.ArgsDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ArgsDetails.Type}),
                              Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()})"))}
+                                 {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\")"))}
                              ]
                          ),
                          ReturnType: new ToolDefinition.TypeDetails(
                              Name: "{it.ResultDetails.Type.Split('.').Last()}",
                              DataType: typeof({it.ResultDetails.Type}),
                              Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()})"))}
+                                 {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\")"))}
                              ]
                          ),
                          ExtraTypes: [
-                             {string.Join(",\n\t\t\t\t", it.ExtraTypes.OfType<EnumDetails>().Select(x => $"new ToolDefinition.EnumDetails(\"{x.Type.Split('.').Last()}\", typeof({x.Type}), [{string.Join(", ", x.Values.Select(v => $"\"{v}\""))}])"))}
+                             {string.Join(",\n\t\t\t\t", it.ExtraTypes.OfType<EnumDetails>().Select(x => $"new ToolDefinition.EnumDetails(\"{x.Type.Split('.').Last()}\", typeof({x.Type}), [{string.Join(", ", x.Values.Select(v => $"new ToolDefinition.EnumValue(\"{v.Name}\", \"{EscapeLiteral(v.Description)}\")"))}])"))}
                          ]
                      ),
              """)

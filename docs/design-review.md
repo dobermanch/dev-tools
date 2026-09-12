@@ -70,15 +70,23 @@ The cost of that near-zero value is structural:
 
 ### Recommended end state
 
-**English text becomes first-class tool metadata in core**, and localization becomes a Web-only translation layer on top of it.
+**English text becomes first-class tool metadata in core**, and translation becomes a layer that only *user-facing* frontends load.
 
-- Author English `Title` / `Description` / per-arg descriptions **where the tool is written** — preferred source: **XML doc comments** on the tool class and on the `Args`/`Result` record parameters, harvested by the generator into `ToolsCatalog`. (Alternative: attribute properties `Description = "..."`. XML docs are better — they also serve IntelliSense for NuGet consumers.) This removes the manual RESX step from the add-a-tool checklist entirely.
+The axis is user-facing vs machine-facing, not Web vs everything else. Web is the only user-facing frontend today, but VS Code and browser extensions are planned and are equally user-facing, so tool translations must stay reusable rather than being absorbed into the Blazor app:
+
+- **Tool-domain text** — titles, descriptions, enum value labels, error messages, categories, keywords — lives in `Dev.Tools.Localization` as RESX, shared by every user-facing frontend.
+- **Frontend-shell text** — `Page.*` / `Component.*` labels, buttons, navigation — stays with the frontend that owns those screens (`Dev.Tools.Web/Locals/Resources.*.resx` today). A VS Code extension will never reuse `Page.TokenGeneratorToolPage.*`.
+- **Machine-facing frontends** (API, MCP) and the CLI ship English only, straight from the catalog.
+
+- Author English `Title` / `Description` / `Usage` in `[ToolDefinition]`, and per-property / per-enum-value text as BCL `[Description]`, **where the tool is written**; the generators harvest it into `ToolsCatalog`. Attribute arguments were chosen over XML doc comments because they live in assembly metadata: every generator reads them through a `ProjectReference` with no `GenerateDocumentationFile` dependency and no silent degradation to empty text when a doc sidecar is missing. `Usage` is MCP-only model guidance (when to prefer the tool, when not to, result shape) and is appended to the MCP description alone. This removes the manual RESX step from the add-a-tool checklist entirely.
 - Generators emit plain `[Description("…")]` (BCL) instead of `[LocalizedDescription("Tools.X…")]`. Spectre, ASP.NET OpenAPI and the MCP SDK all read `DescriptionAttribute` — no other change needed in the three frontends beyond dropping `.AddDevToolsLocalization()` from their `Program.cs` and deleting the two `LocalizedEndpoint*Attribute` files.
-- `Dev.Tools.Localization` becomes Web-only (fold it into `Dev.Tools.Web`, or keep the project but reference it only from Web). uk-UA `ToolResources` stays as-is — 413 keys, verified complete.
+- `Dev.Tools.Localization` **stays a project** and keeps `ToolResources.*.resx`; only user-facing frontends reference it (Web today, VS Code / browser extensions later). It is not folded into `Dev.Tools.Web`, precisely so the next UI frontend inherits the translations instead of copying them.
 - **Fallback becomes the catalog's English**, not a `:placeholder:` — `CompositeStringLocalizer` miss → `ToolsCatalog` description. The neutral placeholder RESX and `tools/ResxGenerator`'s neutral-file output can then go away; keep the generator only for *key inventory / missing-translation diffing* against the Web resources, run on demand rather than `AfterTargets="Build"`.
-- `LocalizationKeysGenerator` stays (Web still needs the key inventory), but its output moves out of the core assembly's build-time obligations.
+- `LocalizationKeysGenerator` stays (user-facing frontends need the key inventory), but its output moves out of the core assembly's build-time obligations. `tools/ResxGenerator` is repurposed: instead of writing a neutral placeholder RESX, it scaffolds and diffs translation files against the catalog.
+- **Open consequence for non-.NET frontends.** A VS Code extension is TypeScript and cannot read RESX or satellite assemblies. Two architectures resolve this, and the choice can wait: either the extension is a thin client over the CLI/MCP server (the .NET side renders text and the host passes a culture), or it is standalone TypeScript and the build must *export* translations as JSON bundles (`l10n` for VS Code, `messages.json` for browser extensions). The repurposed `tools/ResxGenerator` is the natural home for such an export mode, which is another reason to keep it rather than delete it.
+- **One-way door to note.** Baking English into generated `[Description]` attributes means re-adding CLI localization later can no longer go through attributes; it would need a custom Spectre `IHelpProvider` reading a localizer over the catalog. That path stays open and is clean, but it is a different mechanism than today's.
 
-Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MCP become English-only with *better* help text than today (real sentences, no resource lookup), the second DI container and static ambient provider disappear, and the add-a-tool RESX chore disappears for everything except optional Web translations.
+Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MCP become English-only with *better* help text than today (real sentences, no resource lookup), the second DI container and static ambient provider disappear, and the add-a-tool RESX chore disappears except for optional translations in the user-facing frontends.
 
 ---
 
@@ -232,7 +240,7 @@ Each phase is independently shippable.
 
 **Phase 0 — correctness, no design change. ✅ Done 2026-09-11.** §7 items 1-9 + dead generator code, plus five defects found only by building and running (§7.14-§7.17), plus the CLI-defaults fix pulled forward from Phase 2 and the cancellation rethrow pulled forward from Phase 3.
 
-**Phase 1 — English metadata in core; localization becomes Web-only.** XML-doc harvesting into `ToolsCatalog`; generators emit `[Description]`; drop `.AddDevToolsLocalization()` from CLI/API/MCP; Web falls back to catalog English; retire the neutral placeholder RESX and the `AfterTargets="Build"` RESX write. *Removes 2 files × ~19 keys from the add-a-tool checklist and deletes the static-provider/second-container machinery.*
+**Phase 1 — English metadata in core; translation limited to user-facing frontends.** Attribute-authored Title/Description/Usage + `[Description]` harvested into `ToolsCatalog`; generators emit `[Description]`/`[EndpointSummary]`; drop `.AddDevToolsLocalization()` from CLI/API/MCP; `Dev.Tools.Localization` keeps the tool RESX for Web and future VS Code / browser extensions, falling back to catalog English; an analyzer makes in-place description text mandatory; retire the neutral placeholder RESX and the `AfterTargets="Build"` RESX write. *Removes 2 files × ~19 keys from the add-a-tool checklist and deletes the static-provider/second-container machinery.*
 
 **Phase 2 — generator consolidation.** Shared naming/DTO/mapping/pipeline; type allow-list with diagnostics; loud failures instead of silent skips; stronger analyzer rules; remove `DateTime.Now` and symbols from the incremental model; un-skip and fill in snapshot tests.
 

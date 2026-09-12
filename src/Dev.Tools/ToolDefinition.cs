@@ -1,4 +1,4 @@
-namespace Dev.Tools;
+﻿namespace Dev.Tools;
 
 public sealed record ToolDefinition(
     string Name,
@@ -9,14 +9,31 @@ public sealed record ToolDefinition(
     Type ToolType,
     ToolDefinition.TypeDetails ArgsType,
     ToolDefinition.TypeDetails ReturnType,
-    ToolDefinition.TypeDetailsBase[] ExtraTypes
+    ToolDefinition.TypeDetailsBase[] ExtraTypes,
+    string Title = "",
+    string Description = "",
+    string Usage = ""
 )
 {
+    /// <summary>
+    /// First line of <see cref="Description"/>, for places that show one line per tool
+    /// (CLI command list, MCP tool list). Multi-line descriptions keep their detail in
+    /// <see cref="Description"/>.
+    /// </summary>
+    public string Summary
+    {
+        get
+        {
+            var end = Description.IndexOf('\n');
+            return end < 0 ? Description : Description[..end].TrimEnd();
+        }
+    }
+
     public record TypeDetailsBase(
         string Name,
         Type DataType
     );
-    
+
     public sealed record TypeDetails (
         string Name,
         Type DataType,
@@ -29,12 +46,18 @@ public sealed record ToolDefinition(
         bool IsRequired,
         bool IsNullable,
         bool IsPipeInput = false,
-        bool IsPipeOutput = false
+        bool IsPipeOutput = false,
+        string Description = ""
     );
 
     public sealed record EnumDetails(
         string Name,
         Type DataType,
-        string[] Values
+        EnumValue[] Values
     ): TypeDetailsBase(Name, DataType);
+
+    public sealed record EnumValue(
+        string Name,
+        string Description = ""
+    );
 }

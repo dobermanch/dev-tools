@@ -48,6 +48,9 @@ public abstract class ToolGeneratorBase
             Syntax = syntax!,
             Symbol = symbol,
             Name = attributeData.Name,
+            Title = attributeData.Title,
+            Description = attributeData.Description,
+            Usage = attributeData.Usage,
             Categories = attributeData.Categories,
             Keywords = attributeData.Keywords,
             ErrorCodes = ["ErrorCode.Unknown", ..errorCodes.Select(it => it.ToString())],
@@ -58,6 +61,33 @@ public abstract class ToolGeneratorBase
         };
     }
     
+    /// <summary>
+    /// Reads [System.ComponentModel.Description] from a symbol. Attribute arguments live in
+    /// assembly metadata, so this works for referenced assemblies as well as source.
+    /// </summary>
+    private static string GetDescription(ISymbol symbol)
+        => Normalize(symbol.GetAttributes()
+            .FirstOrDefault(it => it.AttributeClass?.ToDisplayString() == "System.ComponentModel.DescriptionAttribute")
+            ?.ConstructorArguments.FirstOrDefault().Value?.ToString());
+
+    /// <summary>
+    /// Normalizes authored text to LF so generated code does not depend on the
+    /// line endings of the source file it was read from.
+    /// </summary>
+    internal static string Normalize(string? value)
+        => value?.Replace("\r\n", "\n").Replace("\r", "\n") ?? string.Empty;
+
+    /// <summary>
+    /// Escapes text for emission inside a C# string literal.
+    /// </summary>
+    internal static string EscapeLiteral(string value)
+        => value
+            .Replace("\\", "\\\\")
+            .Replace("\"", "\\\"")
+            .Replace("\r", "\\r")
+            .Replace("\n", "\\n")
+            .Replace("\t", "\\t");
+
     protected static bool HasConstructorMatchingProperties(ITypeSymbol typeSymbol)
     {
         if (typeSymbol is not INamedTypeSymbol namedType)
@@ -112,6 +142,9 @@ public abstract class ToolGeneratorBase
         string[] aliases = [];
         string[] categories = [];
         string[] keywords = [];
+        var title = string.Empty;
+        var description = string.Empty;
+        var usage = string.Empty;
 
         // Extract from named arguments
         foreach (var namedArg in attr.NamedArguments)
@@ -130,6 +163,15 @@ public abstract class ToolGeneratorBase
                 case "Keywords":
                     keywords = ExtractEnumArray(namedArg.Value);
                     break;
+                case "Title":
+                    title = Normalize(namedArg.Value.Value?.ToString());
+                    break;
+                case "Description":
+                    description = Normalize(namedArg.Value.Value?.ToString());
+                    break;
+                case "Usage":
+                    usage = Normalize(namedArg.Value.Value?.ToString());
+                    break;
             }
         }
 
@@ -138,7 +180,7 @@ public abstract class ToolGeneratorBase
             return null;
         }
 
-        return new ToolAttributeData(name, aliases, categories, keywords);
+        return new ToolAttributeData(name, aliases, categories, keywords, title, description, usage);
     }
 
     private static string[] ExtractStringArray(TypedConstant constant)
@@ -182,13 +224,19 @@ public abstract class ToolGeneratorBase
         public string[] Aliases { get; }
         public string[] Categories { get; }
         public string[] Keywords { get; }
+        public string Title { get; }
+        public string Description { get; }
+        public string Usage { get; }
 
-        public ToolAttributeData(string name, string[] aliases, string[] categories, string[] keywords)
+        public ToolAttributeData(string name, string[] aliases, string[] categories, string[] keywords, string title, string description, string usage)
         {
             Name = name;
             Aliases = aliases;
             Categories = categories;
             Keywords = keywords;
+            Title = title;
+            Description = description;
+            Usage = usage;
         }
     }
     
@@ -241,6 +289,7 @@ public abstract class ToolGeneratorBase
                                 IsNullable = it.NullableAnnotation == NullableAnnotation.Annotated,
                                 IsPipeInput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeInputAttribute"),
                                 IsPipeOutput = it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
+                                Description = GetDescription(it),
                                 DefaultValue = defaults.TryGetValue(it.Name, out var defVal) ? defVal : null
                             })
                             .ToArray(),
@@ -333,7 +382,7 @@ public abstract class ToolGeneratorBase
                 Values = enumType.GetMembers()
                     .OfType<IFieldSymbol>()
                     .Where(f => f.HasConstantValue)
-                    .Select(f => f.Name)
+                    .Select(f => new EnumValueDetails { Name = f.Name, Description = GetDescription(f) })
                     .ToArray()
             });
         }
@@ -344,6 +393,9 @@ public abstract class ToolGeneratorBase
     protected record ToolDetails : TypeDeclaration
     {
         public string Name { get; set; } = null!;
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Usage { get; set; } = string.Empty;
         public string[] Aliases { get; set; } = [];
         public string[] Categories { get; set; } = [];
         public string[] Keywords { get; set; } = [];
@@ -368,12 +420,19 @@ public abstract class ToolGeneratorBase
         public bool IsNullable { get; set; }
         public bool IsPipeInput { get; set; }
         public bool IsPipeOutput { get; set; }
+        public string Description { get; set; } = string.Empty;
         public string? DefaultValue { get; set; }
     }
 
     protected record EnumDetails : TypeDeclaration
     {
         public string Type { get; set; } = null!;
-        public string[] Values { get; set; } = [];
+        public EnumValueDetails[] Values { get; set; } = [];
+    }
+
+    protected record EnumValueDetails
+    {
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = string.Empty;
     }
 }

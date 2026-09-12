@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -145,7 +145,7 @@ public class LocalizationKeysGenerator : ToolGeneratorBase, IIncrementalGenerato
             // Generate enums
             var enums = string.Join(", ",
                 tool.ExtraTypes.OfType<EnumDetails>().Select(e =>
-                    $"new EnumLocalizationKeys(\"{e.Type.Split('.').Last()}\", [{string.Join(", ", e.Values.Select(v => $"\"{v}\""))}])"));
+                    $"new EnumLocalizationKeys(\"{e.Type.Split('.').Last()}\", [{string.Join(", ", e.Values.Select(v => $"\"{v.Name}\""))}])"));
 
             var categoriesStr = string.Join(", ", tool.Categories.Select(c => $"\"{c}\""));
             var keywordsStr = string.Join(", ", tool.Keywords.Select(k => $"\"{k}\""));
