@@ -4,6 +4,9 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "url-parser",
+    Title = "URL Parser",
+    Description =
+        "Parses an absolute URL into its components: scheme, credentials, hostname, port, path, query string and decoded query parameters. Relative URLs are rejected.",
     Aliases = [],
     Keywords = [Keyword.Decode, Keyword.Internet, Keyword.Web, Keyword.Network, Keyword.Url, Keyword.String],
     Categories = [Category.Web]
@@ -70,18 +73,38 @@ public sealed class UrlParserTool : ToolBase<UrlParserTool.Args, UrlParserTool.R
     }
 
     public sealed record Args(
-        [property: PipeInput] string Url
+        [property: PipeInput,
+                   DisplayName("URL"),
+                   Description("Absolute URL to parse, including the scheme")]
+        string Url
     );
 
     public sealed record Result : ToolResult
     {
+        [DisplayName("Scheme")]
+        [Description("URL scheme (http, https, ftp, ...)")]
         public string? Schema { get; init; }
+
+        [Description("Username from the URL, or null when there are no credentials")]
         public string? Username { get; init; }
+
+        [Description("Password from the URL, or null when there are no credentials")]
         public string? Password { get; init; }
+
+        [Description("Domain name or IP address")]
         public string? Hostname { get; init; }
+
+        [Description("Port number; the scheme's default port when none was given")]
         public int? Port { get; init; }
+
+        [Description("Path component, without the query string")]
         public string? Path { get; init; }
+
+        [DisplayName("Query String")]
+        [Description("Raw query string including the leading '?', or null when there is none")]
         public string? Query { get; init; }
+
+        [Description("Decoded query parameters as key-value pairs; a repeated key appears once per value")]
         public IList<KeyValuePair<string, string>> Parameters { get; init; } = [];
     }
 }

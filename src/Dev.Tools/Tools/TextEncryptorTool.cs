@@ -1,9 +1,20 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "text-encryptor",
+    Title = "Text Encryptor",
+    Description =
+        """
+        Encrypts text with a symmetric algorithm and returns the ciphertext as Base64 or hex.
+
+        The key is turned into algorithm-sized key material with a single SHA-256 pass, so the
+        strength of the result is the strength of the key itself. For block cipher modes the
+        randomly generated IV is prepended to the output, which is what text-decryptor expects.
+        """,
+    Usage =
+        "This is a developer utility, not a key-management system: there is no password stretching, no salt and no integrity check outside GCM, so it is not suitable for protecting data at rest. Decrypt with text-decryptor using the same key, algorithm and format.",
     Aliases = ["encrypt"],
     Keywords = [Keyword.Encrypt, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto, Category.Security]
@@ -136,27 +147,49 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
 
     public enum EncryptionAlgorithm
     {
+        [Description("AES-128 in CBC mode with PKCS#7 padding")]
         Aes128Cbc,
+
+        [Description("AES-256 in CBC mode with PKCS#7 padding")]
         Aes256Cbc,
+
+        [Description("AES-256 in GCM mode, authenticated")]
         Aes256Gcm,
+
+        [Description("TripleDES in CBC mode; legacy, 64-bit block")]
         TripleDes,
+
+        [Description("RC4 stream cipher; broken, for legacy interoperability only")]
         Rc4
     }
 
     public enum OutputFormat
     {
+        [Description("Base64")]
         Base64,
+
+        [Description("Lowercase hexadecimal")]
         Hex
     }
 
     public sealed record Args(
-        [property: PipeInput] string Text,
+        [property: PipeInput,
+                   Description("Plain text to encrypt")]
+        string Text,
+        [property: DisplayName("Secret Key"),
+                   Description("Secret key; hashed with SHA-256 to derive the algorithm's key material")]
         string Key,
+        [property: Description("Encryption algorithm to use")]
         EncryptionAlgorithm Algorithm = EncryptionAlgorithm.Aes256Cbc,
+        [property: Description("Encoding of the returned ciphertext")]
         OutputFormat OutputFormat = OutputFormat.Base64
     );
 
-    public sealed record Result([property: PipeOutput] string EncryptedText) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   Description("The encoded ciphertext, with the IV prepended for block cipher modes")]
+        string EncryptedText
+    ) : ToolResult
     {
         public Result() : this(string.Empty)
         {

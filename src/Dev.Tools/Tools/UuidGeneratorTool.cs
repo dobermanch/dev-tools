@@ -5,6 +5,18 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "uuid-generator",
+    Title = "UUID Generator",
+    Description =
+        """
+        Generates UUIDs (GUIDs) in the versions defined by RFC 9562.
+
+        Version 4 is random and is the default. Versions 3 and 5 are derived from a namespace and a
+        name, so the same pair always yields the same UUID. Version 7 embeds a millisecond timestamp
+        and therefore sorts by creation time. Formatting - case, hyphens and wrapping brackets - is
+        applied to every generated value.
+        """,
+    Usage =
+        "Namespace and Name are required for V3 and V5 and ignored otherwise; Time applies to V7 only. Prefer V4 for identifiers that must not be guessable and V7 where database insert order matters. V3 uses MD5 and exists for compatibility - use V5 for new name-based identifiers.",
     Aliases = ["uuid"],
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto]
@@ -140,42 +152,78 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
 
     public enum UuidType : byte
     {
+        [Description("Nil UUID, all zeros")]
         Nil,
+
+        [Description("Version 3, MD5 hash of a namespace and a name")]
         V3,
+
+        [Description("Version 4, random")]
         V4,
+
+        [Description("Version 5, SHA-1 hash of a namespace and a name")]
         V5,
+
+        [Description("Version 7, timestamp-based and sortable")]
         V7,
+
+        [Description("Max UUID, all ones")]
         Max
     }
 
     public enum UuidCase
     {
+        [Description("Lowercase, the canonical form")]
         Lowercase,
+
+        [Description("Uppercase")]
         Uppercase
     }
 
     public enum UuidBrackets
     {
+        [Description("No wrapping characters")]
         None,
+
+        [Description("Wrapped in braces: {...}")]
         Braces,
+
+        [Description("Wrapped in parentheses: (...)")]
         Parentheses,
+
+        [Description("Wrapped in square brackets: [...]")]
         SquareBrackets
     }
 
     // TODO: Taking into account that each UUID type has it own set of parameters,
     // it make sense to make separate tool for each type
     public sealed record Args(
-        UuidType Type = UuidType.Nil,
+        [property: DisplayName("UUID Version"),
+                   Description("UUID version to generate")]
+        UuidType Type = UuidType.V4,
+        [property: Description("Number of UUIDs to generate; values below 1 are treated as 1")]
         int Count = 1,
+        [property: Description("Namespace UUID; required for V3 and V5, ignored otherwise")]
         Guid? Namespace = null,
+        [property: Description("Name hashed together with the namespace; required for V3 and V5, ignored otherwise")]
         string? Name = null,
+        [property: DisplayName("Timestamp"),
+                   Description("Timestamp to embed in a V7 UUID; defaults to the current time, ignored for other versions")]
         DateTime? Time = null,
+        [property: Description("Separate the five groups with hyphens")]
         bool Hyphens = true,
+        [property: Description("Letter case of the hexadecimal digits")]
         UuidCase Case = UuidCase.Lowercase,
+        [property: Description("Characters wrapped around each UUID")]
         UuidBrackets Brackets = UuidBrackets.None
     );
 
-    public sealed record Result([property: PipeOutput] IReadOnlyCollection<string> Data) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("UUIDs"),
+                   Description("The generated UUIDs, one per requested count")]
+        IReadOnlyCollection<string> Data
+    ) : ToolResult
     {
         public Result() : this([]) { }
     }

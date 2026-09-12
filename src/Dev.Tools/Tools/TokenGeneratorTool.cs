@@ -4,6 +4,9 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "token-generator",
+    Title = "Token Generator",
+    Description =
+        "Generates random tokens of a given length from a character set built out of uppercase letters, lowercase letters, digits and symbols, or from a custom alphabet. Characters are drawn with a cryptographic random source.",
     Aliases = ["tokengen"],
     Keywords = [Keyword.Generate, Keyword.Token, Keyword.Text, Keyword.String, Keyword.Password],
     Categories = [Category.Text, Category.Crypto, Category.Security]
@@ -78,17 +81,33 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
     }
 
     public sealed record Args(
+        [property: Description("Length of each generated token; 0 or less produces empty tokens")]
         int TokenLength = 15,
+        [property: DisplayName("Lowercase Letters"),
+                   Description("Include lowercase letters (a-z)")]
         bool Lowercase = true,
+        [property: Description("Include digits (0-9)")]
         bool Numbers = true,
+        [property: DisplayName("Uppercase Letters"),
+                   Description("Include uppercase letters (A-Z)")]
         bool Uppercase = true,
+        [property: Description("Include special characters (!@#$%^&*...)")]
         bool Symbols = true,
+        [property: Description("Number of tokens to generate; values below 1 are treated as 1")]
         int TokenCount = 1,
+        [property: Description("Characters removed from the alphabet after it is built")]
         string? ExcludeSymbols = null,
+        [property: DisplayName("Custom Alphabet"),
+                   Description("Exact character set to draw from; when set, the four character-class options are ignored")]
         string? Alphabet = null
     );
 
-    public sealed record Result([property: PipeOutput] string[] Tokens) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Generated Tokens"),
+                   Description("The generated tokens, one per requested count")]
+        string[] Tokens
+    ) : ToolResult
     {
         public Result() : this([])
         {

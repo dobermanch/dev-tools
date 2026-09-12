@@ -4,6 +4,11 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "ip-details",
+    Title = "IP Address Detector",
+    Description =
+        "Retrieves the caller's current public IPv4 and IPv6 addresses by querying an external lookup service. Either address is null when the corresponding protocol is unreachable.",
+    Usage =
+        "Reports the public address of the machine running this tool, which for a hosted server is the server's own address, not the end user's. Requires outbound network access.",
     Aliases = ["ip"],
     Keywords = [Keyword.Network, Keyword.Internet, Keyword.Ip],
     Categories = [Category.Network]
@@ -52,7 +57,12 @@ public sealed class IpDetailsTool(HttpClient? httpClient = null) : ToolBase<IpDe
 
     public sealed record Args;
 
-    public sealed record Result(string? IpV4, string? IpV6) : ToolResult
+    public sealed record Result(
+        [property: Description("Public IPv4 address, or null when IPv4 lookup failed")]
+        string? IpV4,
+        [property: Description("Public IPv6 address, or null when IPv6 is unavailable on this network")]
+        string? IpV6
+    ) : ToolResult
     {
         public Result() : this(null, null)
         {

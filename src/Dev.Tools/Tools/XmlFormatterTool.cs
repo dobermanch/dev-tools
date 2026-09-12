@@ -1,9 +1,19 @@
-using System.Xml;
+﻿using System.Xml;
 
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "xml-formatter",
+    Title = "XML Formatter",
+    Description =
+        """
+        Reformats XML with control over indentation, element order, element name casing and empty elements.
+
+        The document is parsed and re-serialized, so the original whitespace is lost and malformed
+        XML is rejected rather than repaired. Compact output overrides the indent size.
+        """,
+    Usage =
+        "Formatting only - this never changes element values, just how the document is written. Renaming elements through KeyFormat changes the meaning of the document for anything that reads it by name.",
     Aliases = ["xf"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Xml, Keyword.Format],
     Categories = [Category.Text]
@@ -124,32 +134,58 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
 
     public enum TextCase
     {
+        [Description("Leave names unchanged")]
         None = 0,
+
+        [Description("lowercase")]
         LowerCase,
+
+        [Description("UPPERCASE")]
         UpperCase,
+
+        [Description("camelCase")]
         CamelCase,
+
+        [Description("PascalCase")]
         PascalCase,
     }
 
     public enum SortDirection
     {
+        [Description("Keep the original order")]
         None = 0,
+
+        [Description("Ascending (A-Z)")]
         Ascending,
+
+        [Description("Descending (Z-A)")]
         Descending
     }
 
     public sealed record Args(
-        [property: PipeInput] string Xml,
+        [property: PipeInput,
+                   DisplayName("XML"),
+                   Description("XML text to format")]
+        string Xml,
+        [property: Description("Number of spaces per indent level; ignored when Compact is set")]
         int IndentSize = 2,
+        [property: DisplayName("Sort Elements"),
+                   Description("Order to sort sibling elements in")]
         SortDirection SortKeys = SortDirection.None,
+        [property: DisplayName("Element Name Format"),
+                   Description("Case format applied to every element name")]
         TextCase KeyFormat = TextCase.None,
+        [property: Description("Drop elements with no value and no children")]
         bool ExcludeEmpty = false,
+        [property: Description("Write the document on a single line with no extra whitespace")]
         bool Compact = false
     );
 
     public record Result : ToolResult
     {
         [PipeOutput]
+        [DisplayName("Formatted XML")]
+        [Description("The reformatted XML document")]
         public string Xml { get; init; } = null!;
     }
 

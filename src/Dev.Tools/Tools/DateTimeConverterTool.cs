@@ -4,6 +4,17 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "date-convert",
+    Title = "Date/Time Converter",
+    Description =
+        """
+        Converts a date and time from one representation to another.
+
+        Supported representations are ISO 8601 (local and UTC), ISO 9075, RFC 3339, RFC 7231,
+        Unix seconds, millisecond timestamps, MongoDB ObjectIds, Excel serial dates and the
+        JavaScript date form. Omitting the input converts the current date and time instead.
+        """,
+    Usage =
+        "Leave Date unset to convert the current moment - that is the way to ask what time it is now in a given format. MongoDB ObjectId and Excel serial dates carry less precision than the other formats, so a round trip through them is lossy.",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security]
@@ -93,25 +104,56 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
 
     public enum DateFormatType
     {
+        [Description("ISO 8601 with offset, e.g. 2024-03-01T12:30:00+01:00")]
         Iso8601,
+
+        [Description("ISO 8601 in UTC, e.g. 2024-03-01T11:30:00Z")]
         Iso8601Utc,
+
+        [Description("ISO 9075, e.g. 2024-03-01 12:30:00")]
         Iso9075,
+
+        [Description("RFC 3339, e.g. 2024-03-01T12:30:00+01:00")]
         Rfc3339,
+
+        [Description("RFC 7231 HTTP date, e.g. Fri, 01 Mar 2024 11:30:00 GMT")]
         Rfc7231,
+
+        [Description("Unix timestamp in seconds")]
         Unix,
+
+        [Description("Timestamp in milliseconds")]
         Timestamp,
+
+        [Description("MongoDB ObjectId; only the leading timestamp is meaningful")]
         MongoObjectId,
+
+        [Description("Excel serial date, days since 1899-12-30")]
         ExcelDateTime,
+
+        [Description("JavaScript date/time string")]
         JsDateTime
     }
 
     public sealed record Args(
-        [property: PipeInput] string Date,
+        [property: PipeInput,
+                   DisplayName("Date/Time"),
+                   Description("Date/time value written in the source format; leave unset to use the current date and time")]
+        string? Date = null,
+        [property: DisplayName("From Format"),
+                   Description("Format the input value is written in")]
         DateFormatType From = DateFormatType.Iso8601,
+        [property: DisplayName("To Format"),
+                   Description("Format to write the result in")]
         DateFormatType To = DateFormatType.Iso8601
     );
 
-    public sealed record Result([property: PipeOutput] string Time) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Converted Time"),
+                   Description("The date/time written in the target format")]
+        string Time
+    ) : ToolResult
     {
         public Result() : this(string.Empty)
         {

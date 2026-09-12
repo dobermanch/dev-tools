@@ -1,9 +1,20 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "text-decryptor",
+    Title = "Text Decryptor",
+    Description =
+        """
+        Decrypts text produced by the text-encryptor tool.
+
+        The key, algorithm and encoding must match the ones used to encrypt; for block cipher modes
+        the IV is read from the start of the input. A wrong key usually fails outright, but only
+        AES-GCM authenticates the ciphertext - the other algorithms can return meaningless text.
+        """,
+    Usage =
+        "Only reverses this suite's text-encryptor output - ciphertext from another program will usually fail because the IV placement and key derivation differ. A decryption failure means the key, algorithm or format did not match; it does not narrow down which.",
     Aliases = ["decrypt"],
     Keywords = [Keyword.Encrypt, Keyword.Decode, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto, Category.Security]
@@ -133,27 +144,49 @@ public sealed class TextDecryptorTool : ToolBase<TextDecryptorTool.Args, TextDec
 
     public enum EncryptionAlgorithm
     {
+        [Description("AES-128 in CBC mode with PKCS#7 padding")]
         Aes128Cbc,
+
+        [Description("AES-256 in CBC mode with PKCS#7 padding")]
         Aes256Cbc,
+
+        [Description("AES-256 in GCM mode, authenticated")]
         Aes256Gcm,
+
+        [Description("TripleDES in CBC mode; legacy, 64-bit block")]
         TripleDes,
+
+        [Description("RC4 stream cipher; broken, for legacy interoperability only")]
         Rc4
     }
 
     public enum InputFormat
     {
+        [Description("Base64")]
         Base64,
+
+        [Description("Hexadecimal")]
         Hex
     }
 
     public sealed record Args(
-        [property: PipeInput] string EncryptedText,
+        [property: PipeInput,
+                   Description("Base64 or hex encoded ciphertext to decrypt")]
+        string EncryptedText,
+        [property: DisplayName("Secret Key"),
+                   Description("Secret key; must be the one used to encrypt")]
         string Key,
+        [property: Description("Algorithm the text was encrypted with")]
         EncryptionAlgorithm Algorithm = EncryptionAlgorithm.Aes256Cbc,
+        [property: Description("Encoding of the ciphertext; must match the format used when encrypting")]
         InputFormat InputFormat = InputFormat.Base64
     );
 
-    public sealed record Result([property: PipeOutput] string DecryptedText) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   Description("The recovered plain text")]
+        string DecryptedText
+    ) : ToolResult
     {
         public Result() : this(string.Empty)
         {

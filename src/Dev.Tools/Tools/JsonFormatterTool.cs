@@ -1,10 +1,21 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "json-formatter",
+    Title = "JSON Formatter",
+    Description =
+        """
+        Reformats JSON with control over indentation, key order, key casing and empty values.
+
+        The document is parsed and re-serialized, so the original whitespace is lost, and input that
+        is not strict JSON - comments and trailing commas included - is rejected rather than repaired.
+        Compact output overrides the indent size.
+        """,
+    Usage =
+        "Formatting only - this never changes values, just how the document is written. Renaming keys through KeyFormat changes the meaning of the document for anything that reads it by name.",
     Aliases = ["jf"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Json, Keyword.Format],
     Categories = [Category.Text]
@@ -99,32 +110,56 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
 
     public enum TextCase
     {
+        [Description("Leave names unchanged")]
         None = 0,
+
+        [Description("lowercase")]
         LowerCase,
+
+        [Description("UPPERCASE")]
         UpperCase,
+
+        [Description("camelCase")]
         CamelCase,
+
+        [Description("PascalCase")]
         PascalCase,
     }
 
     public enum SortDirection
     {
+        [Description("Keep the original order")]
         None = 0,
+
+        [Description("Ascending (A-Z)")]
         Ascending,
+
+        [Description("Descending (Z-A)")]
         Descending
     }
 
     public sealed record Args(
-        [property: PipeInput] string Json,
+        [property: PipeInput,
+                   DisplayName("JSON"),
+                   Description("JSON text to format")]
+        string Json,
+        [property: Description("Number of spaces per indent level; ignored when Compact is set")]
         int IndentSize = 2,
+        [property: Description("Order to sort object keys in")]
         SortDirection SortKeys = SortDirection.None,
+        [property: Description("Case format applied to every object key")]
         TextCase KeyFormat = TextCase.None,
+        [property: Description("Drop null, empty string, empty array and empty object values")]
         bool ExcludeEmpty = false,
+        [property: Description("Write the document on a single line with no extra whitespace")]
         bool Compact = false
     );
 
     public sealed record Result : ToolResult
     {
         [PipeOutput]
+        [DisplayName("Formatted JSON")]
+        [Description("The reformatted JSON document")]
         public string Json { get; init; } = null!;
     }
 

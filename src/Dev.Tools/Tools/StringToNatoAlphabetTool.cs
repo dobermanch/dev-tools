@@ -2,6 +2,9 @@
 
 [ToolDefinition(
     Name = "nato",
+    Title = "NATO Phonetic Alphabet",
+    Description =
+        "Converts text to NATO phonetic alphabet words (Alfa, Bravo, Charlie, ...) for clear voice communication. Whitespace is dropped; characters outside A-Z are passed through unchanged.",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Converter]
@@ -54,10 +57,17 @@ public sealed class StringToNatoAlphabetTool : ToolBase<StringToNatoAlphabetTool
     }
 
     public sealed record Args(
-        [property: PipeInput] string Text
+        [property: PipeInput,
+                   Description("Text to convert to the NATO phonetic alphabet")]
+        string Text
     );
 
-    public sealed record Result([property: PipeOutput] IReadOnlyCollection<string> Words) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("NATO Words"),
+                   Description("One phonetic word per input character, in order")]
+        IReadOnlyCollection<string> Words
+    ) : ToolResult
     {
         public Result() : this([]) { }
     }

@@ -40,11 +40,9 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
 
     public sealed record Args(
         [property: PipeInput,
-                   DisplayName("Text"),
                    Description("Text to encode to Base64 format")]
         string Text,
-        [property: DisplayName("Insert Line Breaks"),
-                   Description("Insert line breaks every 76 characters for better readability")]
+        [property: Description("Insert line breaks every 76 characters for better readability")]
         bool InsertLineBreaks = false,
         [property: DisplayName("URL Safe"),
                    Description("Use URL-safe encoding (replaces + with -, / with _, and removes padding)")]

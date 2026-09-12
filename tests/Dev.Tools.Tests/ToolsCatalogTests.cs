@@ -29,10 +29,69 @@ public class ToolsCatalogTests
     }
 
     [Test]
-    public async Task ShouldFallBackToToolNameWhenTitleIsNotSet()
+    public async Task EveryToolShouldCarryATitleAndADescription()
     {
-        // Until every tool carries text, an unset Title must still give callers something to show.
-        await Assert.That(ToolsCatalog.ToolDefinitions.All(it => !string.IsNullOrWhiteSpace(it.Title))).IsTrue();
+        var untitled = ToolsCatalog.ToolDefinitions
+            .Where(it => string.IsNullOrWhiteSpace(it.Title) || string.IsNullOrWhiteSpace(it.Description))
+            .Select(it => it.Name)
+            .ToArray();
+
+        await Assert.That(untitled).IsEmpty();
+    }
+
+    [Test]
+    public async Task ToolTitlesShouldBeASingleLine()
+    {
+        // Titles head a CLI command list and a Web card; only Description may wrap.
+        var wrapped = ToolsCatalog.ToolDefinitions
+            .Where(it => it.Title.Contains('\n'))
+            .Select(it => it.Name)
+            .ToArray();
+
+        await Assert.That(wrapped).IsEmpty();
+    }
+
+    [Test]
+    public async Task EveryArgumentAndResultPropertyShouldCarryADescription()
+    {
+        var undescribed = ToolsCatalog.ToolDefinitions
+            .SelectMany(tool => tool.ArgsType.Properties
+                .Concat(tool.ReturnType.Properties)
+                .Where(it => string.IsNullOrWhiteSpace(it.Description))
+                .Select(it => $"{tool.Name}.{it.Name}"))
+            .ToArray();
+
+        await Assert.That(undescribed).IsEmpty();
+    }
+
+    [Test]
+    public async Task NoPropertyShouldAuthorALabelThatTheNameAlreadyDerives()
+    {
+        // The convention is to author DisplayName only where the derived label misleads;
+        // a DisplayName equal to the derived label is noise in the tool file.
+        var redundant = ToolsCatalog.ToolDefinitions
+            .SelectMany(tool => tool.ArgsType.Properties
+                .Concat(tool.ReturnType.Properties)
+                .Where(it => !string.IsNullOrEmpty(it.DisplayName)
+                             && it.DisplayName == (it with { DisplayName = "" }).Label)
+                .Select(it => $"{tool.Name}.{it.Name}"))
+            .ToArray();
+
+        await Assert.That(redundant).IsEmpty();
+    }
+
+    [Test]
+    public async Task EveryEnumValueShouldCarryADescription()
+    {
+        var undescribed = ToolsCatalog.ToolDefinitions
+            .SelectMany(tool => tool.ExtraTypes
+                .OfType<ToolDefinition.EnumDetails>()
+                .SelectMany(type => type.Values
+                    .Where(it => string.IsNullOrWhiteSpace(it.Description))
+                    .Select(it => $"{tool.Name}.{type.Name}.{it.Name}")))
+            .ToArray();
+
+        await Assert.That(undescribed).IsEmpty();
     }
 
     [Test]
@@ -57,12 +116,17 @@ public class ToolsCatalogTests
 
         await Assert.That(encoded.DisplayName).IsEqualTo("Encoded Text");
         await Assert.That(encoded.Label).IsEqualTo("Encoded Text");
+
+        // Labels that derive correctly are left unauthored, to keep the tool files readable.
+        var lineBreaks = definition.ArgsType.Properties.Single(it => it.Name == "InsertLineBreaks");
+        await Assert.That(lineBreaks.DisplayName).IsEmpty();
+        await Assert.That(lineBreaks.Label).IsEqualTo("Insert Line Breaks");
     }
 
     [Test]
     [Arguments("Count", "Count")]
     [Arguments("InsertLineBreaks", "Insert Line Breaks")]
-    [Arguments("UrlSafe", "Url Safe")]
+    [Arguments("UrlSafe", "Url Safe")]   // derives badly - which is why this one is authored
     [Arguments("IPv4", "IPv4")]
     public async Task LabelShouldFallBackToTheSplitPropertyNameWhenNoDisplayNameIsAuthored(string propertyName, string expected)
     {

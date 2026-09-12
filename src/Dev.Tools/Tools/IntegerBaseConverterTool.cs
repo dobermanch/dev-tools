@@ -1,7 +1,12 @@
-namespace Dev.Tools.Tools;
+﻿namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "int-base-converter",
+    Title = "Integer Base Converter",
+    Description =
+        "Converts a whole number between binary, octal, decimal, hexadecimal and Base64 representations.",
+    Usage =
+        "Only the five listed bases are available - there is no arbitrary-radix option. The Base64 form here is a positional base-64 numeral, not the Base64 encoding of bytes; use the base64-encoder tool for that.",
     Aliases = [],
     Keywords = [Keyword.Convert, Keyword.Encode],
     Categories = [Category.Converter]
@@ -89,20 +94,40 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
     
     public enum BaseType : int
     {
+        [Description("Binary (base 2)")]
         Binary = 2,
+
+        [Description("Octal (base 8)")]
         Octal = 8,
+
+        [Description("Decimal (base 10)")]
         Decimal = 10,
+
+        [Description("Hexadecimal (base 16)")]
         Hexadecimal = 16,
+
+        [Description("Base64 (base 64), digits A-Z a-z 0-9 - _")]
         Base64 = 64
     }
 
     public sealed record Args(
-        [property: PipeInput] string InputValue,
+        [property: PipeInput,
+                   Description("The number to convert, written in the input base")]
+        string InputValue,
+        [property: Description("Base the input value is written in")]
         BaseType InputBase,
+        [property: Description("Base to write the result in")]
         BaseType TargetBase
     );
 
-    public sealed record Result([property: PipeOutput] string? Data, BaseType Base) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Converted Value"),
+                   Description("The number written in the target base")]
+        string? Data,
+        [property: Description("The base the converted value is written in")]
+        BaseType Base
+    ) : ToolResult
     {
         public Result() : this(null!, default) { }
     }

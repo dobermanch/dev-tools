@@ -2,6 +2,9 @@
 
 [ToolDefinition(
     Name = "roman-converter",
+    Title = "Roman Numeral Converter",
+    Description =
+        "Converts between decimal integers (1-3999) and Roman numerals (I, V, X, L, C, D, M) in either direction.",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Converter]
@@ -77,16 +80,28 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
 
     public enum TranscodingType
     {
+        [Description("Decimal number to Roman numerals")]
         Encode,
+
+        [Description("Roman numerals to a decimal number")]
         Decode
     }
 
     public sealed record Args(
-        [property: PipeInput] string Number,
+        [property: PipeInput,
+                   Description("A decimal number between 1 and 3999, or a Roman numeral, matching the chosen direction")]
+        string Number,
+        [property: DisplayName("Direction"),
+                   Description("Whether to convert to Roman numerals or from them")]
         TranscodingType Transcoding
     );
 
-    public sealed record Result([property: PipeOutput] string? Number) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Converted Value"),
+                   Description("The converted Roman numeral or decimal number")]
+        string? Number
+    ) : ToolResult
     {
         public Result() : this(Number: null) { }
     }

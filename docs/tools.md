@@ -1,4 +1,4 @@
-# Available Tools
+﻿# Available Tools
 
 A categorized reference of all tools included in Dev Tools. Each tool is accessible via the [CLI](../README.md#cli), [REST API](../README.md#rest-api), [Web UI](../README.md#web-ui), and [MCP Server](../README.md#mcp-server-ai-assistants).
 
@@ -11,10 +11,10 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | `base64-encoder` | `64e` | Encode text to Base64 with optional URL-safe encoding and line breaks |
 | `base64-decoder` | `64d` | Decode Base64 back to plain text |
 | `case-converter` | `case` | Convert text between 14 case formats: camelCase, snake_case, PascalCase, CONSTANT_CASE, kebab-case, dot.case, Header-Case, path/case, Sentence case, and more |
-| `int-base-converter` | | Convert integers between any bases from 2 to 64 (binary, octal, decimal, hex, …) |
+| `int-base-converter` | | Convert integers between binary, octal, decimal, hexadecimal and base 64 |
 | `roman-converter` | | Bidirectional Roman numeral conversion for integers 1–3999 |
 | `url-transcoder` | | URL-encode or URL-decode a string (RFC 3986) |
-| `date-convert` | | Convert between date/time formats: ISO 8601, ISO 9075, RFC 3339, RFC 7231, Unix timestamp, milliseconds, MongoDB ObjectId, Excel date, and JS date |
+| `date-convert` | | Convert between date/time formats: ISO 8601, ISO 9075, RFC 3339, RFC 7231, Unix timestamp, milliseconds, MongoDB ObjectId, Excel date, and JS date; omit the input to convert the current time |
 
 ---
 
@@ -36,7 +36,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | --- | --- | --- |
 | `token-generator` | `tokengen` | Generate cryptographically random tokens with configurable length, character set (uppercase, lowercase, digits, symbols), and count |
 | `passphrase-generator` | `passphrase` | Generate memorable word-based passphrases with configurable word count, separator, capitalization, and salt |
-| `uuid-generator` | `uuid` | Generate UUIDs in any standard variant: Nil, v3 (MD5 namespace), v4 (random), v5 (SHA-1 namespace), v7 (timestamp-sortable), or Max |
+| `uuid-generator` | `uuid` | Generate UUIDs in any standard variant: v4 (random, the default), v3 (MD5 namespace), v5 (SHA-1 namespace), v7 (timestamp-sortable), Nil, or Max |
 | `ulid-generator` | `ulid` | Generate ULIDs (Universally Unique Lexicographically Sortable Identifiers) — random, Min, or Max |
 
 ---

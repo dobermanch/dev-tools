@@ -1,7 +1,10 @@
-namespace Dev.Tools.Tools;
+﻿namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "case-converter",
+    Title = "Case Converter",
+    Description =
+        "Converts text between casing conventions: camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, dot.case, path case and several others.",
     Aliases = ["case"],
     Keywords = [Keyword.Text, Keyword.String, Keyword.Convert, Keyword.Case],
     Categories = [Category.Converter, Category.Text]
@@ -129,30 +132,70 @@ public sealed class CaseConverterTool : ToolBase<CaseConverterTool.Args, CaseCon
 
     public enum CaseType
     {
+        [Description("None - the text is returned unchanged")]
         None,
-        LowerCase,          // loremipsum dolor
-        UpperCase,          // LOREMIPSUM DOLOR
-        CamelCase,          // loremIpsumDolor
-        CapitalCase,        // Lorem Ipsum Dolor
-        ConstantCase,       // LOREM_IPSUM_DOLOR
-        DotCase,            // lorem.ipsum.dolor
-        HeaderCase,         // Lorem-Ipsum-Dolor
-        NoCase,             // lorem ipsum dolor
-        ParamCase,          // lorem-ipsum-dolor
-        PascalCase,         // LoremIpsumDolor
-        PathForwardCase,    // lorem/ipsum/dolor
-        PathBackwardCase,   // lorem\ipsum\dolor
-        SentenceCase,       // Lorem ipsum dolor
-        SnakeCase,          // lorem_ipsum_dolor
-        MockingCase,        // LoReMiPsUm dOlOr
+
+        [Description("lowercase - loremipsum dolor")]
+        LowerCase,
+
+        [Description("UPPERCASE - LOREMIPSUM DOLOR")]
+        UpperCase,
+
+        [Description("camelCase - loremIpsumDolor")]
+        CamelCase,
+
+        [Description("Capital Case - Lorem Ipsum Dolor")]
+        CapitalCase,
+
+        [Description("CONSTANT_CASE - LOREM_IPSUM_DOLOR")]
+        ConstantCase,
+
+        [Description("dot.case - lorem.ipsum.dolor")]
+        DotCase,
+
+        [Description("Header-Case - Lorem-Ipsum-Dolor")]
+        HeaderCase,
+
+        [Description("no case - lorem ipsum dolor")]
+        NoCase,
+
+        [Description("param-case, also known as kebab-case - lorem-ipsum-dolor")]
+        ParamCase,
+
+        [Description("PascalCase - LoremIpsumDolor")]
+        PascalCase,
+
+        [Description("path/forward/case - lorem/ipsum/dolor")]
+        PathForwardCase,
+
+        [Description("path\\backward\\case - lorem\\ipsum\\dolor")]
+        PathBackwardCase,
+
+        [Description("Sentence case - Lorem ipsum dolor")]
+        SentenceCase,
+
+        [Description("snake_case - lorem_ipsum_dolor")]
+        SnakeCase,
+
+        [Description("mOcKiNg cAsE - LoReMiPsUm dOlOr")]
+        MockingCase,
     }
 
     public sealed record Args(
-        [property: PipeInput] string Text,
+        [property: PipeInput,
+                   Description("Text to convert to a different case format")]
+        string Text,
+        [property: DisplayName("Case Type"),
+                   Description("Target case format for the conversion")]
         CaseType Type = CaseType.None
     );
 
-    public sealed record Result([property: PipeOutput] string Text) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Converted Text"),
+                   Description("The text in the requested case format")]
+        string Text
+    ) : ToolResult
     {
         public Result() : this(string.Empty){}
     }

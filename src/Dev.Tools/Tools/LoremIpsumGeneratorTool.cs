@@ -1,7 +1,10 @@
-namespace Dev.Tools.Tools;
+﻿namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "lorem-ipsum",
+    Title = "Lorem Ipsum Generator",
+    Description =
+        "Generates Lorem Ipsum placeholder text with a configurable number of paragraphs, sentences per paragraph and words per sentence.",
     Aliases = ["lorem"],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Lorem],
     Categories = [Category.Text]
@@ -79,13 +82,25 @@ public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.A
     ];
 
     public sealed record Args(
+        [property: Description("Number of paragraphs to generate; values below 1 are treated as 1")]
         int Paragraphs = 3,
+        [property: DisplayName("Sentences per Paragraph"),
+                   Description("Number of sentences in each paragraph; values below 1 are treated as 1")]
         int SentencesPerParagraph = 5,
+        [property: DisplayName("Words per Sentence"),
+                   Description("Number of words in each sentence; values below 1 are treated as 1")]
         int WordsPerSentence = 8,
+        [property: DisplayName("Start with Lorem Ipsum"),
+                   Description("Begin the first sentence with the classic \"Lorem ipsum dolor sit amet...\" opening")]
         bool StartWithLoremIpsum = true
     );
 
-    public sealed record Result([property: PipeOutput] string Text) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Generated Text"),
+                   Description("The generated placeholder text, paragraphs separated by blank lines")]
+        string Text
+    ) : ToolResult
     {
         public Result() : this(string.Empty)
         {

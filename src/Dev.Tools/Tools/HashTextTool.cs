@@ -5,6 +5,11 @@ namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "hash",
+    Title = "Hash Generator",
+    Description =
+        "Generates a cryptographic hash of text using MD5, SHA-1, SHA-256, SHA-384 or SHA-512. The input is hashed as UTF-8 bytes and the digest is returned as lowercase hexadecimal.",
+    Usage =
+        "Hashing only - there is no way back from a digest to the text. MD5 and SHA-1 are broken for security purposes; use them only for checksums and compatibility, and prefer SHA-256 or stronger otherwise.",
     Aliases = [],
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security]
@@ -68,19 +73,36 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
 
     public enum HashAlgorithm
     {
+        [Description("MD5 - 128-bit, fast, not collision resistant")]
         Md5,
+
+        [Description("SHA-1 - 160-bit, deprecated for security use")]
         Sha1,
+
+        [Description("SHA-256 - 256-bit, the general-purpose default")]
         Sha256,
+
+        [Description("SHA-384 - 384-bit")]
         Sha384,
+
+        [Description("SHA-512 - 512-bit")]
         Sha512
     }
 
     public sealed record Args(
-        [property: PipeInput] string Text,
+        [property: PipeInput,
+                   Description("Text to hash, read as UTF-8")]
+        string Text,
+        [property: Description("Hashing algorithm to use")]
         HashAlgorithm Algorithm = HashAlgorithm.Md5
     );
 
-    public sealed record Result([property: PipeOutput] string Data) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   DisplayName("Hash Value"),
+                   Description("The digest as lowercase hexadecimal")]
+        string Data
+    ) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }

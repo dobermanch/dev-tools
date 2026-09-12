@@ -49,7 +49,7 @@ Worse, page code-behinds **re-declare the tool's own Args with duplicated defaul
 
 ---
 
-## 3. Localization — Web-only
+## 3. Localization — user-facing frontends only
 
 Measured depth of localization today:
 
@@ -90,6 +90,38 @@ The axis is user-facing vs machine-facing, not Web vs everything else. Web is th
 **Labels vs descriptions.** Both are authored in source and translated in RESX, but they differ in whether they can be derived: of the 118 `Args/Result .Name` keys, only 75 match a mechanical split of the property name — the other 43 carry wording a reader needs (`Data` → "Decoded Text", `Type` → "Case Type", `CharInfos` → "Character Details"). So labels are promoted to `[DisplayName]` next to `[Description]`, `TypeProperty` carries both plus a derived `Label` fallback, and `Tools.X.Args.P.Name` becomes `DisplayName`'s translation key instead of dead scaffolding. Nothing in the existing RESX is deleted; every key now has an English source of truth in code.
 
 Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MCP become English-only with *better* help text than today (real sentences, no resource lookup), the second DI container and static ambient provider disappear, and the add-a-tool RESX chore disappears except for optional translations in the user-facing frontends.
+
+---
+
+## 3a. Phase 1 progress and decisions
+
+**Step 1 (core metadata plumbing) — done.** `ToolDefinitionAttribute` gains `Title` / `Description` / `Usage`; `ToolDefinition` gains `Title`, `Description`, `Usage` and a derived `Summary` (first line, for one-line lists); `TypeProperty` gains `Description`, `DisplayName` and a derived `Label`; `EnumDetails.Values` becomes `EnumValue[]` (name + description). `ToolGeneratorBase` reads all of it from assembly metadata and `ToolsCatalogGenerator` emits it. `global using System.ComponentModel;` added to core. `Base64EncoderTool` is migrated as the reference example. Tests: `tests/Dev.Tools.Tests/ToolsCatalogTests.cs`, `tests/Dev.Tools.CodeAnalysis.Tests/Generators/ToolTextEmissionTests.cs`.
+
+**Decisions taken during Phase 1 design:**
+
+| Decision | Choice |
+|---|---|
+| Where English is authored | Attribute arguments, not XML doc comments — they live in assembly metadata, so generators read them through a `ProjectReference` with no doc-sidecar dependency |
+| Multi-line descriptions | Supported via raw string literals; text is normalized to LF and escaped on emission; `Summary` gives the first line for CLI/MCP lists |
+| Model-facing MCP text | Optional `Usage` on `[ToolDefinition]`, appended to the MCP description only, so only tools that need steering cost tokens |
+| Display text scope in core | Everything: tool title/description, property descriptions and labels, enum values, `Category`, `Keyword`, `ErrorCode` |
+| `ErrorCode` English messages | Yes — so CLI/API/MCP print sentences instead of enum names |
+| Property labels | `[DisplayName]` authored **only where the derived label reads badly** (49 of 118 cases); `TypeProperty.Label` derives the rest by splitting the property name, to keep tool files readable |
+| RESX | Nothing deleted. Every key keeps an English source of truth in code and a translation slot in `Dev.Tools.Localization`, including the 74 arg descriptions a localized CLI would need |
+| `Dev.Tools.Localization` | Stays a project, referenced by user-facing frontends only (Web now; VS Code / browser extensions later) |
+| CLI localization | Deferred, not foreclosed: a Spectre `IHelpProvider` subclass plus a culture mechanism, self-contained in `Dev.Tools.Console`, no generator involvement |
+
+**Remaining steps**, each a separate reviewable commit:
+
+~~2. Migration of the English text into source attributes.~~ **Done.** All 22 tools carry `Title` and `Description`; all 118 argument and result properties and all 96 enum members carry `[Description]`; 49 properties carry a `[DisplayName]` where the derived label reads badly. `Category`, `Keyword` and `ErrorCode` carry English on the members that need it — for `Category`/`Keyword` only where the label differs from the member name, for every `ErrorCode` because they are messages. Descriptions were rewritten as contracts (format, constraints, what omission does) rather than copied verbatim, and `Usage` was written for the eleven tools that need model steering: `hash`, `text-encryptor`, `text-decryptor`, `uuid-generator`, `date-convert`, `json-formatter`, `xml-formatter`, `jwt-parser`, `char-viewer`, `int-base-converter`, `ip-details`.
+
+   Three defects found by reading the live MCP schema were folded in: `uuid-generator` defaulted to `Nil` and now defaults to `V4` (the Web page already used `V4`, so this removes a frontend disagreement); `date-convert` declared `Date` as required while its own text said "leave empty for current time" and its implementation already handled it, so the parameter became `string? Date = null`; and `int-base-converter` advertised "custom bases (2-64)" while exposing only five named bases, so the claim is gone and `Usage` says so explicitly. `docs/tools.md` was updated for all three. Writing the text against the implementation rather than against the RESX turned up five claims that were simply untrue and are now corrected: `base64-decoder` does not accept the URL-safe alphabet, `json-formatter` rejects comments rather than dropping them, `text-decryptor` only authenticates under AES-GCM, `token-generator` does not clamp a zero length, and `url-transcoder` writes a space as `+`, not `%20`.
+
+   Five tests in `ToolsCatalogTests` now assert that no tool, property or enum member is left without text, that titles stay single-line, and that no `[DisplayName]` merely repeats what the property name already derives — a stopgap until step 3 turns the first three into analyzer rules.
+3. Analyzer rules making description text mandatory in place: tool `Description` required, every Args/Result property and enum member needs `[Description]`, `Title` must be single-line. Error severity, matching DT1001-1003. Must land **after** step 2 or the build breaks for 22 tools at once.
+4. Generators emit `[Description]` / `[EndpointSummary]` / `[EndpointDescription]` instead of `[LocalizedDescription]`; CLI/API/MCP drop `.AddDevToolsLocalization()` and the Localization project reference; the two `LocalizedEndpoint*Attribute` files are deleted; MCP appends `Usage` and **starts emitting `Tool.OutputSchema`**, which today is absent — so the model currently cannot see result shape and the 44 result descriptions never reach it.
+5. `Dev.Tools.Localization` cleanup: delete `LocalizedDescriptionAttribute`, the static `LocalizationProvider.Current` and the second DI container it builds; add a catalog-backed localizer as the last link in `CompositeStringLocalizer` so a miss falls back to English instead of `:key:`; remove the `GenerateLocalizationResx` build target; repurpose `tools/ResxGenerator` to scaffold and diff translation files against the catalog (and, later, export JSON bundles for non-.NET frontends); add a test asserting uk-UA completeness.
+6. Docs: `CLAUDE.md` add-a-tool checklist loses its manual RESX step; this document records Phase 1 as done.
 
 ---
 
