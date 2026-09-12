@@ -140,7 +140,9 @@ Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MC
    The `GenerateLocalizationResx` target is gone from `Dev.Tools.csproj`, so the core project no longer shells out to a repo-relative script and writes into a sibling project on every build.
 
    Six tests in `LocalizationTests` cover it: the catalog serves every key shape, a key with no translation resolves to English rather than a `:placeholder:`, a uk-UA translation wins over the English, and the uk-UA file is neither missing a key nor carrying a stale one.
-6. Docs: `CLAUDE.md` add-a-tool checklist loses its manual RESX step; this document records Phase 1 as done.
+~~6. Docs.~~ **Done.** The `CLAUDE.md` add-a-tool checklist is three steps and no longer mentions RESX at all; a new **Tool Text** section states the rules the analyzer enforces, and the Web UI and translation follow-ups are given as optional rather than as steps 4 and 5. The project table now describes `Dev.Tools.Localization` as translations referenced by the Web UI only, and the generated-artifact list swaps the deleted localization key scaffolding for `ToolDescriptions`. `README.md` no longer claims the tools are localized — the web UI is; the CLI, API and MCP server speak English.
+
+**Phase 1 is complete.** What is left of this document is the Phase 2-6 roadmap and the §1-§7 analysis behind it; delete it once those land.
 
 ---
 
@@ -294,7 +296,7 @@ Each phase is independently shippable.
 
 **Phase 0 — correctness, no design change. ✅ Done 2026-09-11.** §7 items 1-9 + dead generator code, plus five defects found only by building and running (§7.14-§7.17), plus the CLI-defaults fix pulled forward from Phase 2 and the cancellation rethrow pulled forward from Phase 3.
 
-**Phase 1 — English metadata in core; translation limited to user-facing frontends.** Attribute-authored Title/Description/Usage + `[Description]` harvested into `ToolsCatalog`; generators emit `[Description]`/`[EndpointSummary]`; drop `.AddDevToolsLocalization()` from CLI/API/MCP; `Dev.Tools.Localization` keeps the tool RESX for Web and future VS Code / browser extensions, falling back to catalog English; an analyzer makes in-place description text mandatory; retire the neutral placeholder RESX and the `AfterTargets="Build"` RESX write. *Removes 2 files × ~19 keys from the add-a-tool checklist and deletes the static-provider/second-container machinery.*
+**Phase 1 — English metadata in core; translation limited to user-facing frontends. ✅ Done 2026-09-12.** See §3a for what landed in each of the six steps. Adding a tool is now one source file plus one test file: the RESX chore is gone from the checklist entirely, and with it the static localization provider, the second DI container, the neutral placeholder RESX and the build-time write into a sibling project. Four analyzer rules keep the text in place. Two things were found only by running the frontends rather than reading the generated code — MCP published no output schema at all, and JSON Schema carries no per-enum-value documentation — and both are fixed.
 
 **Phase 2 — generator consolidation.** Shared naming/DTO/mapping/pipeline; type allow-list with diagnostics; loud failures instead of silent skips; stronger analyzer rules; remove `DateTime.Now` and symbols from the incremental model; un-skip and fill in snapshot tests.
 

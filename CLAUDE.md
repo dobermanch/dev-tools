@@ -1,4 +1,4 @@
-# CLAUDE.md
+﻿# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -9,6 +9,8 @@ See [.github/instructions/code.instructions.md](.github/instructions/code.instru
 ## In-Flight Design Work
 
 [docs/design-review.md](docs/design-review.md) — **temporary** working document: a design review of the solution (localization scope, generator duplication, tool-contract seams for connectors and stream payloads, known bugs) plus a phased roadmap. Read it before reshaping the tool abstraction, the source generators, or the localization layout, and keep it current as phases land. **Delete it once the roadmap is done** — it is not permanent documentation and is deliberately not linked from the README.
+
+Phases 0 (correctness fixes) and 1 (English in the tools, localization confined to the Web UI) are done; phases 2-6 are not started.
 
 ## Build & Test Commands
 
@@ -41,7 +43,7 @@ This is a multi-project .NET suite where all tool logic lives in **Dev.Tools** a
 | `Dev.Tools` | Core library — all tool implementations |
 | `Dev.Tools.CodeAnalysis` | Roslyn source generators (netstandard2.0) |
 | `Dev.Tools.Web` | Blazor WASM UI (MudBlazor) |
-| `Dev.Tools.Localization` | RESX-based i18n (en, uk-UA) |
+| `Dev.Tools.Localization` | Translations of the tools' English (uk-UA); referenced by the Web UI only |
 | `Dev.Tools.Api` | ASP.NET Core REST API |
 | `Dev.Tools.Console` | Spectre.Console CLI (dotnet global tool) |
 | `Dev.Tools.Mcp` | MCP server |
@@ -53,6 +55,8 @@ Every tool is a single file in `src/Dev.Tools/Tools/`. Decorate with `[ToolDefin
 ```csharp
 [ToolDefinition(
     Name = "tool-name",        // kebab-case; drives CLI commands, API routes, icon lookup
+    Title = "My Tool",         // English display name
+    Description = "Does the thing, in one line or several paragraphs",
     Aliases = ["alias"],
     Categories = [Category.Converter],
     Keywords = [Keyword.Text, Keyword.Encode]
@@ -67,12 +71,19 @@ public sealed class MyTool : ToolBase<MyTool.Args, MyTool.Result>
     }
 
     public sealed record Args(
-        [property: PipeInput] string? Input,   // [PipeInput] marks primary CLI-pipeable arg
+        [property: PipeInput,                  // [PipeInput] marks primary CLI-pipeable arg
+                   Description("Text to work on")]
+        string? Input,
+        [property: Description("How many times; values below 1 are treated as 1")]
         int Count = 1
     );
 
     // Generator tool: single positional [PipeOutput] property
-    public sealed record Result([property: PipeOutput] string Output) : ToolResult
+    public sealed record Result(
+        [property: PipeOutput,
+                   Description("The computed value")]
+        string Output
+    ) : ToolResult
     {
         public Result() : this(string.Empty) { }
     }
@@ -83,6 +94,22 @@ For **parser-style** tools (many output fields), use a non-positional `Result` r
 
 **Error handling**: throw `ToolException(ErrorCode.X)` for known validation errors — `ToolBase` catches it and returns a failed result. Use `ErrorCode.Unknown` for unexpected errors.
 
+### Tool Text
+
+A tool's English lives in the tool file and nowhere else. The generators lift it into CLI help, the OpenAPI document, the MCP tool schema and the Web UI, so it is worth writing as a contract — the format, the constraints, what omitting a value does — rather than restating the property name.
+
+- **`Description` is required** on the tool, on every `Args`/`Result` property, and on every enum value those properties use. Four analyzer rules enforce it at build time: `DT1004` (tool description), `DT1005` (single-line `Title`), `DT1006` (property), `DT1007` (enum value).
+- **`Description` may run to several paragraphs.** Use a raw string literal and wrap it for readability: a single newline inside a paragraph is dropped when it is read, a blank line starts a new paragraph. The first paragraph is what shows where only one line fits (the CLI command list); the full text shows where there is room.
+- **`[DisplayName]` only when the derived label reads wrong.** `TypeProperty.Label` splits the property name (`InsertLineBreaks` → "Insert Line Breaks"), which is right most of the time, so most properties carry no label at all. Author one where it is not:
+
+  ```csharp
+  [property: DisplayName("URL Safe"),          // "Url Safe" otherwise
+             Description("Use URL-safe encoding (replaces + with -, / with _, and removes padding)")]
+  bool UrlSafe = false
+  ```
+
+- **`Usage`** is optional guidance for a model calling the tool through MCP — when to prefer it, when not to, what it will not do. It is appended to the MCP description only, so only the tools that need steering cost tokens.
+
 ### Source Generator — What's Auto-Generated
 
 When you add `[ToolDefinition]` to a class in `Dev.Tools`, the `Dev.Tools.CodeAnalysis` generators automatically produce:
@@ -90,24 +117,30 @@ When you add `[ToolDefinition]` to a class in `Dev.Tools`, the `Dev.Tools.CodeAn
 - CLI command class (used by `Dev.Tools.Console`)
 - API endpoint (used by `Dev.Tools.Api`)
 - MCP tool definition (used by `Dev.Tools.Mcp`)
-- Localization key scaffolding
+- `ToolDescriptions` — the detailed text the CLI help provider shows per command
 
 Generated files land in `obj/.../generated/` — never edit them.
 
 ### Adding a New Tool (Checklist)
 
-1. Create `src/Dev.Tools/Tools/YourNameTool.cs` following the pattern above
+1. Create `src/Dev.Tools/Tools/YourNameTool.cs` following the pattern above, English text included
 2. Add test class `tests/Dev.Tools.Tests/Tools/YourNameToolTests.cs`
 3. Build — the source generator runs and registers the tool automatically
-4. **Localization** (manual):
-   - Add entries to `Dev.Tools.Localization/Resources/ToolResources.en.resx` and `ToolResources.uk-UA.resx`
-   - Key prefix: `Tools.<ClassName>.*` e.g. `Tools.MyTool.Name`, `Tools.MyTool.Description`, `Tools.MyTool.Args.Input.Name`, etc.
-   - `ToolResources.resx` (no locale suffix) is **auto-generated on build** — do not edit it
-5. **Web UI** (if adding a Blazor page):
-   - Create `src/Dev.Tools.Web/Pages/Tools/YourNameToolPage.razor` + `.razor.cs`
-   - Add icon to `src/Dev.Tools.Web/Services/ToolIconProvider.cs`
-   - Add web page labels to `Dev.Tools.Web/Locals/Resources.en-US.resx` and `Resources.uk-UA.resx`
-   - Key prefix for page labels: `Page.YourNameToolPage.*`
+
+That is the whole tool as far as the CLI, the API and the MCP server are concerned; they pick it up with no further work. Two follow-ups, neither of which the tool needs to function:
+
+**Web UI** — a tool with no page still appears in search and navigation, but its route 404s, so add one:
+
+- Create `src/Dev.Tools.Web/Pages/Tools/YourNameToolPage.razor` + `.razor.cs`
+- Add icon to `src/Dev.Tools.Web/Services/ToolIconProvider.cs`
+- Add web page labels to `Dev.Tools.Web/Locals/Resources.en-US.resx` and `Resources.uk-UA.resx`
+- Key prefix for page labels: `Page.YourNameToolPage.*`
+
+**Translations** — the Web UI shows the tool's English until someone translates it:
+
+- `dotnet run --project tools/Translations -- uk-UA` lists what a culture is missing
+- `--write` adds those entries to `ToolResources.uk-UA.resx` pre-filled with English, ready to translate
+- `LocalizationTests` fails while a culture is incomplete, so this does not get forgotten
 
 ### Available Enums
 
@@ -117,7 +150,7 @@ Generated files land in `obj/.../generated/` — never edit them.
 
 **ErrorCodes**: `Unknown`, `NamespaceEmpty`, `TextEmpty`, `FailedToDecrypt`, `InputNotValid`, `WrongBase`, `WrongFormat`
 
-If you need a new enum value, add it to the enum and add localization entries in both `.en.resx` and `.uk-UA.resx` files.
+If you need a new enum value, add it to the enum. `Category` and `Keyword` members carry a `[Description]` only where the English label differs from the member name (`Crypto` → "Cryptography"); every `ErrorCode` carries one, because those are the messages the CLI, API and MCP print.
 
 ### Testing
 
