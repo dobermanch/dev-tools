@@ -201,13 +201,27 @@ public static class ToolModelFactory
                 : value.ToString();
         }
 
-        return value switch
+        if (value is null)
         {
-            null => "null",
-            bool flag => flag ? "true" : "false",
-            char character => $"'{character}'",
-            string text => $"\"{text}\"",
-            _ => value.ToString()
+            return "null";
+        }
+
+        // Invariant, and escaped for strings and chars. A number keeps its type: the CLI's
+        // DefaultValueAttribute(0) is an int, which Spectre cannot convert to a long option.
+        var literal = Microsoft.CodeAnalysis.CSharp.SymbolDisplay.FormatPrimitive(value, quoteStrings: true, useHexadecimalNumbers: false);
+        return type.SpecialType switch
+        {
+            SpecialType.System_Int64 => literal + "L",
+            SpecialType.System_UInt64 => literal + "UL",
+            SpecialType.System_UInt32 => literal + "U",
+            SpecialType.System_Single => literal + "F",
+            SpecialType.System_Double => literal + "D",
+            SpecialType.System_Decimal => literal + "M",
+            SpecialType.System_Byte => $"(byte)({literal})",
+            SpecialType.System_SByte => $"(sbyte)({literal})",
+            SpecialType.System_Int16 => $"(short)({literal})",
+            SpecialType.System_UInt16 => $"(ushort)({literal})",
+            _ => literal
         };
     }
 

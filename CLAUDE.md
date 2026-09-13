@@ -158,7 +158,7 @@ That is the whole tool as far as the CLI, the API and the MCP server are concern
 
 **Categories**: `Converter`, `Crypto`, `Security`, `Text`, `Network`, `Web`, `Development`
 
-**Keywords**: `Base64`, `Convert`, `Case`, `Decode`, `Encode`, `Generate`, `Guid`, `Hash`, `String`, `Json`, `Xml`, `Format`, `Password`, `Text`, `Url`, `Uuid`, `Network`, `Ip`, `Internet`, `Token`, `Web`, `Jwt`, `Lorem`, `Encrypt`, `Html`, `Hmac`, `Yaml`, `Toml`, `Csv`, `Regex`, `Cron`
+**Keywords**: `Base64`, `Convert`, `Case`, `Decode`, `Encode`, `Generate`, `Guid`, `Hash`, `String`, `Json`, `Xml`, `Format`, `Password`, `Text`, `Url`, `Uuid`, `Network`, `Ip`, `Internet`, `Token`, `Web`, `Jwt`, `Lorem`, `Encrypt`, `Html`, `Hmac`, `Yaml`, `Toml`, `Csv`, `Regex`, `Cron`, `Otp`
 
 **ErrorCodes**: `Unknown`, `NamespaceEmpty`, `TextEmpty`, `FailedToDecrypt`, `InputNotValid`, `WrongBase`, `WrongFormat`, `FailedToEncrypt`, `MatchTimeout`
 

@@ -1284,6 +1284,9 @@
   <data name="Enums.Keyword.Cron" xml:space="preserve">
     <value>Cron</value>
   </data>
+  <data name="Enums.Keyword.Otp" xml:space="preserve">
+    <value>OTP</value>
+  </data>
 
   <!-- Text Decryptor Tool -->
   <data name="Tools.TextDecryptor.Name" xml:space="preserve">
@@ -1799,5 +1802,154 @@ CSV потребує масиву об'єктів: заголовок — це �
   </data>
   <data name="Tools.IpConverter.Result.Ipv6Expanded.Description" xml:space="preserve">
     <value>Та сама адреса IPv6, де всі вісім груп записано чотирма цифрами</value>
+  </data>
+
+  <!-- OTP Generator Tool -->
+  <data name="Tools.Otp.Name" xml:space="preserve">
+    <value>Генератор OTP</value>
+  </data>
+  <data name="Tools.Otp.Description" xml:space="preserve">
+    <value>Генерує та перевіряє одноразові паролі — коди, які показують застосунки-автентифікатори для двофакторного входу, — і будує URI otpauth://, що додає обліковий запис до такого застосунку.
+
+TOTP (RFC 6238) виводить код з поточного часу й змінює його кожен період; HOTP (RFC 4226) виводить його з лічильника, який зростає щоразу, коли код використано. Секрет записано в Base32 — у тому вигляді, в якому сервіс показує його поруч із QR-кодом; якщо його не задано, генерується новий випадковий 160-бітний секрет. Результат містить код для поточного кроку разом із попереднім і наступним, а для TOTP — скільки секунд залишилося поточному коду.
+
+Якщо задано Code, результат повідомляє, чи він дійсний і на скільки кроків від поточного він збігся: код TOTP може бути до Window періодів раніше чи пізніше, щоб урахувати розбіжність годинників, а код HOTP — до Window значень лічильника наперед, для кодів, які згенерували, але не використали.
+
+Майже кожен сервіс використовує SHA-1, 6 цифр і 30 секунд, а деякі застосунки-автентифікатори ігнорують інші значення в URI.</value>
+  </data>
+  <data name="Tools.Otp.Args.Secret.Name" xml:space="preserve">
+    <value>Секрет</value>
+  </data>
+  <data name="Tools.Otp.Args.Secret.Description" xml:space="preserve">
+    <value>Спільний секрет у Base32 (RFC 4648); регістр, пробіли, дефіси та доповнення ігноруються. Якщо не задано, генерується новий випадковий 160-бітний секрет</value>
+  </data>
+  <data name="Tools.Otp.Args.Type.Name" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="Tools.Otp.Args.Type.Description" xml:space="preserve">
+    <value>На основі часу (TOTP) чи на основі лічильника (HOTP)</value>
+  </data>
+  <data name="Tools.Otp.Args.Algorithm.Name" xml:space="preserve">
+    <value>Алгоритм</value>
+  </data>
+  <data name="Tools.Otp.Args.Algorithm.Description" xml:space="preserve">
+    <value>Геш-функція всередині HMAC</value>
+  </data>
+  <data name="Tools.Otp.Args.Digits.Name" xml:space="preserve">
+    <value>Кількість цифр</value>
+  </data>
+  <data name="Tools.Otp.Args.Digits.Description" xml:space="preserve">
+    <value>Довжина коду; значення менші за 6 вважаються 6, більші за 10 — 10</value>
+  </data>
+  <data name="Tools.Otp.Args.Period.Name" xml:space="preserve">
+    <value>Період</value>
+  </data>
+  <data name="Tools.Otp.Args.Period.Description" xml:space="preserve">
+    <value>Лише для TOTP: скільки секунд діє кожен код; значення менші за 1 вважаються 1</value>
+  </data>
+  <data name="Tools.Otp.Args.Counter.Name" xml:space="preserve">
+    <value>Лічильник</value>
+  </data>
+  <data name="Tools.Otp.Args.Counter.Description" xml:space="preserve">
+    <value>Лише для HOTP: значення лічильника, для якого обчислюється код; значення менші за 0 вважаються 0</value>
+  </data>
+  <data name="Tools.Otp.Args.Code.Name" xml:space="preserve">
+    <value>Код</value>
+  </data>
+  <data name="Tools.Otp.Args.Code.Description" xml:space="preserve">
+    <value>Код для перевірки; пробіли ігноруються. Без нього нічого не перевіряється</value>
+  </data>
+  <data name="Tools.Otp.Args.Window.Name" xml:space="preserve">
+    <value>Вікно</value>
+  </data>
+  <data name="Tools.Otp.Args.Window.Description" xml:space="preserve">
+    <value>Наскільки далеко від поточного кроку може бути перевірений код: для TOTP — стільки періодів до чи після, для HOTP — стільки значень лічильника наперед; значення обмежуються від 0 до 10</value>
+  </data>
+  <data name="Tools.Otp.Args.Issuer.Name" xml:space="preserve">
+    <value>Сервіс</value>
+  </data>
+  <data name="Tools.Otp.Args.Issuer.Description" xml:space="preserve">
+    <value>Назва сервісу для URI otpauth://, наприклад GitHub</value>
+  </data>
+  <data name="Tools.Otp.Args.AccountName.Name" xml:space="preserve">
+    <value>Обліковий запис</value>
+  </data>
+  <data name="Tools.Otp.Args.AccountName.Description" xml:space="preserve">
+    <value>Назва облікового запису для URI otpauth://, наприклад адреса електронної пошти</value>
+  </data>
+  <data name="Tools.Otp.Result.Code.Name" xml:space="preserve">
+    <value>Код</value>
+  </data>
+  <data name="Tools.Otp.Result.Code.Description" xml:space="preserve">
+    <value>Код для поточного кроку часу (TOTP) або лічильника (HOTP)</value>
+  </data>
+  <data name="Tools.Otp.Result.PreviousCode.Name" xml:space="preserve">
+    <value>Попередній код</value>
+  </data>
+  <data name="Tools.Otp.Result.PreviousCode.Description" xml:space="preserve">
+    <value>Код для попереднього кроку; відсутній при лічильнику 0</value>
+  </data>
+  <data name="Tools.Otp.Result.NextCode.Name" xml:space="preserve">
+    <value>Наступний код</value>
+  </data>
+  <data name="Tools.Otp.Result.NextCode.Description" xml:space="preserve">
+    <value>Код для наступного кроку</value>
+  </data>
+  <data name="Tools.Otp.Result.Counter.Name" xml:space="preserve">
+    <value>Лічильник</value>
+  </data>
+  <data name="Tools.Otp.Result.Counter.Description" xml:space="preserve">
+    <value>Крок, для якого обчислено код: для TOTP — секунди Unix, поділені на період; для HOTP — лічильник</value>
+  </data>
+  <data name="Tools.Otp.Result.SecondsRemaining.Name" xml:space="preserve">
+    <value>Залишилося секунд</value>
+  </data>
+  <data name="Tools.Otp.Result.SecondsRemaining.Description" xml:space="preserve">
+    <value>Лише для TOTP: скільки секунд до зміни коду</value>
+  </data>
+  <data name="Tools.Otp.Result.IsValid.Name" xml:space="preserve">
+    <value>Дійсний</value>
+  </data>
+  <data name="Tools.Otp.Result.IsValid.Description" xml:space="preserve">
+    <value>Чи дійсний перевірений Code у межах вікна; відсутнє, якщо код не задано</value>
+  </data>
+  <data name="Tools.Otp.Result.MatchOffset.Name" xml:space="preserve">
+    <value>Зсув збігу</value>
+  </data>
+  <data name="Tools.Otp.Result.MatchOffset.Description" xml:space="preserve">
+    <value>На скільки кроків від поточного збігся перевірений код, від'ємне число для раннішого періоду TOTP; відсутній, якщо код не збігся або не заданий</value>
+  </data>
+  <data name="Tools.Otp.Result.Secret.Name" xml:space="preserve">
+    <value>Секрет</value>
+  </data>
+  <data name="Tools.Otp.Result.Secret.Description" xml:space="preserve">
+    <value>Секрет у Base32 без доповнення: заданий і нормалізований або згенерований</value>
+  </data>
+  <data name="Tools.Otp.Result.SecretHex.Name" xml:space="preserve">
+    <value>Секрет (hex)</value>
+  </data>
+  <data name="Tools.Otp.Result.SecretHex.Description" xml:space="preserve">
+    <value>Байти секрету в шістнадцятковому записі малими літерами</value>
+  </data>
+  <data name="Tools.Otp.Result.Uri.Name" xml:space="preserve">
+    <value>URI</value>
+  </data>
+  <data name="Tools.Otp.Result.Uri.Description" xml:space="preserve">
+    <value>URI otpauth://, який читає застосунок-автентифікатор, зазвичай із QR-коду</value>
+  </data>
+  <data name="Tools.Otp.Enums.OtpType.Totp" xml:space="preserve">
+    <value>TOTP, на основі часу</value>
+  </data>
+  <data name="Tools.Otp.Enums.OtpType.Hotp" xml:space="preserve">
+    <value>HOTP, на основі лічильника</value>
+  </data>
+  <data name="Tools.Otp.Enums.OtpAlgorithm.Sha1" xml:space="preserve">
+    <value>SHA-1</value>
+  </data>
+  <data name="Tools.Otp.Enums.OtpAlgorithm.Sha256" xml:space="preserve">
+    <value>SHA-256</value>
+  </data>
+  <data name="Tools.Otp.Enums.OtpAlgorithm.Sha512" xml:space="preserve">
+    <value>SHA-512</value>
   </data>
 </root>

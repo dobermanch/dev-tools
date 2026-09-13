@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using Spectre.Console;
 
@@ -38,9 +39,11 @@ internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResp
         }
         else
         {
+            // Relaxed escaping: this is read in a terminal, not embedded in HTML, so & in a URL stays & rather than &.
             _output.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             }));
         }
 

@@ -621,4 +621,61 @@
     <data name="Page.IpConverterToolPage.TextField.Ipv6Expanded.Label" xml:space="preserve">
         <value>IPv6 (повна форма)</value>
     </data>
+    <data name="Page.OtpToolPage.TextField.Secret.Label" xml:space="preserve">
+        <value>Секрет (Base32)</value>
+    </data>
+    <data name="Page.OtpToolPage.Button.GenerateSecret.Label" xml:space="preserve">
+        <value>Згенерувати секрет</value>
+    </data>
+    <data name="Page.OtpToolPage.Select.Type.Label" xml:space="preserve">
+        <value>Тип</value>
+    </data>
+    <data name="Page.OtpToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Алгоритм</value>
+    </data>
+    <data name="Page.OtpToolPage.Slider.Digits.Label" xml:space="preserve">
+        <value>Кількість цифр</value>
+    </data>
+    <data name="Page.OtpToolPage.Slider.Period.Label" xml:space="preserve">
+        <value>Період, секунди</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Counter.Label" xml:space="preserve">
+        <value>Лічильник</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Issuer.Label" xml:space="preserve">
+        <value>Сервіс</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.AccountName.Label" xml:space="preserve">
+        <value>Обліковий запис</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.PreviousCode.Label" xml:space="preserve">
+        <value>Попередній код</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Code.Label" xml:space="preserve">
+        <value>Поточний код</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.NextCode.Label" xml:space="preserve">
+        <value>Наступний код</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.SecondsRemaining" xml:space="preserve">
+        <value>Зміниться через {0} с</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.SecretHex.Label" xml:space="preserve">
+        <value>Секрет (hex)</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Uri.Label" xml:space="preserve">
+        <value>URI otpauth://</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.CodeToCheck.Label" xml:space="preserve">
+        <value>Код для перевірки</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.Valid" xml:space="preserve">
+        <value>Код дійсний</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.ValidAtOffset" xml:space="preserve">
+        <value>Код дійсний, на відстані {0} кроків від поточного</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.Invalid" xml:space="preserve">
+        <value>Код недійсний</value>
+    </data>
 </root>

@@ -1,0 +1,162 @@
+@page "/tools/otp"
+@implements IDisposable
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="secret" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="9">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Secret.Label"]"
+                        @bind-Value="@_secret"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Error="@(SecretError is not null)"
+                        ErrorText="@SecretError"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="3">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Autorenew"
+                               OnClick="@GenerateSecretAsync">
+                        @_localizer["Button.GenerateSecret.Label"]
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="OtpTool.OtpType"
+                        Label="@_localizer["Select.Type.Label"]"
+                        Value="@_type"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="@((OtpTool.OtpType value) => SetOptionAsync(() => _type = value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="OtpTool.OtpAlgorithm"
+                        Label="@_localizer["Select.Algorithm.Label"]"
+                        Value="@_algorithm"
+                        ValueToDisplay="@(algorithm => Context.Localization.GetToolEnum(_toolDefinition, algorithm))"
+                        ValueChanged="@((OtpTool.OtpAlgorithm value) => SetOptionAsync(() => _algorithm = value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSlider
+                        T="int"
+                        Label="@_localizer["Slider.Digits.Label"]"
+                        Value="@_digits"
+                        MinValue="6"
+                        MaxValue="10"
+                        ValueChanged="@((int value) => SetOptionAsync(() => _digits = value))"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    @if (_type == OtpTool.OtpType.Totp)
+                    {
+                        <DtSlider
+                            T="int"
+                            Label="@_localizer["Slider.Period.Label"]"
+                            Value="@_period"
+                            MinValue="10"
+                            MaxValue="120"
+                            ValueChanged="@((int value) => SetOptionAsync(() => _period = value))"/>
+                    }
+                    else
+                    {
+                        <DtTextField
+                            T="long"
+                            Label="@_localizer["TextField.Counter.Label"]"
+                            @bind-Value="@_counter"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            ShowCopyButton="false"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    }
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Issuer.Label"]"
+                        @bind-Value="@_issuer"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        ShowCopyButton="false"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.AccountName.Label"]"
+                        @bind-Value="@_accountName"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        ShowCopyButton="false"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        @if (_result is { HasErrors: false })
+        {
+            <DtSection Id="codes" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    <MudItem xs="12" md="4">
+                        <DtTextField T="string" Value="@(_result.PreviousCode ?? string.Empty)" Label="@_localizer["TextField.PreviousCode.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="4">
+                        <DtTextField T="string" Value="@_result.Code" Label="@_localizer["TextField.Code.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="4">
+                        <DtTextField T="string" Value="@_result.NextCode" Label="@_localizer["TextField.NextCode.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    @if (_result.SecondsRemaining is { } remaining)
+                    {
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2">@_localizer["Text.SecondsRemaining", remaining]</MudText>
+                            <MudProgressLinear Color="Color.Primary" Value="@(100.0 * remaining / _period)"/>
+                        </MudItem>
+                    }
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.SecretHex" Label="@_localizer["TextField.SecretHex.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Uri" Label="@_localizer["TextField.Uri.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                </MudGrid>
+            </DtSection>
+
+            <DtSection Id="check" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <DtTextField
+                            T="string"
+                            Label="@_localizer["TextField.CodeToCheck.Label"]"
+                            @bind-Value="@_code"
+                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                            ShowCopyButton="false"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        @if (_result.IsValid == true)
+                        {
+                            <MudAlert Severity="Severity.Success" Dense="true">
+                                @(_result.MatchOffset == 0 ? _localizer["Text.Valid"] : _localizer["Text.ValidAtOffset", _result.MatchOffset!])
+                            </MudAlert>
+                        }
+                        else if (_result.IsValid == false)
+                        {
+                            <MudAlert Severity="Severity.Error" Dense="true">@_localizer["Text.Invalid"]</MudAlert>
+                        }
+                    </MudItem>
+                </MudGrid>
+            </DtSection>
+        }
+    </MudCardContent>
+</MudCard>

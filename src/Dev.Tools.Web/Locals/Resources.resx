@@ -621,4 +621,61 @@
     <data name="Page.IpConverterToolPage.TextField.Ipv6Expanded.Label" xml:space="preserve">
         <value>IPv6 (expanded)</value>
     </data>
+    <data name="Page.OtpToolPage.TextField.Secret.Label" xml:space="preserve">
+        <value>Secret (Base32)</value>
+    </data>
+    <data name="Page.OtpToolPage.Button.GenerateSecret.Label" xml:space="preserve">
+        <value>Generate secret</value>
+    </data>
+    <data name="Page.OtpToolPage.Select.Type.Label" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="Page.OtpToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Algorithm</value>
+    </data>
+    <data name="Page.OtpToolPage.Slider.Digits.Label" xml:space="preserve">
+        <value>Digits</value>
+    </data>
+    <data name="Page.OtpToolPage.Slider.Period.Label" xml:space="preserve">
+        <value>Period, seconds</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Counter.Label" xml:space="preserve">
+        <value>Counter</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Issuer.Label" xml:space="preserve">
+        <value>Issuer</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.AccountName.Label" xml:space="preserve">
+        <value>Account name</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.PreviousCode.Label" xml:space="preserve">
+        <value>Previous code</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Code.Label" xml:space="preserve">
+        <value>Current code</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.NextCode.Label" xml:space="preserve">
+        <value>Next code</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.SecondsRemaining" xml:space="preserve">
+        <value>Changes in {0} s</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.SecretHex.Label" xml:space="preserve">
+        <value>Secret (hex)</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.Uri.Label" xml:space="preserve">
+        <value>otpauth:// URI</value>
+    </data>
+    <data name="Page.OtpToolPage.TextField.CodeToCheck.Label" xml:space="preserve">
+        <value>Code to check</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.Valid" xml:space="preserve">
+        <value>The code is valid</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.ValidAtOffset" xml:space="preserve">
+        <value>The code is valid, {0} steps from the current one</value>
+    </data>
+    <data name="Page.OtpToolPage.Text.Invalid" xml:space="preserve">
+        <value>The code is not valid</value>
+    </data>
 </root>

@@ -50,6 +50,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | --- | --- | --- |
 | `hash` | | Hash text or a file using MD5, SHA-1, SHA-256, SHA-384, or SHA-512, or compute an HMAC when given a key; output as a lowercase hex string |
 | `text-encryptor` | `encrypt` | Encrypt text using AES-128-CBC, AES-256-CBC, AES-256-GCM, TripleDES-CBC, or RC4; output as Base64 or hex |
+| `otp` | `totp`, `hotp` | Generate or check TOTP and HOTP codes (RFC 6238, RFC 4226) from a Base32 secret, or generate a secret, with the previous and next codes and the `otpauth://` URI for authenticator apps |
 | `text-decryptor` | `decrypt` | Decrypt ciphertext produced by `text-encryptor`; supports all the same algorithms and input formats |
 
 ---

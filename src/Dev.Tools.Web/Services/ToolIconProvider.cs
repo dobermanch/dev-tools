@@ -38,6 +38,7 @@ public static class ToolIconProvider
             "cron-parser" => Icons.Material.Outlined.EventRepeat,
             "ip-subnet" => Icons.Material.Outlined.SettingsEthernet,
             "ip-converter" => Icons.Material.Outlined.Numbers,
+            "otp" => Icons.Material.Outlined.PhonelinkLock,
             _ => Icons.Material.Outlined.Construction
         };
     }

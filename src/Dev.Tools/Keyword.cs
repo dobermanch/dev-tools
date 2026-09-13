@@ -70,5 +70,8 @@ public enum Keyword
     [Description("Regular Expression")]
     Regex,
 
-    Cron
+    Cron,
+
+    [Description("OTP")]
+    Otp
 }

@@ -17,7 +17,9 @@ internal sealed class CompositeStringLocalizer(IEnumerable<IStringLocalizer> loc
             var key = scopePrefix is null ? name : $"{scopePrefix}.{name}";
             foreach (var localizer in localizers)
             {
-                var value = localizer[key];
+                // Arguments are passed on only when there are some: formatting a text without them would throw
+                // on the literal braces a tool description may hold, such as ${name}.
+                var value = arguments.Length == 0 ? localizer[key] : localizer[key, arguments];
                 if (!value.ResourceNotFound)
                 {
                     return value;

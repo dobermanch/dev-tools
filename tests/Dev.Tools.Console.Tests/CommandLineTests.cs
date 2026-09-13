@@ -48,6 +48,25 @@ public class CommandLineTests
         await Assert.That(output).IsEqualTo("<b>" + Environment.NewLine);
     }
 
+    [Test]
+    public async Task ShouldTakeTheDefault_WhenALongOptionIsLeftOut()
+    {
+        // --counter is a long defaulting to 0; its default was once written as an int, which Spectre refused to convert.
+        var (exitCode, output) = await RunAsync("otp", "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", "--type", "Hotp");
+
+        await Assert.That(exitCode).IsEqualTo(0);
+        await Assert.That(output).Contains("\"Code\": \"755224\"");
+    }
+
+    [Test]
+    public async Task ShouldWriteAJsonResultWithoutEscapingWhatATerminalShowsAsItIs()
+    {
+        var (exitCode, output) = await RunAsync("otp", "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", "--type", "Hotp", "--account-name", "jane");
+
+        await Assert.That(exitCode).IsEqualTo(0);
+        await Assert.That(output).Contains("otpauth://hotp/jane?secret=GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ&algorithm=SHA1&digits=6&counter=0");
+    }
+
     // Exit 2 is ours: Spectre's own handling exits -1 and prints the error to stdout, so 2 also says the
     // message went through the handler that writes it to stderr.
     private const int UsageErrorExitCode = 2;
