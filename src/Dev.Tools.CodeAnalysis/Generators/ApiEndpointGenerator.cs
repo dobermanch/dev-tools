@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Dev.Tools.Api.Core;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
@@ -6,37 +6,12 @@ using Microsoft.CodeAnalysis;
 namespace Dev.Tools.CodeAnalysis.Generators;
 
 [Generator]
-public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
+public class ApiEndpointGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
-    {
-        var referencedToolTypes =
-            context.CompilationProvider
-                .SelectMany((compilation, _) =>
-                    compilation
-                        .References
-                        .Select(compilation.GetAssemblyOrModuleSymbol)
-                        .OfType<IAssemblySymbol>()
-                        .Where(it => it.Name == CodeDefinitions.ToolsAssemblyName)
-                        .Select(it => it.GlobalNamespace)
-                        .SelectMany(it => it.GetAllTypes(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName)))
-                        .Select(it => GetToolDetails((INamedTypeSymbol)it))
-                        .Where(it => it is not null)
-                        .Select(it => it!)
-                );
+        => ToolPipeline.RegisterFrontend<GenerateToolsApiEndpointAttribute>(context, "API endpoint", Generate);
 
-        var attributes = GetAssemblyAttribute<GenerateToolsApiEndpointAttribute>(context.CompilationProvider);
-        
-        var compilationAndAttributes = referencedToolTypes
-            .Combine(attributes)
-            .Where(it => it.Right != null)
-            .Select((it, _) => it.Left)
-            .Collect();
-        
-        context.RegisterSourceOutput(compilationAndAttributes, GenerateTools);
-    }
-
-    protected override void GenerateTools(SourceProductionContext spc, ImmutableArray<ToolDetails> tools)
+    private static void Generate(SourceProductionContext spc, ImmutableArray<ToolModel> tools)
     {
         foreach (var tool in tools)
         {
@@ -45,24 +20,31 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
         }
     }
 
-    private CodeBlock GenerateApiEndpoint(ToolDetails tool) =>
-        new()
+    private static CodeBlock GenerateApiEndpoint(ToolModel tool)
+    {
+        var requestType = ToolNaming.RequestType(tool.TypeName);
+        var responseType = ToolNaming.ResponseType(tool.TypeName);
+
+        return new CodeBlock
         {
             Namespace = "Dev.Tools.Api.Endpoints",
-            TypeName = tool.TypeName.Replace("Tool", "") + "Endpoint",
+            TypeName = ToolNaming.EndpointType(tool.TypeName),
             GeneratorType = typeof(ApiEndpointGenerator),
             Placeholders = new()
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolTitle"] = EscapeLiteral(TitleOf(tool)),
-                ["ToolDescription"] = EscapeLiteral(tool.Description),
-                ["ToolArgsType"] = tool.TypeName.Replace("Tool", "Request"),
-                ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
-                ["RequestType"] = GenerateDataType(tool, tool.ArgsDetails, "Request"),
-                ["RequestTypeMapping"] = GenerateDataTypeMapping(tool.ArgsDetails, tool.ArgsDetails.Type, "args", "request", false),
-                ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
-                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"),"response", "result", true)
+                ["ToolTitle"] = ToolText.EscapeLiteral(tool.DisplayTitle),
+                ["ToolDescription"] = ToolText.EscapeLiteral(tool.Description),
+                ["ToolArgsType"] = requestType,
+                ["ToolResultType"] = responseType,
+                ["RequestType"] = ToolEmitter.DataType(tool, tool.Args, "Request"),
+                ["RequestTypeMapping"] = ToolEmitter.Mapping(
+                    tool.Args, tool.Args.Type, "args", it => $"request.{it.Name}"),
+                ["ResultType"] = ToolEmitter.DataType(tool, tool.Result, "Response"),
+                ["ResultTypeMapping"] = ToolEmitter.Mapping(
+                    tool.Result, responseType, "response", it => $"result.{it.Name}",
+                    forceObjectInitializer: true)
             },
             Usings = [
                 "System.ComponentModel",
@@ -73,7 +55,7 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
                 "System.Net",
                 "System.Net.Mime"
             ],
-            Content = 
+            Content =
               """
               public class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider) : EndpointBase
               {
@@ -113,57 +95,5 @@ public class ApiEndpointGenerator : ToolGeneratorBase, IIncrementalGenerator
               }
               """
         };
-    
-    private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
-    {
-        var properties = new System.Text.StringBuilder();
-        var toolName = tool.TypeName.Replace("Tool", "");
-        
-        foreach (var prop in typeDetails.Properties)
-        {
-            var description = EscapeLiteral(prop.Description);
-            
-            properties.AppendLine($$"""
-                                            [Description("{{description}}")]
-                                            public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
-
-                                    """);
-        }
-
-        return $$"""
-                 public sealed class {{toolName}}{{toolNameSuffix}}
-                     {
-                 {{properties}}    }
-                 """;
-    }
-    
-    private static string GenerateDataTypeMapping(TypeDetails typeDetails, string typeName, string targetVariableName, string sourceVariableName, bool useParameterInitializer)
-    {
-        // Check if Args type has a constructor matching all properties (positional record)
-        if (!useParameterInitializer && HasConstructorMatchingProperties(typeDetails.Symbol))
-        {
-            // Use constructor syntax for positional records
-            var arguments = string.Join(",\n                    ",
-                typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
-
-            return $$"""
-                     var {{targetVariableName}} = new {{typeName}}(
-                                    {{arguments}}
-                                );
-                     """;
-        }
-        else
-        {
-            // Use object initializer syntax for init properties
-            var properties = string.Join(",\n                    ",
-                typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
-
-            return $$"""
-                     var {{targetVariableName}} = new {{typeName}}
-                                {
-                                    {{properties}}
-                                };
-                     """;
-        }
     }
 }

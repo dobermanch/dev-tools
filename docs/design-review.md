@@ -142,36 +142,75 @@ Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MC
    Six tests in `LocalizationTests` cover it: the catalog serves every key shape, a key with no translation resolves to English rather than a `:placeholder:`, a uk-UA translation wins over the English, and the uk-UA file is neither missing a key nor carrying a stale one.
 ~~6. Docs.~~ **Done.** The `CLAUDE.md` add-a-tool checklist is three steps and no longer mentions RESX at all; a new **Tool Text** section states the rules the analyzer enforces, and the Web UI and translation follow-ups are given as optional rather than as steps 4 and 5. The project table now describes `Dev.Tools.Localization` as translations referenced by the Web UI only, and the generated-artifact list swaps the deleted localization key scaffolding for `ToolDescriptions`. `README.md` no longer claims the tools are localized — the web UI is; the CLI, API and MCP server speak English.
 
-**Phase 1 is complete.** What is left of this document is the Phase 2-6 roadmap and the §1-§7 analysis behind it; delete it once those land.
+**Phase 1 is complete.** What is left of this document is the Phase 3-6 roadmap and the §1-§7 analysis behind it; delete it once those land.
 
 ---
 
 ## 4. Source generators — one model, four re-derivations
 
-The generator layer is the project's core bet, and it works, but it has drifted into copy-paste. `ToolGeneratorBase.cs` (389 lines) shares the *symbol reading*; everything downstream is duplicated:
+> **Re-measured 2026-09-12, after Phase 1.** Two of the six rows below are gone: the localization key convention no longer exists, and `LocalizationKeysGenerator` is deleted. The rest still stands.
+
+> **Phase 2 landed 2026-09-12** — the table and recommendations below are kept as the record of what it addressed; §4a says what changed and where the plan was revised.
+
+The generator layer is the project's core bet, and it works, but it has drifted into copy-paste. `ToolGeneratorBase.cs` (491 lines) shares the *symbol reading*; everything downstream is duplicated:
 
 | Duplicated concern | Copies |
 |---|---|
-| Incremental pipeline / assembly scan | `ApiEndpointGenerator.cs:13-26` ≡ `McpToolGenerator.cs:13-26` (character-identical); `CliCommandGenerator.cs:13-50` is the same wrapped in a 6-field debug tuple whose values are destructured and never used |
-| DTO emission | `ApiEndpointGenerator.GenerateDataType:115-136` ≡ `McpToolGenerator.GenerateDataType:178-199` |
-| Args/Result mapping | `ApiEndpointGenerator:138-166`, `McpToolGenerator:201-227`, `CliCommandGenerator.GenerateMapping:243-273` |
-| Localization key convention | **5 independent string concatenations** (`CliCommandGenerator:151,205`; `ApiEndpointGenerator:122`; `McpToolGenerator:130,185`) plus a 6th reconstruction in `LocalizationKeysGenerator:135-163`; nothing checks they agree |
-| `TypeName.Replace("Tool", …)` naming | 4 copies, and it is a global `Replace`, not a suffix trim (so `ToolkitTool` → `kit`) |
-| Catalog/keys generator bodies | `ToolsCatalogGenerator.Initialize:18-63` ≈ `LocalizationKeysGenerator.Initialize:22-49`, incl. a duplicated nested `TrackingNames` class |
+| Incremental pipeline / assembly scan | `ApiEndpointGenerator.cs:13-26` ≡ `McpToolGenerator.cs:13-26` ≡ `CliCommandGenerator.cs:13-26`, character-identical apart from the attribute they combine with |
+| DTO emission | `ApiEndpointGenerator.GenerateDataType` ≡ `McpToolGenerator.GenerateDataType` |
+| Args/Result mapping | `ApiEndpointGenerator.GenerateDataTypeMapping`, `McpToolGenerator.GenerateDataTypeMapping`, `CliCommandGenerator.GenerateMapping` |
+| `TypeName.Replace("Tool", …)` naming | **10 call sites** across the three frontend generators, and it is a global `Replace`, not a suffix trim (so `ToolkitTool` → `kit`) |
+| ~~Localization key convention~~ | ~~5 independent string concatenations~~ — **gone in Phase 1**; the generators emit the text itself now |
+| ~~Catalog/keys generator bodies~~ | ~~`ToolsCatalogGenerator` ≈ `LocalizationKeysGenerator`~~ — **gone in Phase 1**; `LocalizationKeysGenerator` is deleted |
 
 ### Recommendations
 
 1. **Extract a shared emit layer, not just a shared read layer.** One `ToolNaming` helper (fix the `Replace`), one `DtoEmitter`, one `MappingEmitter`, one pipeline factory. Each frontend generator should shrink to "which attributes and which method signature".
-2. **Consider making the frontend generators consume `ToolDefinition`/the catalog model** rather than re-deriving from `ISymbol`. Today the model captures `IsRequired`, `IsNullable`, `IsPipeInput`, `IsPipeOutput`, `DefaultValue` — and uses them *inconsistently*: `IsPipeInput` only by CLI, `DefaultValue` only by MCP (`McpToolGenerator.cs:134-135`), `IsRequired`/`IsNullable` by nobody (everything is emitted as `= default!`). That's why **CLI silently drops every constructor default** (`CliCommandGenerator.cs:215,230`) while MCP honours them — the same tool behaves differently per frontend.
+2. **Consider making the frontend generators consume `ToolDefinition`/the catalog model** rather than re-deriving from `ISymbol`. The model captures `IsRequired`, `IsNullable`, `IsPipeInput`, `IsPipeOutput`, `DefaultValue` and still uses them *inconsistently*: `IsPipeInput` only by CLI, `IsRequired`/`IsNullable` by nobody (everything is emitted as `= default!`). *The worst symptom — the CLI dropping every constructor default while MCP honoured them — was fixed in Phase 0, but the underlying re-derivation is unchanged.*
 3. **Diagnose unsupported types instead of failing downstream.** There is no type mapping and no allow-list: `Type = it.Type.ToDisplayString()` (`ToolGeneratorBase.cs:250`) is emitted verbatim, so an exotic property type fails as a C# error inside generated code, an ASP.NET binding failure, or a Spectre `TypeConverter` failure at runtime. Add an allow-list (primitives, `string`, enums, `DateTimeOffset`, `Guid`, arrays/`IReadOnlyList<T>` of those, the future payload type) + a `DTxxxx` diagnostic.
 4. **Fail loudly instead of silently skipping.** `GetToolDetails` returns `null` — tool vanishes, no diagnostic — when `[ToolDefinition]` lacks `Name` (`:136-139`) or no 2-arg generic interface is found (`:38-41`). Also `FindToolInterface:222-262` matches **any** 2-arg generic interface, not `ITool<,>` specifically.
-5. **Strengthen the analyzer.** Today only DT1001 (unique name), DT1002 (valid name), DT1003 (`public sealed`) exist. Missing and worth adding: exactly one `[PipeInput]` (documented as a rule but unenforced), at most one `[PipeOutput]`, `Result` must have a parameterless ctor (required by `ToolBase.Failed1`), tool must implement `ITool<,>`, `Args` must have exactly one public constructor (`GetConstructorDefaultValues:264-314` silently takes the first).
+5. **Strengthen the analyzer.** DT1001 (unique name), DT1002 (valid name), DT1003 (`public sealed`) and DT1004-DT1007 (description text, added in Phase 1) exist. Missing and worth adding: exactly one `[PipeInput]` (documented as a rule but unenforced), at most one `[PipeOutput]`, `Result` must have a parameterless ctor (required by `ToolBase.Failed1`), tool must implement `ITool<,>`, `Args` must have exactly one public constructor (`GetConstructorDefaultValues:264-314` silently takes the first).
 6. **Restore determinism and test coverage.**
    - `Core/CodeBlock.cs:88` embeds `DateTime.Now` in every generated file header → every build re-emits every file; kills incremental-generator caching and makes snapshots noisy.
    - `ToolDetails`/`TypeDetails` keep `ISymbol`/`SyntaxNode` in the incremental model — precisely what `GeneratorTestsBase.AssertObjectGraph:238-241` bans, and the caching test that would catch it is `[Skip("temporary")]`.
-   - Snapshots: `CliCommandGenerator`, `McpToolGenerator`, `LocalizationKeysGenerator` have **no tests**; `ApiEndpointGeneratorTests` is `[Skip("Just for now")]`; `ToolsCatalogGeneratorTests` runs but has no verified snapshot committed. Test compilations reference only `typeof(object).Assembly` (`GeneratorTestsBase.cs:98-101`), so snapshots are taken from compilations full of unresolved symbols.
-7. **Dead code to remove:** `ValuesListGenerator` (its `[Generator]` is commented out at `:7`, its DT2001 rule and its test are dead), `GetToolDefinitionDetails:195-204`, the inert `.Where` assembly guard (`ToolsCatalogGenerator.cs:55-57`), and the unused scan tuple in `CliCommandGenerator`.
+   - Snapshots: `CliCommandGenerator` and `McpToolGenerator` have **no tests**; `ApiEndpointGeneratorTests` is `[Skip("Just for now")]` and `ToolsCatalogGeneratorTests`'s caching test is `[Skip("temporary")]` — those are the 2 skips in the suite. Test compilations reference only `typeof(object).Assembly` (`GeneratorTestsBase.cs:98-101`), so snapshots are taken from compilations full of unresolved symbols.
+7. ~~**Dead code to remove.**~~ **Done** across Phases 0-1: `ValuesListGenerator`, `GetToolDefinitionDetails`, the unused scan tuple in `CliCommandGenerator`, and `LocalizationKeysGenerator` are all gone. What survives is `ToolsCatalogGenerator`'s `.Combine(assemblyProvider).Select(it => it.Left)`, which pairs the tools with an assembly flag and then throws the flag away.
 8. **Name mismatch:** `McpToolGenerator.cs:53` names the file `XMcpTool.g.cs` but the template at `:76` emits `class {TypeName}McpTool` → actual type `HashTextToolMcpTool`. Cosmetic, but it signals the naming logic isn't centralized.
+
+
+## 4a. Phase 2 progress and decisions
+
+**What landed.** `ToolGeneratorBase` (491 lines) is gone. In its place, each piece has one home:
+
+| Concern | Now | Was |
+|---|---|---|
+| Symbol reading | `ToolModelFactory` (298 lines) — the only generator code that touches Roslyn symbols | `ToolGeneratorBase`, with the symbols carried onward in the model |
+| Model | `ToolModel` / `TypeModel` / `PropertyModel` / `EnumModel` (97 lines), positional records of strings, bools and `EquatableArray<T>` | `ToolDetails : TypeDeclaration`, holding the `ITypeSymbol` and `TypeDeclarationSyntax` |
+| Pipeline | `ToolPipeline.RegisterFrontend<TGuard>` / `RegisterSourceTools` (161 lines) | three character-identical copies plus the catalog's own |
+| DTO + mapping emission | `ToolEmitter.DataType` / `ToolEmitter.Mapping` (78 lines) | two copies of the DTO, three of the mapping |
+| Naming | `ToolNaming` — a suffix trim | 10 global `Replace("Tool", …)` in the generators, 2 more in `Dev.Tools.Localization` (now one shared trim there too) |
+| Text helpers | `ToolText` | static members of the generator base class |
+
+The frontend generators are now 99 (API), 161 (MCP) and 214 (CLI) lines, each opening with a one-line `Initialize` naming its guard attribute. The catalog generator is 97. The guard attribute is reduced to a `bool` before it joins the pipeline instead of travelling as `AttributeData`.
+
+**Loud failures.** A `[ToolDefinition]` class the generators cannot read now yields `DTG1001` naming the class and the reason (no `Name`, no `ITool<,>`), and a frontend switched on but finding no tools yields `DTG1002` — previously CLI-only, now all three. The interface lookup matches `Dev.Tools.ITool<,>` by identity, not "any generic interface with two type arguments".
+
+**Analyzer rules added** (reported where the author is typing, which the generator diagnostics cannot do — those run in the consuming assembly):
+
+- **DT1008** the class must implement `ITool<TArgs, TResult>`, directly or through a base class.
+- **DT1009** at most one `[PipeInput]`. *Revised from "exactly one":* six tools legitimately have none — `ip-details`, `lorem-ipsum`, `passphrase-generator`, `token-generator`, `ulid-generator` and `uuid-generator` take no primary input.
+- **DT1010** at most one `[PipeOutput]` (`ip-details`, `jwt-parser` and `url-parser` have none, correctly).
+- **DT1011** `Args` has exactly one public constructor. Applied to `Args` only: the documented `Result` shape pairs the positional constructor with a parameterless one, and result defaults are never read.
+- **DT1012** (warning) argument types must be bindable: string, bool, char, numeric primitives, decimal, enums, `Guid`, `DateTime`, `DateTimeOffset`, `TimeSpan`, `DateOnly`, `TimeOnly`, `Uri`, nullable forms of those, and arrays or `IList`/`List`/`ICollection`/`IEnumerable`/`IReadOnlyList`/`IReadOnlyCollection` of them. `Result` types are exempt — they are serialized, never bound, and `char-viewer` returns `IList<CharInfo>`. A warning rather than an error so an unlisted-but-working type is not blocked; it names the cause where the generated code would otherwise fail obscurely.
+- *Dropped:* "`Result` must have a parameterless constructor". `ToolBase<TArgs, TResult>` already constrains `TResult : new()`, so the compiler enforces it for every tool that uses the base class, and a tool implementing `ITool<,>` directly never calls `Failed1`. The rule would have duplicated a compiler error.
+
+**Determinism.** The generation timestamp is gone from `CodeBlock`'s header. Verified: all 70 generated files are byte-identical across a `--no-incremental` rebuild, and `ToolsCatalogGeneratorTests.ShouldReuseItsCachedOutputWhenNothingChanged` — the caching test that was `[Skip("temporary")]` — passes. It could never have passed as written: its helper asserted the *first* run's outputs were cached, which a first run never is.
+
+**Tests.** Generator tests now compile a stand-in Dev.Tools library (`Fixtures/SampleTools.cs`: a positional `Args` with defaults, a described enum, piped input and output, a nullable result and an object-initializer result) and hand it to the frontends as a metadata reference, the way the real library reaches them, against real platform references rather than CoreLib alone. `CliCommandGenerator` and `McpToolGenerator` have snapshots for the first time; `ApiEndpointGenerator`'s is un-skipped; each frontend also asserts it emits nothing without its assembly attribute. `Verify` now fails when a generator emits nothing — without that, all three frontend snapshots passed on empty output while the fixture was unreadable (an `[assembly:]` attribute placed after a namespace does not bind). The orphaned snapshot of the long-deleted `GenerateApiEndpointsAttribute` is removed. Suite: **55 passed, 0 skipped** (was 38 passed, 2 skipped). Analyzer tests grew from 19 to 29.
+
+**Regression check.** `HEAD` was built from a clean `git archive` and its generated code diffed against this tree for all 22 tools across API, MCP, CLI and the catalog. The only differences are the header line in every file and the 22 MCP holder classes, now named as their files are (`HashTextMcpTool`, was `HashTextToolMcpTool`). The MCP host discovers them with `WithToolsFromAssembly()`, so the name is not referenced anywhere.
+
+**Not done, deliberately.** Recommendation 2 — frontends consuming the catalog model rather than re-deriving it — is unchanged: `IsRequired`/`IsNullable` are still unused and DTO properties are still emitted as `= default!`. Doing it changes emitted code for every tool, which this phase set out to avoid so the refactor could be verified as behaviour-neutral. It fits naturally with Phase 5, when `ToolContent` forces per-frontend type mapping anyway.
 
 ---
 
@@ -298,7 +337,7 @@ Each phase is independently shippable.
 
 **Phase 1 — English metadata in core; translation limited to user-facing frontends. ✅ Done 2026-09-12.** See §3a for what landed in each of the six steps. Adding a tool is now one source file plus one test file: the RESX chore is gone from the checklist entirely, and with it the static localization provider, the second DI container, the neutral placeholder RESX and the build-time write into a sibling project. Four analyzer rules keep the text in place. Two things were found only by running the frontends rather than reading the generated code — MCP published no output schema at all, and JSON Schema carries no per-enum-value documentation — and both are fixed.
 
-**Phase 2 — generator consolidation.** Shared naming/DTO/mapping/pipeline; type allow-list with diagnostics; loud failures instead of silent skips; stronger analyzer rules; remove `DateTime.Now` and symbols from the incremental model; un-skip and fill in snapshot tests.
+**Phase 2 — generator consolidation. ✅ Done 2026-09-12.** See §4a. One pipeline, one model with no Roslyn objects in it, one emitter, one naming helper; five new analyzer rules and two generator diagnostics in place of silent skips; deterministic output; every generator snapshot-tested and the skipped caching test passing. Output for the 22 real tools is unchanged apart from the header timestamp and the MCP holder class names. Recommendation 2 (frontends reading the catalog model) was deliberately left for later.
 
 **Phase 3 — contract hardening.** `ToolError` with target/args and multiple errors; cancellation honoured and `OperationCanceledException` rethrown; `TimeProvider` + `IRandomSource` seams; `IToolsProvider.GetTool(Type/name)`; alias index; `ToolDefinitionAttribute` public.
 

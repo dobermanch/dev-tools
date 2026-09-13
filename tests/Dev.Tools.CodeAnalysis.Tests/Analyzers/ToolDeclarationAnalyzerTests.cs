@@ -8,8 +8,9 @@ namespace Dev.Tools.CodeAnalysis.Tests.Analyzers;
 public class ToolDeclarationAnalyzerTests
 {
     /// <summary>
-    /// The attribute and tool interface the analyzer looks for, declared in the test compilation so
-    /// the tests do not depend on the real core assembly.
+    /// The attributes and tool interface the analyzer looks for, declared in the test compilation so
+    /// the tests do not depend on the real core assembly. They land in the Dev.Tools namespace, which
+    /// is where the analyzer expects ITool&lt;,&gt; to live.
     /// </summary>
     private const string Preamble =
         """
@@ -20,6 +21,10 @@ public class ToolDeclarationAnalyzerTests
         }
 
         public interface ITool<TArgs, TResult> {}
+
+        public sealed class PipeInputAttribute : System.Attribute {}
+
+        public sealed class PipeOutputAttribute : System.Attribute {}
         """;
 
     private static CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier> Analyze(
@@ -53,10 +58,10 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = "tool1", Description = "Does the first thing")]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
 
               [ToolDefinition(Name = "tool2", Description = "Does the second thing")]
-              public sealed class MyClass2 {}
+              public sealed class MyClass2 : ITool<object, object> {}
               """");
 
         await context.RunAsync();
@@ -70,10 +75,10 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = {|#0:"tool1"|}, Description = "Does the first thing")]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
 
               [ToolDefinition(Name = {|#1:"tool1"|}, Description = "Does the second thing")]
-              public sealed class MyClass2 {}
+              public sealed class MyClass2 : ITool<object, object> {}
               """");
 
         context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotUniqueRule)
@@ -97,7 +102,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               {|#0:[ToolDefinition(Name = "tool1", Description = "Does a thing")]
-              {modifiers} class MyClass1 {}|}
+              {modifiers} class MyClass1 : ITool<object, object> {}|}
               """",
             new Dictionary<string, string> { ["modifiers"] = modifiers });
 
@@ -121,7 +126,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = {|#0:"{name}"|}, Description = "Does a thing")]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
               """",
             new Dictionary<string, string> { ["name"] = name });
 
@@ -140,7 +145,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [{|#0:ToolDefinition(Name = "tool1")|}]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
               """");
 
         context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.MissingDescriptionRule)
@@ -160,7 +165,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = "tool1", {|#0:Description = "{description}"|})]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
               """",
             new Dictionary<string, string> { ["description"] = description });
 
@@ -180,7 +185,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = "tool1", Title = "My Tool", Description = "Summary line.\nDetail paragraph.")]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
               """");
 
         await context.RunAsync();
@@ -194,7 +199,7 @@ public class ToolDeclarationAnalyzerTests
               {{Preamble}}
 
               [ToolDefinition(Name = "tool1", {|#0:Title = "My\nTool"|}, Description = "Does a thing")]
-              public sealed class MyClass1 {}
+              public sealed class MyClass1 : ITool<object, object> {}
               """");
 
         context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.MultiLineTitleRule)
@@ -309,6 +314,245 @@ public class ToolDeclarationAnalyzerTests
 
                   public sealed record Result(
                       [property: System.ComponentModel.Description("The details")] Detail[] Details);
+              }
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_tool_does_not_implement_ITool()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              {|#0:[ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 {}|}
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotAToolRule)
+            .WithArguments("MyClass1")
+            .WithLocation(0));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_tool_only_implements_some_other_two_argument_interface()
+    {
+        // The generators used to accept any generic interface with two type arguments as the tool
+        // interface, so this class would have had string and int generated as its args and result.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              public interface IPair<TLeft, TRight> {}
+
+              {|#0:[ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : IPair<string, int> {}|}
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotAToolRule)
+            .WithArguments("MyClass1")
+            .WithLocation(0));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_report_diagnostic_When_tool_implements_ITool_through_a_base_class()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult> {}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ToolBase<object, object> {}
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_more_than_one_argument_is_piped()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, object>
+              {
+                  public sealed record Args(
+                      [property: PipeInput, System.ComponentModel.Description("First")] string {|#0:First|},
+                      [property: PipeInput, System.ComponentModel.Description("Second")] string {|#1:Second|});
+              }
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousPipeInputRule)
+            .WithArguments("Args", 2)
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousPipeInputRule)
+            .WithArguments("Args", 2)
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_more_than_one_result_is_piped()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<object, MyClass1.Result>
+              {
+                  public sealed record Result(
+                      [property: PipeOutput, System.ComponentModel.Description("First")] string {|#0:First|},
+                      [property: PipeOutput, System.ComponentModel.Description("Second")] string {|#1:Second|});
+              }
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousPipeOutputRule)
+            .WithArguments("Result", 2)
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousPipeOutputRule)
+            .WithArguments("Result", 2)
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_report_diagnostic_When_nothing_is_piped()
+    {
+        // Generators take no input and parsers have no single output worth piping; both are fine.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, MyClass1.Result>
+              {
+                  public sealed record Args(
+                      [property: System.ComponentModel.Description("How many")] int Count = 1);
+
+                  public sealed record Result(
+                      [property: System.ComponentModel.Description("Scheme")] string? Scheme,
+                      [property: System.ComponentModel.Description("Host")] string? Host);
+              }
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_arguments_have_several_public_constructors()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, object>
+              {
+                  public sealed class Args
+                  {
+                      public {|#0:Args|}() {}
+                      public {|#1:Args|}(int count) {}
+                  }
+              }
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousArgsConstructorRule)
+            .WithArguments("Args", 2)
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.AmbiguousArgsConstructorRule)
+            .WithArguments("Args", 2)
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_report_diagnostic_When_only_the_result_has_several_constructors()
+    {
+        // The documented Result shape pairs the positional constructor with a parameterless one.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<object, MyClass1.Result>
+              {
+                  public sealed record Result(
+                      [property: System.ComponentModel.Description("The value")] string Value)
+                  {
+                      public Result() : this(string.Empty) { }
+                  }
+              }
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_an_argument_type_cannot_be_bound()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, object>
+              {
+                  public sealed record Args(
+                      [property: System.ComponentModel.Description("A stream")] System.IO.Stream {|#0:Input|},
+                      [property: System.ComponentModel.Description("A map")] System.Collections.Generic.Dictionary<string, int> {|#1:Map|});
+              }
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.UnsupportedArgumentTypeRule)
+            .WithArguments("Input", "Args", "System.IO.Stream")
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.UnsupportedArgumentTypeRule)
+            .WithArguments("Map", "Args", "System.Collections.Generic.Dictionary<string, int>")
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_report_diagnostic_When_argument_types_are_bindable()
+    {
+        // Every argument type the library uses today, plus the obvious neighbours.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, object>
+              {
+                  public enum Mode { [System.ComponentModel.Description("Only")] Only }
+
+                  public sealed record Args(
+                      [property: System.ComponentModel.Description("d")] string Text,
+                      [property: System.ComponentModel.Description("d")] string? OptionalText,
+                      [property: System.ComponentModel.Description("d")] bool Flag,
+                      [property: System.ComponentModel.Description("d")] int Count,
+                      [property: System.ComponentModel.Description("d")] char Separator,
+                      [property: System.ComponentModel.Description("d")] Mode Mode,
+                      [property: System.ComponentModel.Description("d")] Mode? OptionalMode,
+                      [property: System.ComponentModel.Description("d")] System.Guid Namespace,
+                      [property: System.ComponentModel.Description("d")] System.DateTime Time,
+                      [property: System.ComponentModel.Description("d")] System.DateTimeOffset? When,
+                      [property: System.ComponentModel.Description("d")] string[] Words,
+                      [property: System.ComponentModel.Description("d")] System.Collections.Generic.IList<string> Codes);
               }
               """");
 

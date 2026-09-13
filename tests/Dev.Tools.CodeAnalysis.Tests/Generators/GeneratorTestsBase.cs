@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Dev.Tools.CodeAnalysis.Core;
+using Dev.Tools.CodeAnalysis.Tests.Fixtures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -13,11 +13,103 @@ public abstract class GeneratorTestsBase
     [ModuleInitializer]
     public static void Init()
     {
-        CodeBlock.SystemTime = new DateTime(2025, 1, 1);
         VerifySourceGenerators.Initialize();
     }
 
-    protected Task Verify<T>(SyntaxTree source, MetadataReference? reference = null)
+    /// <summary>
+    /// The stand-in Dev.Tools library, compiled once and handed to the frontend generators the way
+    /// the real one reaches them: as a metadata reference, not as source.
+    /// </summary>
+    private static readonly Lazy<MetadataReference> s_toolsAssembly = new(() =>
+    {
+        var source = CSharpSyntaxTree.ParseText(SampleTools.Source);
+        var compilation = CSharpCompilation.Create(
+            assemblyName: Dev.Tools.CodeAnalysis.CodeDefinitions.ToolsAssemblyName,
+            syntaxTrees: [source],
+            references: PlatformReferences,
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        using var stream = new MemoryStream();
+        var result = compilation.Emit(stream);
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                "The sample tools assembly does not compile:\n"
+                + string.Join("\n", result.Diagnostics.Where(it => it.Severity == DiagnosticSeverity.Error)));
+        }
+
+        return MetadataReference.CreateFromImage(
+            stream.ToArray(), filePath: Dev.Tools.CodeAnalysis.CodeDefinitions.ToolsAssemblyName);
+    });
+
+    protected static MetadataReference ToolsAssembly => s_toolsAssembly.Value;
+
+    /// <summary>
+    /// The assemblies a tool's source actually needs. The test compilations used to reference only
+    /// System.Private.CoreLib, so <c>DescriptionAttribute</c> and friends were unresolved and the
+    /// generators read a model full of error types. Loaded once: every compilation in the run shares
+    /// the same references rather than re-reading the files.
+    /// </summary>
+    private static readonly Lazy<MetadataReference[]> s_platformReferences = new(() =>
+    {
+        var directory = Path.GetDirectoryName(typeof(object).Assembly.Location)!;
+
+        return new[]
+            {
+                "System.Private.CoreLib.dll",
+                "System.Runtime.dll",
+                "netstandard.dll",
+                "System.Collections.dll",
+                "System.ComponentModel.Primitives.dll",
+                "System.Linq.dll",
+                "System.Threading.Tasks.dll"
+            }
+            .Select(it => (MetadataReference)MetadataReference.CreateFromFile(Path.Combine(directory, it)))
+            .ToArray();
+    });
+
+    private static IEnumerable<MetadataReference> PlatformReferences => s_platformReferences.Value;
+
+    /// <summary>
+    /// The consuming assembly of a frontend generator: it declares the attribute that switches the
+    /// generator on, and applies it.
+    /// </summary>
+    protected static SyntaxTree ConsumerAssembly(string attributeNamespace, string attributeName)
+        => CSharpSyntaxTree.ParseText(
+            // Assembly attributes have to precede every namespace and type declaration; placed after
+            // them the attribute does not bind, and the generator reads as switched off.
+            $$"""
+              using System;
+
+              [assembly: {{attributeNamespace}}.{{attributeName}}]
+
+              namespace {{attributeNamespace}}
+              {
+                  [AttributeUsage(AttributeTargets.Assembly)]
+                  internal sealed class {{attributeName}} : Attribute;
+              }
+              """);
+
+    /// <summary>An assembly that references the tools but never asked for a frontend.</summary>
+    protected static SyntaxTree EmptyAssembly => CSharpSyntaxTree.ParseText("// nothing to generate from");
+
+    /// <summary>
+    /// A frontend generator is switched on by an assembly attribute; without it, it has to stay
+    /// silent rather than emit code the consumer never asked for.
+    /// </summary>
+    protected async Task VerifyNoOutput<T>(SyntaxTree source, MetadataReference? reference = null)
+        where T : IIncrementalGenerator, new()
+    {
+        var compilation = CreateCompilation("Tests", [source], null, reference);
+
+        GeneratorDriver driver = CSharpGeneratorDriver.Create(new T().AsSourceGenerator());
+        var result = driver.RunGenerators(compilation).GetRunResult();
+
+        await Assert.That(result.GeneratedTrees).IsEmpty();
+        await Assert.That(result.Diagnostics).IsEmpty();
+    }
+
+    protected async Task Verify<T>(SyntaxTree source, MetadataReference? reference = null)
         where T : IIncrementalGenerator, new()
     {
         var compilation = CreateCompilation("Tests", [source], null, reference);
@@ -29,9 +121,14 @@ public abstract class GeneratorTestsBase
         
         // Run the source generator!
         driver = driver.RunGenerators(compilation);
+
+        // A generator that emits nothing leaves Verify nothing to compare, and it passes. That hid a
+        // fixture the frontends could not read at all, so an empty run is a failure here.
+        await Assert.That(driver.GetRunResult().GeneratedTrees).IsNotEmpty()
+            .Because($"{typeof(T).Name} generated no sources to snapshot");
         
         // Use verify to snapshot test the source generator output!
-        return Verifier.Verify(driver).UseDirectory($"../Snapshots/{GetType().Name}");
+        await Verifier.Verify(driver).UseDirectory($"../Snapshots/{GetType().Name}");
     }
 
     // You call this method passing in C# sources, and the list of stages you expect
@@ -90,15 +187,7 @@ public abstract class GeneratorTestsBase
         CSharpCompilationOptions? options = null,
         MetadataReference? reference = null)
     {
-        // var references = AppDomain.CurrentDomain.GetAssemblies()
-        //     .Where(it => !it.IsDynamic && !string.IsNullOrWhiteSpace(it.Location))
-        //     .Select(it => (MetadataReference)MetadataReference.CreateFromFile(it.Location))
-        //     .Concat([(MetadataReference)MetadataReference.CreateFromFile(typeof(object).Assembly.Location)])
-        //     .ToList();
-        var references = new List<MetadataReference>
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-        };
+        var references = PlatformReferences.ToList();
 
         if (reference is not null)
         {
@@ -204,8 +293,10 @@ public abstract class GeneratorTestsBase
             // Therefore, on the second run the results should always be cached or unchanged!
             // - Unchanged is when the _input_ has changed, but the output hasn't
             // - Cached is when the the input has not changed, so the cached output is used 
+            // This asserted on the first run, whose outputs are always New, so the test could only
+            // ever fail - the likely reason it sat skipped.
             await Assert
-                .That(runStep1.Outputs.ToArray())
+                .That(runStep2.Outputs.ToArray())
                 .ContainsOnly(it => it.Reason is IncrementalStepRunReason.Cached or IncrementalStepRunReason.Unchanged)
                 .Because($"{stepName} expected to have reason {IncrementalStepRunReason.Cached} or {IncrementalStepRunReason.Unchanged}");
 

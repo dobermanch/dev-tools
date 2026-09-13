@@ -1,112 +1,19 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Dev.Tools.CodeAnalysis.Generators;
 
 [Generator]
-public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
+public class ToolsCatalogGenerator : IIncrementalGenerator
 {
-    public class TrackingNames
-    {
-        public const string GetAssemblyInterface = nameof(GetAssemblyInterface);
-        public const string GetTools = nameof(GetTools);
-        public const string Combine = nameof(Combine);
-    }
-    
     public void Initialize(IncrementalGeneratorInitializationContext context)
+        => ToolPipeline.RegisterSourceTools(context, "tools catalog", Generate);
+
+    private static void Generate(SourceProductionContext spc, ImmutableArray<ToolModel> tools)
     {
-        // context.RegisterPostInitializationOutput(ctx =>
-        // {
-        //     ctx.AddSource(CodeDefinitions.ToolDefinitionAttribute.OutputFileName,
-        //         CodeDefinitions.ToolDefinitionAttribute);
-        //     ctx.AddSource(CodeDefinitions.ToolDefinition.OutputFileName, CodeDefinitions.ToolDefinition);
-        // });
-       // Debugger.Launch();
-        
-        //var guardAttribute = typeof(GenerateToolsAttribute);
-        IncrementalValueProvider<bool> assemblyProvider =
-            context
-                .CompilationProvider
-                .Select((compilation, _) =>
-                {
-                    //var attrSymbol = compilation.GetTypeByMetadataName($"{guardAttribute.Namespace}.{guardAttribute.Name}");
-                    return compilation.Assembly.Name == CodeDefinitions.ToolsAssemblyName;
-                        //.GetAttributes()
-                        //.FirstOrDefault(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, attrSymbol));
-                })
-                .WithTrackingName(TrackingNames.GetAssemblyInterface)
-            ;
-
-        IncrementalValuesProvider<ToolDetails> toolsProvider =
-            context
-                .SyntaxProvider
-                .ForAttributeWithMetadataName(
-                    CodeDefinitions.ToolDefinitionAttribute.TypeFullName,
-                    predicate: (s, _) => IsToolsClass(s),
-                    transform: (ctx, _) => GetToolDetails((INamedTypeSymbol)ctx.TargetSymbol))
-                .Where(it => it != null)
-                .Select((it, _) => it!)
-                .WithTrackingName(TrackingNames.GetTools);
-        
-        IncrementalValueProvider<ImmutableArray<ToolDetails>> toolsDeclarations =
-            toolsProvider
-                .Combine(assemblyProvider)
-                .Select((it, _) => it.Left)
-                .Collect()
-                .WithTrackingName(TrackingNames.Combine);
-
-        context.RegisterSourceOutput(toolsDeclarations, GenerateTools);
-    }
-
-    private static bool IsToolsClass(SyntaxNode node) =>
-        node is ClassDeclarationSyntax definition
-        && definition.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.SyntaxTypeName);
-
-    protected override void GenerateTools(SourceProductionContext spc, ImmutableArray<ToolDetails> tools)
-    {
-        if (tools.Length <= 0)
-        {
-            return;
-        }
-        
-        string Aggregate(IList<string> data)
-        {
-            return "[" + string.Join(", ", data) + "]";
-        } 
-
-        string toolsString = tools.Select(it =>
-            $"""
-                     new ToolDefinition(
-                         Name: "{it.Name}",
-                         Title: "{EscapeLiteral(string.IsNullOrEmpty(it.Title) ? it.Name : it.Title)}",
-                         Description: "{EscapeLiteral(it.Description)}",
-                         Usage: "{EscapeLiteral(it.Usage)}",
-                         Aliases: {Aggregate(it.Aliases)},
-                         Categories: {Aggregate(it.Categories)},
-                         Keywords: {Aggregate(it.Keywords)},
-                         ErrorCodes: {Aggregate(it.ErrorCodes)},
-                         ToolType: typeof({it.Namespace}.{it.TypeName}),
-                         ArgsType: new ToolDefinition.TypeDetails(
-                             Name: "{it.ArgsDetails.Type.Split('.').Last()}",
-                             DataType: typeof({it.ArgsDetails.Type}),
-                             Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ArgsDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\", \"{EscapeLiteral(x.DisplayName)}\")"))}
-                             ]
-                         ),
-                         ReturnType: new ToolDefinition.TypeDetails(
-                             Name: "{it.ResultDetails.Type.Split('.').Last()}",
-                             DataType: typeof({it.ResultDetails.Type}),
-                             Properties: [
-                                 {string.Join(",\n\t\t\t\t\t", it.ResultDetails.Properties.Select(x => $"new ToolDefinition.TypeProperty(\"{x.Name}\", typeof({x.Type.Replace("?", "")}), {x.IsRequired.ToString().ToLower()}, {x.IsNullable.ToString().ToLower()}, {x.IsPipeInput.ToString().ToLower()}, {x.IsPipeOutput.ToString().ToLower()}, \"{EscapeLiteral(x.Description)}\", \"{EscapeLiteral(x.DisplayName)}\")"))}
-                             ]
-                         ),
-                         ExtraTypes: [
-                             {string.Join(",\n\t\t\t\t", it.ExtraTypes.OfType<EnumDetails>().Select(x => $"new ToolDefinition.EnumDetails(\"{x.Type.Split('.').Last()}\", typeof({x.Type}), [{string.Join(", ", x.Values.Select(v => $"new ToolDefinition.EnumValue(\"{v.Name}\", \"{EscapeLiteral(v.Description)}\")"))}])"))}
-                         ]
-                     ),
-             """)
+        string toolsString = tools
+            .Select(Definition)
             .Aggregate("", (current, it) => current + it + "\n")
             .Replace("\t", "    ");
 
@@ -137,4 +44,54 @@ public class ToolsCatalogGenerator : ToolGeneratorBase, IIncrementalGenerator
         
         spc.AddSource(codeBlock.OutputFileName, codeBlock);
     }
+
+    private static string Definition(ToolModel tool) =>
+        $"""
+                 new ToolDefinition(
+                     Name: "{tool.Name}",
+                     Title: "{ToolText.EscapeLiteral(tool.DisplayTitle)}",
+                     Description: "{ToolText.EscapeLiteral(tool.Description)}",
+                     Usage: "{ToolText.EscapeLiteral(tool.Usage)}",
+                     Aliases: {Aggregate(tool.Aliases)},
+                     Categories: {Aggregate(tool.Categories)},
+                     Keywords: {Aggregate(tool.Keywords)},
+                     ErrorCodes: {Aggregate(tool.ErrorCodes)},
+                     ToolType: typeof({tool.Namespace}.{tool.TypeName}),
+                     ArgsType: new ToolDefinition.TypeDetails(
+                         Name: "{tool.Args.SimpleName}",
+                         DataType: typeof({tool.Args.Type}),
+                         Properties: [
+                             {Properties(tool.Args)}
+                         ]
+                     ),
+                     ReturnType: new ToolDefinition.TypeDetails(
+                         Name: "{tool.Result.SimpleName}",
+                         DataType: typeof({tool.Result.Type}),
+                         Properties: [
+                             {Properties(tool.Result)}
+                         ]
+                     ),
+                     ExtraTypes: [
+                         {Enums(tool)}
+                     ]
+                 ),
+         """;
+
+    private static string Aggregate(EquatableArray<string> values)
+        => "[" + string.Join(", ", values) + "]";
+
+    private static string Properties(TypeModel type)
+        => string.Join(",\n\t\t\t\t\t", type.Properties.Select(it =>
+            $"new ToolDefinition.TypeProperty(\"{it.Name}\", typeof({it.NonNullableType}), "
+            + $"{Bool(it.IsRequired)}, {Bool(it.IsNullable)}, {Bool(it.IsPipeInput)}, {Bool(it.IsPipeOutput)}, "
+            + $"\"{ToolText.EscapeLiteral(it.Description)}\", \"{ToolText.EscapeLiteral(it.DisplayName)}\")"));
+
+    private static string Enums(ToolModel tool)
+        => string.Join(",\n\t\t\t\t", tool.Enums.Select(it =>
+            $"new ToolDefinition.EnumDetails(\"{it.SimpleName}\", typeof({it.Type}), ["
+            + string.Join(", ", it.Values.Select(value =>
+                $"new ToolDefinition.EnumValue(\"{value.Name}\", \"{ToolText.EscapeLiteral(value.Description)}\")"))
+            + "])"));
+
+    private static string Bool(bool value) => value ? "true" : "false";
 }

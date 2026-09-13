@@ -1,4 +1,4 @@
-﻿using Dev.Tools.CodeAnalysis.Generators;
+﻿using Dev.Tools.CodeAnalysis.Core;
 
 namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
@@ -15,7 +15,7 @@ public class ToolTextEmissionTests
     [Arguments(null, "")]
     public async Task ShouldNormalizeLineEndingsSoGeneratedCodeDoesNotDependOnTheSourceFile(string? value, string expected)
     {
-        await Assert.That(ToolGeneratorBase.Normalize(value)).IsEqualTo(expected);
+        await Assert.That(ToolText.Normalize(value)).IsEqualTo(expected);
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class ToolTextEmissionTests
     [Arguments("tab\there", "tab\\there")]
     public async Task ShouldEscapeTextForAStringLiteral(string value, string expected)
     {
-        await Assert.That(ToolGeneratorBase.EscapeLiteral(value)).IsEqualTo(expected);
+        await Assert.That(ToolText.EscapeLiteral(value)).IsEqualTo(expected);
     }
 
     [Test]
@@ -40,13 +40,13 @@ public class ToolTextEmissionTests
     [Arguments(null, "")]
     public async Task ShouldDropTheLineWrappingAuthoredForTheSourceFile(string? value, string expected)
     {
-        await Assert.That(ToolGeneratorBase.Unwrap(value)).IsEqualTo(expected);
+        await Assert.That(ToolText.Unwrap(value)).IsEqualTo(expected);
     }
 
     [Test]
     public async Task ShouldEscapeABackslashBeforeTheEscapesItIntroduces()
     {
         // A naive order would turn \n into \\n and then mangle it again.
-        await Assert.That(ToolGeneratorBase.EscapeLiteral("c:\\path\nnext")).IsEqualTo("c:\\\\path\\nnext");
+        await Assert.That(ToolText.EscapeLiteral("c:\\path\nnext")).IsEqualTo("c:\\\\path\\nnext");
     }
 }

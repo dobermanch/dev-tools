@@ -25,6 +25,13 @@ public static class StringLocalizerExtensions
             => provider[$"Enums.{typeof(TEnum).Name}.{value.ToString()}"];
     }
 
-    private static string NormalizeToolName(string toolName) 
-        => toolName.Replace("Tool", "");
+    /// <summary>
+    /// The resource-key stem for a tool: its class name without the "Tool" suffix.
+    /// A plain Replace would also strike the word out of the middle of a name, and the generators
+    /// build the other half of these keys - keep the two trims in step.
+    /// </summary>
+    internal static string NormalizeToolName(string toolName)
+        => toolName.Length > 4 && toolName.EndsWith("Tool", StringComparison.Ordinal)
+            ? toolName[..^4]
+            : toolName;
 }

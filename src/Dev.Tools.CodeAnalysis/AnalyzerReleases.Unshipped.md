@@ -14,3 +14,8 @@
 | DT1005  | Documentation | Error  | A tool title must be a single line                                    |
 | DT1006  | Documentation | Error  | Tool arguments and results must be described                          |
 | DT1007  | Documentation | Error  | Tool enum values must be described                                    |
+| DT1008  | Declaration | Error    | A tool must implement ITool<TArgs, TResult>                           |
+| DT1009  | Declaration | Error    | A tool may pipe at most one argument                                  |
+| DT1010  | Declaration | Error    | A tool may pipe at most one result                                    |
+| DT1011  | Declaration | Error    | Tool arguments must have one public constructor                       |
+| DT1012  | Declaration | Warning  | Tool argument types must be bindable by every frontend                |

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.Mcp.Core;
 using Microsoft.CodeAnalysis;
@@ -6,37 +6,12 @@ using Microsoft.CodeAnalysis;
 namespace Dev.Tools.CodeAnalysis.Generators;
 
 [Generator]
-public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
+public class McpToolGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
-    {
-        var referencedToolTypes =
-            context.CompilationProvider
-                .SelectMany((compilation, _) =>
-                    compilation
-                        .References
-                        .Select(compilation.GetAssemblyOrModuleSymbol)
-                        .OfType<IAssemblySymbol>()
-                        .Where(it => it.Name == CodeDefinitions.ToolsAssemblyName)
-                        .Select(it => it.GlobalNamespace)
-                        .SelectMany(it => it.GetAllTypes(t => t.HasAttribute(CodeDefinitions.ToolDefinitionAttribute.TypeFullName)))
-                        .Select(it => GetToolDetails((INamedTypeSymbol)it))
-                        .Where(it => it is not null)
-                        .Select(it => it!)
-                );
+        => ToolPipeline.RegisterFrontend<GenerateToolsMcpToolAttribute>(context, "MCP tool", Generate);
 
-        var attributes = GetAssemblyAttribute<GenerateToolsMcpToolAttribute>(context.CompilationProvider);
-
-        var compilationAndAttributes = referencedToolTypes
-            .Combine(attributes)
-            .Where(it => it.Right != null)
-            .Select((it, _) => it.Left)
-            .Collect();
-
-        context.RegisterSourceOutput(compilationAndAttributes, GenerateTools);
-    }
-
-    protected override void GenerateTools(SourceProductionContext spc, ImmutableArray<ToolDetails> tools)
+    private static void Generate(SourceProductionContext spc, ImmutableArray<ToolModel> tools)
     {
         foreach (var tool in tools)
         {
@@ -45,25 +20,33 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         }
     }
 
-    private CodeBlock GenerateTool(ToolDetails tool)
+    private static CodeBlock GenerateTool(ToolModel tool)
     {
-        return new()
+        var responseType = ToolNaming.ResponseType(tool.TypeName);
+
+        return new CodeBlock
         {
             Namespace = "Dev.Tools.Mcp.Tools",
-            TypeName = tool.TypeName.Replace("Tool", "McpTool"),
+            // The holder class and the file it lands in have to agree: the file was named from the
+            // trimmed base name while the class was spelled out in the template, so
+            // HashTextMcpTool.g.cs declared a class called HashTextToolMcpTool.
+            TypeName = ToolNaming.McpToolType(tool.TypeName),
             GeneratorType = typeof(McpToolGenerator),
             Placeholders = new()
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolTitle"] = EscapeLiteral(TitleOf(tool)),
+                ["ToolTitle"] = ToolText.EscapeLiteral(tool.DisplayTitle),
                 // A model reads the whole thing, usage note included.
-                ["ToolDescription"] = EscapeLiteral(ModelDescription(tool)),
-                ["ToolResultType"] = tool.TypeName.Replace("Tool", "Response"),
-                ["ToolArgsParameters"] = GenerateIndividualParameters(tool, tool.ArgsDetails),
-                ["RequestTypeMapping"] = GenerateArgsFromIndividualParameters(tool.ArgsDetails),
-                ["ResultType"] = GenerateDataType(tool, tool.ResultDetails, "Response"),
-                ["ResultTypeMapping"] = GenerateDataTypeMapping(tool.ResultDetails, tool.TypeName.Replace("Tool", "Response"), "response", "result", true)
+                ["ToolDescription"] = ToolText.EscapeLiteral(tool.ModelDescription),
+                ["ToolResultType"] = responseType,
+                ["ToolArgsParameters"] = GenerateIndividualParameters(tool.Args),
+                ["RequestTypeMapping"] = ToolEmitter.Mapping(
+                    tool.Args, tool.Args.Type, "args", it => ToParamName(it.Name)),
+                ["ResultType"] = ToolEmitter.DataType(tool, tool.Result, "Response"),
+                ["ResultTypeMapping"] = ToolEmitter.Mapping(
+                    tool.Result, responseType, "response", it => $"result.{it.Name}",
+                    forceObjectInitializer: true)
             },
             Usings = [
                 "System.ComponentModel",
@@ -73,9 +56,9 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
                 "ModelContextProtocol.Server"
             ],
             Content =
-              $$"""
+              """
               [McpServerToolType]
-              public static class {{tool.TypeName}}McpTool
+              public static class {TypeName}
               {
                   {ResultType}
 
@@ -108,8 +91,8 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         };
     }
 
-    private static readonly HashSet<string> s_csharpKeywords = new HashSet<string>
-    {
+    private static readonly HashSet<string> s_csharpKeywords =
+    [
         "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
         "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else",
         "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for",
@@ -119,7 +102,7 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true",
         "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual",
         "void", "volatile", "while"
-    };
+    ];
 
     private static string ToParamName(string propertyName)
     {
@@ -127,24 +110,29 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         return s_csharpKeywords.Contains(name) ? "@" + name : name;
     }
 
-    private static string GenerateIndividualParameters(ToolDetails tool, TypeDetails argsDetails)
+    /// <summary>
+    /// The tool's arguments as individual method parameters: the MCP SDK builds the input schema
+    /// from the method signature, so each one carries its own description and default.
+    /// </summary>
+    private static string GenerateIndividualParameters(TypeModel args)
     {
-        if (argsDetails.Properties.Length == 0) return string.Empty;
+        if (args.Properties.Length == 0)
+        {
+            return string.Empty;
+        }
 
-        var paramsText = string.Join(",\n        ",
-            argsDetails.Properties.Select(prop =>
+        var parameters = string.Join(",\n        ",
+            args.Properties.Select(property =>
             {
-                var description = EscapeLiteral(prop.Description + EnumOptions(argsDetails, prop));
-                var paramName = ToParamName(prop.Name);
-                var paramDecl = $"[Description(\"{description}\")] {prop.Type} {paramName}";
+                var description = ToolText.EscapeLiteral(property.Description + EnumOptions(args, property));
+                var declaration = $"[Description(\"{description}\")] {property.Type} {ToParamName(property.Name)}";
 
-                if (prop.DefaultValue != null)
-                    paramDecl += $" = {prop.DefaultValue}";
-
-                return paramDecl;
+                return property.DefaultValue is null
+                    ? declaration
+                    : declaration + $" = {property.DefaultValue}";
             }));
 
-        return paramsText + ",";
+        return parameters + ",";
     }
 
     /// <summary>
@@ -152,16 +140,15 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
     /// JSON Schema carries no per-value documentation - an enum reaches the model as a bare list of
     /// names - so this is the only way the authored value text gets in front of it.
     /// </summary>
-    private static string EnumOptions(TypeDetails argsDetails, PropertyDetails prop)
+    private static string EnumOptions(TypeModel args, PropertyModel property)
     {
-        var propertyType = prop.Type.TrimEnd('?');
-        var enumDetails = argsDetails.Enums.FirstOrDefault(it => it.Type.TrimEnd('?') == propertyType);
-        if (enumDetails is null || enumDetails.Values.Length == 0)
+        var enumModel = args.Enums.FirstOrDefault(it => it.Type.TrimEnd('?') == property.NonNullableType);
+        if (enumModel is null)
         {
             return string.Empty;
         }
 
-        var described = enumDetails
+        var described = enumModel
             .Values
             .Where(it => !string.IsNullOrEmpty(it.Description))
             .Select(it => $"{it.Name} = {it.Description}")
@@ -170,91 +157,5 @@ public class McpToolGenerator : ToolGeneratorBase, IIncrementalGenerator
         return described.Length == 0
             ? string.Empty
             : ". Options: " + string.Join("; ", described);
-    }
-
-    private static string GenerateArgsFromIndividualParameters(TypeDetails argsDetails)
-    {
-        if (HasConstructorMatchingProperties(argsDetails.Symbol))
-        {
-            var arguments = string.Join(",\n                    ",
-                argsDetails.Properties.Select(p =>
-                {
-                    var paramName = ToParamName(p.Name);
-                    return $"{p.Name}: {paramName}";
-                }));
-
-            return $$"""
-                     var args = new {{argsDetails.Type}}(
-                                    {{arguments}}
-                                );
-                     """;
-        }
-        else
-        {
-            var properties = string.Join(",\n                    ",
-                argsDetails.Properties.Select(p =>
-                {
-                    var paramName = ToParamName(p.Name);
-                    return $"{p.Name} = {paramName}";
-                }));
-
-            return $$"""
-                     var args = new {{argsDetails.Type}}
-                                {
-                                    {{properties}}
-                                };
-                     """;
-        }
-    }
-
-    private static string GenerateDataType(ToolDetails tool, TypeDetails typeDetails, string toolNameSuffix)
-    {
-        var properties = new System.Text.StringBuilder();
-        var toolName = tool.TypeName.Replace("Tool", "");
-
-        foreach (var prop in typeDetails.Properties)
-        {
-            var description = EscapeLiteral(prop.Description);
-
-            properties.AppendLine($$"""
-                                            [Description("{{description}}")]
-                                            public {{prop.Type}} {{prop.Name}} { get; set; } = default!;
-
-                                    """);
-        }
-
-        return $$"""
-                 public sealed class {{toolName}}{{toolNameSuffix}}
-                     {
-                 {{properties}}    }
-                 """;
-    }
-
-    private static string GenerateDataTypeMapping(TypeDetails typeDetails, string typeName, string targetVariableName, string sourceVariableName, bool useParameterInitializer)
-    {
-        // Check if Result type has a constructor matching all properties (positional record)
-        if (!useParameterInitializer && HasConstructorMatchingProperties(typeDetails.Symbol))
-        {
-            var arguments = string.Join(",\n                    ",
-                typeDetails.Properties.Select(p => $"{p.Name}: {sourceVariableName}.{p.Name}"));
-
-            return $$"""
-                     var {{targetVariableName}} = new {{typeName}}(
-                                    {{arguments}}
-                                );
-                     """;
-        }
-        else
-        {
-            var properties = string.Join(",\n                    ",
-                typeDetails.Properties.Select(p => $"{p.Name} = {sourceVariableName}.{p.Name}"));
-
-            return $$"""
-                     var {{targetVariableName}} = new {{typeName}}
-                                {
-                                    {{properties}}
-                                };
-                     """;
-        }
     }
 }

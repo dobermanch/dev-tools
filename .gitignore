@@ -60,3 +60,6 @@ _ReSharper*/
 
 # Ignore local files
 *.local.json
+
+# Test run reports (dotnet test / Microsoft.Testing.Platform)
+[Tt]est[Rr]esults/

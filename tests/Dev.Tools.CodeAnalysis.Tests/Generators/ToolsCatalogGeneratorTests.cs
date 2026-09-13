@@ -1,88 +1,26 @@
-using Dev.Tools.CodeAnalysis.Core;
 using Dev.Tools.CodeAnalysis.Generators;
+using Dev.Tools.CodeAnalysis.Tests.Fixtures;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Dev.Tools.CodeAnalysis.Tests.Generators;
 
 public class ToolsCatalogGeneratorTests : GeneratorTestsBase
 {
     [Test]
-    public async Task Should_Generate_Tools_Provider()
+    public async Task ShouldGenerateTheCatalogFromTheToolsInTheAssembly()
     {
-        var code = new CodeBlock
-        {
-            Namespace = "Dev.Tools",
-            TypeName = "TestTool",
-            Header = "",
-            GeneratorType = typeof(ToolsCatalogGenerator),
-            Content = """
-                      [ToolDefinition(
-                          Name = "tool-test",
-                          Aliases = ["tt"],
-                          Keywords = ["test", "keywords"],
-                          Categories = ["default"]
-                      )]
-                      public sealed class TestTool : ITool<int, long> {
-                        public void Test1() {
-                            throw new ToolException("testCode"); 
-                        }
-                        public void Test2() {
-                          throw new ToolException(Errors.TextEmpty); 
-                        }
-                      }
-                      
-                      public interface ITool<TArgs, TResult> {}
-                      
-                      public class Errors {
-                        public const string TextEmpty = "TextEmpty";
-                      }
-                      
-                      public sealed class ToolException(string errorCode) : Exception
-                      {
-                          public string ErrorCode { get; } = errorCode;
-                      }
-                      """
-        };
-        await Verify<ToolsCatalogGenerator>(code);
+        await Verify<ToolsCatalogGenerator>(CSharpSyntaxTree.ParseText(SampleTools.Source));
     }
-    
-    [Test, Skip("temporary")]
-    public async Task Should_Properly_Cache_Results()
+
+    /// <summary>
+    /// The pipeline has to produce the same values twice for the same input, or every consumer
+    /// re-generates everything on every keystroke. This was skipped while the model carried the
+    /// ISymbol and TypeDeclarationSyntax it was read from, which are never equal between runs.
+    /// </summary>
+    [Test]
+    public async Task ShouldReuseItsCachedOutputWhenNothingChanged()
     {
-        var code = new CodeBlock
-        {
-            Namespace = "Dev.Tools",
-            TypeName = "TestTool",
-            Header = "",
-            GeneratorType = typeof(ToolsCatalogGenerator),
-            Content = """
-                      [ToolDefinition(
-                          Name = "tool-test",
-                          Aliases = ["tt"],
-                          Keywords = ["test", "keywords"],
-                          Categories = ["default"]
-                      )]
-                      public sealed class TestTool : ITool<int, long> {
-                        public void Test1() {
-                            throw new ToolException("testCode"); 
-                        }
-                        public void Test2() {
-                          throw new ToolException(Errors.TextEmpty); 
-                        }
-                      }
-
-                      public interface ITool<TArgs, TResult> {}
-
-                      public class Errors {
-                        public const string TextEmpty = "TextEmpty";
-                      }
-
-                      public sealed class ToolException(string errorCode) : Exception
-                      {
-                          public string ErrorCode { get; } = errorCode;
-                      }
-                      """
-        };
-        
-        await VerifyCaching<ToolsCatalogGenerator, ToolsCatalogGenerator.TrackingNames>(code);
+        await VerifyCaching<ToolsCatalogGenerator, ToolPipeline.TrackingNames>(
+            CSharpSyntaxTree.ParseText(SampleTools.Source));
     }
 }

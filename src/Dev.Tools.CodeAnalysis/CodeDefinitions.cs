@@ -7,6 +7,12 @@ public static class CodeDefinitions
 {
     public static readonly string ToolsAssemblyName = "Dev.Tools";
     public static readonly string ToolsGlobalNamespace = "Dev.Tools";
+
+    /// <summary>
+    /// Metadata name of <c>Dev.Tools.ITool&lt;TArgs, TResult&gt;</c>. The generators used to accept any
+    /// generic interface with two type arguments, which is a shape, not an identity.
+    /// </summary>
+    public static readonly string ToolInterfaceMetadataName = "ITool`2";
         
     public static readonly CodeBlock ToolDefinitionAttribute = new()
     {

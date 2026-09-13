@@ -44,8 +44,9 @@ public sealed class ToolCatalogStringLocalizer(IToolsProvider tools) : IStringLo
         foreach (var tool in tools.GetToolDefinitions())
         {
             // The RESX keys are built from the class name without its "Tool" suffix,
-            // the same shape StringLocalizerExtensions asks for.
-            var prefix = $"Tools.{tool.ToolType.Name.Replace("Tool", "")}";
+            // the same shape StringLocalizerExtensions asks for - and by the same trim, so a
+            // lookup and the inventory it is checked against cannot drift apart.
+            var prefix = $"Tools.{StringLocalizerExtensions.NormalizeToolName(tool.ToolType.Name)}";
 
             strings[$"{prefix}.Name"] = tool.Title;
             strings[$"{prefix}.Description"] = tool.Description;

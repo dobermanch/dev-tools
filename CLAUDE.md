@@ -10,7 +10,7 @@ See [.github/instructions/code.instructions.md](.github/instructions/code.instru
 
 [docs/design-review.md](docs/design-review.md) — **temporary** working document: a design review of the solution (localization scope, generator duplication, tool-contract seams for connectors and stream payloads, known bugs) plus a phased roadmap. Read it before reshaping the tool abstraction, the source generators, or the localization layout, and keep it current as phases land. **Delete it once the roadmap is done** — it is not permanent documentation and is deliberately not linked from the README.
 
-Phases 0 (correctness fixes) and 1 (English in the tools, localization confined to the Web UI) are done; phases 2-6 are not started.
+Phases 0 (correctness fixes), 1 (English in the tools, localization confined to the Web UI) and 2 (generator consolidation) are done; phases 3-6 are not started.
 
 ## Build & Test Commands
 
@@ -99,6 +99,7 @@ For **parser-style** tools (many output fields), use a non-positional `Result` r
 A tool's English lives in the tool file and nowhere else. The generators lift it into CLI help, the OpenAPI document, the MCP tool schema and the Web UI, so it is worth writing as a contract — the format, the constraints, what omitting a value does — rather than restating the property name.
 
 - **`Description` is required** on the tool, on every `Args`/`Result` property, and on every enum value those properties use. Four analyzer rules enforce it at build time: `DT1004` (tool description), `DT1005` (single-line `Title`), `DT1006` (property), `DT1007` (enum value).
+- **The tool's shape is checked too.** `DT1008` the class must implement `ITool<TArgs, TResult>` (directly or through `ToolBase`); `DT1009` at most one `[PipeInput]` argument; `DT1010` at most one `[PipeOutput]` result; `DT1011` `Args` has exactly one public constructor, since argument defaults are read from it; `DT1012` (warning) every argument type is one the CLI, API and MCP can all bind — strings, booleans, numbers, `char`, enums, `Guid`, date/time types, their nullable forms, and arrays or lists of those. `Result` types are not restricted: they are only serialized.
 - **`Description` may run to several paragraphs.** Use a raw string literal and wrap it for readability: a single newline inside a paragraph is dropped when it is read, a blank line starts a new paragraph. The first paragraph is what shows where only one line fits (the CLI command list); the full text shows where there is room.
 - **`[DisplayName]` only when the derived label reads wrong.** `TypeProperty.Label` splits the property name (`InsertLineBreaks` → "Insert Line Breaks"), which is right most of the time, so most properties carry no label at all. Author one where it is not:
 
