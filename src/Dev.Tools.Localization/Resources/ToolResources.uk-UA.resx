@@ -1281,6 +1281,9 @@
   <data name="Enums.Keyword.Regex" xml:space="preserve">
     <value>Регулярний вираз</value>
   </data>
+  <data name="Enums.Keyword.Cron" xml:space="preserve">
+    <value>Cron</value>
+  </data>
 
   <!-- Text Decryptor Tool -->
   <data name="Tools.TextDecryptor.Name" xml:space="preserve">
@@ -1508,12 +1511,12 @@ CSV потребує масиву об'єктів: заголовок — це �
     <value>CSV; дані мають бути масивом об'єктів</value>
   </data>
 
-  <!-- Regex Tester (.NET) Tool -->
+  <!-- Regex Tester Tool -->
   <data name="Tools.RegexTester.Name" xml:space="preserve">
-    <value>Тестер регулярних виразів (.NET)</value>
+    <value>Тестер регулярних виразів</value>
   </data>
   <data name="Tools.RegexTester.Description" xml:space="preserve">
-    <value>Перевіряє регулярний вираз .NET на тексті: показує кожен збіг із його позицією та групами захоплення і замінює збіги, якщо задано заміну.
+    <value>Перевіряє регулярний вираз на тексті: показує кожен збіг із його позицією та групами захоплення і замінює збіги, якщо задано заміну.
 
 Шаблон використовує діалект .NET, який подекуди відрізняється від JavaScript і PCRE: іменовані групи записуються як (?&lt;name&gt;...), ретроспективна перевірка (lookbehind) може бути будь-якої довжини, а заміна посилається на групи як $1 чи ${name}. Зіставлення не залежить від культури, тож IgnoreCase порівнює літери однаково на будь-якій машині.
 
@@ -1578,5 +1581,65 @@ CSV потребує масиву об'єктів: заголовок — це �
   </data>
   <data name="Tools.RegexTester.Result.Matches.Description" xml:space="preserve">
     <value>Перші 1 000 збігів: для кожного — індекс від 0, рядок і стовпець від 1, значення та групи захоплення</value>
+  </data>
+
+  <!-- Cron Expression Parser Tool -->
+  <data name="Tools.CronParser.Name" xml:space="preserve">
+    <value>Парсер cron-виразів</value>
+  </data>
+  <data name="Tools.CronParser.Description" xml:space="preserve">
+    <value>Пояснює cron-вираз англійською мовою та перелічує найближчі часи його запуску.
+
+Вираз має п'ять полів — хвилина, година, день місяця, місяць, день тижня — або шість, із секундами на початку. Поле приймає *, списки (1,15), діапазони (1-5), кроки (*/10), назви місяців і днів (JAN, MON) та ? замість *; день тижня 0 і 7 — це неділя. L, W і # вибирають останній день, найближчий робочий день і n-й день тижня в місяці: 5#3 — третя п'ятниця. Макроси @yearly, @annually, @monthly, @weekly, @daily, @midnight, @hourly, @every_minute і @every_second означають відповідний вираз. Поля року немає, і H не підтримується. Як і в crontab, коли обмежено і день місяця, і день тижня, запуск відбувається в день, що відповідає будь-якому з них, тож 0 0 1 * MON спрацьовує 1-го числа та щопонеділка; поле, що починається з *, не вважається обмеженим.
+
+Часи запуску обчислюються в заданому часовому поясі, а якщо його не задано — в UTC. Коли годинник переводять уперед, час у пропущеній годині спрацьовує наприкінці проміжку; коли назад — фіксований час доби спрацьовує один раз, а вираз, що повторюється протягом доби, як-от кожні 30 хвилин, спрацьовує в обох проходах. Вираз, який ніколи не може збігтися, як-от 30 лютого, описується, але не має часів запуску.</value>
+  </data>
+  <data name="Tools.CronParser.Args.Expression.Name" xml:space="preserve">
+    <value>Вираз</value>
+  </data>
+  <data name="Tools.CronParser.Args.Expression.Description" xml:space="preserve">
+    <value>Cron-вираз: п'ять полів (хвилина, година, день місяця, місяць, день тижня), шість із секундами на початку або макрос, як-от @daily</value>
+  </data>
+  <data name="Tools.CronParser.Args.TimeZone.Name" xml:space="preserve">
+    <value>Часовий пояс</value>
+  </data>
+  <data name="Tools.CronParser.Args.TimeZone.Description" xml:space="preserve">
+    <value>Часовий пояс, у якому виконується розклад, як ідентифікатор IANA, наприклад Europe/London; якщо не задано — UTC</value>
+  </data>
+  <data name="Tools.CronParser.Args.From.Name" xml:space="preserve">
+    <value>Від</value>
+  </data>
+  <data name="Tools.CronParser.Args.From.Description" xml:space="preserve">
+    <value>Момент, після якого перелічуються часи запуску; якщо не задано — поточний час</value>
+  </data>
+  <data name="Tools.CronParser.Args.Count.Name" xml:space="preserve">
+    <value>Кількість</value>
+  </data>
+  <data name="Tools.CronParser.Args.Count.Description" xml:space="preserve">
+    <value>Скільки часів запуску перелічити; значення менші за 1 вважаються 1, більші за 100 — 100</value>
+  </data>
+  <data name="Tools.CronParser.Result.Description.Name" xml:space="preserve">
+    <value>Опис</value>
+  </data>
+  <data name="Tools.CronParser.Result.Description.Description" xml:space="preserve">
+    <value>Значення виразу англійською мовою, з часом у 24-годинному форматі</value>
+  </data>
+  <data name="Tools.CronParser.Result.Expression.Name" xml:space="preserve">
+    <value>Вираз</value>
+  </data>
+  <data name="Tools.CronParser.Result.Expression.Description" xml:space="preserve">
+    <value>Вираз у тому вигляді, як його прочитано: поля розділено одинарними пробілами, а макрос розписано полями, які він означає</value>
+  </data>
+  <data name="Tools.CronParser.Result.TimeZone.Name" xml:space="preserve">
+    <value>Часовий пояс</value>
+  </data>
+  <data name="Tools.CronParser.Result.TimeZone.Description" xml:space="preserve">
+    <value>Ідентифікатор часового поясу, у якому подано часи запуску</value>
+  </data>
+  <data name="Tools.CronParser.Result.NextRuns.Name" xml:space="preserve">
+    <value>Наступні запуски</value>
+  </data>
+  <data name="Tools.CronParser.Result.NextRuns.Description" xml:space="preserve">
+    <value>Наступні часи запуску після From, від найранішого, кожен зі зсувом від UTC у цьому часовому поясі; порожньо, якщо вираз ніколи не збігається</value>
   </data>
 </root>

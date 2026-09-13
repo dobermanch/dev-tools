@@ -23,6 +23,8 @@
     <PackageVersion Include="Ulid" Version="1.4.1" />
     <PackageVersion Include="YamlDotNet" Version="18.1.0" />
     <PackageVersion Include="Tomlyn" Version="2.10.1" />
+    <PackageVersion Include="Cronos" Version="0.13.0" />
+    <PackageVersion Include="CronExpressionDescriptor" Version="2.51.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.401" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401" PrivateAssets="All" />

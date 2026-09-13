@@ -17,6 +17,8 @@
     <PackageReference Include="Ulid" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="Tomlyn" />
+    <PackageReference Include="Cronos" />
+    <PackageReference Include="CronExpressionDescriptor" />
   </ItemGroup>
 
   <ItemGroup>

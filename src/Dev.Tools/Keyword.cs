@@ -68,5 +68,7 @@ public enum Keyword
     Csv,
 
     [Description("Regular Expression")]
-    Regex
+    Regex,
+
+    Cron
 }

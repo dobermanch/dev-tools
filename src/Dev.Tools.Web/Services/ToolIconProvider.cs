@@ -35,6 +35,7 @@ public static class ToolIconProvider
             "html-entities" => Icons.Material.Outlined.Html,
             "data-converter" => Icons.Material.Outlined.Transform,
             "regex-tester" => Icons.Material.Outlined.ManageSearch,
+            "cron-parser" => Icons.Material.Outlined.EventRepeat,
             _ => Icons.Material.Outlined.Construction
         };
     }

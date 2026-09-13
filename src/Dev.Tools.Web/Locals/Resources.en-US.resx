@@ -533,4 +533,25 @@
     <data name="Page.RegexTesterToolPage.Table.Header.Groups" xml:space="preserve">
         <value>Groups</value>
     </data>
+    <data name="Page.CronParserToolPage.TextField.Expression.Label" xml:space="preserve">
+        <value>Cron expression</value>
+    </data>
+    <data name="Page.CronParserToolPage.TextField.TimeZone.Label" xml:space="preserve">
+        <value>Time zone</value>
+    </data>
+    <data name="Page.CronParserToolPage.Slider.Count.Label" xml:space="preserve">
+        <value>Next runs to list</value>
+    </data>
+    <data name="Page.CronParserToolPage.TextField.Description.Label" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="Page.CronParserToolPage.Table.Header.Time" xml:space="preserve">
+        <value>Run time</value>
+    </data>
+    <data name="Page.CronParserToolPage.Table.Header.DayOfWeek" xml:space="preserve">
+        <value>Day of week</value>
+    </data>
+    <data name="Page.CronParserToolPage.Text.NoRuns" xml:space="preserve">
+        <value>The expression never matches a date</value>
+    </data>
 </root>
