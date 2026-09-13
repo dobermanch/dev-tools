@@ -474,4 +474,16 @@
     <data name="Page.TextStatisticsToolPage.TextField.Utf16Length.Label" xml:space="preserve">
         <value>Довжина UTF-16</value>
     </data>
+    <data name="Page.HtmlEntitiesToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Операція</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.Switch.EncodeNonAscii.Label" xml:space="preserve">
+        <value>Кодувати символи поза ASCII</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Результат</value>
+    </data>
 </root>

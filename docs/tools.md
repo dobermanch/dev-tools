@@ -13,6 +13,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | `case-converter` | `case` | Convert text between 14 case formats: camelCase, snake_case, PascalCase, CONSTANT_CASE, kebab-case, dot.case, Header-Case, path/case, Sentence case, and more |
 | `int-base-converter` | | Convert integers between binary, octal, decimal, hexadecimal and base 64 |
 | `roman-converter` | | Bidirectional Roman numeral conversion for integers 1–3999 |
+| `html-entities` | | Escape text for HTML (`&`, `<`, `>`, `"`, `'`), optionally writing every non-ASCII character as a numeric reference, or decode HTML character references back to text |
 | `url-transcoder` | | URL-encode or URL-decode a string (RFC 3986) |
 | `date-convert` | | Convert between date/time formats: ISO 8601, ISO 9075, RFC 3339, RFC 7231, Unix timestamp, milliseconds, MongoDB ObjectId, Excel date, and JS date; omit the input to convert the current time |
 

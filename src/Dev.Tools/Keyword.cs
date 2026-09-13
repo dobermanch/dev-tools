@@ -50,5 +50,8 @@ public enum Keyword
     [Description("Lorem Ipsum")]
     Lorem,
 
-    Encrypt
+    Encrypt,
+
+    [Description("HTML")]
+    Html
 }

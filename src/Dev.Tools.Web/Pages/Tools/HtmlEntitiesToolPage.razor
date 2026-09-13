@@ -1,0 +1,55 @@
+@page "/tools/html-entities"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="HtmlEntitiesTool.TranscodingType"
+                        Label="@_localizer["Select.Operation.Label"]"
+                        Value="@_transcoding"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="OnTranscodingChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSwitch
+                        T="bool"
+                        Value="@_encodeNonAscii"
+                        Label="@_localizer["Switch.EncodeNonAscii.Label"]"
+                        Color="Color.Primary"
+                        Disabled="@(_transcoding == HtmlEntitiesTool.TranscodingType.Decode)"
+                        ValueChanged="OnEncodeNonAsciiChangedAsync"/>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        AllowFileInput="true"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_text"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Lines="10"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Text ?? string.Empty)"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Lines="10"
+                        LabelPosition="LabelPositionType.Inline"/>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+    </MudCardContent>
+</MudCard>

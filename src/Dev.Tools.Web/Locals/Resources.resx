@@ -474,4 +474,16 @@
     <data name="Page.TextStatisticsToolPage.TextField.Utf16Length.Label" xml:space="preserve">
         <value>UTF-16 Length</value>
     </data>
+    <data name="Page.HtmlEntitiesToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.Switch.EncodeNonAscii.Label" xml:space="preserve">
+        <value>Encode Non-ASCII Characters</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Text</value>
+    </data>
+    <data name="Page.HtmlEntitiesToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Result</value>
+    </data>
 </root>

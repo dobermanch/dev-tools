@@ -1249,6 +1249,9 @@
   <data name="Enums.Keyword.Encrypt" xml:space="preserve">
     <value>Шифрування</value>
   </data>
+  <data name="Enums.Keyword.Html" xml:space="preserve">
+    <value>HTML</value>
+  </data>
 
   <!-- Text Decryptor Tool -->
   <data name="Tools.TextDecryptor.Name" xml:space="preserve">
@@ -1365,5 +1368,47 @@
   </data>
   <data name="Tools.TextStatistics.Result.Utf16Length.Description" xml:space="preserve">
     <value>Довжина в кодових одиницях UTF-16 — так довжину рядка повідомляють .NET, Java та JavaScript; емодзі рахується як дві або більше</value>
+  </data>
+
+  <!-- HTML Entities Encoder/Decoder Tool -->
+  <data name="Tools.HtmlEntities.Name" xml:space="preserve">
+    <value>Кодер/Декодер HTML-сутностей</value>
+  </data>
+  <data name="Tools.HtmlEntities.Description" xml:space="preserve">
+    <value>Екранує текст для HTML або перетворює посилання на символи HTML назад на текст.
+
+Кодування замінює п'ять символів, що мають особливе значення в HTML, - &amp;, &lt;, &gt;, " та ' - на &amp;amp;, &amp;lt;, &amp;gt;, &amp;quot; та &amp;#39;, чого достатньо, щоб текст безпечно стояв усередині елемента або атрибута в лапках. З EncodeNonAscii кожен символ поза ASCII також стає десятковим числовим посиланням (é стає &amp;#233;) — для сторінки, кодування якої не може його вмістити.
+
+Декодування розуміє десяткові й шістнадцяткові числові посилання та іменовані сутності HTML 4, як-от &amp;nbsp;, &amp;copy; і &amp;eacute;, а також &amp;apos;. Посилання без завершальної крапки з комою або невідоме посилання залишається як є.</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.Text.Description" xml:space="preserve">
+    <value>Текст для екранування або HTML, посилання на символи в якому треба декодувати</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.Transcoding.Name" xml:space="preserve">
+    <value>Операція</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.Transcoding.Description" xml:space="preserve">
+    <value>Екранувати текст чи декодувати посилання в ньому</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.EncodeNonAscii.Name" xml:space="preserve">
+    <value>Кодувати символи поза ASCII</value>
+  </data>
+  <data name="Tools.HtmlEntities.Args.EncodeNonAscii.Description" xml:space="preserve">
+    <value>Під час кодування також записувати кожен символ поза ASCII як числове посилання, наприклад &amp;#233; для é; під час декодування ігнорується</value>
+  </data>
+  <data name="Tools.HtmlEntities.Result.Text.Name" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Tools.HtmlEntities.Result.Text.Description" xml:space="preserve">
+    <value>Екранований текст або текст із декодованими посиланнями</value>
+  </data>
+  <data name="Tools.HtmlEntities.Enums.TranscodingType.Encode" xml:space="preserve">
+    <value>Екранувати символи, що мають особливе значення в HTML</value>
+  </data>
+  <data name="Tools.HtmlEntities.Enums.TranscodingType.Decode" xml:space="preserve">
+    <value>Перетворити посилання на символи назад на текст</value>
   </data>
 </root>
