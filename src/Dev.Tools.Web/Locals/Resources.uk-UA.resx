@@ -450,4 +450,28 @@
     <data name="Page.TextDecryptorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Розшифрований текст</value>
     </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Characters.Label" xml:space="preserve">
+        <value>Символи</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.NonWhitespaceCharacters.Label" xml:space="preserve">
+        <value>Символи без пробілів</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Words.Label" xml:space="preserve">
+        <value>Слова</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Lines.Label" xml:space="preserve">
+        <value>Рядки</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Paragraphs.Label" xml:space="preserve">
+        <value>Абзаци</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Utf8Bytes.Label" xml:space="preserve">
+        <value>Байти UTF-8</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Utf16Length.Label" xml:space="preserve">
+        <value>Довжина UTF-16</value>
+    </data>
 </root>

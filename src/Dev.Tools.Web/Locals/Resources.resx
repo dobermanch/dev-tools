@@ -450,4 +450,28 @@
     <data name="Page.TextDecryptorToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Decrypted Text</value>
     </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Text</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Characters.Label" xml:space="preserve">
+        <value>Characters</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.NonWhitespaceCharacters.Label" xml:space="preserve">
+        <value>Characters Excluding Whitespace</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Words.Label" xml:space="preserve">
+        <value>Words</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Lines.Label" xml:space="preserve">
+        <value>Lines</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Paragraphs.Label" xml:space="preserve">
+        <value>Paragraphs</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Utf8Bytes.Label" xml:space="preserve">
+        <value>UTF-8 Bytes</value>
+    </data>
+    <data name="Page.TextStatisticsToolPage.TextField.Utf16Length.Label" xml:space="preserve">
+        <value>UTF-16 Length</value>
+    </data>
 </root>

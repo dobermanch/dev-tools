@@ -24,6 +24,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | --- | --- | --- |
 | `char-viewer` | | Inspect every character in a string — shows Unicode code point, hex, ASCII value, and Unicode category |
 | `nato` | | Spell out text using the NATO phonetic alphabet (e.g. `SOS` → Sierra, Oscar, Sierra) |
+| `text-statistics` | `wc` | Count characters (as a reader sees them), words, lines and paragraphs, and measure the length in UTF-16 code units and UTF-8 bytes |
 | `lorem-ipsum` | `lorem` | Generate Lorem Ipsum placeholder text with configurable paragraph, sentence, and word counts |
 | `json-formatter` | `jf` | Format, compact, or transform JSON — supports key sorting, key case normalization, and empty-value exclusion |
 | `xml-formatter` | `xf` | Format, compact, or transform XML — same options as the JSON formatter |

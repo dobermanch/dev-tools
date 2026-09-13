@@ -14,6 +14,8 @@ Phases 0 (correctness fixes), 1 (English in the tools, localization confined to 
 
 [docs/proposals/tool-flow.md](docs/proposals/tool-flow.md) records a future feature — running tools as a pipeline with parallel/loop/branch steps. It is why `[PipeInput]`/`[PipeOutput]` are a contract rather than a CLI convenience: a tool does not care where its input came from, and no frontend may reshape a pipe value.
 
+[docs/proposals/it-tools-port.md](docs/proposals/it-tools-port.md) is the agreed list of tools to port from it-tools, in order, with the library decision for each. Check it before adding a tool, and update it as tools land.
+
 ## Build & Test Commands
 
 ```bash
@@ -143,7 +145,7 @@ That is the whole tool as far as the CLI, the API and the MCP server are concern
 - Create `src/Dev.Tools.Web/Pages/Tools/YourNameToolPage.razor` + `.razor.cs`
 - If the `[PipeInput]` argument is something a user would have in a file - a document, encoded or encrypted data - put `AllowFileInput="true"` on the `DtTextField` bound to it; add `OnFileLoaded` when the tool takes `ToolContent`, and the page receives the file's bytes instead of its text (`HashTextToolPage`, `Base64EncoderPage`). Short values (a number, a URL, a date, a token) get no file button
 - Add icon to `src/Dev.Tools.Web/Services/ToolIconProvider.cs`
-- Add web page labels to `Dev.Tools.Web/Locals/Resources.en-US.resx` and `Resources.uk-UA.resx`
+- Add web page labels to `Dev.Tools.Web/Locals/Resources.resx` (the neutral English fallback), `Resources.en-US.resx` and `Resources.uk-UA.resx` - every culture carries the neutral file's keys
 - Key prefix for page labels: `Page.YourNameToolPage.*`
 
 **Translations** — the Web UI shows the tool's English until someone translates it:

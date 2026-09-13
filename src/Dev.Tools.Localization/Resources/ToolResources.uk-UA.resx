@@ -1308,4 +1308,62 @@
   <data name="Tools.TextDecryptor.Enums.InputFormat.Hex" xml:space="preserve">
     <value>Hex</value>
   </data>
+
+  <!-- Text Statistics Tool -->
+  <data name="Tools.TextStatistics.Name" xml:space="preserve">
+    <value>Статистика тексту</value>
+  </data>
+  <data name="Tools.TextStatistics.Description" xml:space="preserve">
+    <value>Підраховує символи, слова, рядки та абзаци в тексті й вимірює його довжину в кодових одиницях UTF-16 та байтах UTF-8.
+
+Символ — це те, що читач сприймає як один знак: емодзі чи літера з комбінованими діакритичними знаками рахується один раз, скільки б кодових точок вона не займала. Слово — це послідовність символів між пробільними символами, що містить хоча б одну літеру чи цифру, тож окреме тире не є словом, а текст без пробілів (китайською, японською, тайською) рахується як одне слово на кожну таку послідовність. Рядки рахуються так, як їх нумерує редактор, тож текст, що закінчується розривом рядка, має порожній останній рядок; рядок розривають \r\n, \n, \r, розрив сторінки, символ наступного рядка та роздільники рядків і абзаців Unicode. Абзац — це блок непорожніх рядків. У порожньому тексті всі значення нульові.</value>
+  </data>
+  <data name="Tools.TextStatistics.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.TextStatistics.Args.Text.Description" xml:space="preserve">
+    <value>Текст для вимірювання; для порожнього або пропущеного тексту всі значення нульові</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Characters.Name" xml:space="preserve">
+    <value>Символи</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Characters.Description" xml:space="preserve">
+    <value>Символи так, як їх бачить читач: емодзі чи літера з наголосом рахується як один</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.NonWhitespaceCharacters.Name" xml:space="preserve">
+    <value>Символи без пробілів</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.NonWhitespaceCharacters.Description" xml:space="preserve">
+    <value>Символи, що не є пробільними, підраховані так само, як символи</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Words.Name" xml:space="preserve">
+    <value>Слова</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Words.Description" xml:space="preserve">
+    <value>Послідовності символів між пробільними символами, що містять хоча б одну літеру чи цифру</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Lines.Name" xml:space="preserve">
+    <value>Рядки</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Lines.Description" xml:space="preserve">
+    <value>Рядки так, як їх нумерує редактор; текст, що закінчується розривом рядка, має порожній останній рядок</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Paragraphs.Name" xml:space="preserve">
+    <value>Абзаци</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Paragraphs.Description" xml:space="preserve">
+    <value>Блоки непорожніх рядків, розділені одним або кількома порожніми рядками</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Utf8Bytes.Name" xml:space="preserve">
+    <value>Байти UTF-8</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Utf8Bytes.Description" xml:space="preserve">
+    <value>Розмір тексту в кодуванні UTF-8, без мітки порядку байтів (BOM)</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Utf16Length.Name" xml:space="preserve">
+    <value>Довжина UTF-16</value>
+  </data>
+  <data name="Tools.TextStatistics.Result.Utf16Length.Description" xml:space="preserve">
+    <value>Довжина в кодових одиницях UTF-16 — так довжину рядка повідомляють .NET, Java та JavaScript; емодзі рахується як дві або більше</value>
+  </data>
 </root>
