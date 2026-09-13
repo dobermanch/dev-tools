@@ -13,7 +13,7 @@ namespace Dev.Tools.Tools;
 )]
 public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, TokenGeneratorTool.Result>
 {
-    protected override Result Execute(Args args)
+    protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         var alphabetBuilder = new StringBuilder(args.Alphabet);
         if (alphabetBuilder.Length <= 0)
@@ -64,7 +64,7 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
         var finalAlphabet = alphabet.ToArray();
 
         var result = new string[count];
-        Parallel.For(0, count, index =>
+        Parallel.For(0, count, new ParallelOptions { CancellationToken = cancellationToken }, index =>
         {
             var builder = new StringBuilder(length);
             for (int i = 0; i < length; i++)

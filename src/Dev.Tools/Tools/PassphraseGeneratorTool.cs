@@ -14,13 +14,13 @@ namespace Dev.Tools.Tools;
 )]
 public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.Args, PassphraseGeneratorTool.Result>
 {
-    protected override Result Execute(Args args)
+    protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         var wordCount = Math.Max(1, args.WordCount);
         var phraseCount = Math.Max(1, args.PhraseCount);
 
         var phrases = new string[phraseCount];
-        Parallel.For(0, phraseCount, index =>
+        Parallel.For(0, phraseCount, new ParallelOptions { CancellationToken = cancellationToken }, index =>
         {
             var parts = new string[wordCount];
             for (var i = 0; i < wordCount; i++)

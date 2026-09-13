@@ -11,13 +11,13 @@
 )]
 public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGeneratorTool.Result>
 {
-    protected override Result Execute(Args args)
+    protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         Ulid[] guids = args.Type switch
         {
-            UlidType.Min => Generate(args, () => Ulid.MinValue),
-            UlidType.Max => Generate(args, () => Ulid.MaxValue),
-            _ => Generate(args, () => Ulid.NewUlid()),
+            UlidType.Min => Generate(args, cancellationToken, () => Ulid.MinValue),
+            UlidType.Max => Generate(args, cancellationToken, () => Ulid.MaxValue),
+            _ => Generate(args, cancellationToken, () => Ulid.NewUlid()),
         };
 
         string[] formattedUlids = guids.Select(u => FormatUlid(u, args)).ToArray();
@@ -25,10 +25,14 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
         return new(formattedUlids);
     }
 
-    private static Ulid[] Generate(Args args, Func<Ulid> getGuid)
+    private static Ulid[] Generate(Args args, CancellationToken cancellationToken, Func<Ulid> getGuid)
     {
         var ulids = new Ulid[args.Count <= 0 ? 1 : args.Count];
-        Parallel.For(0, ulids.Length, index => ulids[index] = getGuid());
+        Parallel.For(
+            0,
+            ulids.Length,
+            new ParallelOptions { CancellationToken = cancellationToken },
+            index => ulids[index] = getGuid());
 
         return ulids;
     }

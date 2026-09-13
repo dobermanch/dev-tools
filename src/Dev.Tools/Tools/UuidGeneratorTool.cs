@@ -25,17 +25,17 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
 {
     private static readonly Guid Max = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
 
-    protected override Result Execute(Args args)
+    protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         Guid[] guids;
 
         switch (args.Type)
         {
             case UuidType.Nil:
-                guids = Generate(args, _ => Guid.Empty);
+                guids = Generate(args, cancellationToken, _ => Guid.Empty);
                 break;
             case UuidType.Max:
-                guids = Generate(args, _ => Max);
+                guids = Generate(args, cancellationToken, _ => Max);
                 break;
             case UuidType.V3:
                 if (args.Namespace is null)
@@ -43,10 +43,10 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
                     throw new ToolException(ErrorCode.NamespaceEmpty);
                 }
 
-                guids = Generate(args, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
+                guids = Generate(args, cancellationToken, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
                 break;
             case UuidType.V4:
-                guids = Generate(args, _ => Guid.NewGuid());
+                guids = Generate(args, cancellationToken, _ => Guid.NewGuid());
                 break;
             case UuidType.V5:
                 if (args.Namespace is null)
@@ -54,11 +54,11 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
                     throw new ToolException(ErrorCode.NamespaceEmpty);
                 }
 
-                guids = Generate(args, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
+                guids = Generate(args, cancellationToken, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
                 break;
             case UuidType.V7:
                 long timestamp = (args.Time ?? DateTimeOffset.UtcNow).ToUnixTimeMilliseconds();
-                guids = Generate(args, _ => NewUuidV7(timestamp));
+                guids = Generate(args, cancellationToken, _ => NewUuidV7(timestamp));
                 break;
             default:
                 guids = [];
@@ -70,10 +70,14 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         return new(formattedGuids);
     }
 
-    private static Guid[] Generate(Args args, Func<long, Guid> getGuid)
+    private static Guid[] Generate(Args args, CancellationToken cancellationToken, Func<long, Guid> getGuid)
     {
         var guilds = new Guid[args.Count <= 0 ? 1 : args.Count];
-        Parallel.For(0, guilds.Length, index => guilds[index] = getGuid(index));
+        Parallel.For(
+            0,
+            guilds.Length,
+            new ParallelOptions { CancellationToken = cancellationToken },
+            index => guilds[index] = getGuid(index));
 
         return guilds;
     }

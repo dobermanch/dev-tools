@@ -23,9 +23,6 @@ public static class SampleTools
 
         namespace Dev.Tools
         {
-            // Internal in the real library, which reaches the frontends through InternalsVisibleTo.
-            // This stand-in has no such grant, and Roslyn does not import internal types from a
-            // reference without one - so it is public here, or the frontends would find no tools.
             [AttributeUsage(AttributeTargets.Class)]
             public sealed class ToolDefinitionAttribute : Attribute
             {
