@@ -13,11 +13,7 @@ internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResp
     // The shell convention for a command interrupted by Ctrl+C.
     private const int CancelledExitCode = 130;
 
-    // Diagnostics go to stderr so piping tools together keeps stdout clean.
-    private static readonly IAnsiConsole ErrorConsole = AnsiConsole.Create(new AnsiConsoleSettings
-    {
-        Out = new AnsiConsoleOutput(System.Console.Error)
-    });
+    private static readonly IAnsiConsole ErrorConsole = StandardError.Console;
 
     public int ProcessResponse(ToolResult result, ToolDefinition definition, SettingsBase settings)
     {
@@ -55,14 +51,14 @@ internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResp
     /// "text-encryptor: --key: Input is not valid". The target is spelled the way it is typed: the
     /// positional pipe-input argument by its name, every other argument as its long option.
     /// </summary>
-    private static string Describe(ToolDefinition definition, ToolError error)
+    internal static string Describe(ToolDefinition definition, ToolError error)
     {
         if (error.Target is null)
         {
             return $"{definition.Name}: {error.Message}";
         }
 
-        var name = char.ToLowerInvariant(error.Target[0]) + error.Target[1..];
+        var name = CliNaming.Kebab(error.Target);
         var isPositional = definition.ArgsType.Properties.Any(it => it.Name == error.Target && it.IsPipeInput);
 
         return $"{definition.Name}: {(isPositional ? name : "--" + name)}: {error.Message}";

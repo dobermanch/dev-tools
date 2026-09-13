@@ -21,6 +21,9 @@
     <Compile Include="..\Dev.Tools.Console\Core\GenerateToolsCliCommandAttribute.cs">
       <Link>Core\GenerateToolsCliCommandAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Dev.Tools.Console\Core\CliNaming.cs">
+      <Link>Core\CliNaming.cs</Link>
+    </Compile>
     <Compile Include="..\Dev.Tools.Mcp\Core\GenerateToolsMcpToolAttribute.cs">
       <Link>Core\GenerateToolsMcpToolAttribute.cs</Link>
     </Compile>

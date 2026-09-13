@@ -26,4 +26,19 @@ public class ToolResponseHandlerTests
         await Assert.That(output.ToString())
             .IsEqualTo(Convert.ToBase64String(Encoding.UTF8.GetBytes(text)) + Environment.NewLine);
     }
+
+    [Test]
+    [Arguments("EncodeNonAscii", "html-entities: --encode-non-ascii: Input is not valid")]
+    [Arguments("Text", "html-entities: text: Input is not valid")]
+    [Arguments(null, "html-entities: Input is not valid")]
+    public async Task ShouldNameTheArgumentAtFaultTheWayItIsTyped(string? target, string expected)
+    {
+        var tools = new ServiceCollection().AddDevTools().BuildServiceProvider().GetRequiredService<IToolsProvider>();
+
+        var description = ToolResponseHandler.Describe(
+            tools.GetToolDefinition<HtmlEntitiesTool>(),
+            new ToolError(ErrorCode.InputNotValid, target));
+
+        await Assert.That(description).IsEqualTo(expected);
+    }
 }

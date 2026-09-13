@@ -216,7 +216,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                 : $"[System.ComponentModel.DefaultValue({defaultValue})]\n            ";
 
             var letter = property.Name[0].ToString().ToLowerInvariant();
-            var template = letter + property.Name.Substring(1);
+            var template = CliNaming.Kebab(property.Name);
             if (property.IsPipeInput)
             {
                 // NOTE: use optional argument template [argument] instead of <argument> to support StdIn

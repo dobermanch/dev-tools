@@ -34,7 +34,7 @@ internal sealed partial class SampleEncoderCommand(Dev.Tools.Providers.IToolsPro
             public Dev.Tools.Tools.SampleEncoderTool.Padding Padding { get; set; } = Dev.Tools.Tools.SampleEncoderTool.Padding.Keep;
 
         [Description("Use the URL-safe alphabet")]
-        [CommandOption("-u|--urlSafe")]
+        [CommandOption("-u|--url-safe")]
         [System.ComponentModel.DefaultValue(false)]
             public bool UrlSafe { get; set; } = false;
 
