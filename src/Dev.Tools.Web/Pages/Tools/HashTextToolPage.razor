@@ -10,6 +10,8 @@
                     <DtTextField
                         T="string"
                         Value="@_args.Text"
+                        AllowFileInput="true"
+                        OnFileLoaded="OnFileLoadedAsync"
                         OnDebounceIntervalElapsed="OnValueChangedAsync"
                         Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
                         ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.Errors).Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"

@@ -13,7 +13,7 @@ public class ToolsCatalogTests
         var definition = Definition<Base64EncoderTool>();
 
         await Assert.That(definition.Title).IsEqualTo("Base64 Encoder");
-        await Assert.That(definition.Description).StartsWith("Encodes text to Base64 format");
+        await Assert.That(definition.Description).StartsWith("Encodes text or a file to Base64 format");
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class ToolsCatalogTests
         var text = definition.ArgsType.Properties.Single(it => it.Name == "Text");
         var encoded = definition.ReturnType.Properties.Single(it => it.Name == "Text");
 
-        await Assert.That(text.Description).IsEqualTo("Text to encode to Base64 format");
+        await Assert.That(text.Description).IsEqualTo("Text or file content to encode; text is encoded as UTF-8");
         await Assert.That(encoded.Description).IsEqualTo("The Base64-encoded text");
     }
 

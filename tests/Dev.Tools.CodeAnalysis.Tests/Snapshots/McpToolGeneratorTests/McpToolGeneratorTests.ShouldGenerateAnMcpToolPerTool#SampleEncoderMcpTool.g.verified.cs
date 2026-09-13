@@ -34,7 +34,7 @@ public static class SampleEncoderMcpTool
     [Description("Encodes text.\n\nA second paragraph the CLI list has no room for.\n\nPrefer this over hand-rolling an encoder.")]
     public static async Task<SampleEncoderResponse> ExecuteAsync(
         IToolsProvider tools,
-        [Description("Text to encode, read as UTF-8")] string text,
+        [Description("Text or file content to encode")] string text,
         [Description("What to do with padding. Options: Keep = Keep the trailing = characters; Strip = Strip the trailing = characters")] Dev.Tools.Tools.SampleEncoderTool.Padding padding = Dev.Tools.Tools.SampleEncoderTool.Padding.Keep,
         [Description("Use the URL-safe alphabet")] bool urlSafe = false,
         CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ public static class SampleEncoderMcpTool
         var tool = tools.GetTool<SampleEncoderTool>();
 
         var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
-               Text: text,
+               Text: global::Dev.Tools.ToolContent.FromText(text),
                     Padding: padding,
                     UrlSafe: urlSafe
            );

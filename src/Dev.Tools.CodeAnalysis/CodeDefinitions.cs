@@ -13,7 +13,13 @@ public static class CodeDefinitions
     /// generic interface with two type arguments, which is a shape, not an identity.
     /// </summary>
     public static readonly string ToolInterfaceMetadataName = "ITool`2";
-        
+
+    /// <summary>
+    /// <c>Dev.Tools.ToolContent</c>: file, binary or streamed data. Every frontend binds it as text and
+    /// supplies files its own way on top, and it is only allowed on the [PipeInput] argument.
+    /// </summary>
+    public static readonly string ToolContentTypeName = "Dev.Tools.ToolContent";
+
     public static readonly CodeBlock ToolDefinitionAttribute = new()
     {
         Namespace = ToolsGlobalNamespace,

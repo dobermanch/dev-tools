@@ -136,6 +136,17 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
                      + "compile error inside generated code, or as a binding failure at run time.",
         isEnabledByDefault: true);
 
+    public static readonly DiagnosticDescriptor MisplacedContentRule = new(
+        "DT1013",
+        "ToolContent is only supported on the piped argument",
+        "The '{0}' property of '{1}' is a ToolContent, which is only supported on the tool's [PipeInput] argument",
+        "Declaration",
+        DiagnosticSeverity.Error,
+        description: "File and binary data reach a tool through its one piped argument: the CLI streams "
+                     + "stdin into it, the API takes it as an upload and the Web UI loads it from a file. "
+                     + "No frontend can supply content anywhere else, and content results are not supported yet.",
+        isEnabledByDefault: true);
+
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         =>
         [
@@ -150,7 +161,8 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
             AmbiguousPipeInputRule,
             AmbiguousPipeOutputRule,
             AmbiguousArgsConstructorRule,
-            UnsupportedArgumentTypeRule
+            UnsupportedArgumentTypeRule,
+            MisplacedContentRule
         ];
 
     public override void Initialize(AnalysisContext context)
@@ -304,7 +316,43 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
 
         CheckSingleConstructor(args, syntaxContext);
         CheckArgumentTypes(args, syntaxContext);
+        CheckContentPlacement(args, isArgs: true, syntaxContext);
+        CheckContentPlacement(result, isArgs: false, syntaxContext);
     }
+
+    /// <summary>
+    /// ToolContent belongs on the [PipeInput] argument and nowhere else: that is the one slot every
+    /// frontend knows how to fill from a file or stdin, and there are no content results yet.
+    /// </summary>
+    private static void CheckContentPlacement(
+        ITypeSymbol toolType,
+        bool isArgs,
+        SyntaxNodeAnalysisContext syntaxContext)
+    {
+        foreach (var property in PublicProperties(toolType))
+        {
+            if (!IsToolContent(property.Type) || SourceLocation(property) is not { } location)
+            {
+                continue;
+            }
+
+            var isPipeInput = isArgs
+                              && property.GetAttributes().Any(it => it.AttributeClass?.Name == "PipeInputAttribute");
+            if (isPipeInput)
+            {
+                continue;
+            }
+
+            syntaxContext.ReportDiagnostic(Diagnostic.Create(
+                MisplacedContentRule,
+                location,
+                property.Name,
+                toolType.Name));
+        }
+    }
+
+    private static bool IsToolContent(ITypeSymbol type)
+        => type.ToDisplayString().TrimEnd('?') == CodeDefinitions.ToolContentTypeName;
 
     /// <summary>
     /// Every property of the type, and every enum they use, needs English text in place.
@@ -400,7 +448,10 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
     {
         foreach (var property in PublicProperties(toolType))
         {
-            if (IsBindableArgumentType(property.Type) || SourceLocation(property) is not { } location)
+            // ToolContent is bound by every frontend in its own way; where it may go is DT1013's concern.
+            if (IsToolContent(property.Type)
+                || IsBindableArgumentType(property.Type)
+                || SourceLocation(property) is not { } location)
             {
                 continue;
             }

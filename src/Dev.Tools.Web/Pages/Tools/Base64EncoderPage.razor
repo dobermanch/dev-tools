@@ -32,6 +32,8 @@
                         T="string"
                         Label="@_localizer["TextField.Input.Label"]"
                         Value="@_args.Text"
+                        AllowFileInput="true"
+                        OnFileLoaded="OnFileLoadedAsync"
                         Error="@_result.HasErrors"
                         ErrorText="@_result.Errors.Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
                         Lines="15"

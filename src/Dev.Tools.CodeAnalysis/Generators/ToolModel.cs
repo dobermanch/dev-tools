@@ -66,13 +66,20 @@ public sealed record PropertyModel(
     bool IsPipeOutput,
     string Description,
     string DisplayName,
-    string? DefaultValue) : IEquatable<PropertyModel>
+    string? DefaultValue,
+    bool IsContent = false) : IEquatable<PropertyModel>
 {
     /// <summary>
     /// The type with every nullable annotation stripped, for the places that need a bare
     /// <c>typeof</c> - which rejects nullable reference types outright.
     /// </summary>
     public string NonNullableType => Type.Replace("?", string.Empty);
+
+    /// <summary>
+    /// The type a frontend binds for this property. A <c>ToolContent</c> argument is text on the command
+    /// line, in a JSON body and in an MCP call; the frontends that take files add their own way on top.
+    /// </summary>
+    public string BindingType => IsContent ? "string" : Type;
 }
 
 public sealed record EnumModel(

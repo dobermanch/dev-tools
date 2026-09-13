@@ -330,6 +330,15 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>:Search tools... (e.g. JSON, Base64, UUID):</value>
     </data>
+    <data name="Component.DtTextField.Button.LoadFile.Tooltip" xml:space="preserve">
+        <value>:Load from a file:</value>
+    </data>
+    <data name="Component.DtTextField.Error.FileTooLarge" xml:space="preserve">
+        <value>:The file is larger than {0}:</value>
+    </data>
+    <data name="Component.DtTextField.Text.LoadedFile" xml:space="preserve">
+        <value>:Loaded from {0}:</value>
+    </data>
     <data name="Page.CharacterViewerPage.Select.ViewType.Label" xml:space="preserve">
         <value>:Select View Type:</value>
     </data>

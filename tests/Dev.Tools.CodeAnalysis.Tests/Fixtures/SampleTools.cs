@@ -4,7 +4,8 @@ namespace Dev.Tools.CodeAnalysis.Tests.Fixtures;
 /// A miniature stand-in for the Dev.Tools library: the attributes, the tool interface and two tools
 /// between them covering what the generators have to handle - a positional Args record with
 /// defaults, an enum argument with described values, a piped input and output, a nullable property
-/// and a result built with an object initializer.
+/// and a result built with an object initializer. One tool pipes <c>ToolContent</c> and the other a
+/// string, which the frontends bind differently.
 ///
 /// The generator tests used to compile a stub whose ITool had no relation to the real one and whose
 /// arguments were <c>int</c> and <c>long</c>, against a compilation that referenced nothing but
@@ -47,6 +48,11 @@ public static class SampleTools
 
             public enum ErrorCode { Unknown, TextEmpty }
 
+            public sealed class ToolContent
+            {
+                public static ToolContent FromText(string? text) => new();
+            }
+
             public record ToolResult
             {
                 public IList<ErrorCode> ErrorCodes { get; init; } = new List<ErrorCode>();
@@ -81,12 +87,12 @@ public static class SampleTools
             {
                 public Task<Result> RunAsync(Args args, CancellationToken cancellationToken)
                 {
-                    if (string.IsNullOrEmpty(args.Text))
+                    if (args.Text is null)
                     {
                         throw new ToolException(ErrorCode.TextEmpty);
                     }
 
-                    return Task.FromResult(new Result(args.Text));
+                    return Task.FromResult(new Result("encoded"));
                 }
 
                 public enum Padding
@@ -96,8 +102,8 @@ public static class SampleTools
                 }
 
                 public sealed record Args(
-                    [property: PipeInput, Description("Text to encode, read as UTF-8")]
-                    string Text,
+                    [property: PipeInput, Description("Text or file content to encode")]
+                    ToolContent Text,
                     [property: Description("What to do with padding")]
                     Padding Padding = Padding.Keep,
                     [property: DisplayName("URL Safe"), Description("Use the URL-safe alphabet")]

@@ -87,7 +87,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                 "Microsoft.Extensions.DependencyInjection",
                 "Spectre.Console.Cli"
             ],
-            Content = 
+            Content =
               """
               internal static class CommandConfigurator
               {
@@ -95,7 +95,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                   {
                       {AddCommand}
                   }
-                  
+
                   private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name, params string[] aliases)
                       where T : class, ICommand
                   {
@@ -104,7 +104,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                       {
                           command.WithAlias(alias);
                       }
-              
+
                       services.AddTransient<T>();
                       services.AddTransient<ICommand, T>(provider => provider.GetRequiredService<T>());
                   }
@@ -129,7 +129,11 @@ public class CliCommandGenerator : IIncrementalGenerator
                 ["ToolResultType"] = tool.Result.Type,
                 ["SettingsType"] = GenerateSettingsClass(tool),
                 ["SettingsMapping"] = ToolEmitter.Mapping(
-                    tool.Args, $"{tool.TypeName}.Args", "args", it => $"settings.{it.Name}"),
+                    tool.Args, $"{tool.TypeName}.Args", "args", SettingsValue),
+                // Only a command with something to pipe in needs the reader; the generators take no input.
+                ["PipeInputParameter"] = tool.Args.Properties.Any(it => it.IsPipeInput)
+                    ? ", PipeInputReader pipeInput"
+                    : string.Empty,
             },
             Usings = [
                 "System.ComponentModel",
@@ -139,26 +143,26 @@ public class CliCommandGenerator : IIncrementalGenerator
                 "Spectre.Console",
                 "Spectre.Console.Cli",
             ],
-            Content = 
+            Content =
               """
               [Description("{ToolDescription}")]
-              internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
+              internal sealed partial class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler{PipeInputParameter})
                   : AsyncCommand<{TypeName}.Settings>
               {
                   {SettingsType}
-                  
+
                   protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
                   {
                       ToolDefinition definition = toolProvider.GetToolDefinition<{ToolType}>();
-                      
+
                       try
                       {
                           var tool = toolProvider.GetTool<{ToolType}>();
-                          
+
                           {SettingsMapping}
-                      
+
                           var result = await tool.RunAsync(args, cancellationToken);
-                          
+
                           return responseHandler.ProcessResponse(result, definition, settings);
                       }
                       catch (Exception ex)
@@ -169,7 +173,28 @@ public class CliCommandGenerator : IIncrementalGenerator
               }
               """
         };
-    
+
+    /// <summary>
+    /// Where a command takes each argument from. The [PipeInput] argument is the one given on the
+    /// command line, or else whatever was piped into stdin - <c>PipeInputReader</c> decides, so no
+    /// command reads stdin itself. Content is streamed; text is read whole.
+    /// </summary>
+    private static string SettingsValue(PropertyModel property)
+    {
+        var value = $"settings.{property.Name}";
+        if (!property.IsPipeInput)
+        {
+            return ToolEmitter.ArgumentValue(property, value);
+        }
+
+        if (property.IsContent)
+        {
+            return $"pipeInput.ReadContent({value})";
+        }
+
+        return property.NonNullableType == "string" ? $"pipeInput.ReadText({value})" : value;
+    }
+
     private static string GenerateSettingsClass(ToolModel tool)
     {
         var properties = new StringBuilder();
@@ -183,10 +208,12 @@ public class CliCommandGenerator : IIncrementalGenerator
             // otherwise every unspecified option silently becomes default(T).
             // The property initializer is not enough on its own: Spectre binds absent
             // flags to false, and only honours the default through DefaultValueAttribute.
-            var initializer = property.DefaultValue ?? "default!";
-            var defaultAttribute = property.DefaultValue is null or "null"
+            // A content argument is bound as text, so a default of the tool's own type does not apply.
+            var defaultValue = property.IsContent ? null : property.DefaultValue;
+            var initializer = defaultValue ?? "default!";
+            var defaultAttribute = defaultValue is null or "null"
                 ? string.Empty
-                : $"[System.ComponentModel.DefaultValue({property.DefaultValue})]\n            ";
+                : $"[System.ComponentModel.DefaultValue({defaultValue})]\n            ";
 
             var letter = property.Name[0].ToString().ToLowerInvariant();
             var template = letter + property.Name.Substring(1);
@@ -196,7 +223,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [Description("{{description}}")]
                                                 [CommandArgument(0, "[{{template}}]")]
-                                                public {{property.Type}} {{property.Name}} { get; set; } = {{initializer}};
+                                                public {{property.BindingType}} {{property.Name}} { get; set; } = {{initializer}};
 
                                         """);
             }
@@ -211,7 +238,7 @@ public class CliCommandGenerator : IIncrementalGenerator
                 properties.AppendLine($$"""
                                                 [Description("{{description}}")]
                                                 [CommandOption("{{template}}")]
-                                                {{defaultAttribute}}public {{property.Type}} {{property.Name}} { get; set; } = {{initializer}};
+                                                {{defaultAttribute}}public {{property.BindingType}} {{property.Name}} { get; set; } = {{initializer}};
 
                                         """);
             }

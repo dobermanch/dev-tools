@@ -14,7 +14,15 @@ public static class ToolEmitter
     /// A flat, settable class mirroring the tool's <c>Args</c> or <c>Result</c>, carrying each
     /// property's authored description so it reaches the OpenAPI and MCP schemas.
     /// </summary>
-    public static string DataType(ToolModel tool, TypeModel type, string suffix)
+    /// <param name="typeOf">
+    /// The declared type of a property, when a frontend binds it as something other than
+    /// <see cref="PropertyModel.BindingType"/> - an upload, say.
+    /// </param>
+    public static string DataType(
+        ToolModel tool,
+        TypeModel type,
+        string suffix,
+        Func<PropertyModel, string>? typeOf = null)
     {
         var properties = new StringBuilder();
         var toolName = ToolNaming.BaseName(tool.TypeName);
@@ -22,10 +30,18 @@ public static class ToolEmitter
         foreach (var property in type.Properties)
         {
             var description = ToolText.EscapeLiteral(property.Description);
+            var propertyType = typeOf?.Invoke(property) ?? property.BindingType;
+
+            // A value the caller leaves out has to keep the tool's own default, as it does on the CLI and
+            // in MCP; with default! an omitted argument arrived as default(T) instead. Only where the
+            // declared type is the tool's own - a default does not carry over to an upload.
+            var initializer = propertyType == property.Type && property.DefaultValue is not null
+                ? property.DefaultValue
+                : "default!";
 
             properties.AppendLine($$"""
                                             [Description("{{description}}")]
-                                            public {{property.Type}} {{property.Name}} { get; set; } = default!;
+                                            public {{propertyType}} {{property.Name}} { get; set; } = {{initializer}};
 
                                     """);
         }
@@ -36,6 +52,13 @@ public static class ToolEmitter
                  {{properties}}    }
                  """;
     }
+
+    /// <summary>
+    /// The expression that hands a frontend's value to the tool. A <c>ToolContent</c> argument arrives
+    /// as text and is wrapped here; anything else passes through unchanged.
+    /// </summary>
+    public static string ArgumentValue(PropertyModel property, string expression)
+        => property.IsContent ? $"global::Dev.Tools.ToolContent.FromText({expression})" : expression;
 
     /// <summary>
     /// <c>var {target} = new {typeName}(...)</c>, using constructor syntax for a positional record

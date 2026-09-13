@@ -9,6 +9,23 @@ namespace Dev.Tools.Api.Core;
 public abstract class EndpointBase : ControllerBase
 {
     /// <summary>
+    /// The largest request a file upload may be. The form is buffered before the action runs, so a larger
+    /// request is refused before any tool sees it rather than tying up the server.
+    /// </summary>
+    protected const long MaxUploadBytes = 10 * 1024 * 1024;
+
+    /// <summary>An uploaded file as tool content, read when the tool reads it.</summary>
+    protected static ToolContent ContentOf(IFormFile? file)
+        => file is null ? ToolContent.FromText(string.Empty) : ToolContent.FromStream(file.OpenReadStream);
+
+    /// <summary>
+    /// An uploaded file as text, for a tool that takes a string - decoded the way tool content decodes
+    /// text, so a file reads the same whichever kind of tool it goes to.
+    /// </summary>
+    protected static Task<string> ReadTextAsync(IFormFile? file, CancellationToken cancellationToken)
+        => ContentOf(file).ReadAllTextAsync(cancellationToken);
+
+    /// <summary>
     /// The response for a tool that reported errors. 400 when the input was at fault; 500 when the tool
     /// failed unexpectedly (<see cref="ErrorCode.Unknown"/>), which is the server's problem, not the
     /// caller's. Every error is listed, with its target spelled the way the request body spells it.

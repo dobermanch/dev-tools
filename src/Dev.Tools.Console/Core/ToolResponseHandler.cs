@@ -3,8 +3,11 @@ using Spectre.Console;
 
 namespace Dev.Tools.Console.Core;
 
-internal sealed class ToolResponseHandler : IToolResponseHandler
+internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResponseHandler
 {
+    // Where results go: stdout, unless a test captures them.
+    private readonly TextWriter _output = output ?? System.Console.Out;
+
     private const int ToolFailedExitCode = 1;
 
     // The shell convention for a command interrupted by Ctrl+C.
@@ -35,11 +38,11 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
         if (outputProperty != null)
         {
             var value = result.GetType().GetProperty(outputProperty.Name)!.GetValue(result, null);
-            System.Console.Out.WriteLine(FormatOutput(value));
+            _output.WriteLine(FormatOutput(value));
         }
         else
         {
-            System.Console.Out.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
+            _output.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
             {
                 WriteIndented = true
             }));

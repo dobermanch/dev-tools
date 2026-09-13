@@ -24,6 +24,9 @@ public class ApiEndpointGenerator : IIncrementalGenerator
     {
         var requestType = ToolNaming.RequestType(tool.TypeName);
         var responseType = ToolNaming.ResponseType(tool.TypeName);
+        var title = ToolText.EscapeLiteral(tool.DisplayTitle);
+        var description = ToolText.EscapeLiteral(tool.Description);
+        var uploadable = tool.Args.Properties.FirstOrDefault(it => it.IsPipeInput && (it.IsContent || it.NonNullableType == "string"));
 
         return new CodeBlock
         {
@@ -34,13 +37,21 @@ public class ApiEndpointGenerator : IIncrementalGenerator
             {
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
-                ["ToolTitle"] = ToolText.EscapeLiteral(tool.DisplayTitle),
-                ["ToolDescription"] = ToolText.EscapeLiteral(tool.Description),
+                ["ToolTitle"] = title,
+                ["ToolDescription"] = description,
                 ["ToolArgsType"] = requestType,
+                ["ToolArgs"] = tool.Args.Type,
                 ["ToolResultType"] = responseType,
                 ["RequestType"] = ToolEmitter.DataType(tool, tool.Args, "Request"),
                 ["RequestTypeMapping"] = ToolEmitter.Mapping(
-                    tool.Args, tool.Args.Type, "args", it => $"request.{it.Name}"),
+                    tool.Args, tool.Args.Type, "args", it => ToolEmitter.ArgumentValue(it, $"request.{it.Name}")),
+                ["FormRequestType"] = uploadable is null
+                    ? string.Empty
+                    : ToolEmitter.DataType(tool, tool.Args, "FormRequest",
+                        typeOf: it => it.IsPipeInput ? "IFormFile" : it.BindingType),
+                ["FormAction"] = uploadable is null
+                    ? string.Empty
+                    : GenerateFormAction(tool, title, description, responseType),
                 ["ResultType"] = ToolEmitter.DataType(tool, tool.Result, "Response"),
                 ["ResultTypeMapping"] = ToolEmitter.Mapping(
                     tool.Result, responseType, "response", it => $"result.{it.Name}",
@@ -59,9 +70,9 @@ public class ApiEndpointGenerator : IIncrementalGenerator
               public class {TypeName}(Dev.Tools.Providers.IToolsProvider toolProvider) : EndpointBase
               {
                   {RequestType}
-                  
+                  {FormRequestType}
                   {ResultType}
-                    
+
                   [HttpPost("{ToolName}")]
                   [EndpointSummary("{ToolTitle}")]
                   [EndpointDescription("{ToolDescription}")]
@@ -70,12 +81,17 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                   [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
                   public async Task<IActionResult> HandleAsync([FromBody] {ToolArgsType} request, CancellationToken cancellationToken)
                   {
+                      {RequestTypeMapping}
+
+                      return await RunToolAsync(args, cancellationToken);
+                  }
+                  {FormAction}
+                  private async Task<IActionResult> RunToolAsync({ToolArgs} args, CancellationToken cancellationToken)
+                  {
                       // No catch here: an unexpected exception goes to the host's exception handler, which
                       // logs it and answers with a detail-free 500. Catching it here used to return
                       // exception.Message to the client.
                       var tool = toolProvider.GetTool<{ToolType}>();
-
-                      {RequestTypeMapping}
 
                       var result = await tool.RunAsync(args, cancellationToken);
                       if (result.HasErrors)
@@ -90,5 +106,41 @@ public class ApiEndpointGenerator : IIncrementalGenerator
               }
               """
         };
+    }
+
+    /// <summary>
+    /// The same tool taking its piped argument as an uploaded file, at <c>tools/{name}/file</c>. A tool
+    /// that takes a string gets the file's text; a tool that takes <c>ToolContent</c> gets the file
+    /// itself. The other arguments are form fields.
+    ///
+    /// Not the JSON route with a second content type: routing tells the two apart, but the OpenAPI
+    /// document keeps one operation per path and method, and the JSON body disappeared from it.
+    /// </summary>
+    private static string GenerateFormAction(ToolModel tool, string title, string description, string responseType)
+    {
+        var formRequestType = ToolNaming.BaseName(tool.TypeName) + "FormRequest";
+        var mapping = ToolEmitter.Mapping(tool.Args, tool.Args.Type, "args", it =>
+            !it.IsPipeInput ? ToolEmitter.ArgumentValue(it, $"request.{it.Name}")
+            : it.IsContent ? $"ContentOf(request.{it.Name})"
+            : $"await ReadTextAsync(request.{it.Name}, cancellationToken)");
+
+        return $$"""
+
+                     [HttpPost("{{tool.Name}}/file")]
+                     [Consumes(MediaTypeNames.Multipart.FormData)]
+                     [RequestSizeLimit(MaxUploadBytes)]
+                     [EndpointSummary("{{title}}")]
+                     [EndpointDescription("{{description}}")]
+                     [ProducesResponseType<{{responseType}}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+                     [ProducesResponseType<ToolProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+                     [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
+                     public async Task<IActionResult> HandleFormAsync([FromForm] {{formRequestType}} request, CancellationToken cancellationToken)
+                     {
+                         {{mapping}}
+
+                         return await RunToolAsync(args, cancellationToken);
+                     }
+
+                 """;
     }
 }

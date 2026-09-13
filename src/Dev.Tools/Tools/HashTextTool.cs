@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+using System.Buffers;
+using System.Security.Cryptography;
 using Dev.Tools.Cryptography;
 
 namespace Dev.Tools.Tools;
@@ -7,7 +8,10 @@ namespace Dev.Tools.Tools;
     Name = "hash",
     Title = "Hash Generator",
     Description =
-        "Generates a cryptographic hash of text using MD5, SHA-1, SHA-256, SHA-384 or SHA-512. The input is hashed as UTF-8 bytes and the digest is returned as lowercase hexadecimal.",
+        """
+        Generates a cryptographic hash of text or a file using MD5, SHA-1, SHA-256, SHA-384 or SHA-512,
+        returned as lowercase hexadecimal. Text is hashed as UTF-8 bytes, a file as its raw bytes.
+        """,
     Usage =
         "Hashing only - there is no way back from a digest to the text. MD5 and SHA-1 are broken for security purposes; use them only for checksums and compatibility, and prefer SHA-256 or stronger otherwise.",
     Aliases = [],
@@ -16,27 +20,31 @@ namespace Dev.Tools.Tools;
 )]
 public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args, HashTextTool.Result>
 {
-    protected override Result Execute(Args args)
+    private const int BufferSize = 81_920;
+
+    protected override async Task<Result> ExecuteAsync(Args args, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(args.Text))
+        // Overriding ExecuteAsync skips the check ToolBase makes before running a tool.
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (args.Text is null)
         {
             throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
         }
 
-        byte[] hash;
+        byte[]? hash;
         try
         {
-            var bytes = Encoding.UTF8.GetBytes(args.Text);
+            // The algorithm is settled before any content is read, so a bad one does not consume stdin first.
             hash = args.Algorithm switch
             {
-                HashAlgorithm.Md5 => ComputeMd5(bytes),
-                HashAlgorithm.Sha1 => ComputeSha1(bytes),
-                HashAlgorithm.Sha256 => ComputeSha256(bytes),
-                HashAlgorithm.Sha384 => ComputeSha384(bytes),
-                HashAlgorithm.Sha512 => ComputeSha512(bytes),
-                _ => throw new ArgumentOutOfRangeException()
+                HashAlgorithm.Md5 => await ComputeMd5Async(args.Text, cancellationToken),
+                HashAlgorithm.Sha1 => await ComputeAsync(args.Text, HashAlgorithmName.SHA1, cancellationToken),
+                HashAlgorithm.Sha256 => await ComputeAsync(args.Text, HashAlgorithmName.SHA256, cancellationToken),
+                HashAlgorithm.Sha384 => await ComputeAsync(args.Text, HashAlgorithmName.SHA384, cancellationToken),
+                HashAlgorithm.Sha512 => await ComputeAsync(args.Text, HashAlgorithmName.SHA512, cancellationToken),
+                _ => throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Algorithm))
             };
-
         }
         catch (CryptographicException)
         {
@@ -44,34 +52,51 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
             // decryption failure, which is what it used to report.
             throw new ToolException(ErrorCode.Unknown);
         }
-        catch (ArgumentOutOfRangeException)
+
+        // Empty text and an empty file alike: nobody asks for the hash of nothing on purpose.
+        if (hash is null)
         {
-            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Algorithm));    
-        }   
-        
-        var result = new StringBuilder();
-        foreach (var ch in hash)
-        {
-            result.Append(ch.ToString("x2"));
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
         }
 
-        return new Result(result.ToString());
+        return new Result(Convert.ToHexStringLower(hash));
     }
 
-    private byte[] ComputeMd5(byte[] data) 
-        => md5Hash.ComputeHash(data);
+    // IMd5Hash hashes a whole buffer - the WebAssembly host substitutes a managed implementation that
+    // works that way - so MD5 reads the content into memory.
+    private async Task<byte[]?> ComputeMd5Async(ToolContent content, CancellationToken cancellationToken)
+    {
+        var bytes = await content.ReadAllBytesAsync(cancellationToken);
+        return bytes.Length == 0 ? null : md5Hash.ComputeHash(bytes);
+    }
 
-    private byte[] ComputeSha1(byte[] data) 
-        => SHA1.HashData(data);
+    // The SHA family hashes as it reads, so a file of any size is never held in memory.
+    private static async Task<byte[]?> ComputeAsync(
+        ToolContent content,
+        HashAlgorithmName algorithm,
+        CancellationToken cancellationToken)
+    {
+        using var hash = IncrementalHash.CreateHash(algorithm);
+        await using var stream = content.OpenRead();
 
-    private byte[] ComputeSha256(byte[] data) 
-        => SHA256.HashData(data);
+        var buffer = ArrayPool<byte>.Shared.Rent(BufferSize);
+        try
+        {
+            var total = 0L;
+            int read;
+            while ((read = await stream.ReadAsync(buffer.AsMemory(), cancellationToken)) > 0)
+            {
+                hash.AppendData(buffer, 0, read);
+                total += read;
+            }
 
-    private byte[] ComputeSha384(byte[] data)
-        => SHA384.HashData(data);
-
-    private byte[] ComputeSha512(byte[] data) 
-        => SHA512.HashData(data);
+            return total == 0 ? null : hash.GetHashAndReset();
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
+    }
 
     public enum HashAlgorithm
     {
@@ -93,8 +118,8 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
 
     public sealed record Args(
         [property: PipeInput,
-                   Description("Text to hash, read as UTF-8")]
-        string Text,
+                   Description("Text or file content to hash; text is read as UTF-8")]
+        ToolContent Text,
         [property: Description("Hashing algorithm to use")]
         HashAlgorithm Algorithm = HashAlgorithm.Md5
     );

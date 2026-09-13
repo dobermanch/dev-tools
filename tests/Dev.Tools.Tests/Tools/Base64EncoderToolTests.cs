@@ -59,4 +59,25 @@ public class Base64EncoderToolTests
         await Assert.That(result.HasErrors).IsTrue();
         await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
     }
+
+    [Test]
+    public async Task ShouldEncodeTheRawBytes_WhenContentIsBinary()
+    {
+        // Not valid UTF-8: text in, text out would have replaced 0xFF before encoding it.
+        var args = new Base64EncoderTool.Args(ToolContent.FromBytes(new byte[] { 0xFF, 0x00, 0x0A }));
+
+        var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Text).IsEqualTo("/wAK");
+    }
+
+    [Test]
+    public async Task ShouldReturnEmptyErrorCode_WhenStreamIsEmpty()
+    {
+        var args = new Base64EncoderTool.Args(ToolContent.FromStream(() => new MemoryStream()));
+
+        var result = await new Base64EncoderTool().RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
+    }
 }

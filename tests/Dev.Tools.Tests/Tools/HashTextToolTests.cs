@@ -48,4 +48,42 @@ public class HashTextToolTests
 
         await Assert.That(result.Data).IsEqualTo(expectedHash);
     }
+
+    // 0xFF 0x00 0x0A is not valid UTF-8, so these only pass if the bytes are hashed as they are.
+    [Test]
+    [Arguments(HashTextTool.HashAlgorithm.Md5, "99691ca21317835731e3902aeae5edf0")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha256, "c933d2fe5a3675b959c287c271739ac2db888cc8c0d68c1c5b58ac5b80f5d735")]
+    public async Task WhenContentIsBinary_ShouldHashTheRawBytes(HashTextTool.HashAlgorithm algorithm, string expectedHash)
+    {
+        var args = new HashTextTool.Args(ToolContent.FromBytes(new byte[] { 0xFF, 0x00, 0x0A }), algorithm);
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo(expectedHash);
+    }
+
+    // What md5sum and sha256sum print for "hello\n": a stream is hashed whole, trailing line break included.
+    [Test]
+    [Arguments(HashTextTool.HashAlgorithm.Md5, "b1946ac92492d2347c6235b4d2611184")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha256, "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03")]
+    public async Task WhenContentIsAStream_ShouldHashAllOfIt(HashTextTool.HashAlgorithm algorithm, string expectedHash)
+    {
+        var args = new HashTextTool.Args(ToolContent.FromStream(() => new MemoryStream("hello\n"u8.ToArray())), algorithm);
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo(expectedHash);
+    }
+
+    [Test]
+    [Arguments(HashTextTool.HashAlgorithm.Md5)]
+    [Arguments(HashTextTool.HashAlgorithm.Sha256)]
+    public async Task WhenStreamIsEmpty_ShouldReturnFailure(HashTextTool.HashAlgorithm algorithm)
+    {
+        var args = new HashTextTool.Args(ToolContent.FromStream(() => new MemoryStream()), algorithm);
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
+    }
 }

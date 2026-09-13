@@ -41,8 +41,10 @@ public class McpToolGenerator : IIncrementalGenerator
                 ["ToolDescription"] = ToolText.EscapeLiteral(tool.ModelDescription),
                 ["ToolResultType"] = responseType,
                 ["ToolArgsParameters"] = GenerateIndividualParameters(tool.Args),
+                // A content argument is text here: MCP takes no file paths, which on the HTTP transport
+                // would let any client read files on the server.
                 ["RequestTypeMapping"] = ToolEmitter.Mapping(
-                    tool.Args, tool.Args.Type, "args", it => ToParamName(it.Name)),
+                    tool.Args, tool.Args.Type, "args", it => ToolEmitter.ArgumentValue(it, ToParamName(it.Name))),
                 ["ResultType"] = ToolEmitter.DataType(tool, tool.Result, "Response"),
                 ["ResultTypeMapping"] = ToolEmitter.Mapping(
                     tool.Result, responseType, "response", it => $"result.{it.Name}",
@@ -126,9 +128,10 @@ public class McpToolGenerator : IIncrementalGenerator
             args.Properties.Select(property =>
             {
                 var description = ToolText.EscapeLiteral(property.Description + EnumOptions(args, property));
-                var declaration = $"[Description(\"{description}\")] {property.Type} {ToParamName(property.Name)}";
+                var declaration = $"[Description(\"{description}\")] {property.BindingType} {ToParamName(property.Name)}";
 
-                return property.DefaultValue is null
+                // A content argument is bound as text, so a default of the tool's own type does not apply.
+                return property.DefaultValue is null || property.IsContent
                     ? declaration
                     : declaration + $" = {property.DefaultValue}";
             }));

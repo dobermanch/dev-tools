@@ -31,7 +31,7 @@ internal partial class ToolsCatalog
                 Name: "Args",
                 DataType: typeof(Dev.Tools.Tools.SampleEncoderTool.Args),
                 Properties: [
-                    new ToolDefinition.TypeProperty("Text", typeof(string), false, false, true, false, "Text to encode, read as UTF-8", ""),
+                    new ToolDefinition.TypeProperty("Text", typeof(Dev.Tools.ToolContent), false, false, true, false, "Text or file content to encode", ""),
                     new ToolDefinition.TypeProperty("Padding", typeof(Dev.Tools.Tools.SampleEncoderTool.Padding), false, false, false, false, "What to do with padding", ""),
                     new ToolDefinition.TypeProperty("UrlSafe", typeof(bool), false, false, false, false, "Use the URL-safe alphabet", "URL Safe")
                 ]

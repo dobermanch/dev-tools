@@ -21,7 +21,7 @@ internal static class CommandConfigurator
         ConfigureCommand<SampleEncoderCommand>(services, configurator, "sample-encoder", "se");
         ConfigureCommand<SampleParserCommand>(services, configurator, "sample-parser");
     }
-    
+
     private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name, params string[] aliases)
         where T : class, ICommand
     {

@@ -252,7 +252,7 @@ Everything is `string` today, end to end: `Args`/`Result` hold whole payloads, a
 
 #### §5e-progress. Phase 5 scope and decisions (agreed 2026-09-12)
 
-**The principle: a tool does not care where its data came from.** Typed on the command line, piped, uploaded, loaded from a file, or — later — produced by the previous step of a [tool flow](proposals/tool-flow.md). Loading files is each frontend's business, and every frontend has its own way to do it, so every frontend offers file input for every `[PipeInput]`, whatever its type:
+**The principle: a tool does not care where its data came from.** Typed on the command line, piped, uploaded, loaded from a file, or — later — produced by the previous step of a [tool flow](proposals/tool-flow.md). Loading files is each frontend's business, and every frontend has its own way to do it, so every frontend offers file input for the `[PipeInput]`, whatever its type - the CLI and the API for every tool, the Web UI only where a file makes sense for the tool (a document or encoded data, not a number, a date or a URL):
 
 - a `string` pipe input (`json-formatter`, and most tools) receives the file's text — the tool is unchanged;
 - a `ToolContent` pipe input receives the bytes or a stream — for tools whose data is not text or not whole (certificates, hashing a large file, Base64 of an image).
@@ -266,14 +266,30 @@ Decisions:
 - **Binary output is a later step.** Returning decoded bytes as Base64 inside JSON makes no sense for a Base64 decoder; decide raw `application/octet-stream`, text-when-UTF-8, MCP blob resources and a Web download once the input side is in.
 - `[PipeInput]`/`[PipeOutput]` are the contract the future tool flow connects tools through, so no frontend may reshape a pipe value — see [docs/proposals/tool-flow.md](proposals/tool-flow.md).
 
-Planned as: (1) CLI output and stdin fixes, no new type — **done**; (2) `ToolContent` input, file input across the frontends, `hash` and `base64-encoder` as the reference tools; (3) binary output, `base64-decoder` as the reference — later.
+Planned as: (1) CLI output and stdin fixes, no new type — **done**; (2) `ToolContent` input, file input across the frontends, `hash` and `base64-encoder` as the reference tools — **done**; (3) binary output, `base64-decoder` as the reference — later.
 
 **Step 1 — done.** Two CLI bugs, both found by running it:
 
 - **Piped output was wrapped at 80 columns.** `ToolResponseHandler` printed results with Spectre's `AnsiConsole.WriteLine`, which wraps to the console width — 80 columns when stdout is redirected. Anything longer than a line gained newlines on the way through: 3 000 bytes Base64-encoded came out as 50 lines, and `base64-encoder < file | base64-decoder` returned the file with a newline every 80 bytes (the system `base64 -d` decoded the same encoder output correctly, so the damage was in the printing). Results now go straight to `Console.Out`; Spectre still renders errors and help. The round trip now returns the file plus the one trailing newline the CLI prints.
 - **Stdin was read even when the argument was given**, so a given argument was replaced by piped data (`echo x | dev-tools base64-encoder hello` encoded `x`) and every command hung wherever stdin is redirected but never written to. The argument now wins, and stdin is read only when it is missing. Verified with `(sleep 25) | timeout 20 dev-tools base64-encoder hello`, which printed `aGVsbG8=` and exited 0 before the timeout; it used to hang.
 
-Neither fix has an automated test: there is no Console test project yet. Step 2 needs one for the stdin streaming, and these two cases belong in it.
+Neither fix had an automated test when it landed; step 2 added the Console test project, and both are covered there.
+
+**Step 2 — done.** File and binary input, end to end:
+
+- **`ToolContent`** (core): text, bytes, or a stream opened when the tool reads it. `ReadAllBytesAsync`, `ReadAllTextAsync` (UTF-8, a byte order mark honoured, invalid bytes become U+FFFD rather than failing) and `OpenRead()`. A string converts implicitly, so every existing caller and test compiles unchanged.
+- **`hash` and `base64-encoder`** take it. The SHA family hashes as it reads (`IncrementalHash`), so a file of any size is never held in memory; MD5 reads the content whole, because `IMd5Hash` hashes a buffer and the WebAssembly host substitutes a managed implementation that works that way. Empty content from any source is `TextEmpty`, as empty text was. Text hashes and encodes exactly as before.
+- **CLI:** `PipeInputReader` replaces `StdinInterceptor` and its reflection over settings. A string pipe input is read whole and trimmed as before; content is streamed from stdin untrimmed, so `dev-tools hash < file` matches `sha256sum file`. Only commands with a pipe input take the reader.
+- **API:** the JSON route is unchanged. Every tool whose pipe input is a string or content also gets `POST /tools/{name}/file`, multipart/form-data, the file as the pipe input's part and the other arguments as form fields; a string tool gets the file's text. A request over 10 MB (`EndpointBase.MaxUploadBytes`) is refused while the form is read, before the tool runs. The upload was first put on the JSON route with a second content type: routing told the two apart, but the OpenAPI document keeps one operation per path and method and the JSON body vanished from it, hence the separate route. The refusal is a 400 validation problem whose message is the framework's ("Request body too large. The max request body size is 10485760 bytes.") rather than a 413 — it names nothing internal, so it was left.
+- **MCP:** the parameter stays a string; text only.
+- **Generators:** `PropertyModel.IsContent` and `BindingType` (the type a frontend binds - `string` for content); `ToolEmitter.ArgumentValue` wraps text into content.
+- **Analyzer:** `DT1013` — `ToolContent` only on the `[PipeInput]` argument; `DT1012` accepts it.
+- **Web:** `DtTextField` gains `AllowFileInput` - a load-file button whose file arrives as if typed, capped at the field's `MaxLength` - and `OnFileLoaded`, which hands a page the file's bytes as `ToolContent` instead, up to 10 MB. Unlike the CLI and the API, the Web UI offers it only where a file makes sense - `base64-encoder`, `base64-decoder`, `hash`, `json-formatter`, `xml-formatter`, `text-encryptor`, `text-decryptor` - and not for short values such as a number, a date, a URL or a JWT; `hash` and `base64-encoder` take the bytes. Built, **not exercised in a browser**; that `IncrementalHash` runs under WebAssembly is also unverified.
+- **uk-UA:** the four tool strings whose English changed are retranslated.
+
+Found on the way: **API request DTOs dropped every argument default.** They were emitted with `= default!`, so a JSON body that left an option out ran the tool with `default(T)` - the same bug the CLI had before Phase 0. The DTOs now carry the tool's own defaults; `POST /tools/token-generator {}` returns a 15-character token.
+
+Verified: 7 Console tests (argument wins without touching stdin, trimming, untrimmed content, unwrapped output), `ToolContentTests`, binary and stream cases for both tools, two `DT1013` analyzer tests, re-verified generator snapshots. Live: CLI hash and Base64 of a 200 KB random file against `sha256sum`, `md5sum` and `base64 -d`; API JSON and multipart uploads, OpenAPI showing both operations, the size limit and a missing file; MCP over stdio.
 
 **Do not convert every tool to streams.** Recommend a payload abstraction used only by tools that need it:
 
@@ -371,7 +387,7 @@ Each phase is independently shippable.
 
 **Phase 5 — `ToolContent` payloads.** Core type + implicit string conversion; generator binding per frontend; CLI stdin streaming, including the stdin-overrides-argument bug noted in §5e; migrate hash/base64 as reference cases.
 
-*In progress.* Scope and decisions agreed 2026-09-12 (§5e-progress): every frontend offers file input for every `[PipeInput]`, `string` tools get the text and `ToolContent` tools the bytes. Planned as three steps: (1) CLI output wrapping and stdin-overrides-argument fixes — **done**; (2) `ToolContent` input with `hash` and `base64-encoder` as reference tools; (3) binary output with `base64-decoder` — later.
+*In progress.* Scope and decisions agreed 2026-09-12 (§5e-progress): every frontend offers file input for every `[PipeInput]`, `string` tools get the text and `ToolContent` tools the bytes. Planned as three steps: (1) CLI output wrapping and stdin-overrides-argument fixes — **done**; (2) `ToolContent` input with `hash` and `base64-encoder` as reference tools — **done**; (3) binary output with `base64-decoder` — later.
 
 **Phase 6 — generic Web page + dependency-light core.** Metadata-driven `ToolPage` with per-tool UI hints and hand-written escape hatch; `Icon` in `[ToolDefinition]`; strip `Microsoft.Extensions.*` from core and move DI wiring to its own package — the precondition for VS Code / browser-extension targets.
 

@@ -159,13 +159,13 @@
     <value>Кодер Base64</value>
   </data>
   <data name="Tools.Base64Encoder.Description" xml:space="preserve">
-    <value>Кодує текст у формат Base64 з опціональним URL-безпечним кодуванням та переносами рядків для сумісності з різними системами</value>
+    <value>Кодує текст або файл у формат Base64 з опціональним URL-безпечним кодуванням та переносами рядків для сумісності з різними системами. Текст кодується як байти UTF-8, файл — як його власні байти.</value>
   </data>
   <data name="Tools.Base64Encoder.Args.Text.Name" xml:space="preserve">
     <value>Текст</value>
   </data>
   <data name="Tools.Base64Encoder.Args.Text.Description" xml:space="preserve">
-    <value>Текст для кодування у формат Base64</value>
+    <value>Текст або вміст файлу для кодування; текст кодується як UTF-8</value>
   </data>
   <data name="Tools.Base64Encoder.Args.InsertLineBreaks.Name" xml:space="preserve">
     <value>Вставити переноси рядків</value>
@@ -386,13 +386,13 @@
     <value>Генератор хешів</value>
   </data>
   <data name="Tools.HashText.Description" xml:space="preserve">
-    <value>Генерує криптографічні хеш-значення з тексту, використовуючи різні алгоритми, включаючи MD5, SHA-1, SHA-256, SHA-384 та SHA-512</value>
+    <value>Генерує криптографічний хеш тексту або файлу за алгоритмом MD5, SHA-1, SHA-256, SHA-384 чи SHA-512 у вигляді шістнадцяткового рядка в нижньому регістрі. Текст хешується як байти UTF-8, файл — як його власні байти.</value>
   </data>
   <data name="Tools.HashText.Args.Text.Name" xml:space="preserve">
     <value>Текст</value>
   </data>
   <data name="Tools.HashText.Args.Text.Description" xml:space="preserve">
-    <value>Текст для генерації хешу</value>
+    <value>Текст або вміст файлу для хешування; текст читається як UTF-8</value>
   </data>
   <data name="Tools.HashText.Args.Algorithm.Name" xml:space="preserve">
     <value>Алгоритм</value>

@@ -90,7 +90,8 @@ public static class ToolModelFactory
                     IsPipeOutput: it.GetAttributes().Any(a => a.AttributeClass?.Name == "PipeOutputAttribute"),
                     Description: AttributeText(it, DescriptionAttribute),
                     DisplayName: AttributeText(it, DisplayNameAttribute),
-                    DefaultValue: defaults.TryGetValue(it.Name, out var value) ? value : null))
+                    DefaultValue: defaults.TryGetValue(it.Name, out var value) ? value : null,
+                    IsContent: it.Type.ToDisplayString().TrimEnd('?') == CodeDefinitions.ToolContentTypeName))
                 .ToEquatableArray(),
             Enums: ReadEnums(properties));
     }

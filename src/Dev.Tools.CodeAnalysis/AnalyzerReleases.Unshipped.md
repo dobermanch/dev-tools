@@ -19,3 +19,4 @@
 | DT1010  | Declaration | Error    | A tool may pipe at most one result                                    |
 | DT1011  | Declaration | Error    | Tool arguments must have one public constructor                       |
 | DT1012  | Declaration | Warning  | Tool argument types must be bindable by every frontend                |
+| DT1013  | Declaration | Error    | ToolContent is only supported on the piped argument                   |

@@ -19,12 +19,12 @@ namespace Dev.Tools.Console.Commands;
 
 [System.CodeDom.Compiler.GeneratedCode("Dev.Tools.CodeAnalysis.Generators.CliCommandGenerator", "1.0.0")]
 [Description("Encodes text.")]
-internal sealed partial class SampleEncoderCommand(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
+internal sealed partial class SampleEncoderCommand(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler, PipeInputReader pipeInput)
     : AsyncCommand<SampleEncoderCommand.Settings>
 {
     public sealed class Settings : SettingsBase
     {
-        [Description("Text to encode, read as UTF-8")]
+        [Description("Text or file content to encode")]
         [CommandArgument(0, "[text]")]
         public string Text { get; set; } = default!;
 
@@ -39,23 +39,23 @@ internal sealed partial class SampleEncoderCommand(Dev.Tools.Providers.IToolsPro
             public bool UrlSafe { get; set; } = false;
 
     }
-    
+
     protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         ToolDefinition definition = toolProvider.GetToolDefinition<SampleEncoderTool>();
-        
+
         try
         {
             var tool = toolProvider.GetTool<SampleEncoderTool>();
-            
+
             var args = new SampleEncoderTool.Args(
-               Text: settings.Text,
+               Text: pipeInput.ReadContent(settings.Text),
                     Padding: settings.Padding,
                     UrlSafe: settings.UrlSafe
            );
-        
+
             var result = await tool.RunAsync(args, cancellationToken);
-            
+
             return responseHandler.ProcessResponse(result, definition, settings);
         }
         catch (Exception ex)

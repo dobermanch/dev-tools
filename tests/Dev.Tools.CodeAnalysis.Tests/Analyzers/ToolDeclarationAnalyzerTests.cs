@@ -26,6 +26,8 @@ public class ToolDeclarationAnalyzerTests
         public sealed class PipeInputAttribute : System.Attribute {}
 
         public sealed class PipeOutputAttribute : System.Attribute {}
+
+        public sealed class ToolContent {}
         """;
 
     private static CSharpAnalyzerTest<ToolDeclarationAnalyzer, DefaultVerifier> Analyze(
@@ -556,6 +558,55 @@ public class ToolDeclarationAnalyzerTests
                       [property: System.ComponentModel.Description("d")] System.Collections.Generic.IList<string> Codes);
               }
               """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_report_diagnostic_When_the_piped_argument_is_content()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, object>
+              {
+                  public sealed record Args(
+                      [property: PipeInput, System.ComponentModel.Description("d")] ToolContent Input,
+                      [property: System.ComponentModel.Description("d")] bool Flag);
+              }
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_content_is_not_the_piped_argument()
+    {
+        // Only the piped argument has a frontend that can fill it from a file, and there are no content results yet.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does a thing")]
+              public sealed class MyClass1 : ITool<MyClass1.Args, MyClass1.Result>
+              {
+                  public sealed record Args(
+                      [property: PipeInput, System.ComponentModel.Description("d")] string Text,
+                      [property: System.ComponentModel.Description("d")] ToolContent {|#0:Attachment|});
+
+                  public sealed record Result(
+                      [property: PipeOutput, System.ComponentModel.Description("d")] ToolContent {|#1:Output|});
+              }
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.MisplacedContentRule)
+            .WithArguments("Attachment", "Args")
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.MisplacedContentRule)
+            .WithArguments("Output", "Result")
+            .WithLocation(1));
 
         await context.RunAsync();
     }

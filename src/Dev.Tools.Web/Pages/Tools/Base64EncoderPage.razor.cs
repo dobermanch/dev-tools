@@ -1,3 +1,4 @@
+using Dev.Tools.Web.Components.Inputs;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
@@ -11,6 +12,9 @@ public partial class Base64EncoderPage : ComponentBase
     private readonly Args _args = new();
     private Base64EncoderTool.Result _result = new();
     private IStringLocalizer _localizer = null!;
+
+    // What a loaded file supplied, until the user types again. Kept, so changing an option re-encodes it.
+    private ToolContent? _file;
 
     [Inject] private WebContext Context { get; set; } = null!;
 
@@ -26,21 +30,35 @@ public partial class Base64EncoderPage : ComponentBase
     private async Task OnStringToEncodeValueChangedAsync(string value)
     {
         _args.Text = value;
-        _result = await _tool.RunAsync(
-            new Base64EncoderTool.Args(_args.Text, _args.InsertLineBreaks, _args.UrlSafe),
-            CancellationToken.None);
+        _file = null;
+        await EncodeAsync();
+    }
+
+    // A file is encoded as its bytes, not as text; the field empties, and says which file it was.
+    private async Task OnFileLoadedAsync(LoadedFile file)
+    {
+        _args.Text = string.Empty;
+        _file = file.Content;
+        await EncodeAsync();
     }
 
     private async Task OnUrlSafeValueChangedAsync(bool value)
     {
         _args.UrlSafe = value;
-        await OnStringToEncodeValueChangedAsync(_args.Text!);
+        await EncodeAsync();
     }
 
     private async Task OnInsertLineBreaksValueChangedAsync(bool value)
     {
         _args.InsertLineBreaks = value;
-        await OnStringToEncodeValueChangedAsync(_args.Text!);
+        await EncodeAsync();
+    }
+
+    private async Task EncodeAsync()
+    {
+        _result = await _tool.RunAsync(
+            new Base64EncoderTool.Args(_file ?? _args.Text, _args.InsertLineBreaks, _args.UrlSafe),
+            CancellationToken.None);
     }
 
     record Args

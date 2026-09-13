@@ -22,24 +22,35 @@ public class SampleEncoderEndpoint(Dev.Tools.Providers.IToolsProvider toolProvid
 {
     public sealed class SampleEncoderRequest
     {
-        [Description("Text to encode, read as UTF-8")]
+        [Description("Text or file content to encode")]
         public string Text { get; set; } = default!;
 
         [Description("What to do with padding")]
-        public Dev.Tools.Tools.SampleEncoderTool.Padding Padding { get; set; } = default!;
+        public Dev.Tools.Tools.SampleEncoderTool.Padding Padding { get; set; } = Dev.Tools.Tools.SampleEncoderTool.Padding.Keep;
 
         [Description("Use the URL-safe alphabet")]
-        public bool UrlSafe { get; set; } = default!;
+        public bool UrlSafe { get; set; } = false;
 
     }
-    
+    public sealed class SampleEncoderFormRequest
+    {
+        [Description("Text or file content to encode")]
+        public IFormFile Text { get; set; } = default!;
+
+        [Description("What to do with padding")]
+        public Dev.Tools.Tools.SampleEncoderTool.Padding Padding { get; set; } = Dev.Tools.Tools.SampleEncoderTool.Padding.Keep;
+
+        [Description("Use the URL-safe alphabet")]
+        public bool UrlSafe { get; set; } = false;
+
+    }
     public sealed class SampleEncoderResponse
     {
         [Description("The encoded text")]
         public string Text { get; set; } = default!;
 
     }
-      
+
     [HttpPost("sample-encoder")]
     [EndpointSummary("Sample Encoder")]
     [EndpointDescription("Encodes text.\n\nA second paragraph the CLI list has no room for.")]
@@ -48,16 +59,40 @@ public class SampleEncoderEndpoint(Dev.Tools.Providers.IToolsProvider toolProvid
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
     public async Task<IActionResult> HandleAsync([FromBody] SampleEncoderRequest request, CancellationToken cancellationToken)
     {
+        var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
+               Text: global::Dev.Tools.ToolContent.FromText(request.Text),
+                    Padding: request.Padding,
+                    UrlSafe: request.UrlSafe
+           );
+
+        return await RunToolAsync(args, cancellationToken);
+    }
+    
+    [HttpPost("sample-encoder/file")]
+    [Consumes(MediaTypeNames.Multipart.FormData)]
+    [RequestSizeLimit(MaxUploadBytes)]
+    [EndpointSummary("Sample Encoder")]
+    [EndpointDescription("Encodes text.\n\nA second paragraph the CLI list has no room for.")]
+    [ProducesResponseType<SampleEncoderResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ToolProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
+    public async Task<IActionResult> HandleFormAsync([FromForm] SampleEncoderFormRequest request, CancellationToken cancellationToken)
+    {
+        var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
+               Text: ContentOf(request.Text),
+                    Padding: request.Padding,
+                    UrlSafe: request.UrlSafe
+           );
+
+        return await RunToolAsync(args, cancellationToken);
+    }
+
+    private async Task<IActionResult> RunToolAsync(Dev.Tools.Tools.SampleEncoderTool.Args args, CancellationToken cancellationToken)
+    {
         // No catch here: an unexpected exception goes to the host's exception handler, which
         // logs it and answers with a detail-free 500. Catching it here used to return
         // exception.Message to the client.
         var tool = toolProvider.GetTool<SampleEncoderTool>();
-
-        var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
-               Text: request.Text,
-                    Padding: request.Padding,
-                    UrlSafe: request.UrlSafe
-           );
 
         var result = await tool.RunAsync(args, cancellationToken);
         if (result.HasErrors)

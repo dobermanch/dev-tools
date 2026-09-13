@@ -12,9 +12,9 @@ internal static class ServiceCollectionExtensions
         public IServiceCollection AddCommands(CommandApp app)
         {
             services.AddTransient<IToolResponseHandler, ToolResponseHandler>();
+            services.AddSingleton(new PipeInputReader());
             app.Configure(config =>
             {
-                config.SetInterceptor(new StdinInterceptor());
                 config.SetHelpProvider(new ToolHelpProvider(config.Settings));
                 CommandConfigurator.ConfigureCommands(services, config);
             });

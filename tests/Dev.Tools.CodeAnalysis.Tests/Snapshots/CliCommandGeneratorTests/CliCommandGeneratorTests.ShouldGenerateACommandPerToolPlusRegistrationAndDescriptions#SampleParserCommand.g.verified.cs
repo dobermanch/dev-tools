@@ -19,7 +19,7 @@ namespace Dev.Tools.Console.Commands;
 
 [System.CodeDom.Compiler.GeneratedCode("Dev.Tools.CodeAnalysis.Generators.CliCommandGenerator", "1.0.0")]
 [Description("Parses a value into its parts.")]
-internal sealed partial class SampleParserCommand(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler) 
+internal sealed partial class SampleParserCommand(Dev.Tools.Providers.IToolsProvider toolProvider, IToolResponseHandler responseHandler, PipeInputReader pipeInput)
     : AsyncCommand<SampleParserCommand.Settings>
 {
     public sealed class Settings : SettingsBase
@@ -29,21 +29,21 @@ internal sealed partial class SampleParserCommand(Dev.Tools.Providers.IToolsProv
         public string Value { get; set; } = default!;
 
     }
-    
+
     protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         ToolDefinition definition = toolProvider.GetToolDefinition<SampleParserTool>();
-        
+
         try
         {
             var tool = toolProvider.GetTool<SampleParserTool>();
-            
+
             var args = new SampleParserTool.Args(
-               Value: settings.Value
+               Value: pipeInput.ReadText(settings.Value)
            );
-        
+
             var result = await tool.RunAsync(args, cancellationToken);
-            
+
             return responseHandler.ProcessResponse(result, definition, settings);
         }
         catch (Exception ex)

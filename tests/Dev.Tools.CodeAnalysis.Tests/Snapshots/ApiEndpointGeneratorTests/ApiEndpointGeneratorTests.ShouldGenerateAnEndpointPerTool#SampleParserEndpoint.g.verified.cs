@@ -26,7 +26,12 @@ public class SampleParserEndpoint(Dev.Tools.Providers.IToolsProvider toolProvide
         public string Value { get; set; } = default!;
 
     }
-    
+    public sealed class SampleParserFormRequest
+    {
+        [Description("The value to parse")]
+        public IFormFile Value { get; set; } = default!;
+
+    }
     public sealed class SampleParserResponse
     {
         [Description("Scheme of the parsed value, when it has one")]
@@ -36,7 +41,7 @@ public class SampleParserEndpoint(Dev.Tools.Providers.IToolsProvider toolProvide
         public System.Collections.Generic.IReadOnlyList<string> Segments { get; set; } = default!;
 
     }
-      
+
     [HttpPost("sample-parser")]
     [EndpointSummary("Sample Parser")]
     [EndpointDescription("Parses a value into its parts.")]
@@ -45,14 +50,36 @@ public class SampleParserEndpoint(Dev.Tools.Providers.IToolsProvider toolProvide
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
     public async Task<IActionResult> HandleAsync([FromBody] SampleParserRequest request, CancellationToken cancellationToken)
     {
+        var args = new Dev.Tools.Tools.SampleParserTool.Args(
+               Value: request.Value
+           );
+
+        return await RunToolAsync(args, cancellationToken);
+    }
+    
+    [HttpPost("sample-parser/file")]
+    [Consumes(MediaTypeNames.Multipart.FormData)]
+    [RequestSizeLimit(MaxUploadBytes)]
+    [EndpointSummary("Sample Parser")]
+    [EndpointDescription("Parses a value into its parts.")]
+    [ProducesResponseType<SampleParserResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ToolProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
+    public async Task<IActionResult> HandleFormAsync([FromForm] SampleParserFormRequest request, CancellationToken cancellationToken)
+    {
+        var args = new Dev.Tools.Tools.SampleParserTool.Args(
+               Value: await ReadTextAsync(request.Value, cancellationToken)
+           );
+
+        return await RunToolAsync(args, cancellationToken);
+    }
+
+    private async Task<IActionResult> RunToolAsync(Dev.Tools.Tools.SampleParserTool.Args args, CancellationToken cancellationToken)
+    {
         // No catch here: an unexpected exception goes to the host's exception handler, which
         // logs it and answers with a detail-free 500. Catching it here used to return
         // exception.Message to the client.
         var tool = toolProvider.GetTool<SampleParserTool>();
-
-        var args = new Dev.Tools.Tools.SampleParserTool.Args(
-               Value: request.Value
-           );
 
         var result = await tool.RunAsync(args, cancellationToken);
         if (result.HasErrors)

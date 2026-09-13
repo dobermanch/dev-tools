@@ -44,7 +44,7 @@ public class LocalizationTests
 
         await Assert.That(localizer["Tools.Base64Encoder.Name"].Value).IsEqualTo("Base64 Encoder");
         await Assert.That(localizer["Tools.Base64Encoder.Description"].Value)
-            .StartsWith("Encodes text to Base64 format");
+            .StartsWith("Encodes text or a file to Base64 format");
     }
 
     [Test]
