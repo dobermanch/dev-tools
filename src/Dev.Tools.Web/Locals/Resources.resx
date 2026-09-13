@@ -489,4 +489,16 @@
     <data name="Page.HtmlEntitiesToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Result</value>
     </data>
+    <data name="Page.DataConverterToolPage.Select.From.Label" xml:space="preserve">
+        <value>From</value>
+    </data>
+    <data name="Page.DataConverterToolPage.Select.To.Label" xml:space="preserve">
+        <value>To</value>
+    </data>
+    <data name="Page.DataConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Input</value>
+    </data>
+    <data name="Page.DataConverterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Result</value>
+    </data>
 </root>

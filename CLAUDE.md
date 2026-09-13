@@ -158,9 +158,9 @@ That is the whole tool as far as the CLI, the API and the MCP server are concern
 
 **Categories**: `Converter`, `Crypto`, `Security`, `Text`, `Network`, `Web`
 
-**Keywords**: `Base64`, `Convert`, `Case`, `Decode`, `Encode`, `Generate`, `Guid`, `Hash`, `String`, `Json`, `Xml`, `Format`, `Password`, `Text`, `Url`, `Uuid`, `Network`, `Ip`, `Internet`, `Token`, `Web`, `Jwt`, `Lorem`, `Encrypt`
+**Keywords**: `Base64`, `Convert`, `Case`, `Decode`, `Encode`, `Generate`, `Guid`, `Hash`, `String`, `Json`, `Xml`, `Format`, `Password`, `Text`, `Url`, `Uuid`, `Network`, `Ip`, `Internet`, `Token`, `Web`, `Jwt`, `Lorem`, `Encrypt`, `Html`, `Hmac`, `Yaml`, `Toml`, `Csv`
 
-**ErrorCodes**: `Unknown`, `NamespaceEmpty`, `TextEmpty`, `FailedToDecrypt`, `InputNotValid`, `WrongBase`, `WrongFormat`
+**ErrorCodes**: `Unknown`, `NamespaceEmpty`, `TextEmpty`, `FailedToDecrypt`, `InputNotValid`, `WrongBase`, `WrongFormat`, `FailedToEncrypt`
 
 If you need a new enum value, add it to the enum. `Category` and `Keyword` members carry a `[Description]` only where the English label differs from the member name (`Crypto` → "Cryptography"); every `ErrorCode` carries one, because those are the messages the CLI, API and MCP print.
 

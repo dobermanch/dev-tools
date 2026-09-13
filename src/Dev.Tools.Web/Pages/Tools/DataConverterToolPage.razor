@@ -1,0 +1,59 @@
+@page "/tools/data-converter"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="DataConverterTool.SourceFormat"
+                        Label="@_localizer["Select.From.Label"]"
+                        Value="@_from"
+                        ValueToDisplay="@(format => Context.Localization.GetToolEnum(_toolDefinition, format))"
+                        ValueChanged="OnFromChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="DataConverterTool.TargetFormat"
+                        Label="@_localizer["Select.To.Label"]"
+                        Value="@_to"
+                        ValueToDisplay="@(format => Context.Localization.GetToolEnum(_toolDefinition, format))"
+                        ValueChanged="OnToChangedAsync"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        AllowFileInput="true"
+                        Label="@_localizer["TextField.Input.Label"]"
+                        @bind-Value="@_text"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+                        Error="@(InputError is not null)"
+                        ErrorText="@InputError"
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Text ?? string.Empty)"
+                        Label="@_localizer["TextField.Result.Label"]"
+                        ReadOnly="true"
+                        Error="@(OutputError is not null)"
+                        ErrorText="@OutputError"
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"/>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+    </MudCardContent>
+</MudCard>

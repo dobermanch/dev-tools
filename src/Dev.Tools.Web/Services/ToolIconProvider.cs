@@ -33,6 +33,7 @@ public static class ToolIconProvider
             "text-decryptor" => Icons.Material.Outlined.LockOpen,
             "text-statistics" => Icons.Material.Outlined.Analytics,
             "html-entities" => Icons.Material.Outlined.Html,
+            "data-converter" => Icons.Material.Outlined.Transform,
             _ => Icons.Material.Outlined.Construction
         };
     }

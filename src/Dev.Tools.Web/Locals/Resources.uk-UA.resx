@@ -489,4 +489,16 @@
     <data name="Page.HtmlEntitiesToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Результат</value>
     </data>
+    <data name="Page.DataConverterToolPage.Select.From.Label" xml:space="preserve">
+        <value>З формату</value>
+    </data>
+    <data name="Page.DataConverterToolPage.Select.To.Label" xml:space="preserve">
+        <value>У формат</value>
+    </data>
+    <data name="Page.DataConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Вхідні дані</value>
+    </data>
+    <data name="Page.DataConverterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Результат</value>
+    </data>
 </root>

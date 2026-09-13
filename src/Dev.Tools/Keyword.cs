@@ -56,5 +56,14 @@ public enum Keyword
     Html,
 
     [Description("HMAC")]
-    Hmac
+    Hmac,
+
+    [Description("YAML")]
+    Yaml,
+
+    [Description("TOML")]
+    Toml,
+
+    [Description("CSV")]
+    Csv
 }

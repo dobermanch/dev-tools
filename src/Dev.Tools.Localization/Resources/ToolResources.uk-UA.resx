@@ -1263,6 +1263,15 @@
   <data name="Enums.Keyword.Hmac" xml:space="preserve">
     <value>HMAC</value>
   </data>
+  <data name="Enums.Keyword.Yaml" xml:space="preserve">
+    <value>YAML</value>
+  </data>
+  <data name="Enums.Keyword.Toml" xml:space="preserve">
+    <value>TOML</value>
+  </data>
+  <data name="Enums.Keyword.Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
 
   <!-- Text Decryptor Tool -->
   <data name="Tools.TextDecryptor.Name" xml:space="preserve">
@@ -1421,5 +1430,72 @@
   </data>
   <data name="Tools.HtmlEntities.Enums.TranscodingType.Decode" xml:space="preserve">
     <value>Перетворити посилання на символи назад на текст</value>
+  </data>
+
+  <!-- Data Format Converter Tool -->
+  <data name="Tools.DataConverter.Name" xml:space="preserve">
+    <value>Конвертер форматів даних</value>
+  </data>
+  <data name="Tools.DataConverter.Description" xml:space="preserve">
+    <value>Перетворює структуровані дані між JSON, YAML, TOML і XML та записує будь-який із них як CSV. Перетворення формату на той самий переформатовує його.
+
+Дані зчитуються в одну модель — об'єкти, масиви, рядки, числа, булеві значення та null — і записуються знову, тож коментарі та початкове розташування не зберігаються. Дані, яких цільовий формат не може вмістити, як-от null у TOML, повідомляються як помилка, а не змінюються, щоб підійти.
+
+YAML читається за базовою схемою YAML 1.2: true, 42 чи null без лапок мають відповідний тип, у лапках — це рядок, а yes, no, on і off — рядки. Потік має містити один документ, а псевдоніми розгортаються в копії того, на що вони посилаються.
+
+XML відображається загальноприйнятим способом: кореневий елемент — єдиний ключ верхнього рівня, атрибути — ключі, що починаються з @, текст поруч з атрибутами чи дочірніми елементами — #text, а елемент, що повторюється, — масив. Кожне значення XML — рядок, а порожній елемент — null. Під час зворотного запису дані з одним ключем верхнього рівня використовують його як кореневий елемент; усе інше загортається в &lt;root&gt;, а елементи масиву без власної назви стають &lt;item&gt;.
+
+CSV потребує масиву об'єктів: заголовок — це всі ключі в порядку першої появи, відсутнє значення чи null — порожня клітинка, вкладений об'єкт чи масив записується як JSON, а поля беруться в лапки за RFC 4180.</value>
+  </data>
+  <data name="Tools.DataConverter.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.DataConverter.Args.Text.Description" xml:space="preserve">
+    <value>Дані для перетворення, записані у вихідному форматі</value>
+  </data>
+  <data name="Tools.DataConverter.Args.From.Name" xml:space="preserve">
+    <value>З формату</value>
+  </data>
+  <data name="Tools.DataConverter.Args.From.Description" xml:space="preserve">
+    <value>Формат, у якому записано текст</value>
+  </data>
+  <data name="Tools.DataConverter.Args.To.Name" xml:space="preserve">
+    <value>У формат</value>
+  </data>
+  <data name="Tools.DataConverter.Args.To.Description" xml:space="preserve">
+    <value>Формат, у якому записати дані; той самий формат, що й вихідний, переформатовує їх</value>
+  </data>
+  <data name="Tools.DataConverter.Result.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.DataConverter.Result.Text.Description" xml:space="preserve">
+    <value>Дані, записані в цільовому форматі</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.SourceFormat.Json" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.SourceFormat.Yaml" xml:space="preserve">
+    <value>YAML, один документ</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.SourceFormat.Toml" xml:space="preserve">
+    <value>TOML</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.SourceFormat.Xml" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.TargetFormat.Json" xml:space="preserve">
+    <value>JSON з відступами</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.TargetFormat.Yaml" xml:space="preserve">
+    <value>YAML</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.TargetFormat.Toml" xml:space="preserve">
+    <value>TOML; дані мають бути об'єктом без null</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.TargetFormat.Xml" xml:space="preserve">
+    <value>XML з відступами</value>
+  </data>
+  <data name="Tools.DataConverter.Enums.TargetFormat.Csv" xml:space="preserve">
+    <value>CSV; дані мають бути масивом об'єктів</value>
   </data>
 </root>
