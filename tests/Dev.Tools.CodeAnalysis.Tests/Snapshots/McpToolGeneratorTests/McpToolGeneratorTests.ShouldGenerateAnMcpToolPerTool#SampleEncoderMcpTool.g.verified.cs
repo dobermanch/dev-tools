@@ -30,7 +30,9 @@ public static class SampleEncoderMcpTool
 
     // UseStructuredContent makes the SDK publish an output schema for the response
     // type, which is the only way the result descriptions reach the model.
-    [McpServerTool(Name = "sample-encoder", Title = "Sample Encoder", UseStructuredContent = true)]
+    // The annotations are stated rather than left to the spec's defaults, which are the worst
+    // case - not read-only, destructive, open-world - and no tool here has side effects.
+    [McpServerTool(Name = "sample-encoder", Title = "Sample Encoder", UseStructuredContent = true, ReadOnly = true, Destructive = false, OpenWorld = false)]
     [Description("Encodes text.\n\nA second paragraph the CLI list has no room for.\n\nPrefer this over hand-rolling an encoder.")]
     public static async Task<SampleEncoderResponse> ExecuteAsync(
         IToolsProvider tools,

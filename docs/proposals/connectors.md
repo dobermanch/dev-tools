@@ -29,6 +29,8 @@ Still open:
 
 **The MCP server emits no tool annotations, and the spec defaults are the worst case**: `readOnlyHint: false`, `destructiveHint: true`, `openWorldHint: true`. All 22 tools, base64 included, currently tell a model they may be destructive and may reach the outside world. `McpServerToolAttribute` (ModelContextProtocol 2.2) exposes `ReadOnly`, `Destructive`, `Idempotent` and `OpenWorld`. This can be fixed on its own, ahead of connectors — see item 5 below.
 
+> **Fixed in the interim (2026-09-13).** The MCP generator now emits `ReadOnly = true` and `Destructive = false` for every tool — none has side effects — and `OpenWorld = true` only for a tool whose constructor takes an `HttpClient` (today just `ip-details`). That is read from the code rather than from `Category.Network`, which is about what a tool is for: an IP range or CIDR calculator belongs there and never leaves the process. When connectors bring their own seam, its type joins the check; declared capabilities (item 5) may replace it.
+
 ## Draft proposal
 
 Agreed as a direction in the 2026-09-12 discussion, but it covers only the generic transport half. Revisit it against the two-layer framing above before building.

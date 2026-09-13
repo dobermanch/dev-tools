@@ -23,7 +23,8 @@ public sealed record ToolModel(
     EquatableArray<string> Keywords,
     EquatableArray<string> ErrorCodes,
     TypeModel Args,
-    TypeModel Result) : IEquatable<ToolModel>
+    TypeModel Result,
+    bool ReachesNetwork = false) : IEquatable<ToolModel>
 {
     /// <summary>The English display name, falling back to the tool's name when none was authored.</summary>
     public string DisplayTitle => string.IsNullOrEmpty(Title) ? Name : Title;

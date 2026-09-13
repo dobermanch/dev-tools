@@ -56,8 +56,20 @@ public static class ToolModelFactory
             Keywords: attribute.Keywords,
             ErrorCodes: new[] { "ErrorCode.Unknown" }.Concat(errorCodes).Distinct().ToEquatableArray(),
             Args: args,
-            Result: result));
+            Result: result,
+            ReachesNetwork: TakesHttpClient(symbol)));
     }
+
+    /// <summary>
+    /// Whether the tool can reach outside the process: a constructor that takes an <c>HttpClient</c> is how
+    /// a tool does that today. Read from the code rather than from <c>Category.Network</c>, which says what
+    /// a tool is about - an IP range or CIDR calculator belongs there and never leaves the process. When
+    /// connectors bring their own seam (docs/proposals/connectors.md), its type belongs in this check.
+    /// </summary>
+    private static bool TakesHttpClient(INamedTypeSymbol symbol)
+        => symbol.InstanceConstructors
+            .SelectMany(it => it.Parameters)
+            .Any(it => it.Type.ToDisplayString().TrimEnd('?') == "System.Net.Http.HttpClient");
 
     /// <summary>
     /// The tool's <c>ITool&lt;TArgs, TResult&gt;</c>, matched by name rather than by shape. This used

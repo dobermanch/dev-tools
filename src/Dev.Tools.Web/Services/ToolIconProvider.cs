@@ -21,7 +21,6 @@ public static class ToolIconProvider
             "ip-details" => Icons.Material.Outlined.Lan,
             "json-formatter" => Icons.Material.Outlined.Code,
             "passphrase-generator" => Icons.Material.Outlined.VpnKey,
-            "rsa-generator" => Icons.Material.Outlined.Key,
             "url-transcoder" => Icons.Material.Outlined.Link,
             "nato" => Icons.Material.Outlined.RecordVoiceOver,
             "token-generator" => Icons.Material.Outlined.Token,

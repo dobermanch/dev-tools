@@ -37,6 +37,9 @@ public class McpToolGenerator : IIncrementalGenerator
                 ["ToolName"] = tool.Name,
                 ["ToolType"] = tool.TypeName,
                 ["ToolTitle"] = ToolText.EscapeLiteral(tool.DisplayTitle),
+                // Read from the tool's dependencies, not its category: a network tool can just as well
+                // be a pure calculator (an IP range or CIDR calculator) that never leaves the process.
+                ["OpenWorld"] = tool.ReachesNetwork ? "true" : "false",
                 // A model reads the whole thing, usage note included.
                 ["ToolDescription"] = ToolText.EscapeLiteral(tool.ModelDescription),
                 ["ToolResultType"] = responseType,
@@ -67,7 +70,9 @@ public class McpToolGenerator : IIncrementalGenerator
 
                   // UseStructuredContent makes the SDK publish an output schema for the response
                   // type, which is the only way the result descriptions reach the model.
-                  [McpServerTool(Name = "{ToolName}", Title = "{ToolTitle}", UseStructuredContent = true)]
+                  // The annotations are stated rather than left to the spec's defaults, which are the worst
+                  // case - not read-only, destructive, open-world - and no tool here has side effects.
+                  [McpServerTool(Name = "{ToolName}", Title = "{ToolTitle}", UseStructuredContent = true, ReadOnly = true, Destructive = false, OpenWorld = {OpenWorld})]
                   [Description("{ToolDescription}")]
                   public static async Task<{ToolResultType}> ExecuteAsync(
                       IToolsProvider tools,
