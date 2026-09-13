@@ -18,6 +18,7 @@ public class ToolDeclarationAnalyzerTests
              public string Name { get; set; }
              public string Title { get; set; }
              public string Description { get; set; }
+             public string[] Aliases { get; set; }
         }
 
         public interface ITool<TArgs, TResult> {}
@@ -554,6 +555,69 @@ public class ToolDeclarationAnalyzerTests
                       [property: System.ComponentModel.Description("d")] string[] Words,
                       [property: System.ComponentModel.Description("d")] System.Collections.Generic.IList<string> Codes);
               }
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_an_alias_repeats_another_tools_name()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = {|#0:"hash"|}, Description = "Does the first thing")]
+              public sealed class MyClass1 : ITool<object, object> {}
+
+              [ToolDefinition(Name = "encoder", Aliases = [{|#1:"hash"|}], Description = "Does the second thing")]
+              public sealed class MyClass2 : ITool<object, object> {}
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotUniqueRule)
+            .WithArguments("hash")
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotUniqueRule)
+            .WithArguments("hash")
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_report_diagnostic_When_two_tools_share_an_alias()
+    {
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Aliases = [{|#0:"t"|}], Description = "Does the first thing")]
+              public sealed class MyClass1 : ITool<object, object> {}
+
+              [ToolDefinition(Name = "tool2", Aliases = ["x", {|#1:"t"|}], Description = "Does the second thing")]
+              public sealed class MyClass2 : ITool<object, object> {}
+              """");
+
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotUniqueRule)
+            .WithArguments("t")
+            .WithLocation(0));
+        context.ExpectedDiagnostics.Add(new DiagnosticResult(ToolDeclarationAnalyzer.NotUniqueRule)
+            .WithArguments("t")
+            .WithLocation(1));
+
+        await context.RunAsync();
+    }
+
+    [Test]
+    public async Task Should_not_hold_aliases_to_the_name_format()
+    {
+        // "64e" starts with a digit, which a name may not; as an alias it is fine.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "base64-encoder", Aliases = ["64e"], Description = "Encodes")]
+              public sealed class MyClass1 : ITool<object, object> {}
               """");
 
         await context.RunAsync();

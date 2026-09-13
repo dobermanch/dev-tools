@@ -18,14 +18,19 @@ internal static class CommandConfigurator
 {
     public static void ConfigureCommands(IServiceCollection services, IConfigurator configurator)
     {
-        ConfigureCommand<SampleEncoderCommand>(services, configurator, "sample-encoder");
+        ConfigureCommand<SampleEncoderCommand>(services, configurator, "sample-encoder", "se");
         ConfigureCommand<SampleParserCommand>(services, configurator, "sample-parser");
     }
     
-    private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name)
+    private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name, params string[] aliases)
         where T : class, ICommand
     {
-        configurator.AddCommand<T>(name);
+        var command = configurator.AddCommand<T>(name);
+        foreach (var alias in aliases)
+        {
+            command.WithAlias(alias);
+        }
+
         services.AddTransient<T>();
         services.AddTransient<ICommand, T>(provider => provider.GetRequiredService<T>());
     }

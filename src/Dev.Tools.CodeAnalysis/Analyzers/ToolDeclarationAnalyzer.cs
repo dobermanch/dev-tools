@@ -15,10 +15,11 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
     public static readonly DiagnosticDescriptor NotUniqueRule = new(
         "DT1001",
         "The tool name should be unique",
-        "The tool name '{0}' is already been used",
+        "The tool name or alias '{0}' is already used by another tool",
         "Naming",
         DiagnosticSeverity.Error,
-        description: "The tool name should be unique across the project.",
+        description: "Names and aliases share one namespace: the CLI accepts either as a command and "
+                     + "IToolsProvider looks tools up by either, so no two tools may share one.",
         isEnabledByDefault: true,
         customTags: [WellKnownDiagnosticTags.CompilationEnd]);
 
@@ -211,6 +212,12 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
                         literal.GetLocation(),
                         name)
                     );
+                }
+
+                // Aliases are not held to the name format - "64e" is a fine alias - only to uniqueness.
+                foreach (var alias in AliasLiterals(attribute!))
+                {
+                    attributeList.Add((alias.Token.ValueText, alias.GetLocation()));
                 }
             }, SyntaxKind.ClassDeclaration);
 
@@ -512,6 +519,15 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
             ?.Arguments
             .FirstOrDefault(it => it.NameEquals?.Name.Identifier.Text == name)
             ?.GetLocation();
+
+    private static IEnumerable<LiteralExpressionSyntax> AliasLiterals(AttributeSyntax attribute)
+        => attribute
+            .ArgumentList
+            ?.Arguments
+            .Where(it => it.NameEquals?.Name.Identifier.Text == "Aliases")
+            .SelectMany(it => it.Expression.DescendantNodesAndSelf().OfType<LiteralExpressionSyntax>())
+            .Where(it => it.IsKind(SyntaxKind.StringLiteralExpression))
+            ?? [];
 
     private static void CheckNameIsUnique(ConcurrentBag<(string name, Location location)> attributeList,
         CompilationAnalysisContext compilationEndContext)

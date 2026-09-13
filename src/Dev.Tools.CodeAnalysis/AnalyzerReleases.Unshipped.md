@@ -7,7 +7,7 @@
 
 | Rule ID | Category    | Severity | Notes                                                                 |
 |---------|-------------|----------|-----------------------------------------------------------------------|
-| DT1001  | Naming      | Error    | The tool name should be unique                                        |
+| DT1001  | Naming      | Error    | The tool name should be unique (names and aliases together)           |
 | DT1002  | Naming      | Error    | The tool name is not valid                                            |
 | DT1003  | Declaration | Error    | Class marked with ToolDefinitionAttribute should be public and sealed |
 | DT1004  | Documentation | Error  | A tool must describe itself                                           |

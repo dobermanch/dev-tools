@@ -14,11 +14,11 @@ public class CliCommandGenerator : IIncrementalGenerator
 
     private static void Generate(SourceProductionContext spc, ImmutableArray<ToolModel> tools)
     {
-        var commands = new List<(string TypeName, string ToolName)>();
+        var commands = new List<(string TypeName, ToolModel Tool)>();
         foreach (var tool in tools)
         {
             var code = GenerateCliCommand(tool);
-            commands.Add((code.TypeName, tool.Name));
+            commands.Add((code.TypeName, tool));
             spc.AddSource(code.OutputFileName, code);
         }
 
@@ -65,7 +65,11 @@ public class CliCommandGenerator : IIncrementalGenerator
         };
     }
 
-    private static CodeBlock GenerateCommandRegistration(List<(string TypeName, string ToolName)> commands)
+    /// <summary>
+    /// Registers every command under its name and its aliases. The aliases were carried in the model
+    /// and never registered, so <c>dev-tools 64e</c> answered "No such command".
+    /// </summary>
+    private static CodeBlock GenerateCommandRegistration(List<(string TypeName, ToolModel Tool)> commands)
         => new()
         {
             Namespace = "Dev.Tools.Console.Commands",
@@ -73,8 +77,11 @@ public class CliCommandGenerator : IIncrementalGenerator
             GeneratorType = typeof(CliCommandGenerator),
             Placeholders = new()
             {
+                // Aliases arrive already quoted from the model.
                 ["AddCommand"] = string.Join("\n        ",
-                    commands.Select(it => $"ConfigureCommand<{it.TypeName}>(services, configurator, \"{it.ToolName}\");"))
+                    commands.Select(it => it.Tool.Aliases.Length == 0
+                        ? $"ConfigureCommand<{it.TypeName}>(services, configurator, \"{it.Tool.Name}\");"
+                        : $"ConfigureCommand<{it.TypeName}>(services, configurator, \"{it.Tool.Name}\", {string.Join(", ", it.Tool.Aliases)});"))
             },
             Usings = [
                 "Microsoft.Extensions.DependencyInjection",
@@ -89,10 +96,15 @@ public class CliCommandGenerator : IIncrementalGenerator
                       {AddCommand}
                   }
                   
-                  private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name)
+                  private static void ConfigureCommand<T>(IServiceCollection services, IConfigurator configurator, string name, params string[] aliases)
                       where T : class, ICommand
                   {
-                      configurator.AddCommand<T>(name);
+                      var command = configurator.AddCommand<T>(name);
+                      foreach (var alias in aliases)
+                      {
+                          command.WithAlias(alias);
+                      }
+              
                       services.AddTransient<T>();
                       services.AddTransient<ICommand, T>(provider => provider.GetRequiredService<T>());
                   }
