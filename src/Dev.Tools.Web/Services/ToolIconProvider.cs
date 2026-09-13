@@ -37,6 +37,7 @@ public static class ToolIconProvider
             "regex-tester" => Icons.Material.Outlined.ManageSearch,
             "cron-parser" => Icons.Material.Outlined.EventRepeat,
             "ip-subnet" => Icons.Material.Outlined.SettingsEthernet,
+            "ip-converter" => Icons.Material.Outlined.Numbers,
             _ => Icons.Material.Outlined.Construction
         };
     }

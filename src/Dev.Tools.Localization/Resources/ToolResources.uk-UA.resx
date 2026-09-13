@@ -1740,4 +1740,64 @@ CSV потребує масиву об'єктів: заголовок — це �
   <data name="Tools.IpSubnet.Result.Blocks.Description" xml:space="preserve">
     <value>Найменша кількість CIDR-блоків, що покривають саме вхідні дані: для діапазону — його блоки по порядку; для мережі чи адреси — лише ця мережа</value>
   </data>
+
+  <!-- IP Address Converter Tool -->
+  <data name="Tools.IpConverter.Name" xml:space="preserve">
+    <value>Конвертер IP-адрес</value>
+  </data>
+  <data name="Tools.IpConverter.Description" xml:space="preserve">
+    <value>Перетворює IP-адресу між її записами: IPv4 через крапки, IPv6 та одне десяткове, шістнадцяткове чи двійкове число.
+
+Вхідні дані — адреса IPv4 (192.168.1.1), адреса IPv6 (2001:db8::1) або адреса як число: десяткові цифри, шістнадцяткове після 0x чи двійкове після 0b. Число, що вміщується в 32 біти, читається як адреса IPv4, а більше — як IPv6, тож ::1 треба записати як адресу, а не як число 1. Адреса IPv4 — це чотири десяткові числа від 0 до 255: початковий нуль не робить число вісімковим, а скорочені форми, як-от 10.1, відхиляються.
+
+Адреса IPv4 також подається як адреса IPv6, що її відображає (::ffff:192.168.1.1), а IPv4-відображена адреса IPv6 — як адреса IPv4, яку вона містить. Десяткове, шістнадцяткове й двійкове числа — це адреса в тому вигляді, як її задано: 32 біти для IPv4, 128 для IPv6.</value>
+  </data>
+  <data name="Tools.IpConverter.Args.Address.Name" xml:space="preserve">
+    <value>Адреса</value>
+  </data>
+  <data name="Tools.IpConverter.Args.Address.Description" xml:space="preserve">
+    <value>Адреса IPv4 (192.168.1.1), адреса IPv6 (2001:db8::1) або адреса як десяткове число (3232235777), шістнадцяткове число після 0x (0xC0A80101) чи двійкове число після 0b</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Version.Name" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Version.Description" xml:space="preserve">
+    <value>4 або 6 — залежно від того, як прочитано вхідні дані</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv4.Name" xml:space="preserve">
+    <value>IPv4</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv4.Description" xml:space="preserve">
+    <value>Адреса IPv4 у десятковому записі через крапки; для адреси IPv6 — адреса IPv4, яку містить IPv4-відображена адреса, інакше відсутня</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Decimal.Name" xml:space="preserve">
+    <value>Десяткове</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Decimal.Description" xml:space="preserve">
+    <value>Адреса як одне десяткове число</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Hexadecimal.Name" xml:space="preserve">
+    <value>Шістнадцяткове</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Hexadecimal.Description" xml:space="preserve">
+    <value>Адреса як шістнадцяткове число після 0x: 8 цифр для IPv4, 32 для IPv6</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Binary.Name" xml:space="preserve">
+    <value>Двійкове</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Binary.Description" xml:space="preserve">
+    <value>Адреса як двійкове число після 0b: 32 цифри для IPv4, 128 для IPv6</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv6.Name" xml:space="preserve">
+    <value>IPv6</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv6.Description" xml:space="preserve">
+    <value>Адреса IPv6 у найкоротшій формі (RFC 5952); для адреси IPv4 — IPv4-відображена адреса IPv6 ::ffff:a.b.c.d</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv6Expanded.Name" xml:space="preserve">
+    <value>IPv6 (повна форма)</value>
+  </data>
+  <data name="Tools.IpConverter.Result.Ipv6Expanded.Description" xml:space="preserve">
+    <value>Та сама адреса IPv6, де всі вісім груп записано чотирма цифрами</value>
+  </data>
 </root>

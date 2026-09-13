@@ -600,4 +600,25 @@
     <data name="Page.IpSubnetToolPage.TextField.Blocks.Label" xml:space="preserve">
         <value>CIDR-блоки</value>
     </data>
+    <data name="Page.IpConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>IP-адреса або число</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv4.Label" xml:space="preserve">
+        <value>IPv4</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Decimal.Label" xml:space="preserve">
+        <value>Десяткове</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Hexadecimal.Label" xml:space="preserve">
+        <value>Шістнадцяткове</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Binary.Label" xml:space="preserve">
+        <value>Двійкове</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv6.Label" xml:space="preserve">
+        <value>IPv6</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv6Expanded.Label" xml:space="preserve">
+        <value>IPv6 (повна форма)</value>
+    </data>
 </root>

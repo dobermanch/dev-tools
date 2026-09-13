@@ -1,8 +1,6 @@
-using System.Buffers.Binary;
 using System.Globalization;
-using System.Net;
-using System.Net.Sockets;
 using System.Numerics;
+using Dev.Tools.Networking;
 
 namespace Dev.Tools.Tools;
 
@@ -39,8 +37,8 @@ namespace Dev.Tools.Tools;
 )]
 public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Result>
 {
-    private const int Ipv4Bits = 32;
-    private const int Ipv6Bits = 128;
+    private const int Ipv4Bits = IpAddressText.Ipv4Bits;
+    private const int Ipv6Bits = IpAddressText.Ipv6Bits;
 
     protected override Result Execute(Args args)
     {
@@ -68,15 +66,15 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
 
         return new Result(
             Version: isIpv4 ? 4 : 6,
-            Network: $"{Format(network, range.Width)}/{prefix.ToString(CultureInfo.InvariantCulture)}",
-            NetworkAddress: Format(network, range.Width),
+            Network: $"{IpAddressText.Format(network, range.Width)}/{prefix.ToString(CultureInfo.InvariantCulture)}",
+            NetworkAddress: IpAddressText.Format(network, range.Width),
             PrefixLength: prefix,
-            SubnetMask: Format(HostMask(range.Width) & ~hostMask, range.Width),
-            WildcardMask: Format(hostMask, range.Width),
-            BroadcastAddress: isIpv4 ? Format(lastAddress, range.Width) : null,
+            SubnetMask: IpAddressText.Format(HostMask(range.Width) & ~hostMask, range.Width),
+            WildcardMask: IpAddressText.Format(hostMask, range.Width),
+            BroadcastAddress: isIpv4 ? IpAddressText.Format(lastAddress, range.Width) : null,
             IpClass: isIpv4 ? ClassOf((uint)network) : null,
-            FirstHost: Format(firstHost, range.Width),
-            LastHost: Format(lastHost, range.Width),
+            FirstHost: IpAddressText.Format(firstHost, range.Width),
+            LastHost: IpAddressText.Format(lastHost, range.Width),
             HostCount: hostCount.ToString(CultureInfo.InvariantCulture),
             AddressCount: addressCount.ToString(CultureInfo.InvariantCulture),
             Blocks: Blocks(range)
@@ -88,8 +86,8 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         var dash = input.IndexOf('-');
         if (dash >= 0)
         {
-            var start = ParseAddress(input[..dash].Trim());
-            var end = ParseAddress(input[(dash + 1)..].Trim());
+            var start = IpAddressText.Parse(input[..dash].Trim());
+            var end = IpAddressText.Parse(input[(dash + 1)..].Trim());
             if (start is null || end is null || start.Value.Width != end.Value.Width || start.Value.Value > end.Value.Value)
             {
                 return null;
@@ -99,7 +97,7 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         }
 
         var slash = input.IndexOf('/');
-        var address = ParseAddress((slash >= 0 ? input[..slash] : input).Trim());
+        var address = IpAddressText.Parse((slash >= 0 ? input[..slash] : input).Trim());
         if (address is null)
         {
             return null;
@@ -118,46 +116,6 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         return new AddressRange(network, network | hostMask, width);
     }
 
-    private static Address? ParseAddress(string text)
-    {
-        if (text.Contains(':'))
-        {
-            // A zone index (fe80::1%eth0) names an interface on one machine, not part of a network.
-            if (text.Contains('%') || !IPAddress.TryParse(text, out var ip) || ip.AddressFamily != AddressFamily.InterNetworkV6)
-            {
-                return null;
-            }
-
-            return new Address(BinaryPrimitives.ReadUInt128BigEndian(ip.GetAddressBytes()), Ipv6Bits);
-        }
-
-        // Not IPAddress.TryParse: it reads 10.1 as 10.0.0.1 and 010.0.0.1 as octal.
-        var parts = text.Split('.');
-        if (parts.Length != 4)
-        {
-            return null;
-        }
-
-        uint value = 0;
-        foreach (var part in parts)
-        {
-            if (part.Length is 0 or > 3 || !part.All(char.IsAsciiDigit))
-            {
-                return null;
-            }
-
-            var octet = uint.Parse(part, CultureInfo.InvariantCulture);
-            if (octet > 255)
-            {
-                return null;
-            }
-
-            value = value << 8 | octet;
-        }
-
-        return new Address(value, Ipv4Bits);
-    }
-
     private static int? ParsePrefix(string text, int width)
     {
         if (text.Length is > 0 and <= 3 && text.All(char.IsAsciiDigit))
@@ -167,7 +125,7 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         }
 
         // A dotted IPv4 mask, which must be ones followed by zeros.
-        if (width == Ipv4Bits && ParseAddress(text) is { Width: Ipv4Bits } mask)
+        if (width == Ipv4Bits && IpAddressText.Parse(text) is { Width: Ipv4Bits } mask)
         {
             var host = ~(uint)mask.Value;
             return (host & (host + 1)) == 0 ? Ipv4Bits - BitOperations.PopCount(host) : null;
@@ -191,7 +149,7 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
                 hostBits--;
             }
 
-            blocks.Add($"{Format(start, range.Width)}/{(range.Width - hostBits).ToString(CultureInfo.InvariantCulture)}");
+            blocks.Add($"{IpAddressText.Format(start, range.Width)}/{(range.Width - hostBits).ToString(CultureInfo.InvariantCulture)}");
 
             var end = start + HostMask(hostBits);
             if (end == range.Last)
@@ -211,20 +169,6 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         _ => (UInt128.One << bits) - 1
     };
 
-    private static string Format(UInt128 value, int width)
-    {
-        if (width == Ipv4Bits)
-        {
-            var address = (uint)value;
-            return string.Create(CultureInfo.InvariantCulture,
-                $"{address >> 24}.{address >> 16 & 0xFF}.{address >> 8 & 0xFF}.{address & 0xFF}");
-        }
-
-        Span<byte> bytes = stackalloc byte[16];
-        BinaryPrimitives.WriteUInt128BigEndian(bytes, value);
-        return new IPAddress(bytes).ToString();
-    }
-
     private static string ClassOf(uint address) => (address >> 24) switch
     {
         < 128 => "A",
@@ -233,8 +177,6 @@ public sealed class IpSubnetTool : ToolBase<IpSubnetTool.Args, IpSubnetTool.Resu
         < 240 => "D",
         _ => "E"
     };
-
-    private readonly record struct Address(UInt128 Value, int Width);
 
     private readonly record struct AddressRange(UInt128 First, UInt128 Last, int Width);
 

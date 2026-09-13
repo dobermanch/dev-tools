@@ -600,4 +600,25 @@
     <data name="Page.IpSubnetToolPage.TextField.Blocks.Label" xml:space="preserve">
         <value>CIDR blocks</value>
     </data>
+    <data name="Page.IpConverterToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>IP address or number</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv4.Label" xml:space="preserve">
+        <value>IPv4</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Decimal.Label" xml:space="preserve">
+        <value>Decimal</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Hexadecimal.Label" xml:space="preserve">
+        <value>Hexadecimal</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Binary.Label" xml:space="preserve">
+        <value>Binary</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv6.Label" xml:space="preserve">
+        <value>IPv6</value>
+    </data>
+    <data name="Page.IpConverterToolPage.TextField.Ipv6Expanded.Label" xml:space="preserve">
+        <value>IPv6 (expanded)</value>
+    </data>
 </root>
