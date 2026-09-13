@@ -63,6 +63,14 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 
 ---
 
+## Development
+
+| Tool | Alias | Description |
+| --- | --- | --- |
+| `regex-tester` | `regex` | Test a .NET regular expression against text: every match with its position and capture groups, and an optional replacement; a match that backtracks too long is reported instead of hanging |
+
+---
+
 ## Network
 
 | Tool | Alias | Description |

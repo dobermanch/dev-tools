@@ -501,4 +501,43 @@
     <data name="Page.DataConverterToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Result</value>
     </data>
+    <data name="Page.RegexTesterToolPage.TextField.Pattern.Label" xml:space="preserve">
+        <value>Pattern</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Replacement.Label" xml:space="preserve">
+        <value>Replacement (optional)</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.IgnoreCase.Label" xml:space="preserve">
+        <value>Ignore Case</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.Multiline.Label" xml:space="preserve">
+        <value>Multiline</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.Singleline.Label" xml:space="preserve">
+        <value>Singleline</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.IgnorePatternWhitespace.Label" xml:space="preserve">
+        <value>Ignore Pattern Whitespace</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Text.Label" xml:space="preserve">
+        <value>Text</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.MatchCount.Label" xml:space="preserve">
+        <value>Matches</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Result</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Position" xml:space="preserve">
+        <value>Line:Column</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Index" xml:space="preserve">
+        <value>Index</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Value" xml:space="preserve">
+        <value>Value</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Groups" xml:space="preserve">
+        <value>Groups</value>
+    </data>
 </root>

@@ -34,6 +34,7 @@ public static class ToolIconProvider
             "text-statistics" => Icons.Material.Outlined.Analytics,
             "html-entities" => Icons.Material.Outlined.Html,
             "data-converter" => Icons.Material.Outlined.Transform,
+            "regex-tester" => Icons.Material.Outlined.ManageSearch,
             _ => Icons.Material.Outlined.Construction
         };
     }
@@ -48,6 +49,7 @@ public static class ToolIconProvider
             Category.Text => Icons.Material.Outlined.TextFields,
             Category.Network => Icons.Material.Outlined.Lan,
             Category.Web => Icons.Material.Outlined.Language,
+            Category.Development => Icons.Material.Outlined.DeveloperMode,
             _ => Icons.Material.Outlined.Category
         };
     }

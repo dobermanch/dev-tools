@@ -501,4 +501,43 @@
     <data name="Page.DataConverterToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Результат</value>
     </data>
+    <data name="Page.RegexTesterToolPage.TextField.Pattern.Label" xml:space="preserve">
+        <value>Шаблон</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Replacement.Label" xml:space="preserve">
+        <value>Заміна (необов'язково)</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.IgnoreCase.Label" xml:space="preserve">
+        <value>Ігнорувати регістр</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.Multiline.Label" xml:space="preserve">
+        <value>Багаторядковий</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.Singleline.Label" xml:space="preserve">
+        <value>Однорядковий</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Switch.IgnorePatternWhitespace.Label" xml:space="preserve">
+        <value>Ігнорувати пробіли в шаблоні</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Text.Label" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.MatchCount.Label" xml:space="preserve">
+        <value>Збіги</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Результат</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Position" xml:space="preserve">
+        <value>Рядок:Стовпець</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Index" xml:space="preserve">
+        <value>Індекс</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Value" xml:space="preserve">
+        <value>Значення</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Table.Header.Groups" xml:space="preserve">
+        <value>Групи</value>
+    </data>
 </root>

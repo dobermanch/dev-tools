@@ -14,5 +14,6 @@ public enum Category
     Security,
     Text,
     Network,
-    Web
+    Web,
+    Development
 }

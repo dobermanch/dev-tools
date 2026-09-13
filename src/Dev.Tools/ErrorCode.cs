@@ -29,5 +29,8 @@ public enum ErrorCode
 
     // Appended rather than placed beside FailedToDecrypt, so the numeric values of existing members hold.
     [Description("Failed to encrypt")]
-    FailedToEncrypt
+    FailedToEncrypt,
+
+    [Description("The pattern took too long to match")]
+    MatchTimeout
 }

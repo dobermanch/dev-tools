@@ -65,5 +65,8 @@ public enum Keyword
     Toml,
 
     [Description("CSV")]
-    Csv
+    Csv,
+
+    [Description("Regular Expression")]
+    Regex
 }

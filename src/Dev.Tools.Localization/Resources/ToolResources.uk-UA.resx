@@ -36,6 +36,9 @@
   <data name="Enums.Category.Web" xml:space="preserve">
     <value>Веб</value>
   </data>
+  <data name="Enums.Category.Development" xml:space="preserve">
+    <value>Розробка</value>
+  </data>
 
   <!-- Global Error Code Enums -->
   <data name="Enums.ErrorCode.FailedToDecrypt" xml:space="preserve">
@@ -43,6 +46,9 @@
   </data>
   <data name="Enums.ErrorCode.FailedToEncrypt" xml:space="preserve">
     <value>Помилка шифрування</value>
+  </data>
+  <data name="Enums.ErrorCode.MatchTimeout" xml:space="preserve">
+    <value>Шаблон зіставлявся надто довго</value>
   </data>
   <data name="Enums.ErrorCode.InputNotValid" xml:space="preserve">
     <value>Вхідні дані недійсні</value>
@@ -1272,6 +1278,9 @@
   <data name="Enums.Keyword.Csv" xml:space="preserve">
     <value>CSV</value>
   </data>
+  <data name="Enums.Keyword.Regex" xml:space="preserve">
+    <value>Регулярний вираз</value>
+  </data>
 
   <!-- Text Decryptor Tool -->
   <data name="Tools.TextDecryptor.Name" xml:space="preserve">
@@ -1497,5 +1506,77 @@ CSV потребує масиву об'єктів: заголовок — це �
   </data>
   <data name="Tools.DataConverter.Enums.TargetFormat.Csv" xml:space="preserve">
     <value>CSV; дані мають бути масивом об'єктів</value>
+  </data>
+
+  <!-- Regex Tester (.NET) Tool -->
+  <data name="Tools.RegexTester.Name" xml:space="preserve">
+    <value>Тестер регулярних виразів (.NET)</value>
+  </data>
+  <data name="Tools.RegexTester.Description" xml:space="preserve">
+    <value>Перевіряє регулярний вираз .NET на тексті: показує кожен збіг із його позицією та групами захоплення і замінює збіги, якщо задано заміну.
+
+Шаблон використовує діалект .NET, який подекуди відрізняється від JavaScript і PCRE: іменовані групи записуються як (?&lt;name&gt;...), ретроспективна перевірка (lookbehind) може бути будь-якої довжини, а заміна посилається на групи як $1 чи ${name}. Зіставлення не залежить від культури, тож IgnoreCase порівнює літери однаково на будь-якій машині.
+
+Пошук одного збігу може тривати не довше 2 секунд, тож шаблон із катастрофічним поверненням (backtracking) повідомляється як помилка, а не виконується далі. Позиції — це зсуви від 0 у кодових одиницях UTF-16, а також рядок і стовпець від 1. Підраховуються всі збіги, а перелічуються перші 1 000.</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Text.Description" xml:space="preserve">
+    <value>Текст для пошуку</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Pattern.Name" xml:space="preserve">
+    <value>Шаблон</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Pattern.Description" xml:space="preserve">
+    <value>Регулярний вираз .NET для зіставлення</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Replacement.Name" xml:space="preserve">
+    <value>Заміна</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Replacement.Description" xml:space="preserve">
+    <value>Текст, яким замінюється кожен збіг, з посиланнями на групи як $1 чи ${name}; без заміни нічого не замінюється, а порожня заміна видаляє збіги</value>
+  </data>
+  <data name="Tools.RegexTester.Args.IgnoreCase.Name" xml:space="preserve">
+    <value>Ігнорувати регістр</value>
+  </data>
+  <data name="Tools.RegexTester.Args.IgnoreCase.Description" xml:space="preserve">
+    <value>Зіставляти літери без урахування регістру</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Multiline.Name" xml:space="preserve">
+    <value>Багаторядковий</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Multiline.Description" xml:space="preserve">
+    <value>^ і $ збігаються з початком і кінцем кожного рядка, а не лише всього тексту</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Singleline.Name" xml:space="preserve">
+    <value>Однорядковий</value>
+  </data>
+  <data name="Tools.RegexTester.Args.Singleline.Description" xml:space="preserve">
+    <value>. збігається з будь-яким символом, зокрема з розривом рядка</value>
+  </data>
+  <data name="Tools.RegexTester.Args.IgnorePatternWhitespace.Name" xml:space="preserve">
+    <value>Ігнорувати пробіли в шаблоні</value>
+  </data>
+  <data name="Tools.RegexTester.Args.IgnorePatternWhitespace.Description" xml:space="preserve">
+    <value>Неекрановані пробільні символи в шаблоні ігноруються, а # починає коментар — для шаблону, записаного в кілька рядків</value>
+  </data>
+  <data name="Tools.RegexTester.Result.Output.Name" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Tools.RegexTester.Result.Output.Description" xml:space="preserve">
+    <value>Із заміною — текст, у якому замінено кожен збіг; інакше — значення кожного збігу, по одному в рядку</value>
+  </data>
+  <data name="Tools.RegexTester.Result.MatchCount.Name" xml:space="preserve">
+    <value>Кількість збігів</value>
+  </data>
+  <data name="Tools.RegexTester.Result.MatchCount.Description" xml:space="preserve">
+    <value>Скільки збігів шаблон знайшов у всьому тексті</value>
+  </data>
+  <data name="Tools.RegexTester.Result.Matches.Name" xml:space="preserve">
+    <value>Збіги</value>
+  </data>
+  <data name="Tools.RegexTester.Result.Matches.Description" xml:space="preserve">
+    <value>Перші 1 000 збігів: для кожного — індекс від 0, рядок і стовпець від 1, значення та групи захоплення</value>
   </data>
 </root>
