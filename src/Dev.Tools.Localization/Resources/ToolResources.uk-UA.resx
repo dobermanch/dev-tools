@@ -386,7 +386,9 @@
     <value>Генератор хешів</value>
   </data>
   <data name="Tools.HashText.Description" xml:space="preserve">
-    <value>Генерує криптографічний хеш тексту або файлу за алгоритмом MD5, SHA-1, SHA-256, SHA-384 чи SHA-512 у вигляді шістнадцяткового рядка в нижньому регістрі. Текст хешується як байти UTF-8, файл — як його власні байти.</value>
+    <value>Генерує криптографічний хеш тексту або файлу за алгоритмом MD5, SHA-1, SHA-256, SHA-384 чи SHA-512 у вигляді шістнадцяткового рядка в нижньому регістрі. Текст хешується як байти UTF-8, файл — як його власні байти.
+
+З ключем (Key) натомість обчислює HMAC (RFC 2104): хеш із ключем — спільним секретом, — який може відтворити лише той, хто має той самий ключ; так перевіряють підписи вебхуків і підписані запити до API. Ключ читається як UTF-8, а порожній ключ означає його відсутність.</value>
   </data>
   <data name="Tools.HashText.Args.Text.Name" xml:space="preserve">
     <value>Текст</value>
@@ -400,11 +402,17 @@
   <data name="Tools.HashText.Args.Algorithm.Description" xml:space="preserve">
     <value>Алгоритм хешування для використання</value>
   </data>
+  <data name="Tools.HashText.Args.Key.Name" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="Tools.HashText.Args.Key.Description" xml:space="preserve">
+    <value>Секретний ключ, що читається як UTF-8 і робить результат HMAC; без ключа або з порожнім ключем повертається звичайний хеш</value>
+  </data>
   <data name="Tools.HashText.Result.Data.Name" xml:space="preserve">
     <value>Хеш-значення</value>
   </data>
   <data name="Tools.HashText.Result.Data.Description" xml:space="preserve">
-    <value>Згенерований хеш у шістнадцятковому форматі</value>
+    <value>Хеш або, якщо задано ключ, HMAC у шістнадцятковому форматі в нижньому регістрі</value>
   </data>
   <data name="Tools.HashText.Enums.HashAlgorithm.Md5" xml:space="preserve">
     <value>MD5</value>
@@ -1251,6 +1259,9 @@
   </data>
   <data name="Enums.Keyword.Html" xml:space="preserve">
     <value>HTML</value>
+  </data>
+  <data name="Enums.Keyword.Hmac" xml:space="preserve">
+    <value>HMAC</value>
   </data>
 
   <!-- Text Decryptor Tool -->

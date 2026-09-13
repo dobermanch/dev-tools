@@ -13,6 +13,10 @@ public partial class HashTextToolPage : ComponentBase
     private Dictionary<HashTextTool.HashAlgorithm, HashTextTool.Result?> _results = new();
     private IStringLocalizer _localizer = null!;
 
+    // What the results were computed from - typed text or a loaded file - and the HMAC key, if any.
+    private ToolContent? _content;
+    private string? _key;
+
     [Inject] private WebContext Context { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
@@ -29,14 +33,26 @@ public partial class HashTextToolPage : ComponentBase
     private async Task OnValueChangedAsync(string value)
     {
         _args.Text = value;
-        await HashAsync(value);
+        _content = value;
+        await HashAsync(_content);
     }
 
     // A file is hashed as its bytes, not as text; the field empties, and says which file it was.
     private async Task OnFileLoadedAsync(LoadedFile file)
     {
         _args.Text = string.Empty;
-        await HashAsync(file.Content);
+        _content = file.Content;
+        await HashAsync(_content);
+    }
+
+    // The loaded file holds its bytes, so a new key hashes the same content again.
+    private async Task OnKeyChangedAsync(string value)
+    {
+        _key = value;
+        if (_content is not null)
+        {
+            await HashAsync(_content);
+        }
     }
 
     private async Task HashAsync(ToolContent content)
@@ -47,7 +63,8 @@ public partial class HashTextToolPage : ComponentBase
             tasks.Add(_tool.RunAsync(new HashTextTool.Args
                     (
                         Text: content,
-                        Algorithm: algorithm
+                        Algorithm: algorithm,
+                        Key: _key
                     ),
                     CancellationToken.None)
                 .ContinueWith(it =>

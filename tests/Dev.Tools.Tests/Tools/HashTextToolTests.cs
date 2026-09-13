@@ -1,4 +1,6 @@
-﻿using Dev.Tools.Cryptography;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Dev.Tools.Cryptography;
 using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
@@ -81,6 +83,81 @@ public class HashTextToolTests
     public async Task WhenStreamIsEmpty_ShouldReturnFailure(HashTextTool.HashAlgorithm algorithm)
     {
         var args = new HashTextTool.Args(ToolContent.FromStream(() => new MemoryStream()), algorithm);
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
+    }
+
+    // Test case 2 of RFC 2202 (MD5, SHA-1) and RFC 4231 (SHA-2): key "Jefe".
+    [Test]
+    [Arguments(HashTextTool.HashAlgorithm.Md5, "750c783e6ab0b503eaa86e310a5db738")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha1, "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha256, "5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha384, "af45d2e376484031617f78d2b58a6b1b9c7ef464f5a01b47e42ec3736322445e8e2240ca5e69e2c78b3239ecfab21649")]
+    [Arguments(HashTextTool.HashAlgorithm.Sha512, "164b7a7bfcf819e2e395fbe73b56e0a387bd64222e831fd610270cd7ea2505549758bf75c05a994a6d034f65f8f0e6fdcaeab1a34d4a6b4b636e070a38bce737")]
+    public async Task WhenKeyProvided_ShouldGenerateHmac(HashTextTool.HashAlgorithm algorithm, string expectedHmac)
+    {
+        var args = new HashTextTool.Args("what do ya want for nothing?", algorithm, Key: "Jefe");
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo(expectedHmac);
+    }
+
+    // HMAC-MD5 is written out over IMd5Hash, so it is held to the framework's HMACMD5 on either side of
+    // the 64-byte block: a key is zero-padded below it and hashed first above it.
+    [Test]
+    [Arguments(1)]
+    [Arguments(63)]
+    [Arguments(64)]
+    [Arguments(65)]
+    [Arguments(200)]
+    public async Task WhenKeyProvided_ShouldComputeHmacMd5AsTheFrameworkDoes(int keyLength)
+    {
+        var key = string.Concat(Enumerable.Range(0, keyLength).Select(i => (char)('a' + i % 26)));
+        const string text = "The quick brown fox jumps over the lazy dog";
+        var expected = HMACMD5.HashData(Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(text));
+
+        var result = await new HashTextTool(new Md5Hash())
+            .RunAsync(new HashTextTool.Args(text, HashTextTool.HashAlgorithm.Md5, key), CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo(Convert.ToHexStringLower(expected));
+    }
+
+    [Test]
+    [Arguments(null)]
+    [Arguments("")]
+    public async Task WhenKeyIsEmpty_ShouldGenerateThePlainHash(string? key)
+    {
+        var args = new HashTextTool.Args("test-text", HashTextTool.HashAlgorithm.Sha256, key);
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo("b18939c1891ba923a4d46ccf146612094490300d22e436bf5a5d6d46d99e4225");
+    }
+
+    [Test]
+    [Arguments(HashTextTool.HashAlgorithm.Md5)]
+    [Arguments(HashTextTool.HashAlgorithm.Sha256)]
+    public async Task WhenKeyProvidedForAStream_ShouldHmacAllOfIt(HashTextTool.HashAlgorithm algorithm)
+    {
+        var content = "hello\n"u8.ToArray();
+        var key = "secret"u8.ToArray();
+        var expected = algorithm == HashTextTool.HashAlgorithm.Md5
+            ? HMACMD5.HashData(key, content)
+            : HMACSHA256.HashData(key, content);
+        var args = new HashTextTool.Args(ToolContent.FromStream(() => new MemoryStream(content)), algorithm, "secret");
+
+        var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Data).IsEqualTo(Convert.ToHexStringLower(expected));
+    }
+
+    [Test]
+    public async Task WhenKeyProvidedButTextIsEmpty_ShouldReturnFailure()
+    {
+        var args = new HashTextTool.Args("", HashTextTool.HashAlgorithm.Sha256, "secret");
 
         var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 

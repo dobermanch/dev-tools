@@ -87,6 +87,9 @@
     <data name="Page.HashTextToolPage.TextField.Input.Label" xml:space="preserve">
         <value>Текст для хешування</value>
     </data>
+    <data name="Page.HashTextToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Ключ HMAC (необов'язково)</value>
+    </data>
     <data name="Page.TokenGeneratorToolPage.Slider.TokenLength.Label" xml:space="preserve">
         <value>Довжина токена</value>
     </data>

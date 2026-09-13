@@ -20,6 +20,15 @@
                         Lines="5"
                     />
                 </MudItem>
+                <MudItem xs="12">
+                    <DtTextField
+                        T="string"
+                        Value="@_key"
+                        OnDebounceIntervalElapsed="OnKeyChangedAsync"
+                        Label="@_localizer["TextField.Key.Label"]"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
             </MudGrid>
         </DtSection>
 

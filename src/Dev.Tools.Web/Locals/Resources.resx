@@ -84,6 +84,9 @@
     <data name="Page.HashTextToolPage.TextField.Input.Label" xml:space="preserve">
         <value>Text to Hash</value>
     </data>
+    <data name="Page.HashTextToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>HMAC Key (optional)</value>
+    </data>
     <data name="Page.TokenGeneratorToolPage.Slider.TokenLength.Label" xml:space="preserve">
         <value>Token Length</value>
     </data>

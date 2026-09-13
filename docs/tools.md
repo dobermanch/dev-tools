@@ -47,7 +47,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 
 | Tool | Alias | Description |
 | --- | --- | --- |
-| `hash` | | Hash text using MD5, SHA-1, SHA-256, SHA-384, or SHA-512; output as a lowercase hex string |
+| `hash` | | Hash text or a file using MD5, SHA-1, SHA-256, SHA-384, or SHA-512, or compute an HMAC when given a key; output as a lowercase hex string |
 | `text-encryptor` | `encrypt` | Encrypt text using AES-128-CBC, AES-256-CBC, AES-256-GCM, TripleDES-CBC, or RC4; output as Base64 or hex |
 | `text-decryptor` | `decrypt` | Decrypt ciphertext produced by `text-encryptor`; supports all the same algorithms and input formats |
 

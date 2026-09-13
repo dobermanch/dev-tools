@@ -53,5 +53,8 @@ public enum Keyword
     Encrypt,
 
     [Description("HTML")]
-    Html
+    Html,
+
+    [Description("HMAC")]
+    Hmac
 }
