@@ -561,4 +561,43 @@
     <data name="Page.CronParserToolPage.Text.NoRuns" xml:space="preserve">
         <value>Вираз не збігається жодною датою</value>
     </data>
+    <data name="Page.IpSubnetToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Мережа, адреса або діапазон</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.Network.Label" xml:space="preserve">
+        <value>Мережа</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.SubnetMask.Label" xml:space="preserve">
+        <value>Маска підмережі</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.WildcardMask.Label" xml:space="preserve">
+        <value>Зворотна маска</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.BroadcastAddress.Label" xml:space="preserve">
+        <value>Широкомовна адреса</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.FirstHost.Label" xml:space="preserve">
+        <value>Перший хост</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.LastHost.Label" xml:space="preserve">
+        <value>Останній хост</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.HostCount.Label" xml:space="preserve">
+        <value>Доступні хости</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.AddressCount.Label" xml:space="preserve">
+        <value>Розмір мережі</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.NetworkAddress.Label" xml:space="preserve">
+        <value>Адреса мережі</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.PrefixLength.Label" xml:space="preserve">
+        <value>CIDR-префікс</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.IpClass.Label" xml:space="preserve">
+        <value>Клас IP</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.Blocks.Label" xml:space="preserve">
+        <value>CIDR-блоки</value>
+    </data>
 </root>

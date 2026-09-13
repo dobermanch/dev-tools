@@ -561,4 +561,43 @@
     <data name="Page.CronParserToolPage.Text.NoRuns" xml:space="preserve">
         <value>The expression never matches a date</value>
     </data>
+    <data name="Page.IpSubnetToolPage.TextField.Input.Label" xml:space="preserve">
+        <value>Network, address or range</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.Network.Label" xml:space="preserve">
+        <value>Network</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.SubnetMask.Label" xml:space="preserve">
+        <value>Subnet mask</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.WildcardMask.Label" xml:space="preserve">
+        <value>Wildcard mask</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.BroadcastAddress.Label" xml:space="preserve">
+        <value>Broadcast address</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.FirstHost.Label" xml:space="preserve">
+        <value>First host</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.LastHost.Label" xml:space="preserve">
+        <value>Last host</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.HostCount.Label" xml:space="preserve">
+        <value>Usable hosts</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.AddressCount.Label" xml:space="preserve">
+        <value>Network size</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.NetworkAddress.Label" xml:space="preserve">
+        <value>Network address</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.PrefixLength.Label" xml:space="preserve">
+        <value>CIDR prefix</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.IpClass.Label" xml:space="preserve">
+        <value>IP class</value>
+    </data>
+    <data name="Page.IpSubnetToolPage.TextField.Blocks.Label" xml:space="preserve">
+        <value>CIDR blocks</value>
+    </data>
 </root>

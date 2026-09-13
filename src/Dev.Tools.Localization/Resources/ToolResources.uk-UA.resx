@@ -1642,4 +1642,102 @@ CSV потребує масиву об'єктів: заголовок — це �
   <data name="Tools.CronParser.Result.NextRuns.Description" xml:space="preserve">
     <value>Наступні часи запуску після From, від найранішого, кожен зі зсувом від UTC у цьому часовому поясі; порожньо, якщо вираз ніколи не збігається</value>
   </data>
+
+  <!-- IP Subnet Calculator Tool -->
+  <data name="Tools.IpSubnet.Name" xml:space="preserve">
+    <value>Калькулятор IP-підмереж</value>
+  </data>
+  <data name="Tools.IpSubnet.Description" xml:space="preserve">
+    <value>Обчислює IP-мережу: її адресу, маску, широкомовну адресу, діапазон хостів і розмір — однаково для IPv4 та IPv6. Для діапазону адрес також перелічує CIDR-блоки, що його покривають.
+
+Вхідні дані — мережа в нотації CIDR, як-от 192.168.1.0/24 чи 2001:db8::/32, де біти хоста можуть бути встановлені й очищаються; мережа IPv4 з маскою через крапки, як-от 10.0.0.0/255.0.0.0; окрема адреса, що вважається мережею з однієї адреси; або діапазон у вигляді початок-кінець, як-от 10.0.0.1-10.0.0.100. Для діапазону результат описує найменшу мережу, що вміщує його повністю, а Blocks перелічує найменшу кількість CIDR-блоків, які покривають саме цей діапазон.
+
+Адреса IPv4 — це чотири десяткові числа від 0 до 255: початковий нуль не робить число вісімковим, а скорочені форми, як-от 10.1, відхиляються. Перша й остання адреси мережі IPv4 — це її мережева та широкомовна адреси, тож вони не є хостами — окрім /31, де хостами є обидві (RFC 3021), і /32, що є одним хостом. В IPv6 немає широкомовної адреси, і кожна адреса мережі вважається хостом. Кількості подаються десятковим текстом, бо мережа IPv6 може містити більше адрес, ніж уміщує 64-бітне число.
+
+Клас — це той, який адреса мережі IPv4 мала до CIDR, визначений за її першим числом: A до 127, B до 191, C до 223, D для групової розсилки та E зарезервований. Він більше не визначає розмір мережі, а в IPv6 класів немає.</value>
+  </data>
+  <data name="Tools.IpSubnet.Args.Input.Name" xml:space="preserve">
+    <value>Вхідні дані</value>
+  </data>
+  <data name="Tools.IpSubnet.Args.Input.Description" xml:space="preserve">
+    <value>Мережа в нотації CIDR (192.168.1.0/24, 2001:db8::/32), мережа IPv4 з маскою через крапки (10.0.0.0/255.0.0.0), окрема адреса або діапазон у вигляді початок-кінець (10.0.0.1-10.0.0.100)</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Version.Name" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Version.Description" xml:space="preserve">
+    <value>4 або 6</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Network.Name" xml:space="preserve">
+    <value>Мережа</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Network.Description" xml:space="preserve">
+    <value>Мережа в нотації CIDR; для діапазону — найменша мережа, що вміщує його повністю</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.NetworkAddress.Name" xml:space="preserve">
+    <value>Адреса мережі</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.NetworkAddress.Description" xml:space="preserve">
+    <value>Перша адреса мережі, з усіма очищеними бітами хоста</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.PrefixLength.Name" xml:space="preserve">
+    <value>Довжина префікса</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.PrefixLength.Description" xml:space="preserve">
+    <value>Скільки початкових бітів адреси визначають мережу</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.SubnetMask.Name" xml:space="preserve">
+    <value>Маска підмережі</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.SubnetMask.Description" xml:space="preserve">
+    <value>Префікс у вигляді маски: біти мережі встановлено, біти хоста очищено</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.WildcardMask.Name" xml:space="preserve">
+    <value>Зворотна маска</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.WildcardMask.Description" xml:space="preserve">
+    <value>Інверсія маски підмережі, як її приймають списки контролю доступу: біти хоста встановлено</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.BroadcastAddress.Name" xml:space="preserve">
+    <value>Широкомовна адреса</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.BroadcastAddress.Description" xml:space="preserve">
+    <value>Остання адреса мережі IPv4; відсутня для IPv6, у якому немає широкомовної розсилки</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.IpClass.Name" xml:space="preserve">
+    <value>Клас IP</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.IpClass.Description" xml:space="preserve">
+    <value>Клас адреси мережі IPv4 з часів до CIDR — A, B, C, D (групова розсилка) або E (зарезервований); відсутній для IPv6</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.FirstHost.Name" xml:space="preserve">
+    <value>Перший хост</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.FirstHost.Description" xml:space="preserve">
+    <value>Перша адреса, яку може використати хост</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.LastHost.Name" xml:space="preserve">
+    <value>Останній хост</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.LastHost.Description" xml:space="preserve">
+    <value>Остання адреса, яку може використати хост</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.HostCount.Name" xml:space="preserve">
+    <value>Кількість хостів</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.HostCount.Description" xml:space="preserve">
+    <value>Скільки адрес можуть використати хости, десятковим текстом</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.AddressCount.Name" xml:space="preserve">
+    <value>Кількість адрес</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.AddressCount.Description" xml:space="preserve">
+    <value>Скільки адрес містить мережа, десятковим текстом</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Blocks.Name" xml:space="preserve">
+    <value>Блоки</value>
+  </data>
+  <data name="Tools.IpSubnet.Result.Blocks.Description" xml:space="preserve">
+    <value>Найменша кількість CIDR-блоків, що покривають саме вхідні дані: для діапазону — його блоки по порядку; для мережі чи адреси — лише ця мережа</value>
+  </data>
 </root>

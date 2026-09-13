@@ -77,3 +77,4 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | Tool | Alias | Description |
 | --- | --- | --- |
 | `ip-details` | | Look up your current public IPv4 and IPv6 addresses |
+| `ip-subnet` | `subnet` | Calculate an IPv4 or IPv6 network from CIDR, a dotted mask, an address or a range: network, masks, broadcast, host range and counts, and the CIDR blocks that cover a range exactly |
