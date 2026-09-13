@@ -21,8 +21,12 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto]
 )]
-public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
+public sealed class UuidGeneratorTool(IMd5Hash md5Hash, IRandomSource? random = null, TimeProvider? time = null)
+    : ToolBase<UuidGeneratorTool.Args, UuidGeneratorTool.Result>
 {
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+    private readonly TimeProvider _time = time ?? TimeProvider.System;
+
     private static readonly Guid Max = Guid.Parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF");
 
     protected override Result Execute(Args args, CancellationToken cancellationToken)
@@ -46,7 +50,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
                 guids = Generate(args, cancellationToken, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
                 break;
             case UuidType.V4:
-                guids = Generate(args, cancellationToken, _ => Guid.NewGuid());
+                guids = Generate(args, cancellationToken, _ => NewUuidV4());
                 break;
             case UuidType.V5:
                 if (args.Namespace is null)
@@ -57,7 +61,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
                 guids = Generate(args, cancellationToken, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));
                 break;
             case UuidType.V7:
-                long timestamp = (args.Time ?? DateTimeOffset.UtcNow).ToUnixTimeMilliseconds();
+                long timestamp = (args.Time ?? _time.GetUtcNow()).ToUnixTimeMilliseconds();
                 guids = Generate(args, cancellationToken, _ => NewUuidV7(timestamp));
                 break;
             default:
@@ -80,6 +84,21 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
             index => guilds[index] = getGuid(index));
 
         return guilds;
+    }
+
+    /// <summary>
+    /// 122 random bits with the version and variant stamped in. Built from the injected source rather
+    /// than <c>Guid.NewGuid()</c>, which reads its own randomness and so could never be asserted on.
+    /// </summary>
+    private Guid NewUuidV4()
+    {
+        Span<byte> bytes = stackalloc byte[16];
+        _random.Fill(bytes);
+
+        bytes[6] = (byte)((bytes[6] & 0x0F) | 0x40); // version 4
+        bytes[8] = (byte)((bytes[8] & 0x3F) | 0x80); // RFC 9562 variant
+
+        return new Guid(bytes, bigEndian: true);
     }
 
     private Guid NewUuidV3(Guid namespaceUuid, string name)
@@ -107,7 +126,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         return new Guid(hash.AsSpan(0, 16), bigEndian: true);
     }
 
-    private static Guid NewUuidV7(long timeStampInMs)
+    private Guid NewUuidV7(long timeStampInMs)
     {
         var bytes = new byte[16];
 
@@ -124,13 +143,17 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash) : ToolBase<UuidGenerator
         // Fill random part
         // bytes [7-15]: random part
         Span<byte> random = bytes.AsSpan()[6..];
-        RandomNumberGenerator.Fill(random);
+        _random.Fill(random);
 
         // add mask to set guid version
         // bytes [6]: 4 bits dedicated to guid version (version: 7)
         // bytes [6]: 4 bits dedicated to random part
         bytes[6] &= 0x0F;
         bytes[6] += 0x70;
+
+        // bytes [8]: the top two bits are the RFC 9562 variant (10). These used to be left random,
+        // so three V7 values in four carried the wrong variant.
+        bytes[8] = (byte)((bytes[8] & 0x3F) | 0x80);
 
         return new Guid(bytes, true);
     }

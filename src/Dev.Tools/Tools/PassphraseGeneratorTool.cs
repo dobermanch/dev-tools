@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+﻿using Dev.Tools.Cryptography;
 using Dev.Tools.Providers;
 
 namespace Dev.Tools.Tools;
@@ -12,8 +12,11 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Generate, Keyword.Token, Keyword.Text, Keyword.String, Keyword.Password],
     Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
-public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.Args, PassphraseGeneratorTool.Result>
+public sealed class PassphraseGeneratorTool(IRandomSource? random = null)
+    : ToolBase<PassphraseGeneratorTool.Args, PassphraseGeneratorTool.Result>
 {
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+
     protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         var wordCount = Math.Max(1, args.WordCount);
@@ -30,9 +33,9 @@ public sealed class PassphraseGeneratorTool : ToolBase<PassphraseGeneratorTool.A
                     : i == 0 
                         ? WordProvider.Attributes 
                         : WordProvider.Words;
-                // RandomNumberGenerator is thread-safe and cryptographically secure;
+                // The default source is thread-safe and cryptographically secure;
                 // a shared System.Random is neither, and this generates passphrases.
-                parts[i] = source[RandomNumberGenerator.GetInt32(source.Length)];
+                parts[i] = source[_random.Next(source.Length)];
             }
 
             var pass = string.Join(args.Separator?.ToString() ?? "", parts).ToLower();

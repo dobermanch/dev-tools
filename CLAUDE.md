@@ -94,6 +94,10 @@ For **parser-style** tools (many output fields), use a non-positional `Result` r
 
 **Error handling**: throw `ToolException(ErrorCode.X)` for known validation errors — `ToolBase` catches it and returns a failed result. Use `ErrorCode.Unknown` for unexpected errors.
 
+**Randomness and time**: never call `Random`, `RandomNumberGenerator`, `Guid.NewGuid()`, `Ulid.NewUlid()` or `DateTimeOffset.Now` directly. Take an optional `IRandomSource? random = null` and/or `TimeProvider? time = null` constructor parameter and default it to `CryptographicRandomSource.Instance` / `TimeProvider.System`. The container injects whatever a host registered, and tests pass `ScriptedRandomSource` / `FixedTimeProvider` (`tests/Dev.Tools.Tests/Helpers`) to assert the exact value a tool produces.
+
+**Cancellation**: a tool with work worth stopping part way overrides `Execute(Args, CancellationToken)` instead of `Execute(Args)` and passes the token on - to `ParallelOptions` for a `Parallel.For`.
+
 ### Tool Text
 
 A tool's English lives in the tool file and nowhere else. The generators lift it into CLI help, the OpenAPI document, the MCP tool schema and the Web UI, so it is worth writing as a contract — the format, the constraints, what omitting a value does — rather than restating the property name.

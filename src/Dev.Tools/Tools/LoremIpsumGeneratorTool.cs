@@ -1,4 +1,6 @@
-﻿namespace Dev.Tools.Tools;
+﻿using Dev.Tools.Cryptography;
+
+namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "lorem-ipsum",
@@ -9,14 +11,16 @@
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Lorem],
     Categories = [Category.Text]
 )]
-public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.Args, LoremIpsumGeneratorTool.Result>
+public sealed class LoremIpsumGeneratorTool(IRandomSource? random = null)
+    : ToolBase<LoremIpsumGeneratorTool.Args, LoremIpsumGeneratorTool.Result>
 {
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+
     protected override Result Execute(Args args)
     {
         var paragraphs = Math.Max(1, args.Paragraphs);
         var sentences = Math.Max(1, args.SentencesPerParagraph);
         var words = Math.Max(1, args.WordsPerSentence);
-        var random = new Random();
 
         var paragraphTexts = new string[paragraphs];
         for (var p = 0; p < paragraphs; p++)
@@ -25,8 +29,8 @@ public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.A
             for (var s = 0; s < sentences; s++)
             {
                 sentenceTexts[s] = p == 0 && s == 0 && args.StartWithLoremIpsum
-                    ? BuildLoremStart(words, random)
-                    : BuildSentence(words, random);
+                    ? BuildLoremStart(words)
+                    : BuildSentence(words);
             }
 
             paragraphTexts[p] = string.Join(" ", sentenceTexts);
@@ -35,7 +39,7 @@ public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.A
         return new Result(string.Join("\n\n", paragraphTexts));
     }
 
-    private static string BuildLoremStart(int wordCount, Random random)
+    private string BuildLoremStart(int wordCount)
     {
         string[] opening = ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit"];
 
@@ -46,14 +50,14 @@ public sealed class LoremIpsumGeneratorTool : ToolBase<LoremIpsumGeneratorTool.A
 
         var extra = Enumerable
             .Range(0, wordCount - opening.Length)
-            .Select(_ => Words[random.Next(Words.Length)]);
+            .Select(_ => Words[_random.Next(Words.Length)]);
         return string.Join(" ", opening.Concat(extra)) + ".";
     }
 
-    private static string BuildSentence(int wordCount, Random random)
+    private string BuildSentence(int wordCount)
     {
         var picked = Enumerable.Range(0, wordCount)
-            .Select(_ => Words[random.Next(Words.Length)])
+            .Select(_ => Words[_random.Next(Words.Length)])
             .ToArray();
         
         picked[0] = char.ToUpper(picked[0][0]) + picked[0][1..];

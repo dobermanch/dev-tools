@@ -1,3 +1,4 @@
+using Dev.Tools.Tests.Helpers;
 using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
@@ -241,5 +242,32 @@ public class TextEncryptorToolTests
         // Should be valid hex that can be decoded
         var decoded = Convert.FromHexString(result.EncryptedText);
         await Assert.That(decoded.Length).IsGreaterThan(0);
+    }
+
+    [Test]
+    [Arguments(TextEncryptorTool.EncryptionAlgorithm.Aes256Cbc, 16)]
+    [Arguments(TextEncryptorTool.EncryptionAlgorithm.Aes256Gcm, 12)]
+    [Arguments(TextEncryptorTool.EncryptionAlgorithm.TripleDes, 8)]
+    public async Task ShouldTakeItsIvFromTheRandomSource(TextEncryptorTool.EncryptionAlgorithm algorithm, int ivBytes)
+    {
+        var tool = new TextEncryptorTool(new ScriptedRandomSource(0xAB));
+        var args = new TextEncryptorTool.Args("hello", "secret", algorithm, TextEncryptorTool.OutputFormat.Hex);
+
+        var first = await tool.RunAsync(args, CancellationToken.None);
+        var second = await tool.RunAsync(args, CancellationToken.None);
+
+        // The IV or nonce leads the output.
+        await Assert.That(first.EncryptedText).StartsWith(string.Concat(Enumerable.Repeat("ab", ivBytes)));
+        // Same IV, key and text: reproducible ciphertext, which is what the seam is for.
+        await Assert.That(second.EncryptedText).IsEqualTo(first.EncryptedText);
+
+        var decrypted = await new TextDecryptorTool().RunAsync(
+            new TextDecryptorTool.Args(
+                first.EncryptedText,
+                "secret",
+                Enum.Parse<TextDecryptorTool.EncryptionAlgorithm>(algorithm.ToString()),
+                TextDecryptorTool.InputFormat.Hex),
+            CancellationToken.None);
+        await Assert.That(decrypted.DecryptedText).IsEqualTo("hello");
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+﻿using Dev.Tools.Cryptography;
 
 namespace Dev.Tools.Tools;
 
@@ -11,8 +11,11 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Generate, Keyword.Token, Keyword.Text, Keyword.String, Keyword.Password],
     Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
-public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, TokenGeneratorTool.Result>
+public sealed class TokenGeneratorTool(IRandomSource? random = null)
+    : ToolBase<TokenGeneratorTool.Args, TokenGeneratorTool.Result>
 {
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+
     protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         var alphabetBuilder = new StringBuilder(args.Alphabet);
@@ -69,9 +72,9 @@ public sealed class TokenGeneratorTool : ToolBase<TokenGeneratorTool.Args, Token
             var builder = new StringBuilder(length);
             for (int i = 0; i < length; i++)
             {
-                // RandomNumberGenerator is thread-safe and cryptographically secure;
+                // The default source is thread-safe and cryptographically secure;
                 // a shared System.Random is neither, and this generates passwords.
-                builder.Append(finalAlphabet[RandomNumberGenerator.GetInt32(finalAlphabet.Length)]);
+                builder.Append(finalAlphabet[_random.Next(finalAlphabet.Length)]);
             }
 
             result[index] = builder.ToString();

@@ -1,3 +1,5 @@
+using Dev.Tools.Cryptography;
+using Dev.Tools.Tests.Helpers;
 using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using Microsoft.Extensions.DependencyInjection;
@@ -122,5 +124,30 @@ public class ToolsProviderTests
             Calls++;
             return _inner.ComputeHash(data);
         }
+    }
+
+    [Test]
+    public async Task ShouldInjectAHostsClockAndRandomSourceIntoTools()
+    {
+        var provider = Provider(services => services
+            .AddSingleton<TimeProvider>(new FixedTimeProvider(new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)))
+            .AddSingleton<IRandomSource>(new ScriptedRandomSource(0xAB)));
+
+        var date = await provider.GetTool<DateTimeConverterTool>().RunAsync(
+            new DateTimeConverterTool.Args(To: DateTimeConverterTool.DateFormatType.Unix), CancellationToken.None);
+        var uuid = await provider.GetTool<UuidGeneratorTool>().RunAsync(
+            new UuidGeneratorTool.Args(Type: UuidGeneratorTool.UuidType.V7), CancellationToken.None);
+
+        await Assert.That(date.Time).IsEqualTo("1767225600");
+        await Assert.That(uuid.Data.Single()).IsEqualTo("019b76da-a800-7bab-abab-abababababab");
+    }
+
+    [Test]
+    public async Task ShouldDefaultToTheSystemClockAndACryptographicRandomSource()
+    {
+        var services = new ServiceCollection().AddDevTools().BuildServiceProvider();
+
+        await Assert.That(services.GetRequiredService<TimeProvider>()).IsSameReferenceAs(TimeProvider.System);
+        await Assert.That(services.GetRequiredService<IRandomSource>()).IsTypeOf<CryptographicRandomSource>();
     }
 }

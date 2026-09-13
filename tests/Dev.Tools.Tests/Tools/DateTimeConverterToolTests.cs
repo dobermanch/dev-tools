@@ -1,3 +1,4 @@
+using Dev.Tools.Tests.Helpers;
 using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
@@ -26,5 +27,16 @@ public class DateTimeConverterToolTests
         var result = await new DateTimeConverterTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Time).IsEqualTo(expected);
+    }
+
+    [Test]
+    public async Task WhenNoDateIsGiven_ShouldConvertTheCurrentMomentFromTheClock()
+    {
+        var tool = new DateTimeConverterTool(new FixedTimeProvider(new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)));
+
+        var result = await tool.RunAsync(
+            new DateTimeConverterTool.Args(To: DateTimeConverterTool.DateFormatType.Unix), CancellationToken.None);
+
+        await Assert.That(result.Time).IsEqualTo("1767225600");
     }
 }

@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDevTools(this IServiceCollection services)
     {
         services.TryAddSingleton<IMd5Hash, Md5Hash>();
+        services.TryAddSingleton<IRandomSource>(CryptographicRandomSource.Instance);
+        services.TryAddSingleton(TimeProvider.System);
         services.AddSingleton<IToolsProvider, ToolsProvider>();
 
         foreach (var tool in ToolsCatalog.ToolDefinitions)

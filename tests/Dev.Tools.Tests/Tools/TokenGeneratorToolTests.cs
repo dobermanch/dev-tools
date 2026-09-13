@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Tests.Helpers;
+using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -148,5 +149,16 @@ public class TokenGeneratorToolTests
         var result = await new TokenGeneratorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Tokens[0].ToArray()).Contains(it => symbols.Contains(it));
+    }
+
+    [Test]
+    public async Task ShouldDrawEachCharacterFromTheRandomSource()
+    {
+        // Positions 2, 0 and 1 of an alphabet that nothing is excluded from, so it keeps its order.
+        var tool = new TokenGeneratorTool(new ScriptedRandomSource(0, 2, 0, 1));
+
+        var result = await tool.RunAsync(new TokenGeneratorTool.Args(TokenLength: 3, Alphabet: "abc"), CancellationToken.None);
+
+        await Assert.That(result.Tokens.Single()).IsEqualTo("cab");
     }
 }

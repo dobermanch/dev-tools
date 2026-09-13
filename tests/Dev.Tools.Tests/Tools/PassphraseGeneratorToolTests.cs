@@ -1,4 +1,6 @@
-﻿using Dev.Tools.Tools;
+﻿using Dev.Tools.Providers;
+using Dev.Tools.Tests.Helpers;
+using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
 
@@ -76,5 +78,17 @@ public class PassphraseGeneratorToolTests
         var result = await new PassphraseGeneratorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Phrases[0]).EndsWith(args.Salt!);
+    }
+
+    [Test]
+    public async Task ShouldDrawEachWordFromTheRandomSource()
+    {
+        var tool = new PassphraseGeneratorTool(new ScriptedRandomSource(0, 0));
+
+        var result = await tool.RunAsync(new PassphraseGeneratorTool.Args(WordCount: 3), CancellationToken.None);
+
+        // An attribute, a word, then a creature - each the first of its list.
+        var expected = string.Join("-", WordProvider.Attributes[0], WordProvider.Words[0], WordProvider.AllCreatures[0]).ToLower();
+        await Assert.That(result.Phrases.Single()).IsEqualTo(expected);
     }
 }

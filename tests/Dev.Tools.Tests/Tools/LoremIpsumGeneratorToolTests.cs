@@ -1,3 +1,4 @@
+using Dev.Tools.Tests.Helpers;
 using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
@@ -217,5 +218,18 @@ public class LoremIpsumGeneratorToolTests
 
         await Assert.That(result.HasErrors).IsFalse();
         await Assert.That(result.Text.Length).IsGreaterThan(1000);
+    }
+
+    [Test]
+    public async Task ShouldDrawEachWordFromTheRandomSource()
+    {
+        // Vocabulary positions 3, 0 and 1: "sit", "lorem", "ipsum".
+        var tool = new LoremIpsumGeneratorTool(new ScriptedRandomSource(0, 3, 0, 1));
+        var args = new LoremIpsumGeneratorTool.Args(
+            Paragraphs: 1, SentencesPerParagraph: 1, WordsPerSentence: 3, StartWithLoremIpsum: false);
+
+        var result = await tool.RunAsync(args, CancellationToken.None);
+
+        await Assert.That(result.Text).IsEqualTo("Sit lorem ipsum.");
     }
 }

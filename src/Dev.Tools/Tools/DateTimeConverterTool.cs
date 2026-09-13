@@ -19,8 +19,11 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Generate, Keyword.Text, Keyword.String, Keyword.Hash],
     Categories = [Category.Text, Category.Crypto, Category.Security]
 )]
-public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args, DateTimeConverterTool.Result>
+public sealed class DateTimeConverterTool(TimeProvider? time = null)
+    : ToolBase<DateTimeConverterTool.Args, DateTimeConverterTool.Result>
 {
+    private readonly TimeProvider _time = time ?? TimeProvider.System;
+
     protected override Result Execute(Args args)
     {
         var date = ConvertStringToDate(args.Date, args.From);
@@ -38,11 +41,11 @@ public sealed class DateTimeConverterTool : ToolBase<DateTimeConverterTool.Args,
         return new Result(result);
     }
 
-    private static DateTimeOffset? ConvertStringToDate(string? input, DateFormatType formatType)
+    private DateTimeOffset? ConvertStringToDate(string? input, DateFormatType formatType)
     {
         if (string.IsNullOrEmpty(input))
         {
-            return DateTimeOffset.Now;
+            return _time.GetLocalNow();
         }
 
         try

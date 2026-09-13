@@ -1,4 +1,6 @@
-﻿namespace Dev.Tools.Tools;
+﻿using Dev.Tools.Cryptography;
+
+namespace Dev.Tools.Tools;
 
 [ToolDefinition(
     Name = "ulid-generator",
@@ -9,15 +11,19 @@
     Keywords = [Keyword.Uuid, Keyword.Guid, Keyword.Generate, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto]
 )]
-public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGeneratorTool.Result>
+public sealed class UlidGeneratorTool(IRandomSource? random = null, TimeProvider? time = null)
+    : ToolBase<UlidGeneratorTool.Args, UlidGeneratorTool.Result>
 {
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+    private readonly TimeProvider _time = time ?? TimeProvider.System;
+
     protected override Result Execute(Args args, CancellationToken cancellationToken)
     {
         Ulid[] guids = args.Type switch
         {
             UlidType.Min => Generate(args, cancellationToken, () => Ulid.MinValue),
             UlidType.Max => Generate(args, cancellationToken, () => Ulid.MaxValue),
-            _ => Generate(args, cancellationToken, () => Ulid.NewUlid()),
+            _ => Generate(args, cancellationToken, NewUlid),
         };
 
         string[] formattedUlids = guids.Select(u => FormatUlid(u, args)).ToArray();
@@ -35,6 +41,18 @@ public sealed class UlidGeneratorTool : ToolBase<UlidGeneratorTool.Args, UlidGen
             index => ulids[index] = getGuid());
 
         return ulids;
+    }
+
+    /// <summary>
+    /// Built from the injected clock and random source rather than <c>Ulid.NewUlid()</c>, which reads
+    /// both itself and so could never be asserted on.
+    /// </summary>
+    private Ulid NewUlid()
+    {
+        Span<byte> randomness = stackalloc byte[10];
+        _random.Fill(randomness);
+
+        return Ulid.NewUlid(_time.GetUtcNow(), randomness);
     }
 
     private static string FormatUlid(Ulid ulid, Args args)

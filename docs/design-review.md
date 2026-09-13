@@ -234,7 +234,7 @@ Also fix the frontends' error handling, which is inconsistent and in two cases a
 
 ### 5c. Determinism / testability
 
-`Guid.NewGuid()`, `DateTimeOffset.Now/UtcNow`, `Ulid.NewUlid()`, `new Random()`, `RandomNumberGenerator`, and live HTTP are all called directly. Only `IMd5Hash` and `UuidGeneratorTool.Args.Time` are seams, so tests can assert shape but never values — and `IpDetailsToolTests` **hits the real network in a unit test**. Recommend two more core abstractions alongside `IMd5Hash`: BCL `TimeProvider` (already in .NET) and a small `IRandomSource` (`Next(int)`, `Fill(Span<byte>)`) with a crypto-backed default. This is also a correctness fix — see §7.
+~~Randomness and time were read directly, so tests could assert shape but never values.~~ **Done in Phase 3 step 4.** `IRandomSource` (`Next(int)`, `Fill(Span<byte>)`) sits next to `IMd5Hash` in `Dev.Tools.Cryptography`, with `CryptographicRandomSource` as its default, and BCL `TimeProvider` covers the clock. Every direct call is gone: `Guid.NewGuid()` (UUID v4, now built from 16 drawn bytes), `DateTimeOffset.UtcNow` and `RandomNumberGenerator.Fill` (UUID v7), `Ulid.NewUlid()` (now `Ulid.NewUlid(clock, randomness)`), `new Random()` (Lorem Ipsum), `RandomNumberGenerator.GetInt32` (passphrase and token generators), `DateTimeOffset.Now` (date-convert with no input), and the text encryptor's AES-CBC and Triple-DES IVs and AES-GCM nonce. Tools take them as optional constructor parameters — the container injects a host's registrations, `AddDevTools` registers the defaults with `TryAdd`, and the 100 existing `new XTool()` test call sites compile unchanged. Tests now assert exact values through `ScriptedRandomSource` and `FixedTimeProvider`. That surfaced a real bug: **UUID v7 never set the RFC 9562 variant bits**, so about three values in four carried the wrong variant; fixed and pinned by a zero-bytes test that failed before the fix. The live-network half of this item was already dealt with in Phase 0 (`IpDetailsToolTests` uses a stub handler).
 
 ### 5d. External connectors (the future feature, designed now)
 
@@ -250,6 +250,8 @@ Recommended seam, in order of importance:
 ### 5e. File/stream payloads (the other future feature)
 
 Everything is `string` today, end to end: `Args`/`Result` hold whole payloads, and `StdinInterceptor.cs:31` does `Console.In.ReadToEnd()` and only assigns when the property is `typeof(string)` (`:38`) — so a non-string pipe input silently ignores stdin.
+
+> **Also fix here (found in Phase 3 step 4, deliberately left for this phase):** `StdinInterceptor` reads stdin whenever input is redirected, even when the pipe-input argument was passed on the command line. So in any non-interactive environment whose stdin stays open (CI, IDE run configurations, process launchers) every command with a `[PipeInput]` argument hangs - `encrypt hello --key secret` included - and piped data silently replaces an explicit argument (`echo x | dev-tools encrypt hello` encrypts `x`). Read stdin only when the argument is empty; the stdin streaming this phase introduces is the natural place.
 
 **Do not convert every tool to streams.** Recommend a payload abstraction used only by tools that need it:
 
@@ -341,11 +343,11 @@ Each phase is independently shippable.
 
 **Phase 3 — contract hardening.** `ToolError` with target/args and multiple errors; cancellation honoured and `OperationCanceledException` rethrown; `TimeProvider` + `IRandomSource` seams; `IToolsProvider.GetTool(Type/name)`; alias index; ~~`ToolDefinitionAttribute` public~~ (deferred — external tools are out of scope, see §5f).
 
-*In progress.* Planned as five commits: (1) type and name-or-alias lookups — **done**, see §5f; (2) public `ToolDefinitionAttribute` — **deferred**, external tools are out of scope; (3) cancellation honoured inside the four `Parallel.For` generators — **done**, see §5b; (4) `TimeProvider` + `IRandomSource`; (5) `ToolError`, last because it is the only step that changes what the frontends return.
+*In progress.* Planned as five commits: (1) type and name-or-alias lookups — **done**, see §5f; (2) public `ToolDefinitionAttribute` — **deferred**, external tools are out of scope; (3) cancellation honoured inside the four `Parallel.For` generators — **done**, see §5b; (4) `TimeProvider` + `IRandomSource` — **done**, see §5c; (5) `ToolError`, last because it is the only step that changes what the frontends return.
 
 **Phase 4 — connectors.** Constructor-injected `IHttpRequester`, per-tool options records with embedded defaults, `Capability` metadata, network `ErrorCode`s; `IpDetailsTool` migrated as the reference implementation; its test becomes hermetic.
 
-**Phase 5 — `ToolContent` payloads.** Core type + implicit string conversion; generator binding per frontend; CLI stdin streaming; migrate hash/base64 as reference cases.
+**Phase 5 — `ToolContent` payloads.** Core type + implicit string conversion; generator binding per frontend; CLI stdin streaming, including the stdin-overrides-argument bug noted in §5e; migrate hash/base64 as reference cases.
 
 **Phase 6 — generic Web page + dependency-light core.** Metadata-driven `ToolPage` with per-tool UI hints and hand-written escape hatch; `Icon` in `[ToolDefinition]`; strip `Microsoft.Extensions.*` from core and move DI wiring to its own package — the precondition for VS Code / browser-extension targets.
 

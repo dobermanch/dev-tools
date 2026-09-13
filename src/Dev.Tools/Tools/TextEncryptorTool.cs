@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Dev.Tools.Cryptography;
 
 namespace Dev.Tools.Tools;
 
@@ -19,8 +20,13 @@ namespace Dev.Tools.Tools;
     Keywords = [Keyword.Encrypt, Keyword.Text, Keyword.String],
     Categories = [Category.Crypto, Category.Security]
 )]
-public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEncryptorTool.Result>
+public sealed class TextEncryptorTool(IRandomSource? random = null)
+    : ToolBase<TextEncryptorTool.Args, TextEncryptorTool.Result>
 {
+    // The IVs and the nonce must be unpredictable, which the default source guarantees. A test may
+    // substitute a fixed one to get reproducible ciphertext; nothing else should.
+    private readonly IRandomSource _random = random ?? CryptographicRandomSource.Instance;
+
     protected override Result Execute(Args args)
     {
         if (string.IsNullOrEmpty(args.Text))
@@ -67,11 +73,11 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
     }
 
     // AES-CBC: output = IV[16] + Ciphertext
-    private static byte[] EncryptAesCbc(byte[] data, byte[] key)
+    private byte[] EncryptAesCbc(byte[] data, byte[] key)
     {
         using var aes = Aes.Create();
         aes.Key = key;
-        aes.GenerateIV();
+        aes.IV = RandomBytes(aes.BlockSize / 8);
 
         using var encryptor = aes.CreateEncryptor();
         var ciphertext = encryptor.TransformFinalBlock(data, 0, data.Length);
@@ -83,9 +89,9 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
     }
 
     // AES-GCM: output = Nonce[12] + Tag[16] + Ciphertext
-    private static byte[] EncryptAesGcm(byte[] data, byte[] key)
+    private byte[] EncryptAesGcm(byte[] data, byte[] key)
     {
-        var nonce = RandomNumberGenerator.GetBytes(AesGcm.NonceByteSizes.MaxSize);
+        var nonce = RandomBytes(AesGcm.NonceByteSizes.MaxSize);
         var ciphertext = new byte[data.Length];
         var tag = new byte[AesGcm.TagByteSizes.MaxSize];
 
@@ -100,11 +106,11 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
     }
 
     // TripleDES-CBC: output = IV[8] + Ciphertext
-    private static byte[] EncryptTripleDes(byte[] data, byte[] key)
+    private byte[] EncryptTripleDes(byte[] data, byte[] key)
     {
         using var des = TripleDES.Create();
         des.Key = key;
-        des.GenerateIV();
+        des.IV = RandomBytes(des.BlockSize / 8);
 
         using var encryptor = des.CreateEncryptor();
         var ciphertext = encryptor.TransformFinalBlock(data, 0, data.Length);
@@ -113,6 +119,13 @@ public sealed class TextEncryptorTool : ToolBase<TextEncryptorTool.Args, TextEnc
         Buffer.BlockCopy(des.IV, 0, result, 0, des.IV.Length);
         Buffer.BlockCopy(ciphertext, 0, result, des.IV.Length, ciphertext.Length);
         return result;
+    }
+
+    private byte[] RandomBytes(int count)
+    {
+        var bytes = new byte[count];
+        _random.Fill(bytes);
+        return bytes;
     }
 
     // RC4: output = Ciphertext (stream cipher, no IV)

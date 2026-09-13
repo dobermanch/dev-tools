@@ -1,4 +1,5 @@
-﻿using Dev.Tools.Cryptography;
+﻿using Dev.Tools.Tests.Helpers;
+using Dev.Tools.Cryptography;
 using Dev.Tools.Tools;
 
 namespace Dev.Tools.Tests.Tools;
@@ -552,5 +553,55 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Data.First()[14]).IsEqualTo(version);
+    }
+
+    [Test]
+    public async Task WhenTypeIsV4_ShouldBuildTheUuidFromTheRandomSource()
+    {
+        var tool = new UuidGeneratorTool(new Md5Hash(), new ScriptedRandomSource(0xAB));
+
+        var result = await tool.RunAsync(new UuidGeneratorTool.Args(Type: UuidGeneratorTool.UuidType.V4), CancellationToken.None);
+
+        // Sixteen 0xAB bytes with version 4 and the RFC variant stamped in.
+        await Assert.That(result.Data.Single()).IsEqualTo("abababab-abab-4bab-abab-abababababab");
+    }
+
+    [Test]
+    public async Task WhenTypeIsV7_ShouldBuildTheUuidFromTheClockAndTheRandomSource()
+    {
+        var tool = new UuidGeneratorTool(
+            new Md5Hash(),
+            new ScriptedRandomSource(0xAB),
+            new FixedTimeProvider(new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero)));
+
+        var result = await tool.RunAsync(new UuidGeneratorTool.Args(Type: UuidGeneratorTool.UuidType.V7), CancellationToken.None);
+
+        // "019b76da-a800" is 1767225600000 ms, 2026-01-01T00:00:00Z; the rest is 0xAB bytes with version 7 and the variant.
+        await Assert.That(result.Data.Single()).IsEqualTo("019b76da-a800-7bab-abab-abababababab");
+    }
+
+    [Test]
+    [Arguments(UuidGeneratorTool.UuidType.V4)]
+    [Arguments(UuidGeneratorTool.UuidType.V7)]
+    public async Task WhenTheRandomBytesAreZero_ShouldStillStampTheRfcVariant(UuidGeneratorTool.UuidType type)
+    {
+        // The variant bits must read 10 whatever the random byte under them. V7 used to leave them
+        // random, so this came out as '0' for V7.
+        var tool = new UuidGeneratorTool(new Md5Hash(), new ScriptedRandomSource(0x00));
+
+        var result = await tool.RunAsync(new UuidGeneratorTool.Args(Type: type), CancellationToken.None);
+
+        await Assert.That(result.Data.Single()[19]).IsEqualTo('8');
+    }
+
+    [Test]
+    public async Task WhenTypeIsV7_EveryUuidShouldCarryTheRfcVariant()
+    {
+        var result = await new UuidGeneratorTool(new Md5Hash())
+            .RunAsync(new UuidGeneratorTool.Args(Type: UuidGeneratorTool.UuidType.V7, Count: 500), CancellationToken.None);
+
+        var wrongVariant = result.Data.Where(it => !"89ab".Contains(it[19])).ToArray();
+
+        await Assert.That(wrongVariant).IsEmpty();
     }
 }
