@@ -24,13 +24,13 @@ public sealed class JwtParserTool : ToolBase<JwtParserTool.Args, JwtParserTool.R
     {
         if (string.IsNullOrEmpty(args.Token))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Token));
         }
 
         var parts = args.Token.Trim().Split('.');
         if (parts.Length != 3)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Token));
         }
 
         try
@@ -60,11 +60,11 @@ public sealed class JwtParserTool : ToolBase<JwtParserTool.Args, JwtParserTool.R
         }
         catch (FormatException)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Token));
         }
         catch (JsonException)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Token));
         }
     }
 

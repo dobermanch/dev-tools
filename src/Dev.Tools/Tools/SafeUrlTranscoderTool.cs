@@ -17,7 +17,7 @@ public sealed class SafeUrlTranscoderTool : ToolBase<SafeUrlTranscoderTool.Args,
     {
         if (string.IsNullOrEmpty(args.Url))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Url));
         }
 
         string url = args.Transcoding == TranscodingType.Encode

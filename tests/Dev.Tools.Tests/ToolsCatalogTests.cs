@@ -149,4 +149,15 @@ public class ToolsCatalogTests
 
         await Assert.That(uuidType.Values.Select(it => it.Name)).Contains("V7");
     }
+
+    [Test]
+    public async Task ShouldListEveryErrorAToolCanReportOnce()
+    {
+        // The encryptor collects two errors into a list before throwing, throws a third from a switch arm
+        // and a fourth directly; the catalog used to see only codes passed straight to a thrown exception.
+        var codes = Definition<TextEncryptorTool>().ErrorCodes;
+
+        await Assert.That(codes).IsEquivalentTo(
+            [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.InputNotValid, ErrorCode.FailedToEncrypt]);
+    }
 }

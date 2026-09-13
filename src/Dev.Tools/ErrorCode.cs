@@ -25,5 +25,9 @@ public enum ErrorCode
     WrongBase,
 
     [Description("Invalid format")]
-    WrongFormat
+    WrongFormat,
+
+    // Appended rather than placed beside FailedToDecrypt, so the numeric values of existing members hold.
+    [Description("Failed to encrypt")]
+    FailedToEncrypt
 }

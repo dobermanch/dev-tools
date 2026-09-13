@@ -27,7 +27,7 @@ public class HashTextToolTests
         var result = await new HashTextTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes).Contains(ErrorCode.TextEmpty);
+        await Assert.That(result.Errors.Select(it => it.Code)).Contains(ErrorCode.TextEmpty);
     }
 
     [Test]

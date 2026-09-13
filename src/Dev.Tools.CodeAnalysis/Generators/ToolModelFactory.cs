@@ -54,7 +54,7 @@ public static class ToolModelFactory
             Aliases: attribute.Aliases,
             Categories: attribute.Categories,
             Keywords: attribute.Keywords,
-            ErrorCodes: new[] { "ErrorCode.Unknown" }.Concat(errorCodes).ToEquatableArray(),
+            ErrorCodes: new[] { "ErrorCode.Unknown" }.Concat(errorCodes).Distinct().ToEquatableArray(),
             Args: args,
             Result: result));
     }
@@ -203,19 +203,24 @@ public static class ToolModelFactory
             .FirstOrDefault(it => it.AttributeClass?.ToDisplayString() == attributeFullName)
             ?.ConstructorArguments.FirstOrDefault().Value?.ToString());
 
+    /// <summary>
+    /// Every <c>ErrorCode.X</c> the tool can report: those passed to a <c>ToolException</c> or a
+    /// <c>ToolError</c> anywhere in its members. This used to read the first argument of thrown
+    /// <c>ToolException</c> statements only, which misses codes collected into a list before the throw and
+    /// throw expressions in switch arms.
+    /// </summary>
     private static string[] FindThrownErrorCodes(INamedTypeSymbol symbol)
         => symbol.GetMembers()
-            .OfType<IMethodSymbol>()
             .SelectMany(it => it.DeclaringSyntaxReferences)
             .Select(it => it.GetSyntax())
-            .OfType<MethodDeclarationSyntax>()
-            .SelectMany(it => it
-                .DescendantNodes()
-                .OfType<ThrowStatementSyntax>()
-                .Select(x => x.Expression)
-                .OfType<ObjectCreationExpressionSyntax>()
-                .Where(x => x.Type.ToFullString() == "ToolException")
-                .Select(x => x.ArgumentList!.Arguments[0].Expression.ToString()))
+            .SelectMany(it => it.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
+            .Where(it => it.Type.ToString() is "ToolException" or "ToolError")
+            .SelectMany(it => it.ArgumentList?.Arguments.SelectMany(argument => argument.DescendantNodesAndSelf())
+                              ?? [])
+            .OfType<MemberAccessExpressionSyntax>()
+            .Where(it => it.Expression.ToString() == "ErrorCode")
+            .Select(it => it.ToString())
+            .Distinct()
             .ToArray();
 
     private static ToolAttributeValues? ReadToolAttribute(INamedTypeSymbol symbol)

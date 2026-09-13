@@ -53,6 +53,6 @@ public class UrlParserToolTests
         var args = new UrlParserTool.Args(null!);
 
         var result = await new UrlParserTool().RunAsync(args, CancellationToken.None);
-        await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.TextEmpty);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
     }
 }

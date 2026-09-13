@@ -15,7 +15,7 @@ public sealed class Base64EncoderTool : ToolBase<Base64EncoderTool.Args, Base64E
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
         }
 
         byte[] bytes = Encoding.UTF8.GetBytes(args.Text);

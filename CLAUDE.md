@@ -10,7 +10,7 @@ See [.github/instructions/code.instructions.md](.github/instructions/code.instru
 
 [docs/design-review.md](docs/design-review.md) — **temporary** working document: a design review of the solution (localization scope, generator duplication, tool-contract seams for connectors and stream payloads, known bugs) plus a phased roadmap. Read it before reshaping the tool abstraction, the source generators, or the localization layout, and keep it current as phases land. **Delete it once the roadmap is done** — it is not permanent documentation and is deliberately not linked from the README.
 
-Phases 0 (correctness fixes), 1 (English in the tools, localization confined to the Web UI) and 2 (generator consolidation) are done; phases 3-6 are not started.
+Phases 0 (correctness fixes), 1 (English in the tools, localization confined to the Web UI), 2 (generator consolidation) and 3 (contract hardening) are done; phases 4-6 are not started.
 
 ## Build & Test Commands
 
@@ -66,7 +66,7 @@ public sealed class MyTool : ToolBase<MyTool.Args, MyTool.Result>
     protected override Result Execute(Args args)
     {
         if (string.IsNullOrEmpty(args.Input))
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Input));
         return new Result(/* computed value */);
     }
 
@@ -92,7 +92,7 @@ public sealed class MyTool : ToolBase<MyTool.Args, MyTool.Result>
 
 For **parser-style** tools (many output fields), use a non-positional `Result` record with nullable properties and `[PipeOutput]` on the main one.
 
-**Error handling**: throw `ToolException(ErrorCode.X)` for known validation errors — `ToolBase` catches it and returns a failed result. Use `ErrorCode.Unknown` for unexpected errors.
+**Error handling**: throw `ToolException(ErrorCode.X, nameof(Args.Y))` for known validation errors, naming the argument at fault — `ToolBase` catches it and returns a result whose `Errors` holds it. When several arguments can be wrong independently, collect `ToolError`s and throw `new ToolException(errors)` once, so the caller hears about all of them. Anything else a tool throws becomes `ErrorCode.Unknown` with no detail. Every frontend shows the code's English `[Description]` - never an exception message - so keep those messages short, plain and free of internals.
 
 **Randomness and time**: never call `Random`, `RandomNumberGenerator`, `Guid.NewGuid()`, `Ulid.NewUlid()` or `DateTimeOffset.Now` directly. Take an optional `IRandomSource? random = null` and/or `TimeProvider? time = null` constructor parameter and default it to `CryptographicRandomSource.Instance` / `TimeProvider.System`. The container injects whatever a host registered, and tests pass `ScriptedRandomSource` / `FixedTimeProvider` (`tests/Dev.Tools.Tests/Helpers`) to assert the exact value a tool produces.
 
@@ -177,7 +177,7 @@ public class MyToolTests
     {
         var result = await new MyTool().RunAsync(new MyTool.Args(string.Empty), CancellationToken.None);
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.TextEmpty);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
     }
 }
 ```

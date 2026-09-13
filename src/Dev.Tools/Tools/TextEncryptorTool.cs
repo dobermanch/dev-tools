@@ -29,14 +29,21 @@ public sealed class TextEncryptorTool(IRandomSource? random = null)
 
     protected override Result Execute(Args args)
     {
+        // Both are checked before either is reported, so a caller missing both hears about both.
+        var errors = new List<ToolError>();
         if (string.IsNullOrEmpty(args.Text))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            errors.Add(new ToolError(ErrorCode.TextEmpty, nameof(Args.Text)));
         }
 
         if (string.IsNullOrEmpty(args.Key))
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            errors.Add(new ToolError(ErrorCode.InputNotValid, nameof(Args.Key)));
+        }
+
+        if (errors.Count > 0)
+        {
+            throw new ToolException(errors);
         }
 
         try
@@ -51,7 +58,7 @@ public sealed class TextEncryptorTool(IRandomSource? random = null)
                 EncryptionAlgorithm.Aes256Gcm => EncryptAesGcm(plainBytes, keyBytes),
                 EncryptionAlgorithm.TripleDes => EncryptTripleDes(plainBytes, keyBytes[..24]),
                 EncryptionAlgorithm.Rc4 => EncryptRc4(plainBytes, keyBytes),
-                _ => throw new ToolException(ErrorCode.InputNotValid)
+                _ => throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Algorithm))
             };
 
             var output = args.OutputFormat switch
@@ -68,7 +75,7 @@ public sealed class TextEncryptorTool(IRandomSource? random = null)
         }
         catch
         {
-            throw new ToolException(ErrorCode.FailedToDecrypt);
+            throw new ToolException(ErrorCode.FailedToEncrypt);
         }
     }
 

@@ -19,7 +19,7 @@ public sealed class UrlParserTool : ToolBase<UrlParserTool.Args, UrlParserTool.R
         {
             if (string.IsNullOrEmpty(args.Url))
             {
-                throw new ToolException(ErrorCode.TextEmpty);
+                throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Url));
             }
 
             var uri = new Uri(args.Url);
@@ -68,7 +68,7 @@ public sealed class UrlParserTool : ToolBase<UrlParserTool.Args, UrlParserTool.R
         }
         catch (FormatException)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Url));
         }
     }
 

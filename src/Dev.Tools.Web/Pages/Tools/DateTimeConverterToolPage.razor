@@ -13,7 +13,7 @@
                         Label="@_localizer["TextField.Input.Label"]"
                         OnDebounceIntervalElapsed="OnValueChangedAsync"
                         Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"/>
+                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.Errors).Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"/>
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <DtSelectEnum

@@ -45,7 +45,7 @@ public sealed class StringToNatoAlphabetTool : ToolBase<StringToNatoAlphabetTool
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
         }
 
         List<string> words = args.Text

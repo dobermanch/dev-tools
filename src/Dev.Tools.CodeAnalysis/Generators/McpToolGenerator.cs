@@ -53,7 +53,8 @@ public class McpToolGenerator : IIncrementalGenerator
                 "Dev.Tools.Providers",
                 "Dev.Tools.Tools",
                 "ModelContextProtocol",
-                "ModelContextProtocol.Server"
+                "ModelContextProtocol.Server",
+                "Dev.Tools.Mcp.Core"
             ],
             Content =
               """
@@ -79,7 +80,7 @@ public class McpToolGenerator : IIncrementalGenerator
 
                       if (result.HasErrors)
                       {
-                          throw new McpException("Tool '{ToolName}' failed: " + string.Join(", ", result.ErrorCodes));
+                          throw new McpException(ToolErrorMessage.For("{ToolName}", result.Errors));
                       }
 
                       {ResultTypeMapping}

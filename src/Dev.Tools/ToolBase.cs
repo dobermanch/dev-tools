@@ -11,7 +11,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
         }
         catch (ToolException ex)
         {
-            return Failed1(ex.ErrorCode);
+            return Failed(ex.Errors);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -20,7 +20,7 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
         }
         catch (Exception)
         {
-            return Failed1(ErrorCode.Unknown);
+            return Failed([new ToolError(ErrorCode.Unknown)]);
         }
     }
 
@@ -43,8 +43,5 @@ public abstract class ToolBase<TArgs, TResult> : ITool<TArgs, TResult>
     protected virtual TResult Execute(TArgs args) 
         => throw new NotImplementedException();
 
-    protected TResult Failed1(ErrorCode code) => new ()
-    {
-        ErrorCodes = { code }
-    };
+    private static TResult Failed(IReadOnlyList<ToolError> errors) => new() { Errors = errors };
 }

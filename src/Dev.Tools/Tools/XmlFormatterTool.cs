@@ -24,7 +24,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
     {
         if (string.IsNullOrWhiteSpace(args.Xml))
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Xml));
         }
 
         XmlDocument document = new XmlDocument();
@@ -35,7 +35,7 @@ public sealed class XmlFormatterTool : ToolBase<XmlFormatterTool.Args, XmlFormat
         }
         catch (Exception)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Xml));
         }
 
         var xmlNode = Format(document.DocumentElement!, args, document);

@@ -33,7 +33,7 @@
                         Label="@_localizer["TextField.Input.Label"]"
                         Value="@_args.Text"
                         Error="@_result.HasErrors"
-                        ErrorText="@_result.ErrorCodes.Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
+                        ErrorText="@_result.Errors.Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
                         Lines="15"
                         OnDebounceIntervalElapsed="OnStringToEncodeValueChangedAsync"
                         LabelPosition="LabelPositionType.Inline"

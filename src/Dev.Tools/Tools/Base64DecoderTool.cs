@@ -17,7 +17,7 @@ public sealed class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64D
         {
             if (string.IsNullOrEmpty(args.Text))
             {
-                throw new ToolException(ErrorCode.TextEmpty);
+                throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
             }
 
             byte[] bytes = Convert.FromBase64String(args.Text);
@@ -27,7 +27,7 @@ public sealed class Base64DecoderTool : ToolBase<Base64DecoderTool.Args, Base64D
         }
         catch (FormatException)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Text));
         }
     }
 

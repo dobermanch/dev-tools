@@ -61,7 +61,12 @@ builder.Services
 
 builder.Services.AddDevTools();
 
+// An unexpected exception is logged and answered with a detail-free RFC 9457 problem, instead of its
+// message reaching the client. Tool errors never get this far - endpoints return those themselves.
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+app.UseExceptionHandler();
 app.UseForwardedHeaders();
 
 app.MapOpenApi();

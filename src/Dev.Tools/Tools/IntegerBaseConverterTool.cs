@@ -21,7 +21,7 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
     {
         if (string.IsNullOrEmpty(args.InputValue))
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.InputValue));
         }
 
         if ((int)args.InputBase < MinBaseLength
@@ -29,7 +29,9 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
             || (int)args.TargetBase < MinBaseLength
             || (int)args.TargetBase > MaxBaseLength)
         {
-            throw new ToolException(ErrorCode.WrongBase);
+            throw new ToolException(
+                ErrorCode.WrongBase,
+                (int)args.InputBase is < MinBaseLength or > MaxBaseLength ? nameof(Args.InputBase) : nameof(Args.TargetBase));
         }
 
         if (args.InputBase == args.TargetBase)
@@ -83,7 +85,7 @@ public sealed class IntegerBaseConverterTool : ToolBase<IntegerBaseConverterTool
             int index = Alphabet.IndexOf(c);
             if (index < 0 || index >= baseValue)
             {
-                throw new ToolException(ErrorCode.InputNotValid);
+                throw new ToolException(ErrorCode.InputNotValid, nameof(Args.InputValue));
             }
 
             result = checked(result * baseValue + index);

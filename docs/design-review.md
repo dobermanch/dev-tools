@@ -142,7 +142,7 @@ Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MC
    Six tests in `LocalizationTests` cover it: the catalog serves every key shape, a key with no translation resolves to English rather than a `:placeholder:`, a uk-UA translation wins over the English, and the uk-UA file is neither missing a key nor carrying a stale one.
 ~~6. Docs.~~ **Done.** The `CLAUDE.md` add-a-tool checklist is three steps and no longer mentions RESX at all; a new **Tool Text** section states the rules the analyzer enforces, and the Web UI and translation follow-ups are given as optional rather than as steps 4 and 5. The project table now describes `Dev.Tools.Localization` as translations referenced by the Web UI only, and the generated-artifact list swaps the deleted localization key scaffolding for `ToolDescriptions`. `README.md` no longer claims the tools are localized — the web UI is; the CLI, API and MCP server speak English.
 
-**Phase 1 is complete.** What is left of this document is the Phase 3-6 roadmap and the §1-§7 analysis behind it; delete it once those land.
+**Phase 1 is complete.** What is left of this document is the Phase 4-6 roadmap and the §1-§7 analysis behind it; delete it once those land.
 
 ---
 
@@ -217,6 +217,10 @@ The frontend generators are now 99 (API), 161 (MCP) and 214 (CLI) lines, each op
 ## 5. Core contract — the seams the future features need
 
 ### 5a. Error model
+
+> **Done in Phase 3 step 5.** A result carries `IReadOnlyList<ToolError> Errors`, each a `Code`, an optional `Target` (the `Args` property at fault) and the English `Message` authored on the code; `ErrorCodes` and `Failed1` are gone. `ToolException` takes one error or several, so the encryptor and decryptor report a missing text *and* a missing key together; every throw site that is about one argument names it - all but the three that are not (a failed decryption, a failed encryption, and the hasher's `Unknown`). The misused codes are fixed: the encryptor reports the new `FailedToEncrypt`, and the hasher's `CryptographicException` - which no input can cause - is `Unknown`. The catalog's error-code scan now also finds codes collected into a list and thrown from switch arms. Frontends: the CLI prints `text-encryptor: --key: Input is not valid`, one line per error, exit 1; the API answers 400 with `ToolProblemDetails` - the standard RFC 9110 problem type plus an `errors` list of code, target (spelled as in the JSON body) and message, typed in the OpenAPI document - and 500 for `Unknown`; MCP raises `text-encryptor failed: text: Text cannot be empty; key: Input is not valid`; the Web pages read `Errors`. Format arguments were deliberately left out: none of today's codes needs one.
+>
+> **No exception detail reaches a client.** Only authored messages, codes and argument names are exposed. The generated API endpoint used to `catch (Exception e)` and return `e.Message`; it no longer catches, and `AddProblemDetails` + `UseExceptionHandler` log the exception and answer with a detail-free 500. The CLI no longer prints a stack trace for a failure outside a tool - it prints `<tool>: the tool failed unexpectedly`, or `cancelled` with exit 130. The MCP SDK only forwards `McpException` messages, and ours carry authored English only.
 
 `ToolResult.ErrorCodes` is an `IList` but only ever holds one code: `ToolBase.Failed1` (`ToolBase.cs:28-31`) creates the result and returns. An error carries **no target field, no message, no payload** — `ErrorCode` is a flat 7-value global enum, which already forces semantic abuse: the *encryptor* returns `FailedToDecrypt` (`TextEncryptorTool.cs:54`) and so does the *hasher* (`HashTextTool.cs:38`). `JsonFormatterTool` discards the parser's line/offset (`:18,28`).
 
@@ -341,9 +345,9 @@ Each phase is independently shippable.
 
 **Phase 2 — generator consolidation. ✅ Done 2026-09-12.** See §4a. One pipeline, one model with no Roslyn objects in it, one emitter, one naming helper; five new analyzer rules and two generator diagnostics in place of silent skips; deterministic output; every generator snapshot-tested and the skipped caching test passing. Output for the 22 real tools is unchanged apart from the header timestamp and the MCP holder class names. Recommendation 2 (frontends reading the catalog model) was deliberately left for later.
 
-**Phase 3 — contract hardening.** `ToolError` with target/args and multiple errors; cancellation honoured and `OperationCanceledException` rethrown; `TimeProvider` + `IRandomSource` seams; `IToolsProvider.GetTool(Type/name)`; alias index; ~~`ToolDefinitionAttribute` public~~ (deferred — external tools are out of scope, see §5f).
+**Phase 3 — contract hardening. ✅ Done 2026-09-12.** `ToolError` with target/args and multiple errors; cancellation honoured and `OperationCanceledException` rethrown; `TimeProvider` + `IRandomSource` seams; `IToolsProvider.GetTool(Type/name)`; alias index; ~~`ToolDefinitionAttribute` public~~ (deferred — external tools are out of scope, see §5f).
 
-*In progress.* Planned as five commits: (1) type and name-or-alias lookups — **done**, see §5f; (2) public `ToolDefinitionAttribute` — **deferred**, external tools are out of scope; (3) cancellation honoured inside the four `Parallel.For` generators — **done**, see §5b; (4) `TimeProvider` + `IRandomSource` — **done**, see §5c; (5) `ToolError`, last because it is the only step that changes what the frontends return.
+*In progress.* Planned as five commits: (1) type and name-or-alias lookups — **done**, see §5f; (2) public `ToolDefinitionAttribute` — **deferred**, external tools are out of scope; (3) cancellation honoured inside the four `Parallel.For` generators — **done**, see §5b; (4) `TimeProvider` + `IRandomSource` — **done**, see §5c; (5) `ToolError`, last because it is the only step that changes what the frontends return — **done**, see §5a.
 
 **Phase 4 — connectors.** Constructor-injected `IHttpRequester`, per-tool options records with embedded defaults, `Capability` metadata, network `ErrorCode`s; `IpDetailsTool` migrated as the reference implementation; its test becomes hermetic.
 

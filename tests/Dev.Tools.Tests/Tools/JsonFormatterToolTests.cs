@@ -18,7 +18,7 @@ public class JsonFormatterToolTests
             Json: json!
         ), CancellationToken.None);
 
-        await Assert.That(result.ErrorCodes.First()).IsEqualTo(errorCode);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(errorCode);
     }
     
     [Test]

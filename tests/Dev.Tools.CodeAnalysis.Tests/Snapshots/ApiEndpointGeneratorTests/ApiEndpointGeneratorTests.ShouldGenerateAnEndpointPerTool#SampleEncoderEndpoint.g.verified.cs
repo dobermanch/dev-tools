@@ -13,7 +13,6 @@ using Dev.Tools.Tools;
 using Dev.Tools.Api.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using System.Net.Mime;
 
 namespace Dev.Tools.Api.Endpoints;
@@ -45,36 +44,32 @@ public class SampleEncoderEndpoint(Dev.Tools.Providers.IToolsProvider toolProvid
     [EndpointSummary("Sample Encoder")]
     [EndpointDescription("Encodes text.\n\nA second paragraph the CLI list has no room for.")]
     [ProducesResponseType<SampleEncoderResponse>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
+    [ProducesResponseType<ToolProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
     public async Task<IActionResult> HandleAsync([FromBody] SampleEncoderRequest request, CancellationToken cancellationToken)
     {
-        try 
-        {  
-            var tool = toolProvider.GetTool<SampleEncoderTool>();
-            
-            var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
+        // No catch here: an unexpected exception goes to the host's exception handler, which
+        // logs it and answers with a detail-free 500. Catching it here used to return
+        // exception.Message to the client.
+        var tool = toolProvider.GetTool<SampleEncoderTool>();
+
+        var args = new Dev.Tools.Tools.SampleEncoderTool.Args(
                Text: request.Text,
                     Padding: request.Padding,
                     UrlSafe: request.UrlSafe
            );
-            
-            var result = await tool.RunAsync(args, cancellationToken);
-            if (result.HasErrors)
-            {
-                return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-            }
-            
-            var response = new SampleEncoderResponse
+
+        var result = await tool.RunAsync(args, cancellationToken);
+        if (result.HasErrors)
+        {
+            return ToolFailed(result.Errors);
+        }
+
+        var response = new SampleEncoderResponse
            {
                Text = result.Text
            };
-            
-            return Ok(response);
-        }
-        catch (Exception e)
-        {
-            return Problem(title: "Failed to run tool", detail: e.Message, statusCode: (int)HttpStatusCode.InternalServerError);
-        }
+
+        return Ok(response);
     }
 }

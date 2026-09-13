@@ -20,7 +20,7 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
     {
         if (string.IsNullOrEmpty(args.Text))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Text));
         }
 
         byte[] hash;
@@ -40,11 +40,13 @@ public sealed class HashTextTool(IMd5Hash md5Hash) : ToolBase<HashTextTool.Args,
         }
         catch (CryptographicException)
         {
-            throw new ToolException(ErrorCode.FailedToDecrypt);
+            // No input makes hashing fail, so this is not the caller's doing - and it was never a
+            // decryption failure, which is what it used to report.
+            throw new ToolException(ErrorCode.Unknown);
         }
         catch (ArgumentOutOfRangeException)
         {
-            throw new ToolException(ErrorCode.InputNotValid);    
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Algorithm));    
         }   
         
         var result = new StringBuilder();

@@ -13,6 +13,7 @@ using Dev.Tools.Providers;
 using Dev.Tools.Tools;
 using ModelContextProtocol;
 using ModelContextProtocol.Server;
+using Dev.Tools.Mcp.Core;
 
 namespace Dev.Tools.Mcp.Tools;
 
@@ -50,7 +51,7 @@ public static class SampleEncoderMcpTool
 
         if (result.HasErrors)
         {
-            throw new McpException("Tool 'sample-encoder' failed: " + string.Join(", ", result.ErrorCodes));
+            throw new McpException(ToolErrorMessage.For("sample-encoder", result.Errors));
         }
 
         var response = new SampleEncoderResponse

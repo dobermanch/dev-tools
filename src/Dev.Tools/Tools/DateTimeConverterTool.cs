@@ -29,13 +29,13 @@ public sealed class DateTimeConverterTool(TimeProvider? time = null)
         var date = ConvertStringToDate(args.Date, args.From);
         if (date is null)
         {
-            throw new ToolException(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat, nameof(Args.Date));
         }
 
         var result = ConvertDateToString(date.Value, args.To);
         if (result is null)
         {
-            throw new ToolException(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat, nameof(Args.To));
         }
 
         return new Result(result);

@@ -144,7 +144,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Data).IsEmpty();
-        await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.NamespaceEmpty);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.NamespaceEmpty);
     }
 
     [Test]
@@ -300,7 +300,7 @@ public class UuidGeneratorToolTests
         var result = await new UuidGeneratorTool(new Md5Hash()).RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.Data).IsEmpty();
-        await Assert.That(result.ErrorCodes.First()).IsEqualTo(ErrorCode.NamespaceEmpty);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.NamespaceEmpty);
     }
 
     [Test]

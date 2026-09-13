@@ -26,7 +26,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
     {
         if (string.IsNullOrWhiteSpace(args.Json))
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Json));
         }
 
         JsonDocument document;
@@ -36,7 +36,7 @@ public sealed class JsonFormatterTool : ToolBase<JsonFormatterTool.Args, JsonFor
         }
         catch (Exception)
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Json));
         }
 
         var jsonObject = FormatJson(document.RootElement, args);

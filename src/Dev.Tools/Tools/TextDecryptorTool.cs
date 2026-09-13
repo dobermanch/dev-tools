@@ -23,14 +23,21 @@ public sealed class TextDecryptorTool : ToolBase<TextDecryptorTool.Args, TextDec
 {
     protected override Result Execute(Args args)
     {
+        // Both are checked before either is reported, so a caller missing both hears about both.
+        var errors = new List<ToolError>();
         if (string.IsNullOrEmpty(args.EncryptedText))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            errors.Add(new ToolError(ErrorCode.TextEmpty, nameof(Args.EncryptedText)));
         }
 
         if (string.IsNullOrEmpty(args.Key))
         {
-            throw new ToolException(ErrorCode.InputNotValid);
+            errors.Add(new ToolError(ErrorCode.InputNotValid, nameof(Args.Key)));
+        }
+
+        if (errors.Count > 0)
+        {
+            throw new ToolException(errors);
         }
 
         try
@@ -49,7 +56,7 @@ public sealed class TextDecryptorTool : ToolBase<TextDecryptorTool.Args, TextDec
                 EncryptionAlgorithm.Aes256Gcm => DecryptAesGcm(encryptedBytes, keyBytes),
                 EncryptionAlgorithm.TripleDes => DecryptTripleDes(encryptedBytes, keyBytes[..24]),
                 EncryptionAlgorithm.Rc4 => DecryptRc4(encryptedBytes, keyBytes),
-                _ => throw new ToolException(ErrorCode.InputNotValid)
+                _ => throw new ToolException(ErrorCode.InputNotValid, nameof(Args.Algorithm))
             };
 
             return new Result(Encoding.UTF8.GetString(plainBytes));
@@ -60,7 +67,7 @@ public sealed class TextDecryptorTool : ToolBase<TextDecryptorTool.Args, TextDec
         }
         catch (FormatException)
         {
-            throw new ToolException(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat, nameof(Args.EncryptedText));
         }
         catch
         {

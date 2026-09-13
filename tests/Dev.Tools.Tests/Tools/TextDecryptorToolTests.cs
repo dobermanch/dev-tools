@@ -14,7 +14,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.TextEmpty);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.TextEmpty);
     }
 
     [Test]
@@ -27,7 +27,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.InputNotValid);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.InputNotValid);
     }
 
     [Test]
@@ -45,7 +45,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.WrongFormat);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.WrongFormat);
     }
 
     [Test]
@@ -257,7 +257,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.FailedToDecrypt);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.FailedToDecrypt);
     }
 
     [Test]
@@ -277,7 +277,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.FailedToDecrypt);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.FailedToDecrypt);
     }
 
     [Test]
@@ -295,7 +295,7 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.FailedToDecrypt);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.FailedToDecrypt);
     }
 
     [Test]
@@ -318,6 +318,6 @@ public class TextDecryptorToolTests
         var result = await new TextDecryptorTool().RunAsync(args, CancellationToken.None);
 
         await Assert.That(result.HasErrors).IsTrue();
-        await Assert.That(result.ErrorCodes[0]).IsEqualTo(ErrorCode.FailedToDecrypt);
+        await Assert.That(result.Errors[0].Code).IsEqualTo(ErrorCode.FailedToDecrypt);
     }
 }

@@ -7,6 +7,9 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
 {
     private const int ToolFailedExitCode = 1;
 
+    // The shell convention for a command interrupted by Ctrl+C.
+    private const int CancelledExitCode = 130;
+
     // Diagnostics go to stderr so piping tools together keeps stdout clean.
     private static readonly IAnsiConsole ErrorConsole = AnsiConsole.Create(new AnsiConsoleSettings
     {
@@ -17,9 +20,9 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
     {
         if (result.HasErrors)
         {
-            foreach (var errorCode in result.ErrorCodes)
+            foreach (var error in result.Errors)
             {
-                ErrorConsole.MarkupLineInterpolated($"[red]{definition.Name} failed: {errorCode}[/]");
+                ErrorConsole.MarkupLineInterpolated($"[red]{Describe(definition, error)}[/]");
             }
 
             return ToolFailedExitCode;
@@ -42,6 +45,23 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
         return 0;
     }
 
+    /// <summary>
+    /// "text-encryptor: --key: Input is not valid". The target is spelled the way it is typed: the
+    /// positional pipe-input argument by its name, every other argument as its long option.
+    /// </summary>
+    private static string Describe(ToolDefinition definition, ToolError error)
+    {
+        if (error.Target is null)
+        {
+            return $"{definition.Name}: {error.Message}";
+        }
+
+        var name = char.ToLowerInvariant(error.Target[0]) + error.Target[1..];
+        var isPositional = definition.ArgsType.Properties.Any(it => it.Name == error.Target && it.IsPipeInput);
+
+        return $"{definition.Name}: {(isPositional ? name : "--" + name)}: {error.Message}";
+    }
+
     // A collection output is one value per line, so piping it stays line-oriented
     // instead of printing the type name.
     private static string FormatOutput(object? value) => value switch
@@ -54,9 +74,19 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
         _ => value.ToString() ?? string.Empty
     };
 
+    /// <summary>
+    /// A failure outside the tool itself - a tool turns its own exceptions into errors - so nothing in the
+    /// exception is something the user can act on. The full stack trace used to be printed here.
+    /// </summary>
     public int ProcessError(Exception exception, ToolDefinition definition, SettingsBase settings)
     {
-        ErrorConsole.WriteException(exception);
+        if (exception is OperationCanceledException)
+        {
+            ErrorConsole.MarkupLineInterpolated($"[yellow]{definition.Name}: cancelled[/]");
+            return CancelledExitCode;
+        }
+
+        ErrorConsole.MarkupLineInterpolated($"[red]{definition.Name}: the tool failed unexpectedly[/]");
         return -1;
     }
 }

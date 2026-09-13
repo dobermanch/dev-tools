@@ -30,7 +30,7 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
     {
         if (string.IsNullOrEmpty(args.Number))
         {
-            throw new ToolException(ErrorCode.TextEmpty);
+            throw new ToolException(ErrorCode.TextEmpty, nameof(Args.Number));
         }
 
         var result = args.Transcoding == TranscodingType.Decode 
@@ -44,7 +44,7 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
     {
         if (!int.TryParse(input, out var number) || number < 1 || number > 3999)
         {
-            throw new ToolException(ErrorCode.WrongFormat);
+            throw new ToolException(ErrorCode.WrongFormat, nameof(Args.Number));
         }
 
         var result = new StringBuilder();
@@ -68,7 +68,7 @@ public sealed class IntegerToRomanConverterTool : ToolBase<IntegerToRomanConvert
         {
             if (!RomanToNumber.TryGetValue(c, out int value))
             {
-                throw new ToolException(ErrorCode.WrongFormat);
+                throw new ToolException(ErrorCode.WrongFormat, nameof(Args.Number));
             }
 
             total += value > prev ? value - 2 * prev : value;

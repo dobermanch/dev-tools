@@ -44,7 +44,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash, IRandomSource? random = 
             case UuidType.V3:
                 if (args.Namespace is null)
                 {
-                    throw new ToolException(ErrorCode.NamespaceEmpty);
+                    throw new ToolException(ErrorCode.NamespaceEmpty, nameof(Args.Namespace));
                 }
 
                 guids = Generate(args, cancellationToken, _ => NewUuidV3(args.Namespace.Value, args.Name ?? string.Empty));
@@ -55,7 +55,7 @@ public sealed class UuidGeneratorTool(IMd5Hash md5Hash, IRandomSource? random = 
             case UuidType.V5:
                 if (args.Namespace is null)
                 {
-                    throw new ToolException(ErrorCode.NamespaceEmpty);
+                    throw new ToolException(ErrorCode.NamespaceEmpty, nameof(Args.Namespace));
                 }
 
                 guids = Generate(args, cancellationToken, _ => NewUuidV5(args.Namespace.Value, args.Name ?? string.Empty));

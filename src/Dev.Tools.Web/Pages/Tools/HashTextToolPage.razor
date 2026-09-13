@@ -12,7 +12,7 @@
                         Value="@_args.Text"
                         OnDebounceIntervalElapsed="OnValueChangedAsync"
                         Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.ErrorCodes).Select(it => Context.Localization.GetErrorCode(it)).FirstOrDefault("")"
+                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.Errors).Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
                         Label="@_localizer["TextField.Input.Label"]"
                         LabelPosition="LabelPositionType.Inline"
                         Lines="5"

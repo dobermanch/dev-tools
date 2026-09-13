@@ -41,6 +41,9 @@
   <data name="Enums.ErrorCode.FailedToDecrypt" xml:space="preserve">
     <value>Помилка дешифрування</value>
   </data>
+  <data name="Enums.ErrorCode.FailedToEncrypt" xml:space="preserve">
+    <value>Помилка шифрування</value>
+  </data>
   <data name="Enums.ErrorCode.InputNotValid" xml:space="preserve">
     <value>Вхідні дані недійсні</value>
   </data>

@@ -52,7 +52,6 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                 "Dev.Tools.Api.Core",
                 "Microsoft.AspNetCore.Http",
                 "Microsoft.AspNetCore.Mvc",
-                "System.Net",
                 "System.Net.Mime"
             ],
             Content =
@@ -67,30 +66,26 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                   [EndpointSummary("{ToolTitle}")]
                   [EndpointDescription("{ToolDescription}")]
                   [ProducesResponseType<{ToolResultType}>(StatusCodes.Status200OK, MediaTypeNames.Application.Json)]
-                  [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.Json)]
-                  [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.Json)]
+                  [ProducesResponseType<ToolProblemDetails>(StatusCodes.Status400BadRequest, MediaTypeNames.Application.ProblemJson)]
+                  [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError, MediaTypeNames.Application.ProblemJson)]
                   public async Task<IActionResult> HandleAsync([FromBody] {ToolArgsType} request, CancellationToken cancellationToken)
                   {
-                      try 
-                      {  
-                          var tool = toolProvider.GetTool<{ToolType}>();
-                          
-                          {RequestTypeMapping}
-                          
-                          var result = await tool.RunAsync(args, cancellationToken);
-                          if (result.HasErrors)
-                          {
-                              return Problem(type: result.ErrorCodes[0].ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-                          }
-                          
-                          {ResultTypeMapping}
-                          
-                          return Ok(response);
-                      }
-                      catch (Exception e)
+                      // No catch here: an unexpected exception goes to the host's exception handler, which
+                      // logs it and answers with a detail-free 500. Catching it here used to return
+                      // exception.Message to the client.
+                      var tool = toolProvider.GetTool<{ToolType}>();
+
+                      {RequestTypeMapping}
+
+                      var result = await tool.RunAsync(args, cancellationToken);
+                      if (result.HasErrors)
                       {
-                          return Problem(title: "Failed to run tool", detail: e.Message, statusCode: (int)HttpStatusCode.InternalServerError);
+                          return ToolFailed(result.Errors);
                       }
+
+                      {ResultTypeMapping}
+
+                      return Ok(response);
                   }
               }
               """
