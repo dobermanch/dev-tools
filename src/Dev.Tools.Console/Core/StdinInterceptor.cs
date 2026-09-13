@@ -25,6 +25,16 @@ public sealed class StdinInterceptor : ICommandInterceptor
             return;
         }
 
+        // An argument given on the command line wins, and stdin is read only when it is missing. Reading
+        // stdin regardless replaced the argument with whatever was piped (`echo x | dev-tools encrypt hello`
+        // encrypted "x"), and hung wherever stdin is redirected but left open with nothing written to it -
+        // CI, IDE run configurations, process launchers.
+        var currentValue = targetProp.GetValue(settings) as string;
+        if (!string.IsNullOrWhiteSpace(currentValue))
+        {
+            return;
+        }
+
         if (System.Console.IsInputRedirected)
         {
             var stdin = System.Console.In.ReadToEnd();
@@ -34,7 +44,7 @@ public sealed class StdinInterceptor : ICommandInterceptor
             }
 
             stdin = stdin.TrimEnd('\r', '\n');
-            
+
             if (targetProp.PropertyType == typeof(string) && targetProp.CanWrite)
             {
                 targetProp.SetValue(settings, stdin);
@@ -43,13 +53,9 @@ public sealed class StdinInterceptor : ICommandInterceptor
             return;
         }
 
-        var currentValue = targetProp.GetValue(settings) as string;
-        if (string.IsNullOrWhiteSpace(currentValue))
-        {
-            throw new ArgumentException(
-                $"Missing required input for argument '{targetProp.Name}'. " +
-                "Provide argument or pipe data into the command.");
-        }
+        throw new ArgumentException(
+            $"Missing required input for argument '{targetProp.Name}'. " +
+            "Provide argument or pipe data into the command.");
     }
   
     public void InterceptResult(CommandContext context, CommandSettings settings, ref int result)

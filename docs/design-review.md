@@ -248,7 +248,32 @@ Also fix the frontends' error handling, which is inconsistent and in two cases a
 
 Everything is `string` today, end to end: `Args`/`Result` hold whole payloads, and `StdinInterceptor.cs:31` does `Console.In.ReadToEnd()` and only assigns when the property is `typeof(string)` (`:38`) — so a non-string pipe input silently ignores stdin.
 
-> **Also fix here (found in Phase 3 step 4, deliberately left for this phase):** `StdinInterceptor` reads stdin whenever input is redirected, even when the pipe-input argument was passed on the command line. So in any non-interactive environment whose stdin stays open (CI, IDE run configurations, process launchers) every command with a `[PipeInput]` argument hangs - `encrypt hello --key secret` included - and piped data silently replaces an explicit argument (`echo x | dev-tools encrypt hello` encrypts `x`). Read stdin only when the argument is empty; the stdin streaming this phase introduces is the natural place.
+> ~~**Also fix here (found in Phase 3 step 4, deliberately left for this phase):** `StdinInterceptor` reads stdin whenever input is redirected, even when the pipe-input argument was passed on the command line.~~ **Done in Phase 5 step 1** — see §5e-progress below.
+
+#### §5e-progress. Phase 5 scope and decisions (agreed 2026-09-12)
+
+**The principle: a tool does not care where its data came from.** Typed on the command line, piped, uploaded, loaded from a file, or — later — produced by the previous step of a [tool flow](proposals/tool-flow.md). Loading files is each frontend's business, and every frontend has its own way to do it, so every frontend offers file input for every `[PipeInput]`, whatever its type:
+
+- a `string` pipe input (`json-formatter`, and most tools) receives the file's text — the tool is unchanged;
+- a `ToolContent` pipe input receives the bytes or a stream — for tools whose data is not text or not whole (certificates, hashing a large file, Base64 of an image).
+
+Decisions:
+
+- **Stdin trailing newline:** trimmed for `string` pipe inputs, as today (`echo hello | hash` stays convenient); **not** trimmed for `ToolContent`, matching `sha256sum` and `base64`.
+- **API file input:** `multipart/form-data` on the same route, the file as a part and the other arguments as form fields, with an explicit size limit. The JSON body stays.
+- **MCP:** text only; no file paths, which on the HTTP transport would let a client read any file on the server.
+- **`ToolContent` only on the `[PipeInput]`** (an analyzer rule), so each frontend has exactly one file slot.
+- **Binary output is a later step.** Returning decoded bytes as Base64 inside JSON makes no sense for a Base64 decoder; decide raw `application/octet-stream`, text-when-UTF-8, MCP blob resources and a Web download once the input side is in.
+- `[PipeInput]`/`[PipeOutput]` are the contract the future tool flow connects tools through, so no frontend may reshape a pipe value — see [docs/proposals/tool-flow.md](proposals/tool-flow.md).
+
+Planned as: (1) CLI output and stdin fixes, no new type — **done**; (2) `ToolContent` input, file input across the frontends, `hash` and `base64-encoder` as the reference tools; (3) binary output, `base64-decoder` as the reference — later.
+
+**Step 1 — done.** Two CLI bugs, both found by running it:
+
+- **Piped output was wrapped at 80 columns.** `ToolResponseHandler` printed results with Spectre's `AnsiConsole.WriteLine`, which wraps to the console width — 80 columns when stdout is redirected. Anything longer than a line gained newlines on the way through: 3 000 bytes Base64-encoded came out as 50 lines, and `base64-encoder < file | base64-decoder` returned the file with a newline every 80 bytes (the system `base64 -d` decoded the same encoder output correctly, so the damage was in the printing). Results now go straight to `Console.Out`; Spectre still renders errors and help. The round trip now returns the file plus the one trailing newline the CLI prints.
+- **Stdin was read even when the argument was given**, so a given argument was replaced by piped data (`echo x | dev-tools base64-encoder hello` encoded `x`) and every command hung wherever stdin is redirected but never written to. The argument now wins, and stdin is read only when it is missing. Verified with `(sleep 25) | timeout 20 dev-tools base64-encoder hello`, which printed `aGVsbG8=` and exited 0 before the timeout; it used to hang.
+
+Neither fix has an automated test: there is no Console test project yet. Step 2 needs one for the stdin streaming, and these two cases belong in it.
 
 **Do not convert every tool to streams.** Recommend a payload abstraction used only by tools that need it:
 
@@ -345,6 +370,8 @@ Each phase is independently shippable.
 **Phase 4 — connectors. ⏸ Postponed 2026-09-12.** Only one tool (`ip-details`) talks to an external service, which is too little to design the connector split on — a generic transport (address, auth, timeouts) versus a per-service contract. See [docs/proposals/connectors.md](proposals/connectors.md) for the context, what is still wrong with `ip-details`, the draft proposal and the open questions. Resume when a second tool needs an external service.
 
 **Phase 5 — `ToolContent` payloads.** Core type + implicit string conversion; generator binding per frontend; CLI stdin streaming, including the stdin-overrides-argument bug noted in §5e; migrate hash/base64 as reference cases.
+
+*In progress.* Scope and decisions agreed 2026-09-12 (§5e-progress): every frontend offers file input for every `[PipeInput]`, `string` tools get the text and `ToolContent` tools the bytes. Planned as three steps: (1) CLI output wrapping and stdin-overrides-argument fixes — **done**; (2) `ToolContent` input with `hash` and `base64-encoder` as reference tools; (3) binary output with `base64-decoder` — later.
 
 **Phase 6 — generic Web page + dependency-light core.** Metadata-driven `ToolPage` with per-tool UI hints and hand-written escape hatch; `Icon` in `[ToolDefinition]`; strip `Microsoft.Extensions.*` from core and move DI wiring to its own package — the precondition for VS Code / browser-extension targets.
 

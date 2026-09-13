@@ -28,15 +28,18 @@ internal sealed class ToolResponseHandler : IToolResponseHandler
             return ToolFailedExitCode;
         }
 
+        // The result goes to stdout as it is, not through Spectre: Spectre wraps text to the console width
+        // (80 columns when redirected), which put a newline every 80 characters into anything piped on -
+        // `base64-encoder < file | base64-decoder` did not give the file back.
         var outputProperty = definition.ReturnType.Properties.FirstOrDefault(it => it.IsPipeOutput);
         if (outputProperty != null)
         {
             var value = result.GetType().GetProperty(outputProperty.Name)!.GetValue(result, null);
-            AnsiConsole.WriteLine(FormatOutput(value));
+            System.Console.Out.WriteLine(FormatOutput(value));
         }
         else
         {
-            AnsiConsole.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
+            System.Console.Out.WriteLine(JsonSerializer.Serialize(result, result.GetType(), new JsonSerializerOptions
             {
                 WriteIndented = true
             }));
