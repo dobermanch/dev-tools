@@ -123,7 +123,7 @@ Result: core keeps zero `Microsoft.Extensions.Localization` coupling, CLI/API/MC
    The `ToolsCatalogTests` assertions from step 2 stay: the analyzer stops undescribed text being *written*, while those tests check the other half — that what was written survives the generator into the catalog every frontend reads.
 ~~4. Generators emit the English text instead of localization keys.~~ **Done.** The CLI emits `[Description]`, the API emits the built-in `[EndpointSummary]` / `[EndpointDescription]`, and MCP emits `[Description]` plus `Title` on `[McpServerTool]`. All three hosts dropped `.AddDevToolsLocalization()` and their `Dev.Tools.Localization` project reference, and the two `LocalizedEndpoint*Attribute` files are gone. Verified live: the CLI shows real sentences with no resource lookup, the OpenAPI document carries a summary, a full description and per-property descriptions on all 22 endpoints, and `tools/list` returns a title and a description for all 22 MCP tools.
 
-   **MCP now emits an output schema.** `UseStructuredContent = true` makes the SDK publish the response type's schema, so all 22 tools now carry one and the result descriptions reach the model for the first time. `Usage` is appended to the MCP description only. Tool annotations (`ReadOnly`, `OpenWorld`) are deliberately *not* emitted: they would have to be hardcoded true for every tool today, which is a claim the generator cannot check — they belong with the `Capability` metadata in Phase 4.
+   **MCP now emits an output schema.** `UseStructuredContent = true` makes the SDK publish the response type's schema, so all 22 tools now carry one and the result descriptions reach the model for the first time. `Usage` is appended to the MCP description only. Tool annotations (`ReadOnly`, `OpenWorld`) are deliberately *not* emitted: they would have to be hardcoded true for every tool today, which is a claim the generator cannot check — they belong with the `Capability` metadata in Phase 4 (postponed; see [docs/proposals/connectors.md](proposals/connectors.md) for why the missing annotations matter anyway).
 
    Two gaps showed up while verifying, both fixed here:
 
@@ -240,16 +240,9 @@ Also fix the frontends' error handling, which is inconsistent and in two cases a
 
 ~~Randomness and time were read directly, so tests could assert shape but never values.~~ **Done in Phase 3 step 4.** `IRandomSource` (`Next(int)`, `Fill(Span<byte>)`) sits next to `IMd5Hash` in `Dev.Tools.Cryptography`, with `CryptographicRandomSource` as its default, and BCL `TimeProvider` covers the clock. Every direct call is gone: `Guid.NewGuid()` (UUID v4, now built from 16 drawn bytes), `DateTimeOffset.UtcNow` and `RandomNumberGenerator.Fill` (UUID v7), `Ulid.NewUlid()` (now `Ulid.NewUlid(clock, randomness)`), `new Random()` (Lorem Ipsum), `RandomNumberGenerator.GetInt32` (passphrase and token generators), `DateTimeOffset.Now` (date-convert with no input), and the text encryptor's AES-CBC and Triple-DES IVs and AES-GCM nonce. Tools take them as optional constructor parameters — the container injects a host's registrations, `AddDevTools` registers the defaults with `TryAdd`, and the 100 existing `new XTool()` test call sites compile unchanged. Tests now assert exact values through `ScriptedRandomSource` and `FixedTimeProvider`. That surfaced a real bug: **UUID v7 never set the RFC 9562 variant bits**, so about three values in four carried the wrong variant; fixed and pinned by a zero-bytes test that failed before the fix. The live-network half of this item was already dealt with in Phase 0 (`IpDetailsToolTests` uses a stub handler).
 
-### 5d. External connectors (the future feature, designed now)
+### 5d. External connectors (the future feature)
 
-`IpDetailsTool` is the shape of everything to come, and it is currently the anti-pattern: hardcoded `https://api.ipify.org` / `api6.ipify.org` (`:15-16`), `new HttpClient()` created per request and never disposed (`:27`), `catch { return null; }` swallowing failures (and cancellation) into a null IP rather than an `ErrorCode`.
-
-Recommended seam, in order of importance:
-
-1. **Declare the dependency in the constructor**, like `IMd5Hash`. Core defines a minimal `IHttpRequester` (or takes `HttpClient` and lets the host own lifetime/factory) so core does **not** take a `Microsoft.Extensions.Http` dependency — that matters for WASM/AOT (§6).
-2. **Options, not constants.** A per-tool options record (`IpDetailsOptions { Uri IpV4Endpoint; Uri IpV6Endpoint; TimeSpan Timeout; }`) with embedded defaults, bindable from `IConfiguration` by hosts that have one, and settable directly by hosts that don't (WASM, VS Code). Follow the repo's own guidance (`code.instructions.md`: "Prefer `IOptions<T>` for configuration binding") but keep the *core* type a plain record so the WASM/AOT host isn't forced into `Microsoft.Extensions.Options`.
-3. **Declare the capability in metadata.** `[ToolDefinition(..., Capabilities = Capability.Network)]` flowing into `ToolDefinition`. This is what lets a browser extension hide network tools, the API document rate-limits, MCP mark a tool as non-hermetic, and the test suite exclude network tools from the default run.
-4. **Network failures become `ErrorCode`s** (`ConnectorUnavailable`, `ConnectorTimeout`), not nulls.
+> **Postponed 2026-09-12 and moved to its own document: [docs/proposals/connectors.md](proposals/connectors.md).** It is a feature proposal rather than part of this review, and it should outlive this document. It holds the purpose (a generic HTTP transport plus a per-service contract), what is still wrong with `ip-details`, the draft proposal, and the questions to answer when a second tool needs an external service.
 
 ### 5e. File/stream payloads (the other future feature)
 
@@ -349,7 +342,7 @@ Each phase is independently shippable.
 
 *In progress.* Planned as five commits: (1) type and name-or-alias lookups — **done**, see §5f; (2) public `ToolDefinitionAttribute` — **deferred**, external tools are out of scope; (3) cancellation honoured inside the four `Parallel.For` generators — **done**, see §5b; (4) `TimeProvider` + `IRandomSource` — **done**, see §5c; (5) `ToolError`, last because it is the only step that changes what the frontends return — **done**, see §5a.
 
-**Phase 4 — connectors.** Constructor-injected `IHttpRequester`, per-tool options records with embedded defaults, `Capability` metadata, network `ErrorCode`s; `IpDetailsTool` migrated as the reference implementation; its test becomes hermetic.
+**Phase 4 — connectors. ⏸ Postponed 2026-09-12.** Only one tool (`ip-details`) talks to an external service, which is too little to design the connector split on — a generic transport (address, auth, timeouts) versus a per-service contract. See [docs/proposals/connectors.md](proposals/connectors.md) for the context, what is still wrong with `ip-details`, the draft proposal and the open questions. Resume when a second tool needs an external service.
 
 **Phase 5 — `ToolContent` payloads.** Core type + implicit string conversion; generator binding per frontend; CLI stdin streaming, including the stdin-overrides-argument bug noted in §5e; migrate hash/base64 as reference cases.
 
@@ -360,7 +353,7 @@ Each phase is independently shippable.
 ## 9. Verification (per phase)
 
 - `dotnet build` — must be warning-clean; confirm generated files under `src/*/obj/**/generated/` no longer churn between two consecutive builds (Phase 2).
-- `dotnet test` — all TUnit suites; generator snapshot tests un-skipped and committed; network-dependent tests moved behind a category filter (Phase 4).
+- `dotnet test` — all TUnit suites; generator snapshot tests un-skipped and committed; network-dependent tests moved behind a category filter (Phase 4, postponed; none exist today).
 - CLI: `echo "Hello" | dev-tools base64-encoder | dev-tools base64-decoder`; `dev-tools base64-decoder "!!!"; echo $?` must be non-zero (Phase 0); `dev-tools hash --help` shows real English descriptions (Phase 1).
 - API: `docker run` or `dotnet run`, check `/ui` Scalar doc renders descriptions, and `POST /tools/base64-decoder` with bad input returns a well-formed `ProblemDetails` (Phase 3).
 - MCP: call a tool over stdio, plus an intentionally-failing input, to confirm errors surface (Phase 0/3).

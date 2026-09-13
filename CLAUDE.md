@@ -10,7 +10,7 @@ See [.github/instructions/code.instructions.md](.github/instructions/code.instru
 
 [docs/design-review.md](docs/design-review.md) — **temporary** working document: a design review of the solution (localization scope, generator duplication, tool-contract seams for connectors and stream payloads, known bugs) plus a phased roadmap. Read it before reshaping the tool abstraction, the source generators, or the localization layout, and keep it current as phases land. **Delete it once the roadmap is done** — it is not permanent documentation and is deliberately not linked from the README.
 
-Phases 0 (correctness fixes), 1 (English in the tools, localization confined to the Web UI), 2 (generator consolidation) and 3 (contract hardening) are done; phases 4-6 are not started.
+Phases 0 (correctness fixes), 1 (English in the tools, localization confined to the Web UI), 2 (generator consolidation) and 3 (contract hardening) are done; phase 4 (connectors) is postponed until a second tool needs an external service - see [docs/proposals/connectors.md](docs/proposals/connectors.md), which is a standing feature proposal and stays when the review is deleted; phases 5-6 are not started.
 
 ## Build & Test Commands
 
