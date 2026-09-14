@@ -39,6 +39,7 @@ public static class ToolIconProvider
             "otp" => Icons.Material.Outlined.PhonelinkLock,
             "text-diff" => Icons.Material.Outlined.Difference,
             "bcrypt" => Icons.Material.Outlined.Password,
+            "color-converter" => Icons.Material.Outlined.Palette,
             _ => Icons.Material.Outlined.Construction
         };
     }

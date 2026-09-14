@@ -1181,6 +1181,9 @@
   <data name="Enums.Keyword.Diff" xml:space="preserve">
     <value>Diff</value>
   </data>
+  <data name="Enums.Keyword.Color" xml:space="preserve">
+    <value>Колір</value>
+  </data>
 
   <!-- Text Statistics Tool -->
   <data name="Tools.TextStatistics.Name" xml:space="preserve">
@@ -2055,5 +2058,83 @@ bcrypt читає не більше перших 72 байтів пароля в
   </data>
   <data name="Tools.Bcrypt.Enums.BcryptOperation.Verify" xml:space="preserve">
     <value>Перевірити пароль за bcrypt-гешем</value>
+  </data>
+
+  <!-- Color Converter Tool -->
+  <data name="Tools.ColorConverter.Name" xml:space="preserve">
+    <value>Конвертер кольорів</value>
+  </data>
+  <data name="Tools.ColorConverter.Description" xml:space="preserve">
+    <value>Перетворює колір між записами, якими користуються CSS і дизайнерські інструменти: hex, RGB, HSL, HWB, CMYK та назвами кольорів CSS.
+
+Вхідні дані — будь-який із них: #rgb, #rgba, #rrggbb або #rrggbbaa, із # чи без нього; rgb() і rgba(), hsl() і hsla(), hwb(), зі значеннями через коми чи пробіли та необов'язковою прозорістю після скісної риски; cmyk() з відсотками або device-cmyk() із числами від 0 до 1; або одна зі 148 назв кольорів CSS чи transparent. Відтінок може мати одиниці deg, grad, rad або turn, а значення поза своїм діапазоном обмежується, як це робить CSS.
+
+Кожен результат записується з кольору, округленого до 8 бітів на канал, тож усі вони описують той самий колір, що й hex; HSL, HWB і CMYK округлюються до одного знака після коми. Прозорість, меншу за 1, збережено в hex, RGB, HSL і HWB. CMYK — це проста формула без колірного профілю, тож це не те, що з кольору зробить принтер, і прозорості в ньому немає. Name — назва саме цього кольору в CSS, якщо вона є.</value>
+  </data>
+  <data name="Tools.ColorConverter.Args.Color.Name" xml:space="preserve">
+    <value>Колір</value>
+  </data>
+  <data name="Tools.ColorConverter.Args.Color.Description" xml:space="preserve">
+    <value>Колір: hex (#1e90ff), rgb(), hsl(), hwb(), cmyk() або device-cmyk(), назва кольору CSS чи transparent</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hex.Name" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hex.Description" xml:space="preserve">
+    <value>#rrggbb або #rrggbbaa, якщо прозорість кольору менша за 1</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Rgb.Name" xml:space="preserve">
+    <value>RGB</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Rgb.Description" xml:space="preserve">
+    <value>rgb(r, g, b) або rgba(r, g, b, alpha), кожен канал від 0 до 255</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hsl.Name" xml:space="preserve">
+    <value>HSL</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hsl.Description" xml:space="preserve">
+    <value>hsl(відтінок, насиченість%, світлість%) або hsla з прозорістю</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hwb.Name" xml:space="preserve">
+    <value>HWB</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Hwb.Description" xml:space="preserve">
+    <value>hwb(відтінок білизна% чорнота%), з / alpha, якщо прозорість менша за 1</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Cmyk.Name" xml:space="preserve">
+    <value>CMYK</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Cmyk.Description" xml:space="preserve">
+    <value>cmyk(c%, m%, y%, k%) за простою формулою, без колірного профілю та прозорості</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Name.Name" xml:space="preserve">
+    <value>Назва в CSS</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Name.Description" xml:space="preserve">
+    <value>Назва саме цього кольору в CSS або transparent; відсутня, якщо назви немає</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Red.Name" xml:space="preserve">
+    <value>Червоний</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Red.Description" xml:space="preserve">
+    <value>Червоний канал, від 0 до 255</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Green.Name" xml:space="preserve">
+    <value>Зелений</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Green.Description" xml:space="preserve">
+    <value>Зелений канал, від 0 до 255</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Blue.Name" xml:space="preserve">
+    <value>Синій</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Blue.Description" xml:space="preserve">
+    <value>Синій канал, від 0 до 255</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Alpha.Name" xml:space="preserve">
+    <value>Прозорість</value>
+  </data>
+  <data name="Tools.ColorConverter.Result.Alpha.Description" xml:space="preserve">
+    <value>Непрозорість від 0 (прозорий) до 1 (непрозорий), округлена до трьох знаків після коми</value>
   </data>
 </root>

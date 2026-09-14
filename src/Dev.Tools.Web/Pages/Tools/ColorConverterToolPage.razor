@@ -1,0 +1,73 @@
+@page "/tools/color-converter"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Color.Label"]"
+                        @bind-Value="@_color"
+                        OnDebounceIntervalElapsed="@OnColorChangedAsync"
+                        Error="@(ColorError is not null)"
+                        ErrorText="@ColorError"
+                        ShowCopyButton="false"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudColorPicker
+                        Label="@_localizer["ColorPicker.Label"]"
+                        Value="@_picked"
+                        ValueChanged="@OnPickedAsync"
+                        ShowAlpha="true"
+                        PickerVariant="PickerVariant.Inline"/>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    @if (_result is { HasErrors: false })
+                    {
+                        <div style="height: 56px; border-radius: 4px; border: 1px solid var(--mud-palette-lines-default); background: @_result.Rgb;"></div>
+                    }
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        @if (_result is { HasErrors: false })
+        {
+            <DtSection Id="output" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Hex" Label="@_localizer["TextField.Hex.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Rgb" Label="@_localizer["TextField.Rgb.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Hsl" Label="@_localizer["TextField.Hsl.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Hwb" Label="@_localizer["TextField.Hwb.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <DtTextField T="string" Value="@_result.Cmyk" Label="@_localizer["TextField.Cmyk.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    @if (_result.Name is not null)
+                    {
+                        <MudItem xs="12" md="6">
+                            <DtTextField T="string" Value="@_result.Name" Label="@_localizer["TextField.Name.Label"]"
+                                         ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </DtSection>
+        }
+    </MudCardContent>
+</MudCard>

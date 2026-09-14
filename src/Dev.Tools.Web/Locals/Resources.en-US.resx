@@ -734,4 +734,28 @@
     <data name="Page.BcryptToolPage.Text.Truncated" xml:space="preserve">
         <value>Only the first 72 bytes of the password count: bcrypt ignores the rest</value>
     </data>
+    <data name="Page.ColorConverterToolPage.TextField.Color.Label" xml:space="preserve">
+        <value>Color</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.ColorPicker.Label" xml:space="preserve">
+        <value>Pick a color</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Hex.Label" xml:space="preserve">
+        <value>Hex</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Rgb.Label" xml:space="preserve">
+        <value>RGB</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Hsl.Label" xml:space="preserve">
+        <value>HSL</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Hwb.Label" xml:space="preserve">
+        <value>HWB</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Cmyk.Label" xml:space="preserve">
+        <value>CMYK</value>
+    </data>
+    <data name="Page.ColorConverterToolPage.TextField.Name.Label" xml:space="preserve">
+        <value>CSS name</value>
+    </data>
 </root>

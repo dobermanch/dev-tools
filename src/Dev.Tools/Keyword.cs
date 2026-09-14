@@ -75,5 +75,7 @@ public enum Keyword
     [Description("OTP")]
     Otp,
 
-    Diff
+    Diff,
+
+    Color
 }

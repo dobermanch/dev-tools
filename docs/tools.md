@@ -16,6 +16,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | `url-transcoder` | | URL-encode or URL-decode a string (RFC 3986) |
 | `date-convert` | | Convert between date/time formats: ISO 8601, ISO 9075, RFC 3339, RFC 7231, Unix timestamp, milliseconds, MongoDB ObjectId, Excel date, and JS date; omit the input to convert the current time |
 | `data-converter` | | Convert structured data between JSON, YAML, TOML and XML, or write it as CSV; converting a format to itself reformats it |
+| `color-converter` | `color` | Convert a color between hex, RGB, HSL, HWB, CMYK and CSS names, with alpha; reads any CSS notation of them |
 
 ---
 
