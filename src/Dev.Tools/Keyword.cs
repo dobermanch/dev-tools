@@ -73,5 +73,7 @@ public enum Keyword
     Cron,
 
     [Description("OTP")]
-    Otp
+    Otp,
+
+    Diff
 }

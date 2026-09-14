@@ -675,4 +675,28 @@
     <data name="Page.EncryptionToolPage.TextField.Result.Decrypt.Label" xml:space="preserve">
         <value>Decrypted text</value>
     </data>
+    <data name="Page.TextDiffToolPage.TextField.Original.Label" xml:space="preserve">
+        <value>Original text</value>
+    </data>
+    <data name="Page.TextDiffToolPage.TextField.Modified.Label" xml:space="preserve">
+        <value>Modified text</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Switch.IgnoreWhitespace.Label" xml:space="preserve">
+        <value>Ignore whitespace</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Switch.IgnoreCase.Label" xml:space="preserve">
+        <value>Ignore case</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Slider.ContextLines.Label" xml:space="preserve">
+        <value>Context lines</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Text.Summary" xml:space="preserve">
+        <value>{0} lines added, {1} removed</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Text.NoChanges" xml:space="preserve">
+        <value>The texts are identical</value>
+    </data>
+    <data name="Page.TextDiffToolPage.TextField.Diff.Label" xml:space="preserve">
+        <value>Unified diff</value>
+    </data>
 </root>

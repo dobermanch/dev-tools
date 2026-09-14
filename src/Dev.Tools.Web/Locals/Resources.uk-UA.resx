@@ -675,4 +675,28 @@
     <data name="Page.EncryptionToolPage.TextField.Result.Decrypt.Label" xml:space="preserve">
         <value>Розшифрований текст</value>
     </data>
+    <data name="Page.TextDiffToolPage.TextField.Original.Label" xml:space="preserve">
+        <value>Оригінальний текст</value>
+    </data>
+    <data name="Page.TextDiffToolPage.TextField.Modified.Label" xml:space="preserve">
+        <value>Змінений текст</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Switch.IgnoreWhitespace.Label" xml:space="preserve">
+        <value>Ігнорувати пробіли</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Switch.IgnoreCase.Label" xml:space="preserve">
+        <value>Ігнорувати регістр</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Slider.ContextLines.Label" xml:space="preserve">
+        <value>Рядки контексту</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Text.Summary" xml:space="preserve">
+        <value>Додано рядків: {0}, видалено: {1}</value>
+    </data>
+    <data name="Page.TextDiffToolPage.Text.NoChanges" xml:space="preserve">
+        <value>Тексти однакові</value>
+    </data>
+    <data name="Page.TextDiffToolPage.TextField.Diff.Label" xml:space="preserve">
+        <value>Уніфікований diff</value>
+    </data>
 </root>

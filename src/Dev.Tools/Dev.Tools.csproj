@@ -19,6 +19,7 @@
     <PackageReference Include="Tomlyn" />
     <PackageReference Include="Cronos" />
     <PackageReference Include="CronExpressionDescriptor" />
+    <PackageReference Include="DiffPlex" />
   </ItemGroup>
 
   <ItemGroup>

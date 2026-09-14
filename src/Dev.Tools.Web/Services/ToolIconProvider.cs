@@ -37,6 +37,7 @@ public static class ToolIconProvider
             "ip-subnet" => Icons.Material.Outlined.SettingsEthernet,
             "ip-converter" => Icons.Material.Outlined.Numbers,
             "otp" => Icons.Material.Outlined.PhonelinkLock,
+            "text-diff" => Icons.Material.Outlined.Difference,
             _ => Icons.Material.Outlined.Construction
         };
     }

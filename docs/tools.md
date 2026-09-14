@@ -68,6 +68,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | --- | --- | --- |
 | `regex-tester` | `regex` | Test a .NET regular expression against text: every match with its position and capture groups, and an optional replacement; a match that backtracks too long is reported instead of hanging |
 | `cron-parser` | `cron` | Explain a cron expression in English and list its next run times in a time zone, daylight saving changes included; five fields or six with seconds, `L`, `W`, `#` and the `@daily`-style macros |
+| `text-diff` | `diff` | Compare two texts line by line as a unified diff, the format of `diff -u` and `git diff`, optionally ignoring whitespace and case |
 
 ---
 

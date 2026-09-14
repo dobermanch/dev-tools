@@ -1178,6 +1178,9 @@
   <data name="Enums.Keyword.Otp" xml:space="preserve">
     <value>OTP</value>
   </data>
+  <data name="Enums.Keyword.Diff" xml:space="preserve">
+    <value>Diff</value>
+  </data>
 
   <!-- Text Statistics Tool -->
   <data name="Tools.TextStatistics.Name" xml:space="preserve">
@@ -1902,5 +1905,77 @@ TOTP (RFC 6238) виводить код з поточного часу й змі
   </data>
   <data name="Tools.Encryption.Enums.CiphertextFormat.Hex" xml:space="preserve">
     <value>Шістнадцятковий, записується малими літерами, читається в будь-якому регістрі</value>
+  </data>
+
+  <!-- Text Diff Tool -->
+  <data name="Tools.TextDiff.Name" xml:space="preserve">
+    <value>Порівняння текстів</value>
+  </data>
+  <data name="Tools.TextDiff.Description" xml:space="preserve">
+    <value>Порівнює два тексти рядок за рядком і показує відмінності як уніфікований diff — у форматі, який пишуть diff -u та git diff.
+
+Змінений текст порівнюється з Original: рядок, який є лише в оригіналі, видалено (-), рядок, який є лише в зміненому тексті, додано (+), а змінений рядок — це видалення, за яким іде додавання. Кожна група змін показується з ContextLines незміненими рядками навколо, а групи, ближчі одна до одної, поєднуються в один фрагмент. Закінчення рядків не порівнюються, тож текст із переносами рядків Windows збігається з тим самим текстом із переносами Unix; відсутній перенос рядка в самому кінці — це зміна, позначена "\ No newline at end of file".
+
+IgnoreWhitespace порівнює рядки без жодних пробілів і табуляцій, а IgnoreCase — без урахування регістру літер. Рядки все одно показуються так, як їх записано, а незмінений рядок — так, як він записаний в оригіналі. Для однакових текстів diff порожній.</value>
+  </data>
+  <data name="Tools.TextDiff.Args.Modified.Name" xml:space="preserve">
+    <value>Змінений текст</value>
+  </data>
+  <data name="Tools.TextDiff.Args.Modified.Description" xml:space="preserve">
+    <value>Змінений текст, який порівнюється з Original</value>
+  </data>
+  <data name="Tools.TextDiff.Args.Original.Name" xml:space="preserve">
+    <value>Оригінал</value>
+  </data>
+  <data name="Tools.TextDiff.Args.Original.Description" xml:space="preserve">
+    <value>Текст у тому вигляді, яким він був до зміни</value>
+  </data>
+  <data name="Tools.TextDiff.Args.IgnoreWhitespace.Name" xml:space="preserve">
+    <value>Ігнорувати пробіли</value>
+  </data>
+  <data name="Tools.TextDiff.Args.IgnoreWhitespace.Description" xml:space="preserve">
+    <value>Порівнювати рядки без жодних пробілів і табуляцій</value>
+  </data>
+  <data name="Tools.TextDiff.Args.IgnoreCase.Name" xml:space="preserve">
+    <value>Ігнорувати регістр</value>
+  </data>
+  <data name="Tools.TextDiff.Args.IgnoreCase.Description" xml:space="preserve">
+    <value>Порівнювати рядки без урахування регістру літер</value>
+  </data>
+  <data name="Tools.TextDiff.Args.ContextLines.Name" xml:space="preserve">
+    <value>Рядки контексту</value>
+  </data>
+  <data name="Tools.TextDiff.Args.ContextLines.Description" xml:space="preserve">
+    <value>Скільки незмінених рядків показувати навколо кожної групи змін; значення менші за 0 вважаються 0</value>
+  </data>
+  <data name="Tools.TextDiff.Result.Diff.Name" xml:space="preserve">
+    <value>Diff</value>
+  </data>
+  <data name="Tools.TextDiff.Result.Diff.Description" xml:space="preserve">
+    <value>Відмінності в уніфікованому форматі diff, як їх пишуть diff -u та git diff, але без останнього переносу рядка; порожньо, якщо тексти збігаються</value>
+  </data>
+  <data name="Tools.TextDiff.Result.HasChanges.Name" xml:space="preserve">
+    <value>Є зміни</value>
+  </data>
+  <data name="Tools.TextDiff.Result.HasChanges.Description" xml:space="preserve">
+    <value>Чи відрізняються тексти з урахуванням того, що ігнорують параметри</value>
+  </data>
+  <data name="Tools.TextDiff.Result.AddedLines.Name" xml:space="preserve">
+    <value>Додані рядки</value>
+  </data>
+  <data name="Tools.TextDiff.Result.AddedLines.Description" xml:space="preserve">
+    <value>Скільки рядків є лише в зміненому тексті</value>
+  </data>
+  <data name="Tools.TextDiff.Result.RemovedLines.Name" xml:space="preserve">
+    <value>Видалені рядки</value>
+  </data>
+  <data name="Tools.TextDiff.Result.RemovedLines.Description" xml:space="preserve">
+    <value>Скільки рядків є лише в оригінальному тексті</value>
+  </data>
+  <data name="Tools.TextDiff.Result.Lines.Name" xml:space="preserve">
+    <value>Рядки</value>
+  </data>
+  <data name="Tools.TextDiff.Result.Lines.Description" xml:space="preserve">
+    <value>Усі рядки обох текстів по порядку, кожен — незмінений, видалений або доданий, із його номером у кожному тексті, де він є</value>
   </data>
 </root>
