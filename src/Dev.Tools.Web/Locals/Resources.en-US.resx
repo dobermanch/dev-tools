@@ -692,4 +692,46 @@
     <data name="Page.TextDiffToolPage.TextField.Diff.Label" xml:space="preserve">
         <value>Unified diff</value>
     </data>
+    <data name="Page.BcryptToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Password.Label" xml:space="preserve">
+        <value>Password</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Hash.Label" xml:space="preserve">
+        <value>Bcrypt hash to check</value>
+    </data>
+    <data name="Page.BcryptToolPage.Slider.Cost.Label" xml:space="preserve">
+        <value>Cost</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.CostHint" xml:space="preserve">
+        <value>Each step doubles the time; in the browser a cost above 10 can take several seconds</value>
+    </data>
+    <data name="Page.BcryptToolPage.Button.Hash.Label" xml:space="preserve">
+        <value>Hash</value>
+    </data>
+    <data name="Page.BcryptToolPage.Button.Verify.Label" xml:space="preserve">
+        <value>Check</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Hash</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Version.Label" xml:space="preserve">
+        <value>Version</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Cost.Label" xml:space="preserve">
+        <value>Cost</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Salt.Label" xml:space="preserve">
+        <value>Salt</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.Matches" xml:space="preserve">
+        <value>The password matches the hash</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.NoMatch" xml:space="preserve">
+        <value>The password does not match the hash</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.Truncated" xml:space="preserve">
+        <value>Only the first 72 bytes of the password count: bcrypt ignores the rest</value>
+    </data>
 </root>

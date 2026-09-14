@@ -189,6 +189,14 @@ public class ToolDeclarationAnalyzer : DiagnosticAnalyzer
                     syntaxContext.SemanticModel,
                     CodeDefinitions.ToolDefinitionAttribute.TypeFullName);
 
+                // The attribute is found through the symbol, so every declaration of a partial tool finds it - a
+                // [GeneratedRegex] adds a generated one. Only the declaration it is written on is checked, or the
+                // tool would be counted once per declaration and collide with itself (DT1001).
+                if (attribute?.Parent?.Parent != syntaxContext.Node)
+                {
+                    return;
+                }
+
                 LiteralExpressionSyntax? literal =
                     attribute
                         ?.ArgumentList

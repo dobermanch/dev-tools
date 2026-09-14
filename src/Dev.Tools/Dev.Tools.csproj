@@ -20,6 +20,7 @@
     <PackageReference Include="Cronos" />
     <PackageReference Include="CronExpressionDescriptor" />
     <PackageReference Include="DiffPlex" />
+    <PackageReference Include="BCrypt.Net-Next" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,109 @@
+@page "/tools/bcrypt"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="input" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="BcryptTool.BcryptOperation"
+                        Label="@_localizer["Select.Operation.Label"]"
+                        Value="@_operation"
+                        ValueToDisplay="@(operation => Context.Localization.GetToolEnum(_toolDefinition, operation))"
+                        ValueChanged="@((BcryptTool.BcryptOperation value) => SetOperation(value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="8">
+                    <DtTextField
+                        T="string"
+                        Label="@_localizer["TextField.Password.Label"]"
+                        @bind-Value="@_password"
+                        Error="@(ErrorFor(nameof(BcryptTool.Args.Password)) is not null)"
+                        ErrorText="@ErrorFor(nameof(BcryptTool.Args.Password))"
+                        ShowCopyButton="false"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                @if (_operation == BcryptTool.BcryptOperation.Hash)
+                {
+                    <MudItem xs="12" md="6">
+                        <DtSlider
+                            T="int"
+                            Label="@_localizer["Slider.Cost.Label"]"
+                            Value="@_cost"
+                            MinValue="4"
+                            MaxValue="12"
+                            ValueChanged="@((int value) => _cost = value)"/>
+                        <MudText Typo="Typo.caption">@_localizer["Text.CostHint"]</MudText>
+                    </MudItem>
+                }
+                else
+                {
+                    <MudItem xs="12">
+                        <DtTextField
+                            T="string"
+                            Label="@_localizer["TextField.Hash.Label"]"
+                            @bind-Value="@_hash"
+                            Error="@(ErrorFor(nameof(BcryptTool.Args.Hash)) is not null)"
+                            ErrorText="@ErrorFor(nameof(BcryptTool.Args.Hash))"
+                            ShowCopyButton="false"
+                            LabelPosition="LabelPositionType.Inline"
+                        />
+                    </MudItem>
+                }
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@_running" OnClick="@RunAsync">
+                        @if (_running)
+                        {
+                            <MudProgressCircular Class="mr-2" Size="Size.Small" Indeterminate="true"/>
+                        }
+                        @_localizer[$"Button.{_operation}.Label"]
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        @if (_result is { HasErrors: false })
+        {
+            <DtSection Id="output" ShowDivider="true">
+                <MudGrid Class="align-center" Spacing="4">
+                    @if (_result.Matches is { } matches)
+                    {
+                        <MudItem xs="12">
+                            <MudAlert Severity="@(matches ? Severity.Success : Severity.Error)" Dense="true">
+                                @_localizer[matches ? "Text.Matches" : "Text.NoMatch"]
+                            </MudAlert>
+                        </MudItem>
+                    }
+                    else
+                    {
+                        <MudItem xs="12">
+                            <DtTextField T="string" Value="@_result.Hash" Label="@_localizer["TextField.Result.Label"]"
+                                         ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                        </MudItem>
+                    }
+                    <MudItem xs="12" sm="4">
+                        <DtTextField T="string" Value="@_result.Version" Label="@_localizer["TextField.Version.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <DtTextField T="int" Value="@_result.Cost" Label="@_localizer["TextField.Cost.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    <MudItem xs="12" sm="4">
+                        <DtTextField T="string" Value="@_result.Salt" Label="@_localizer["TextField.Salt.Label"]"
+                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
+                    </MudItem>
+                    @if (_result.PasswordTruncated)
+                    {
+                        <MudItem xs="12">
+                            <MudAlert Severity="Severity.Warning" Dense="true">@_localizer["Text.Truncated"]</MudAlert>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </DtSection>
+        }
+    </MudCardContent>
+</MudCard>

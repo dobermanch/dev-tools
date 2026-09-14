@@ -38,6 +38,7 @@ public static class ToolIconProvider
             "ip-converter" => Icons.Material.Outlined.Numbers,
             "otp" => Icons.Material.Outlined.PhonelinkLock,
             "text-diff" => Icons.Material.Outlined.Difference,
+            "bcrypt" => Icons.Material.Outlined.Password,
             _ => Icons.Material.Outlined.Construction
         };
     }

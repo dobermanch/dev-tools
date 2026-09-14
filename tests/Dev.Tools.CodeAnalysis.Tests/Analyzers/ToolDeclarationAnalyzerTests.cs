@@ -71,6 +71,23 @@ public class ToolDeclarationAnalyzerTests
     }
 
     [Test]
+    public async Task Should_not_report_diagnostic_When_a_tool_is_declared_in_several_parts()
+    {
+        // A [GeneratedRegex] in a tool adds a generated partial declaration without the attribute or the modifiers.
+        var context = Analyze(
+            $$""""
+              {{Preamble}}
+
+              [ToolDefinition(Name = "tool1", Description = "Does the first thing")]
+              public sealed partial class MyClass1 : ITool<object, object> {}
+
+              partial class MyClass1 {}
+              """");
+
+        await context.RunAsync();
+    }
+
+    [Test]
     public async Task Should_report_diagnostic_When_name_is_not_unique()
     {
         var context = Analyze(

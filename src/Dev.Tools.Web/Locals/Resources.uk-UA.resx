@@ -699,4 +699,46 @@
     <data name="Page.TextDiffToolPage.TextField.Diff.Label" xml:space="preserve">
         <value>Уніфікований diff</value>
     </data>
+    <data name="Page.BcryptToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Операція</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Password.Label" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Hash.Label" xml:space="preserve">
+        <value>Bcrypt-геш для перевірки</value>
+    </data>
+    <data name="Page.BcryptToolPage.Slider.Cost.Label" xml:space="preserve">
+        <value>Вартість</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.CostHint" xml:space="preserve">
+        <value>Кожен крок подвоює час; у браузері вартість понад 10 може займати кілька секунд</value>
+    </data>
+    <data name="Page.BcryptToolPage.Button.Hash.Label" xml:space="preserve">
+        <value>Гешувати</value>
+    </data>
+    <data name="Page.BcryptToolPage.Button.Verify.Label" xml:space="preserve">
+        <value>Перевірити</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Result.Label" xml:space="preserve">
+        <value>Геш</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Version.Label" xml:space="preserve">
+        <value>Версія</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Cost.Label" xml:space="preserve">
+        <value>Вартість</value>
+    </data>
+    <data name="Page.BcryptToolPage.TextField.Salt.Label" xml:space="preserve">
+        <value>Сіль</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.Matches" xml:space="preserve">
+        <value>Пароль відповідає гешу</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.NoMatch" xml:space="preserve">
+        <value>Пароль не відповідає гешу</value>
+    </data>
+    <data name="Page.BcryptToolPage.Text.Truncated" xml:space="preserve">
+        <value>Враховуються лише перші 72 байти пароля: решту bcrypt ігнорує</value>
+    </data>
 </root>

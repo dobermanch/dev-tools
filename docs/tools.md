@@ -48,6 +48,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | Tool | Alias | Description |
 | --- | --- | --- |
 | `hash` | | Hash text or a file using MD5, SHA-1, SHA-256, SHA-384, or SHA-512, or compute an HMAC when given a key; output as a lowercase hex string |
+| `bcrypt` | | Hash a password with bcrypt (a random salt, cost 4-15), or check a password against a `$2a$`, `$2b$` or `$2y$` hash |
 | `encryption` | `cipher` | Encrypt text with AES-128-CBC, AES-256-CBC, AES-256-GCM, TripleDES-CBC or RC4 to Base64 or hex, or decrypt what it encrypted |
 | `otp` | `totp`, `hotp` | Generate or check TOTP and HOTP codes (RFC 6238, RFC 4226) from a Base32 secret, or generate a secret, with the previous and next codes and the `otpauth://` URI for authenticator apps |
 

@@ -1978,4 +1978,82 @@ IgnoreWhitespace порівнює рядки без жодних пробілі�
   <data name="Tools.TextDiff.Result.Lines.Description" xml:space="preserve">
     <value>Усі рядки обох текстів по порядку, кожен — незмінений, видалений або доданий, із його номером у кожному тексті, де він є</value>
   </data>
+
+  <!-- Bcrypt Hash Tool -->
+  <data name="Tools.Bcrypt.Name" xml:space="preserve">
+    <value>Bcrypt-геш</value>
+  </data>
+  <data name="Tools.Bcrypt.Description" xml:space="preserve">
+    <value>Гешує пароль алгоритмом bcrypt або перевіряє пароль за bcrypt-гешем.
+
+Геш записується в модульному форматі crypt — $2b$, вартість, далі 22 символи солі та 31 символ гешу — щоразу з новою випадковою 128-бітною сіллю, тож той самий пароль, загешований двічі, дає два різні геші, і обидва проходять перевірку. Вартість — це двійковий логарифм кількості раундів розгортання ключа: кожен крок угору подвоює час. Перевірка читає версію, вартість і сіль із самого гешу та приймає версії $2a$, $2b$ і $2y$, які пишуть інші бібліотеки.
+
+bcrypt читає не більше перших 72 байтів пароля в кодуванні UTF-8 й ігнорує решту, про що повідомляє результат. Вартість обмежується від 4 до 15, а геш із вищою вартістю відхиляється, щоб один запит не займав сервер чи браузер на хвилини.</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Password.Name" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Password.Description" xml:space="preserve">
+    <value>Пароль, який треба загешувати або перевірити</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Operation.Name" xml:space="preserve">
+    <value>Операція</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Operation.Description" xml:space="preserve">
+    <value>Загешувати пароль чи перевірити його за Hash</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Hash.Name" xml:space="preserve">
+    <value>Геш</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Hash.Description" xml:space="preserve">
+    <value>Лише для перевірки: bcrypt-геш, за яким перевіряється пароль, наприклад $2b$10$...</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Cost.Name" xml:space="preserve">
+    <value>Вартість</value>
+  </data>
+  <data name="Tools.Bcrypt.Args.Cost.Description" xml:space="preserve">
+    <value>Лише для гешування: вартість, кожен крок якої подвоює час; обмежується від 4 до 15</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Hash.Name" xml:space="preserve">
+    <value>Геш</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Hash.Description" xml:space="preserve">
+    <value>Новий геш або геш, за яким перевірено пароль</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Matches.Name" xml:space="preserve">
+    <value>Збігається</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Matches.Description" xml:space="preserve">
+    <value>Лише для перевірки: чи відповідає пароль гешу</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Version.Name" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Version.Description" xml:space="preserve">
+    <value>Версія bcrypt із гешу, наприклад 2b</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Cost.Name" xml:space="preserve">
+    <value>Вартість</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Cost.Description" xml:space="preserve">
+    <value>Вартість із гешу</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Salt.Name" xml:space="preserve">
+    <value>Сіль</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.Salt.Description" xml:space="preserve">
+    <value>Сіль із гешу, 22 символи</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.PasswordTruncated.Name" xml:space="preserve">
+    <value>Пароль обрізано</value>
+  </data>
+  <data name="Tools.Bcrypt.Result.PasswordTruncated.Description" xml:space="preserve">
+    <value>Чи довший пароль за 72 байти UTF-8 — найбільше, що читає bcrypt; решта не змінює геш</value>
+  </data>
+  <data name="Tools.Bcrypt.Enums.BcryptOperation.Hash" xml:space="preserve">
+    <value>Загешувати пароль із новою випадковою сіллю</value>
+  </data>
+  <data name="Tools.Bcrypt.Enums.BcryptOperation.Verify" xml:space="preserve">
+    <value>Перевірити пароль за bcrypt-гешем</value>
+  </data>
 </root>
