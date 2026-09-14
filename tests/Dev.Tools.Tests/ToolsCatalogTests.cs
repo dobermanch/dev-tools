@@ -10,22 +10,22 @@ public class ToolsCatalogTests
     [Test]
     public async Task ShouldExposeEnglishTextFromTheToolDefinition()
     {
-        var definition = Definition<Base64EncoderTool>();
+        var definition = Definition<BaseEncodingTool>();
 
-        await Assert.That(definition.Title).IsEqualTo("Base64 Encoder");
-        await Assert.That(definition.Description).StartsWith("Encodes text or a file to Base64 format");
+        await Assert.That(definition.Title).IsEqualTo("Base64 Encoder/Decoder");
+        await Assert.That(definition.Description).StartsWith("Encodes text or a file as Base64");
     }
 
     [Test]
     public async Task ShouldExposePropertyDescriptions()
     {
-        var definition = Definition<Base64EncoderTool>();
+        var definition = Definition<BaseEncodingTool>();
 
         var text = definition.ArgsType.Properties.Single(it => it.Name == "Text");
         var encoded = definition.ReturnType.Properties.Single(it => it.Name == "Text");
 
-        await Assert.That(text.Description).IsEqualTo("Text or file content to encode; text is encoded as UTF-8");
-        await Assert.That(encoded.Description).IsEqualTo("The Base64-encoded text");
+        await Assert.That(text.Description).IsEqualTo("Text or file content to encode, text being encoded as UTF-8; or Base64 text to decode");
+        await Assert.That(encoded.Description).IsEqualTo("The Base64 text when encoding, or the decoded text when decoding");
     }
 
     // DT1004-DT1007 stop undescribed text being written; the tests below check the other half -
@@ -104,7 +104,7 @@ public class ToolsCatalogTests
     [Arguments("", "")]
     public async Task SummaryShouldBeTheFirstLineOfADetailedDescription(string description, string expected)
     {
-        var definition = Definition<Base64EncoderTool>() with { Description = description };
+        var definition = Definition<BaseEncodingTool>() with { Description = description };
 
         await Assert.That(definition.Summary).IsEqualTo(expected);
     }
@@ -112,13 +112,13 @@ public class ToolsCatalogTests
     [Test]
     public async Task ShouldExposeAuthoredPropertyLabels()
     {
-        var definition = Definition<Base64EncoderTool>();
+        var definition = Definition<BaseEncodingTool>();
 
-        // "Text" on the result means "Encoded Text" to a reader - that is what DisplayName is for.
+        // "Text" on the result means "Result" to a reader - that is what DisplayName is for.
         var encoded = definition.ReturnType.Properties.Single(it => it.Name == "Text");
 
-        await Assert.That(encoded.DisplayName).IsEqualTo("Encoded Text");
-        await Assert.That(encoded.Label).IsEqualTo("Encoded Text");
+        await Assert.That(encoded.DisplayName).IsEqualTo("Result");
+        await Assert.That(encoded.Label).IsEqualTo("Result");
 
         // Labels that derive correctly are left unauthored, to keep the tool files readable.
         var lineBreaks = definition.ArgsType.Properties.Single(it => it.Name == "InsertLineBreaks");
@@ -155,9 +155,9 @@ public class ToolsCatalogTests
     {
         // The encryptor collects two errors into a list before throwing, throws a third from a switch arm
         // and a fourth directly; the catalog used to see only codes passed straight to a thrown exception.
-        var codes = Definition<TextEncryptorTool>().ErrorCodes;
+        var codes = Definition<EncryptionTool>().ErrorCodes;
 
         await Assert.That(codes).IsEquivalentTo(
-            [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.InputNotValid, ErrorCode.FailedToEncrypt]);
+            [ErrorCode.Unknown, ErrorCode.TextEmpty, ErrorCode.InputNotValid, ErrorCode.FailedToEncrypt, ErrorCode.WrongFormat, ErrorCode.FailedToDecrypt]);
     }
 }

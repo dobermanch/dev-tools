@@ -140,58 +140,6 @@
     <value>XML</value>
   </data>
 
-  <!-- Base64 Decoder Tool -->
-  <data name="Tools.Base64Decoder.Name" xml:space="preserve">
-    <value>Декодер Base64</value>
-  </data>
-  <data name="Tools.Base64Decoder.Description" xml:space="preserve">
-    <value>Декодує текст з формату Base64 назад до оригінального рядка з використанням кодування UTF-8</value>
-  </data>
-  <data name="Tools.Base64Decoder.Args.Text.Name" xml:space="preserve">
-    <value>Текст</value>
-  </data>
-  <data name="Tools.Base64Decoder.Args.Text.Description" xml:space="preserve">
-    <value>Текст у форматі Base64 для декодування</value>
-  </data>
-  <data name="Tools.Base64Decoder.Result.Data.Name" xml:space="preserve">
-    <value>Декодований текст</value>
-  </data>
-  <data name="Tools.Base64Decoder.Result.Data.Description" xml:space="preserve">
-    <value>Декодований текст у оригінальному форматі</value>
-  </data>
-
-  <!-- Base64 Encoder Tool -->
-  <data name="Tools.Base64Encoder.Name" xml:space="preserve">
-    <value>Кодер Base64</value>
-  </data>
-  <data name="Tools.Base64Encoder.Description" xml:space="preserve">
-    <value>Кодує текст або файл у формат Base64 з опціональним URL-безпечним кодуванням та переносами рядків для сумісності з різними системами. Текст кодується як байти UTF-8, файл — як його власні байти.</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.Text.Name" xml:space="preserve">
-    <value>Текст</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.Text.Description" xml:space="preserve">
-    <value>Текст або вміст файлу для кодування; текст кодується як UTF-8</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.InsertLineBreaks.Name" xml:space="preserve">
-    <value>Вставити переноси рядків</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.InsertLineBreaks.Description" xml:space="preserve">
-    <value>Вставляти переноси рядків кожні 76 символів для кращої читабельності</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.UrlSafe.Name" xml:space="preserve">
-    <value>Безпечний URL</value>
-  </data>
-  <data name="Tools.Base64Encoder.Args.UrlSafe.Description" xml:space="preserve">
-    <value>Використовувати URL-безпечне кодування (заміна + на -, / на _, та видалення заповнення)</value>
-  </data>
-  <data name="Tools.Base64Encoder.Result.Text.Name" xml:space="preserve">
-    <value>Закодований текст</value>
-  </data>
-  <data name="Tools.Base64Encoder.Result.Text.Description" xml:space="preserve">
-    <value>Текст, закодований у Base64</value>
-  </data>
-
   <!-- Case Converter Tool -->
   <data name="Tools.CaseConverter.Name" xml:space="preserve">
     <value>Конвертер регістру</value>
@@ -1203,63 +1151,6 @@
   </data>
 
   <!-- Text Encryptor Tool -->
-  <data name="Tools.TextEncryptor.Name" xml:space="preserve">
-    <value>Шифрувальник тексту</value>
-  </data>
-  <data name="Tools.TextEncryptor.Description" xml:space="preserve">
-    <value>Шифрує текст за допомогою симетричних алгоритмів шифрування (AES, TripleDES, RC4). Результат кодується у Base64 і включає IV для блокових шифрів.</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Text.Name" xml:space="preserve">
-    <value>Текст</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Text.Description" xml:space="preserve">
-    <value>Відкритий текст для шифрування</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Key.Name" xml:space="preserve">
-    <value>Секретний ключ</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Key.Description" xml:space="preserve">
-    <value>Секретний ключ для шифрування. Похідний ключ обчислюється через SHA-256.</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Algorithm.Name" xml:space="preserve">
-    <value>Алгоритм</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.Algorithm.Description" xml:space="preserve">
-    <value>Алгоритм шифрування</value>
-  </data>
-  <data name="Tools.TextEncryptor.Result.EncryptedText.Name" xml:space="preserve">
-    <value>Зашифрований текст</value>
-  </data>
-  <data name="Tools.TextEncryptor.Result.EncryptedText.Description" xml:space="preserve">
-    <value>Зашифрований результат у форматі Base64 (з доданим IV для блокових шифрів)</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
-    <value>AES-128 CBC</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
-    <value>AES-256 CBC</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
-    <value>AES-256 GCM</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
-    <value>TripleDES CBC</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
-    <value>RC4</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.OutputFormat.Name" xml:space="preserve">
-    <value>Формат виводу</value>
-  </data>
-  <data name="Tools.TextEncryptor.Args.OutputFormat.Description" xml:space="preserve">
-    <value>Формат кодування зашифрованого результату</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.OutputFormat.Base64" xml:space="preserve">
-    <value>Base64</value>
-  </data>
-  <data name="Tools.TextEncryptor.Enums.OutputFormat.Hex" xml:space="preserve">
-    <value>Hex</value>
-  </data>
   <data name="Enums.Keyword.Encrypt" xml:space="preserve">
     <value>Шифрування</value>
   </data>
@@ -1286,65 +1177,6 @@
   </data>
   <data name="Enums.Keyword.Otp" xml:space="preserve">
     <value>OTP</value>
-  </data>
-
-  <!-- Text Decryptor Tool -->
-  <data name="Tools.TextDecryptor.Name" xml:space="preserve">
-    <value>Дешифрувальник тексту</value>
-  </data>
-  <data name="Tools.TextDecryptor.Description" xml:space="preserve">
-    <value>Розшифровує текст. Підтримує алгоритми AES, TripleDES і RC4.</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.EncryptedText.Name" xml:space="preserve">
-    <value>Зашифрований текст</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.EncryptedText.Description" xml:space="preserve">
-    <value>Зашифрований текст у форматі Base64 або Hex для розшифрування</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.Key.Name" xml:space="preserve">
-    <value>Секретний ключ</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.Key.Description" xml:space="preserve">
-    <value>Секретний ключ для розшифрування (повинен збігатися з ключем шифрування)</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.Algorithm.Name" xml:space="preserve">
-    <value>Алгоритм</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.Algorithm.Description" xml:space="preserve">
-    <value>Алгоритм шифрування, який використовувався для шифрування тексту</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.InputFormat.Name" xml:space="preserve">
-    <value>Формат вхідних даних</value>
-  </data>
-  <data name="Tools.TextDecryptor.Args.InputFormat.Description" xml:space="preserve">
-    <value>Формат кодування зашифрованого входу (повинен збігатися з форматом виводу при шифруванні)</value>
-  </data>
-  <data name="Tools.TextDecryptor.Result.DecryptedText.Name" xml:space="preserve">
-    <value>Розшифрований текст</value>
-  </data>
-  <data name="Tools.TextDecryptor.Result.DecryptedText.Description" xml:space="preserve">
-    <value>Відкритий текст, отриманий після розшифрування</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
-    <value>AES-128 CBC</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
-    <value>AES-256 CBC</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
-    <value>AES-256 GCM</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
-    <value>TripleDES CBC</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
-    <value>RC4</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.InputFormat.Base64" xml:space="preserve">
-    <value>Base64</value>
-  </data>
-  <data name="Tools.TextDecryptor.Enums.InputFormat.Hex" xml:space="preserve">
-    <value>Hex</value>
   </data>
 
   <!-- Text Statistics Tool -->
@@ -1951,5 +1783,124 @@ TOTP (RFC 6238) виводить код з поточного часу й змі
   </data>
   <data name="Tools.Otp.Enums.OtpAlgorithm.Sha512" xml:space="preserve">
     <value>SHA-512</value>
+  </data>
+
+  <!-- Base64 Encoder/Decoder Tool -->
+  <data name="Tools.BaseEncoding.Name" xml:space="preserve">
+    <value>Кодер/декодер Base64</value>
+  </data>
+  <data name="Tools.BaseEncoding.Description" xml:space="preserve">
+    <value>Кодує текст або файл у Base64 чи декодує Base64 назад у текст.
+
+Текст кодується як його байти UTF-8, а файл — як його власні байти, стандартним алфавітом із доповненням; кожні 76 символів можна вставляти перенос рядка. Декодування ігнорує пробіли й переноси рядків і читає декодовані байти як UTF-8. З UrlSafe обидві операції використовують алфавіт RFC 4648 для URL та імен файлів — '-' і '_' замість '+' і '/': кодування пропускає доповнення, а декодування приймає текст із ним чи без нього.</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.Text.Description" xml:space="preserve">
+    <value>Текст або вміст файлу для кодування (текст кодується як UTF-8) або текст Base64 для декодування</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.Transcoding.Name" xml:space="preserve">
+    <value>Операція</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.Transcoding.Description" xml:space="preserve">
+    <value>Кодувати вхідні дані в Base64 чи декодувати Base64 назад у текст</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.UrlSafe.Name" xml:space="preserve">
+    <value>Безпечний для URL</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.UrlSafe.Description" xml:space="preserve">
+    <value>Використовувати URL-безпечний алфавіт ('-' і '_' замість '+' і '/'): кодування пропускає доповнення, декодування приймає текст із ним чи без нього</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.InsertLineBreaks.Name" xml:space="preserve">
+    <value>Вставити переноси рядків</value>
+  </data>
+  <data name="Tools.BaseEncoding.Args.InsertLineBreaks.Description" xml:space="preserve">
+    <value>Лише для кодування: вставляти перенос рядка кожні 76 символів</value>
+  </data>
+  <data name="Tools.BaseEncoding.Result.Text.Name" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Tools.BaseEncoding.Result.Text.Description" xml:space="preserve">
+    <value>Текст Base64 під час кодування або декодований текст під час декодування</value>
+  </data>
+  <data name="Tools.BaseEncoding.Enums.TranscodingType.Encode" xml:space="preserve">
+    <value>Закодувати вхідні дані як текст Base64</value>
+  </data>
+  <data name="Tools.BaseEncoding.Enums.TranscodingType.Decode" xml:space="preserve">
+    <value>Декодувати текст Base64 назад у текст</value>
+  </data>
+
+  <!-- Text Encryption Tool -->
+  <data name="Tools.Encryption.Name" xml:space="preserve">
+    <value>Шифрування тексту</value>
+  </data>
+  <data name="Tools.Encryption.Description" xml:space="preserve">
+    <value>Шифрує текст симетричним алгоритмом або розшифровує текст, який зашифрував цей інструмент.
+
+Ключ перетворюється на ключовий матеріал потрібного розміру одним проходом SHA-256, тож результат настільки надійний, наскільки надійний сам ключ. Шифрування повертає шифротекст у Base64 чи hex із випадковим IV на початку — для AES-GCM це nonce і тег, — а розшифрування читає цю структуру назад, тож ключ, алгоритм і формат мають бути тими, що використовувалися для шифрування. Неправильний ключ зазвичай одразу призводить до помилки, але лише AES-GCM автентифікує шифротекст: інші алгоритми можуть повернути беззмістовний текст.</value>
+  </data>
+  <data name="Tools.Encryption.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.Encryption.Args.Text.Description" xml:space="preserve">
+    <value>Відкритий текст для шифрування або шифротекст у вибраному форматі для розшифрування</value>
+  </data>
+  <data name="Tools.Encryption.Args.Key.Name" xml:space="preserve">
+    <value>Секретний ключ</value>
+  </data>
+  <data name="Tools.Encryption.Args.Key.Description" xml:space="preserve">
+    <value>Секретний ключ, з якого через SHA-256 виводиться ключовий матеріал алгоритму; для розшифрування потрібен ключ, яким шифрували</value>
+  </data>
+  <data name="Tools.Encryption.Args.Operation.Name" xml:space="preserve">
+    <value>Операція</value>
+  </data>
+  <data name="Tools.Encryption.Args.Operation.Description" xml:space="preserve">
+    <value>Зашифрувати чи розшифрувати текст</value>
+  </data>
+  <data name="Tools.Encryption.Args.Algorithm.Name" xml:space="preserve">
+    <value>Алгоритм</value>
+  </data>
+  <data name="Tools.Encryption.Args.Algorithm.Description" xml:space="preserve">
+    <value>Алгоритм шифрування; для розшифрування потрібен той, яким шифрували</value>
+  </data>
+  <data name="Tools.Encryption.Args.Format.Name" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="Tools.Encryption.Args.Format.Description" xml:space="preserve">
+    <value>Кодування шифротексту: те, що повертає шифрування і читає розшифрування</value>
+  </data>
+  <data name="Tools.Encryption.Result.Text.Name" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Tools.Encryption.Result.Text.Description" xml:space="preserve">
+    <value>Закодований шифротекст з IV на початку або відновлений відкритий текст</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionOperation.Encrypt" xml:space="preserve">
+    <value>Зашифрувати відкритий текст</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionOperation.Decrypt" xml:space="preserve">
+    <value>Розшифрувати текст, зашифрований цим інструментом</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionAlgorithm.Aes128Cbc" xml:space="preserve">
+    <value>AES-128 у режимі CBC з доповненням PKCS#7</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionAlgorithm.Aes256Cbc" xml:space="preserve">
+    <value>AES-256 у режимі CBC з доповненням PKCS#7</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionAlgorithm.Aes256Gcm" xml:space="preserve">
+    <value>AES-256 у режимі GCM, з автентифікацією</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionAlgorithm.TripleDes" xml:space="preserve">
+    <value>TripleDES у режимі CBC; застарілий, блок 64 біти</value>
+  </data>
+  <data name="Tools.Encryption.Enums.EncryptionAlgorithm.Rc4" xml:space="preserve">
+    <value>Потоковий шифр RC4; зламаний, лише для сумісності зі старими системами</value>
+  </data>
+  <data name="Tools.Encryption.Enums.CiphertextFormat.Base64" xml:space="preserve">
+    <value>Base64</value>
+  </data>
+  <data name="Tools.Encryption.Enums.CiphertextFormat.Hex" xml:space="preserve">
+    <value>Шістнадцятковий, записується малими літерами, читається в будь-якому регістрі</value>
   </data>
 </root>

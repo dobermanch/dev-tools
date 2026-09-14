@@ -85,7 +85,7 @@ public class CommandLineTests
     [Test]
     public async Task ShouldFailWithoutRunningTheTool_WhenAnArgumentHasNowhereToGo()
     {
-        var (exitCode, output) = await RunAsync("base64-encoder", "hello", "world");
+        var (exitCode, output) = await RunAsync("base-encoding", "hello", "world");
 
         await Assert.That(exitCode).IsEqualTo(UsageErrorExitCode);
         await Assert.That(output).IsEmpty();

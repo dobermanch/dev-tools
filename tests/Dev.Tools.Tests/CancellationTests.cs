@@ -13,7 +13,7 @@ public class CancellationTests
     private static readonly Dictionary<string, Func<CancellationToken, Task>> Runs = new()
     {
         // A tool with no reason to override the token-aware Execute, checked by ToolBase alone.
-        ["base64-encoder"] = token => new Base64EncoderTool().RunAsync(new Base64EncoderTool.Args("hello"), token),
+        ["base-encoding"] = token => new BaseEncodingTool().RunAsync(new BaseEncodingTool.Args("hello"), token),
         ["passphrase-generator"] = token => new PassphraseGeneratorTool().RunAsync(new PassphraseGeneratorTool.Args(), token),
         ["token-generator"] = token => new TokenGeneratorTool().RunAsync(new TokenGeneratorTool.Args(), token),
         ["ulid-generator"] = token => new UlidGeneratorTool().RunAsync(new UlidGeneratorTool.Args(), token),

@@ -1,0 +1,69 @@
+@page "/tools/base-encoding"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="4">
+                    <DtSelectEnum
+                        T="BaseEncodingTool.TranscodingType"
+                        Label="@_localizer["Select.Transcoding.Label"]"
+                        Value="@_transcoding"
+                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+                        ValueChanged="@((BaseEncodingTool.TranscodingType value) => SetOptionAsync(() => _transcoding = value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudSwitch
+                        T="bool"
+                        Value="@_urlSafe"
+                        Label="@_localizer["Switch.UrlSafe.Label"]"
+                        Color="Color.Primary"
+                        ValueChanged="@((bool value) => SetOptionAsync(() => _urlSafe = value))"/>
+                </MudItem>
+                @if (_transcoding == BaseEncodingTool.TranscodingType.Encode)
+                {
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudSwitch
+                            T="bool"
+                            Value="@_insertLineBreaks"
+                            Label="@_localizer["Switch.LineBreaks.Label"]"
+                            Color="Color.Primary"
+                            ValueChanged="@((bool value) => SetOptionAsync(() => _insertLineBreaks = value))"/>
+                    </MudItem>
+                }
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Label="@(_localizer[$"TextField.Input.{_transcoding}.Label"])"
+                        Value="@_text"
+                        AllowFileInput="true"
+                        OnFileLoaded="OnFileLoadedAsync"
+                        Error="@(InputError is not null)"
+                        ErrorText="@InputError"
+                        Lines="15"
+                        OnDebounceIntervalElapsed="OnTextChangedAsync"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Text ?? string.Empty)"
+                        Label="@(_localizer[$"TextField.Result.{_transcoding}.Label"])"
+                        ReadOnly="true"
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+    </MudCardContent>
+</MudCard>

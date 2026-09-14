@@ -22,27 +22,27 @@ public class ToolErrorTests
     [Test]
     public async Task ARejectedInputShouldNameTheArgumentAtFault()
     {
-        var result = await new Base64DecoderTool().RunAsync(new Base64DecoderTool.Args("!!!"), CancellationToken.None);
+        var result = await new BaseEncodingTool().RunAsync(new BaseEncodingTool.Args("!!!", BaseEncodingTool.TranscodingType.Decode), CancellationToken.None);
 
         await Assert.That(result.Errors)
-            .IsEquivalentTo([new ToolError(ErrorCode.InputNotValid, nameof(Base64DecoderTool.Args.Text))]);
+            .IsEquivalentTo([new ToolError(ErrorCode.InputNotValid, nameof(BaseEncodingTool.Args.Text))]);
     }
 
     [Test]
     public async Task EveryMissingArgumentShouldBeReportedNotOnlyTheFirst()
     {
-        var encrypted = await new TextEncryptorTool().RunAsync(new TextEncryptorTool.Args("", ""), CancellationToken.None);
-        var decrypted = await new TextDecryptorTool().RunAsync(new TextDecryptorTool.Args("", ""), CancellationToken.None);
+        var encrypted = await new EncryptionTool().RunAsync(new EncryptionTool.Args("", ""), CancellationToken.None);
+        var decrypted = await new EncryptionTool().RunAsync(new EncryptionTool.Args("", "", EncryptionTool.EncryptionOperation.Decrypt), CancellationToken.None);
 
         await Assert.That(encrypted.Errors).IsEquivalentTo(
         [
-            new ToolError(ErrorCode.TextEmpty, nameof(TextEncryptorTool.Args.Text)),
-            new ToolError(ErrorCode.InputNotValid, nameof(TextEncryptorTool.Args.Key))
+            new ToolError(ErrorCode.TextEmpty, nameof(EncryptionTool.Args.Text)),
+            new ToolError(ErrorCode.InputNotValid, nameof(EncryptionTool.Args.Key))
         ]);
         await Assert.That(decrypted.Errors).IsEquivalentTo(
         [
-            new ToolError(ErrorCode.TextEmpty, nameof(TextDecryptorTool.Args.EncryptedText)),
-            new ToolError(ErrorCode.InputNotValid, nameof(TextDecryptorTool.Args.Key))
+            new ToolError(ErrorCode.TextEmpty, nameof(EncryptionTool.Args.Text)),
+            new ToolError(ErrorCode.InputNotValid, nameof(EncryptionTool.Args.Key))
         ]);
     }
 

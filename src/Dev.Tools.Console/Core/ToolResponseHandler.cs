@@ -30,7 +30,7 @@ internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResp
 
         // The result goes to stdout as it is, not through Spectre: Spectre wraps text to the console width
         // (80 columns when redirected), which put a newline every 80 characters into anything piped on -
-        // `base64-encoder < file | base64-decoder` did not give the file back.
+        // `base-encoding < file | base-encoding --transcoding Decode` did not give the file back.
         var outputProperty = definition.ReturnType.Properties.FirstOrDefault(it => it.IsPipeOutput);
         if (outputProperty != null)
         {
@@ -51,7 +51,7 @@ internal sealed class ToolResponseHandler(TextWriter? output = null) : IToolResp
     }
 
     /// <summary>
-    /// "text-encryptor: --key: Input is not valid". The target is spelled the way it is typed: the
+    /// "encryption: --key: Input is not valid". The target is spelled the way it is typed: the
     /// positional pipe-input argument by its name, every other argument as its long option.
     /// </summary>
     internal static string Describe(ToolDefinition definition, ToolError error)

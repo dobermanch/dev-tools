@@ -6,7 +6,7 @@
     Description =
         "Converts a whole number between binary, octal, decimal, hexadecimal and Base64 representations.",
     Usage =
-        "Only the five listed bases are available - there is no arbitrary-radix option. The Base64 form here is a positional base-64 numeral, not the Base64 encoding of bytes; use the base64-encoder tool for that.",
+        "Only the five listed bases are available - there is no arbitrary-radix option. The Base64 form here is a positional base-64 numeral, not the Base64 encoding of bytes; use the base-encoding tool for that.",
     Aliases = [],
     Keywords = [Keyword.Convert, Keyword.Encode],
     Categories = [Category.Converter]

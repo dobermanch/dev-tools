@@ -47,7 +47,7 @@ Try the **[live demo](https://dobermanch.github.io/dev-tools/)** - no installati
 
 - **Write once, expose everywhere** — CLI, REST API, and MCP server all auto-generated from a single `[ToolDefinition]` attribute via Roslyn source generators
 - **Growing tool library** — encoding, hashing, encryption, UUID/ULID generation, JWT parsing, formatters, and more
-- **Pipeable CLI** — compose tools with Unix pipes: `echo "hello" | dev-tools base64-encoder`
+- **Pipeable CLI** — compose tools with Unix pipes: `echo "hello" | dev-tools base-encoding`
 - **AI assistant integration** — MCP server works with Claude, Cursor, and any MCP-compatible host
 - **Localized web UI** — English and Ukrainian; the CLI, API and MCP server speak English
 - **Multi-arch Docker images** — `linux/amd64` and `linux/arm64`, published on every release
@@ -57,7 +57,7 @@ Try the **[live demo](https://dobermanch.github.io/dev-tools/)** - no installati
 
 ## Available Tools
 
-See [docs/tools.md](docs/tools.md) for the full categorized reference with aliases and descriptions.
+See [docs/tools.md](docs/tools.md) for the full categorized reference with aliases and descriptions, and [docs/tool-design.md](docs/tool-design.md) for when an operation gets its own tool and when it is a mode of another.
 
 ---
 
@@ -85,11 +85,11 @@ dotnet tool install --global Dev.Tools.Console
 
 ```bash
 # Encode to Base64
-dev-tools base64-encoder "Hello, World!"
+dev-tools base-encoding "Hello, World!"
 # → SGVsbG8sIFdvcmxkIQ==
 
 # Pipe tools together
-echo "Hello, World!" | dev-tools base64-encoder | dev-tools base64-decoder
+echo "Hello, World!" | dev-tools base-encoding | dev-tools base-encoding --transcoding Decode
 
 # Format JSON (sort keys)
 echo '{"b":2,"a":1}' | dev-tools json-formatter --sort-keys Ascending
@@ -102,11 +102,11 @@ dev-tools hash --help
 Or run without installing via Docker:
 
 ```bash
-docker run --rm ghcr.io/dobermanch/dev-tools-console base64-encoder "Hello, World!"
+docker run --rm ghcr.io/dobermanch/dev-tools-console base-encoding "Hello, World!"
 # → SGVsbG8sIFdvcmxkIQ==
 
 # Pipe into the container
-echo "Hello, World!" | docker run --rm -i ghcr.io/dobermanch/dev-tools-console base64-encoder
+echo "Hello, World!" | docker run --rm -i ghcr.io/dobermanch/dev-tools-console base-encoding
 ```
 
 ---
@@ -123,7 +123,7 @@ Call an endpoint:
 
 ```bash
 # Encode to Base64
-curl -X POST http://localhost:8080/tools/base64-encoder \
+curl -X POST http://localhost:8080/tools/base-encoding \
   -H "Content-Type: application/json" \
   -d '{"text": "Hello, World!"}'
 ```
@@ -189,11 +189,11 @@ dotnet add package Dev.Tools
 
 ```csharp
 // Base64 encode
-var encoded = await new Base64EncoderTool().RunAsync(
-    new Base64EncoderTool.Args("Hello, World!"),
+var encoded = await new BaseEncodingTool().RunAsync(
+    new BaseEncodingTool.Args("Hello, World!"),
     CancellationToken.None);
 
-Console.WriteLine(encoded.Output); // SGVsbG8sIFdvcmxkIQ==
+Console.WriteLine(encoded.Text); // SGVsbG8sIFdvcmxkIQ==
 ```
 
 ---
@@ -236,7 +236,7 @@ dotnet test
 Run a specific test class:
 
 ```bash
-dotnet test --filter "ClassName=Base64EncoderToolTests"
+dotnet test --filter "ClassName=BaseEncodingToolTests"
 ```
 
 ### Make Targets

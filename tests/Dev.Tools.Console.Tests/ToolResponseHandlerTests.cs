@@ -16,11 +16,11 @@ public class ToolResponseHandlerTests
         // redirected - and so put line breaks into anything piped on to the next command.
         var tools = new ServiceCollection().AddDevTools().BuildServiceProvider().GetRequiredService<IToolsProvider>();
         var text = new string('a', 3000);
-        var result = await tools.GetTool<Base64EncoderTool>().RunAsync(new Base64EncoderTool.Args(text), CancellationToken.None);
+        var result = await tools.GetTool<BaseEncodingTool>().RunAsync(new BaseEncodingTool.Args(text), CancellationToken.None);
         var output = new StringWriter();
 
         var exitCode = new ToolResponseHandler(output)
-            .ProcessResponse(result, tools.GetToolDefinition<Base64EncoderTool>(), new Base64EncoderCommand.Settings());
+            .ProcessResponse(result, tools.GetToolDefinition<BaseEncodingTool>(), new BaseEncodingCommand.Settings());
 
         await Assert.That(exitCode).IsEqualTo(0);
         await Assert.That(output.ToString())

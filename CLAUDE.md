@@ -24,7 +24,7 @@ dotnet test
 dotnet restore
 
 # Run a specific test class
-dotnet test --filter "ClassName=Base64EncoderToolTests"
+dotnet test --filter "ClassName=BaseEncodingToolTests"
 
 # Pack NuGet library
 make nuget
@@ -134,6 +134,7 @@ Generated files land in `obj/.../generated/` — never edit them.
 
 ### Adding a New Tool (Checklist)
 
+0. Decide whether it is a new tool at all, or a mode or option of an existing one - see [docs/tool-design.md](docs/tool-design.md). In short: inverses and views of one subject that share one contract are one tool with a mode argument (`html-entities`, `otp`); results of different shape are separate tools; an algorithm, format or version is always an option
 1. Create `src/Dev.Tools/Tools/YourNameTool.cs` following the pattern above, English text included
 2. Add test class `tests/Dev.Tools.Tests/Tools/YourNameToolTests.cs`
 3. Build — the source generator runs and registers the tool automatically
@@ -143,7 +144,7 @@ That is the whole tool as far as the CLI, the API and the MCP server are concern
 **Web UI** — a tool with no page still appears in search and navigation, but its route 404s, so add one:
 
 - Create `src/Dev.Tools.Web/Pages/Tools/YourNameToolPage.razor` + `.razor.cs`
-- If the `[PipeInput]` argument is something a user would have in a file - a document, encoded or encrypted data - put `AllowFileInput="true"` on the `DtTextField` bound to it; add `OnFileLoaded` when the tool takes `ToolContent`, and the page receives the file's bytes instead of its text (`HashTextToolPage`, `Base64EncoderPage`). Short values (a number, a URL, a date, a token) get no file button
+- If the `[PipeInput]` argument is something a user would have in a file - a document, encoded or encrypted data - put `AllowFileInput="true"` on the `DtTextField` bound to it; add `OnFileLoaded` when the tool takes `ToolContent`, and the page receives the file's bytes instead of its text (`HashTextToolPage`, `BaseEncodingToolPage`). Short values (a number, a URL, a date, a token) get no file button
 - Add icon to `src/Dev.Tools.Web/Services/ToolIconProvider.cs`
 - Add web page labels to `Dev.Tools.Web/Locals/Resources.resx` (the neutral English fallback), `Resources.en-US.resx` and `Resources.uk-UA.resx` - every culture carries the neutral file's keys
 - Key prefix for page labels: `Page.YourNameToolPage.*`

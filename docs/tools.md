@@ -8,8 +8,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 
 | Tool | Alias | Description |
 | --- | --- | --- |
-| `base64-encoder` | `64e` | Encode text to Base64 with optional URL-safe encoding and line breaks |
-| `base64-decoder` | `64d` | Decode Base64 back to plain text |
+| `base-encoding` | `base64` | Encode text or a file to Base64, or decode Base64 back to text, with an optional URL-safe alphabet and line breaks |
 | `case-converter` | `case` | Convert text between 14 case formats: camelCase, snake_case, PascalCase, CONSTANT_CASE, kebab-case, dot.case, Header-Case, path/case, Sentence case, and more |
 | `int-base-converter` | | Convert integers between binary, octal, decimal, hexadecimal and base 64 |
 | `roman-converter` | | Bidirectional Roman numeral conversion for integers 1–3999 |
@@ -49,9 +48,8 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | Tool | Alias | Description |
 | --- | --- | --- |
 | `hash` | | Hash text or a file using MD5, SHA-1, SHA-256, SHA-384, or SHA-512, or compute an HMAC when given a key; output as a lowercase hex string |
-| `text-encryptor` | `encrypt` | Encrypt text using AES-128-CBC, AES-256-CBC, AES-256-GCM, TripleDES-CBC, or RC4; output as Base64 or hex |
+| `encryption` | `cipher` | Encrypt text with AES-128-CBC, AES-256-CBC, AES-256-GCM, TripleDES-CBC or RC4 to Base64 or hex, or decrypt what it encrypted |
 | `otp` | `totp`, `hotp` | Generate or check TOTP and HOTP codes (RFC 6238, RFC 4226) from a Base32 secret, or generate a secret, with the previous and next codes and the `otpauth://` URI for authenticator apps |
-| `text-decryptor` | `decrypt` | Decrypt ciphertext produced by `text-encryptor`; supports all the same algorithms and input formats |
 
 ---
 

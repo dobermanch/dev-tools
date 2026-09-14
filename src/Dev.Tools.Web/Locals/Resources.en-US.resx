@@ -11,24 +11,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Page.Base64DecoderPage.TextField.Input.Label" xml:space="preserve">
-        <value>Base64 String to Decode</value>
-    </data>
-    <data name="Page.Base64DecoderPage.TextField.Result.Label" xml:space="preserve">
-        <value>Decoded String</value>
-    </data>
-    <data name="Page.Base64EncoderPage.TextField.Input.Label" xml:space="preserve">
-        <value>String to Encode</value>
-    </data>
-    <data name="Page.Base64EncoderPage.TextField.Result.Label" xml:space="preserve">
-        <value>Base64 String</value>
-    </data>
-    <data name="Page.Base64EncoderPage.Switch.SafeUrl.Label" xml:space="preserve">
-        <value>Use Safe URL</value>
-    </data>
-    <data name="Page.Base64EncoderPage.Switch.LineBreaks.Label" xml:space="preserve">
-        <value>Insert Line Breaks</value>
-    </data>
     <data name="Page.CaseConverterPage.TextField.Input.Label" xml:space="preserve">
         <value>Text to Convert</value>
     </data>
@@ -416,36 +398,6 @@
     <data name="Component.DtTextField.Text.LoadedFile" xml:space="preserve">
         <value>Loaded from {0}</value>
     </data>
-    <data name="Page.TextEncryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
-        <value>Algorithm</value>
-    </data>
-    <data name="Page.TextEncryptorToolPage.Select.OutputFormat.Label" xml:space="preserve">
-        <value>Output Format</value>
-    </data>
-    <data name="Page.TextEncryptorToolPage.TextField.Key.Label" xml:space="preserve">
-        <value>Secret Key</value>
-    </data>
-    <data name="Page.TextEncryptorToolPage.TextField.Input.Label" xml:space="preserve">
-        <value>Text to Encrypt</value>
-    </data>
-    <data name="Page.TextEncryptorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>Encrypted Text</value>
-    </data>
-    <data name="Page.TextDecryptorToolPage.TextField.Key.Label" xml:space="preserve">
-        <value>Secret Key</value>
-    </data>
-    <data name="Page.TextDecryptorToolPage.Select.Algorithm.Label" xml:space="preserve">
-        <value>Algorithm</value>
-    </data>
-    <data name="Page.TextDecryptorToolPage.Select.InputFormat.Label" xml:space="preserve">
-        <value>Input Format</value>
-    </data>
-    <data name="Page.TextDecryptorToolPage.TextField.Input.Label" xml:space="preserve">
-        <value>Encrypted Text</value>
-    </data>
-    <data name="Page.TextDecryptorToolPage.TextField.Result.Label" xml:space="preserve">
-        <value>Decrypted Text</value>
-    </data>
     <data name="Page.TextStatisticsToolPage.TextField.Input.Label" xml:space="preserve">
         <value>Text</value>
     </data>
@@ -670,5 +622,50 @@
     </data>
     <data name="Page.OtpToolPage.Text.Invalid" xml:space="preserve">
         <value>The code is not valid</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.Select.Transcoding.Label" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.Switch.UrlSafe.Label" xml:space="preserve">
+        <value>URL-safe alphabet</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.Switch.LineBreaks.Label" xml:space="preserve">
+        <value>Insert line breaks</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.TextField.Input.Encode.Label" xml:space="preserve">
+        <value>Text to encode</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.TextField.Input.Decode.Label" xml:space="preserve">
+        <value>Base64 text to decode</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.TextField.Result.Encode.Label" xml:space="preserve">
+        <value>Base64 text</value>
+    </data>
+    <data name="Page.BaseEncodingToolPage.TextField.Result.Decode.Label" xml:space="preserve">
+        <value>Decoded text</value>
+    </data>
+    <data name="Page.EncryptionToolPage.Select.Operation.Label" xml:space="preserve">
+        <value>Operation</value>
+    </data>
+    <data name="Page.EncryptionToolPage.TextField.Key.Label" xml:space="preserve">
+        <value>Secret key</value>
+    </data>
+    <data name="Page.EncryptionToolPage.Select.Algorithm.Label" xml:space="preserve">
+        <value>Algorithm</value>
+    </data>
+    <data name="Page.EncryptionToolPage.Select.Format.Label" xml:space="preserve">
+        <value>Ciphertext format</value>
+    </data>
+    <data name="Page.EncryptionToolPage.TextField.Input.Encrypt.Label" xml:space="preserve">
+        <value>Text to encrypt</value>
+    </data>
+    <data name="Page.EncryptionToolPage.TextField.Input.Decrypt.Label" xml:space="preserve">
+        <value>Encrypted text</value>
+    </data>
+    <data name="Page.EncryptionToolPage.TextField.Result.Encrypt.Label" xml:space="preserve">
+        <value>Encrypted text</value>
+    </data>
+    <data name="Page.EncryptionToolPage.TextField.Result.Decrypt.Label" xml:space="preserve">
+        <value>Decrypted text</value>
     </data>
 </root>

@@ -208,7 +208,8 @@ public static class ToolModelFactory
 
         // Invariant, and escaped for strings and chars. A number keeps its type: the CLI's
         // DefaultValueAttribute(0) is an int, which Spectre cannot convert to a long option.
-        var literal = Microsoft.CodeAnalysis.CSharp.SymbolDisplay.FormatPrimitive(value, quoteStrings: true, useHexadecimalNumbers: false);
+        var literal = Microsoft.CodeAnalysis.CSharp.SymbolDisplay.FormatPrimitive(value, quoteStrings: true, useHexadecimalNumbers: false)
+            ?? value.ToString();
         return type.SpecialType switch
         {
             SpecialType.System_Int64 => literal + "L",

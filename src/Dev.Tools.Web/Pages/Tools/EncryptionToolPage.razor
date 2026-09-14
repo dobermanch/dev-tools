@@ -1,0 +1,78 @@
+@page "/tools/encryption"
+
+<DtToolPageHeader ToolDefinition="@_toolDefinition"/>
+
+<MudCard Class="my-4">
+    <MudCardContent>
+        <DtSection Id="config" Class="mt-0">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="EncryptionTool.EncryptionOperation"
+                        Label="@_localizer["Select.Operation.Label"]"
+                        Value="@_operation"
+                        ValueToDisplay="@(operation => Context.Localization.GetToolEnum(_toolDefinition, operation))"
+                        ValueChanged="@((EncryptionTool.EncryptionOperation value) => SetOptionAsync(() => _operation = value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@_key"
+                        Label="@_localizer["TextField.Key.Label"]"
+                        Error="@(KeyError is not null)"
+                        ErrorText="@KeyError"
+                        ShowCopyButton="false"
+                        OnDebounceIntervalElapsed="OnKeyChangedAsync"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="EncryptionTool.EncryptionAlgorithm"
+                        Label="@_localizer["Select.Algorithm.Label"]"
+                        Value="@_algorithm"
+                        ValueToDisplay="@(algorithm => Context.Localization.GetToolEnum(_toolDefinition, algorithm))"
+                        ValueChanged="@((EncryptionTool.EncryptionAlgorithm value) => SetOptionAsync(() => _algorithm = value))"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtSelectEnum
+                        T="EncryptionTool.CiphertextFormat"
+                        Label="@_localizer["Select.Format.Label"]"
+                        Value="@_format"
+                        ValueToDisplay="@(format => Context.Localization.GetToolEnum(_toolDefinition, format))"
+                        ValueChanged="@((EncryptionTool.CiphertextFormat value) => SetOptionAsync(() => _format = value))"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-center" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        AllowFileInput="true"
+                        T="string"
+                        Value="@_text"
+                        Label="@(_localizer[$"TextField.Input.{_operation}.Label"])"
+                        Error="@(InputError is not null)"
+                        ErrorText="@InputError"
+                        Lines="15"
+                        OnDebounceIntervalElapsed="OnTextChangedAsync"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtTextField
+                        T="string"
+                        Value="@(_result?.Text ?? string.Empty)"
+                        Label="@(_localizer[$"TextField.Result.{_operation}.Label"])"
+                        ReadOnly="true"
+                        Lines="15"
+                        LabelPosition="LabelPositionType.Inline"
+                    />
+                </MudItem>
+            </MudGrid>
+        </DtSection>
+    </MudCardContent>
+</MudCard>

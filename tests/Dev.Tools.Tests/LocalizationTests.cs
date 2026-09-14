@@ -42,9 +42,9 @@ public class LocalizationTests
     {
         var localizer = CatalogLocalizer();
 
-        await Assert.That(localizer["Tools.Base64Encoder.Name"].Value).IsEqualTo("Base64 Encoder");
-        await Assert.That(localizer["Tools.Base64Encoder.Description"].Value)
-            .StartsWith("Encodes text or a file to Base64 format");
+        await Assert.That(localizer["Tools.BaseEncoding.Name"].Value).IsEqualTo("Base64 Encoder/Decoder");
+        await Assert.That(localizer["Tools.BaseEncoding.Description"].Value)
+            .StartsWith("Encodes text or a file as Base64");
     }
 
     [Test]
@@ -52,12 +52,12 @@ public class LocalizationTests
     {
         var localizer = CatalogLocalizer();
 
-        await Assert.That(localizer["Tools.Base64Encoder.Args.UrlSafe.Name"].Value).IsEqualTo("URL Safe");
-        await Assert.That(localizer["Tools.Base64Encoder.Args.InsertLineBreaks.Name"].Value)
+        await Assert.That(localizer["Tools.BaseEncoding.Args.UrlSafe.Name"].Value).IsEqualTo("URL Safe");
+        await Assert.That(localizer["Tools.BaseEncoding.Args.InsertLineBreaks.Name"].Value)
             .IsEqualTo("Insert Line Breaks");
-        await Assert.That(localizer["Tools.Base64Encoder.Result.Text.Name"].Value).IsEqualTo("Encoded Text");
-        await Assert.That(localizer["Tools.Base64Encoder.Result.Text.Description"].Value)
-            .IsEqualTo("The Base64-encoded text");
+        await Assert.That(localizer["Tools.BaseEncoding.Result.Text.Name"].Value).IsEqualTo("Result");
+        await Assert.That(localizer["Tools.BaseEncoding.Result.Text.Description"].Value)
+            .IsEqualTo("The Base64 text when encoding, or the decoded text when decoding");
     }
 
     [Test]
@@ -100,9 +100,9 @@ public class LocalizationTests
         // Adding a tool no longer involves touching a RESX file, so its keys exist nowhere else.
         var provider = Provider();
 
-        var title = provider["Tools.Base64Encoder.Name"].Value;
+        var title = provider["Tools.BaseEncoding.Name"].Value;
 
-        await Assert.That(title).IsEqualTo("Base64 Encoder");
+        await Assert.That(title).IsEqualTo("Base64 Encoder/Decoder");
         await Assert.That(title).DoesNotStartWith(":");
     }
 
@@ -117,7 +117,7 @@ public class LocalizationTests
         {
             CultureInfo.CurrentUICulture = new CultureInfo("uk-UA");
 
-            await Assert.That(provider["Tools.Base64Encoder.Name"].Value).IsEqualTo("Кодер Base64");
+            await Assert.That(provider["Tools.BaseEncoding.Name"].Value).IsEqualTo("Кодер/декодер Base64");
             await Assert.That(provider["Enums.Category.Crypto"].Value).IsEqualTo("Криптографія");
         }
         finally

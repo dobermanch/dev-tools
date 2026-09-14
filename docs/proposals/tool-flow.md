@@ -4,7 +4,7 @@
 
 ## What it is
 
-A pipeline that runs tools in a defined order, with the output of one step feeding the input of the next, plus control flow around the steps: run in parallel, loop over items, branch on a condition. Today the CLI gets a small version of this from the shell (`dev-tools base64-encoder < file | dev-tools base64-decoder`); a flow would make it a first-class feature that any frontend can define and run.
+A pipeline that runs tools in a defined order, with the output of one step feeding the input of the next, plus control flow around the steps: run in parallel, loop over items, branch on a condition. Today the CLI gets a small version of this from the shell (`dev-tools base-encoding < file | dev-tools base-encoding --transcoding Decode`); a flow would make it a first-class feature that any frontend can define and run.
 
 ## Why it matters now
 

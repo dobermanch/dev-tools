@@ -22,7 +22,7 @@ public class ToolsProviderTests
     {
         var provider = Provider();
 
-        await Assert.That(provider.GetToolDefinition("64e")).IsSameReferenceAs(provider.GetToolDefinition("base64-encoder"));
+        await Assert.That(provider.GetToolDefinition("base64")).IsSameReferenceAs(provider.GetToolDefinition("base-encoding"));
     }
 
     [Test]
@@ -38,18 +38,18 @@ public class ToolsProviderTests
     {
         var provider = Provider();
 
-        await Assert.That(provider.GetTool("base64-encoder")).IsTypeOf<Base64EncoderTool>();
-        await Assert.That(provider.GetTool("64e")).IsTypeOf<Base64EncoderTool>();
-        await Assert.That(provider.GetTool(typeof(Base64EncoderTool))).IsTypeOf<Base64EncoderTool>();
+        await Assert.That(provider.GetTool("base-encoding")).IsTypeOf<BaseEncodingTool>();
+        await Assert.That(provider.GetTool("base64")).IsTypeOf<BaseEncodingTool>();
+        await Assert.That(provider.GetTool(typeof(BaseEncodingTool))).IsTypeOf<BaseEncodingTool>();
     }
 
     [Test]
     public async Task AToolResolvedByNameShouldRun()
     {
         // The point of the non-generic lookups: a host that only has a name can still run the tool.
-        var tool = (ITool<Base64EncoderTool.Args, Base64EncoderTool.Result>)Provider().GetTool("64e");
+        var tool = (ITool<BaseEncodingTool.Args, BaseEncodingTool.Result>)Provider().GetTool("base64");
 
-        var result = await tool.RunAsync(new Base64EncoderTool.Args("hello"), CancellationToken.None);
+        var result = await tool.RunAsync(new BaseEncodingTool.Args("hello"), CancellationToken.None);
 
         await Assert.That(result.Text).IsEqualTo("aGVsbG8=");
     }
@@ -104,13 +104,13 @@ public class ToolsProviderTests
     public async Task ACollisionShouldBeReportedByName()
     {
         var hash = ToolsCatalog.ToolDefinitions.Single(it => it.Name == "hash");
-        var encoder = ToolsCatalog.ToolDefinitions.Single(it => it.Name == "base64-encoder");
+        var encoder = ToolsCatalog.ToolDefinitions.Single(it => it.Name == "base-encoding");
         var clashing = encoder with { Aliases = ["hash"] };
 
         var exception = await Assert.That(() => new ToolsProvider(new ServiceCollection().BuildServiceProvider(), [hash, clashing]))
             .Throws<InvalidOperationException>();
 
-        await Assert.That(exception!.Message).Contains("'hash' (hash, base64-encoder)");
+        await Assert.That(exception!.Message).Contains("'hash' (hash, base-encoding)");
     }
 
     private sealed class CountingMd5Hash : Dev.Tools.Cryptography.IMd5Hash

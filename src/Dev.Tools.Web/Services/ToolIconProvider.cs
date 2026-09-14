@@ -10,8 +10,7 @@ public static class ToolIconProvider
     {
         return toolName switch
         {
-            "base64-encoder" => Icons.Material.Outlined.DataObject,
-            "base64-decoder" => Icons.Material.Outlined.DataArray,
+            "base-encoding" => Icons.Material.Outlined.DataObject,
             "case-converter" => Icons.Material.Outlined.TextFormat,
             "char-viewer" => Icons.Material.Outlined.Visibility,
             "date-convert" => Icons.Material.Outlined.Schedule,
@@ -29,8 +28,7 @@ public static class ToolIconProvider
             "uuid-generator" => Icons.Material.Outlined.QrCode2,
             "jwt-parser" => Icons.Material.Outlined.Badge,
             "lorem-ipsum" => Icons.Material.Outlined.Article,
-            "text-encryptor" => Icons.Material.Outlined.Lock,
-            "text-decryptor" => Icons.Material.Outlined.LockOpen,
+            "encryption" => Icons.Material.Outlined.Lock,
             "text-statistics" => Icons.Material.Outlined.Analytics,
             "html-entities" => Icons.Material.Outlined.Html,
             "data-converter" => Icons.Material.Outlined.Transform,
