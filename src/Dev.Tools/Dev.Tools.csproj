@@ -21,6 +21,7 @@
     <PackageReference Include="CronExpressionDescriptor" />
     <PackageReference Include="DiffPlex" />
     <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="Net.Codecrete.QrCodeGenerator" />
   </ItemGroup>
 
   <ItemGroup>

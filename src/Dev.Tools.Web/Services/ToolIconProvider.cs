@@ -40,6 +40,7 @@ public static class ToolIconProvider
             "text-diff" => Icons.Material.Outlined.Difference,
             "bcrypt" => Icons.Material.Outlined.Password,
             "color-converter" => Icons.Material.Outlined.Palette,
+            "qr-code" => Icons.Material.Outlined.QrCodeScanner,
             _ => Icons.Material.Outlined.Construction
         };
     }

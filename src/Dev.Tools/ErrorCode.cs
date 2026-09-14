@@ -32,5 +32,8 @@ public enum ErrorCode
     FailedToEncrypt,
 
     [Description("The pattern took too long to match")]
-    MatchTimeout
+    MatchTimeout,
+
+    [Description("Too much data for a QR code")]
+    DataTooLong
 }

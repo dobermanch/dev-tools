@@ -758,4 +758,43 @@
     <data name="Page.ColorConverterToolPage.TextField.Name.Label" xml:space="preserve">
         <value>CSS name</value>
     </data>
+    <data name="Page.QrCodeToolPage.Select.Content.Label" xml:space="preserve">
+        <value>Content</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Text.Text.Label" xml:space="preserve">
+        <value>Text or URL</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Text.WiFi.Label" xml:space="preserve">
+        <value>Network name (SSID)</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Select.Security.Label" xml:space="preserve">
+        <value>Security</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Password.Label" xml:space="preserve">
+        <value>Password</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Switch.Hidden.Label" xml:space="preserve">
+        <value>Hidden network</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Select.ErrorCorrection.Label" xml:space="preserve">
+        <value>Error correction</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Slider.Border.Label" xml:space="preserve">
+        <value>Border, modules</value>
+    </data>
+    <data name="Page.QrCodeToolPage.ColorPicker.Dark.Label" xml:space="preserve">
+        <value>Dark color</value>
+    </data>
+    <data name="Page.QrCodeToolPage.ColorPicker.Light.Label" xml:space="preserve">
+        <value>Light color</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Text.Details" xml:space="preserve">
+        <value>Version {0}, {1}×{1} modules</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Payload.Label" xml:space="preserve">
+        <value>Encoded text</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Svg.Label" xml:space="preserve">
+        <value>SVG</value>
+    </data>
 </root>

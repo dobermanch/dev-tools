@@ -39,6 +39,7 @@ A categorized reference of all tools included in Dev Tools. Each tool is accessi
 | --- | --- | --- |
 | `token-generator` | `tokengen` | Generate cryptographically random tokens with configurable length, character set (uppercase, lowercase, digits, symbols), and count |
 | `passphrase-generator` | `passphrase` | Generate memorable word-based passphrases with configurable word count, separator, capitalization, and salt |
+| `qr-code` | `qr` | Generate a QR code as SVG for any text or URL, or for joining a Wi-Fi network, with error correction, border and colors |
 | `uuid-generator` | `uuid` | Generate UUIDs in any standard variant: v4 (random, the default), v3 (MD5 namespace), v5 (SHA-1 namespace), v7 (timestamp-sortable), Nil, or Max |
 | `ulid-generator` | `ulid` | Generate ULIDs (Universally Unique Lexicographically Sortable Identifiers) — random, Min, or Max |
 

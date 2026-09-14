@@ -50,6 +50,9 @@
   <data name="Enums.ErrorCode.MatchTimeout" xml:space="preserve">
     <value>Шаблон зіставлявся надто довго</value>
   </data>
+  <data name="Enums.ErrorCode.DataTooLong" xml:space="preserve">
+    <value>Забагато даних для QR-коду</value>
+  </data>
   <data name="Enums.ErrorCode.InputNotValid" xml:space="preserve">
     <value>Вхідні дані недійсні</value>
   </data>
@@ -1184,6 +1187,9 @@
   <data name="Enums.Keyword.Color" xml:space="preserve">
     <value>Колір</value>
   </data>
+  <data name="Enums.Keyword.Qr" xml:space="preserve">
+    <value>QR-код</value>
+  </data>
 
   <!-- Text Statistics Tool -->
   <data name="Tools.TextStatistics.Name" xml:space="preserve">
@@ -2136,5 +2142,130 @@ bcrypt читає не більше перших 72 байтів пароля в
   </data>
   <data name="Tools.ColorConverter.Result.Alpha.Description" xml:space="preserve">
     <value>Непрозорість від 0 (прозорий) до 1 (непрозорий), округлена до трьох знаків після коми</value>
+  </data>
+
+  <!-- QR Code Generator Tool -->
+  <data name="Tools.QrCode.Name" xml:space="preserve">
+    <value>Генератор QR-кодів</value>
+  </data>
+  <data name="Tools.QrCode.Description" xml:space="preserve">
+    <value>Генерує QR-код як зображення SVG — для будь-якого тексту або для підключення до мережі Wi-Fi.
+
+Текст кодується як UTF-8 у найменший QR-код, що його вміщує; URL, номер телефону чи звичайний текст — усе підходить, бо що робити з прочитаним, вирішує сканер. Вміст Wi-Fi кодує назву мережі, пароль, захист і те, чи мережа прихована, у форматі WIFI:, який телефони читають для підключення, з екрануванням символів, зарезервованих цим форматом.
+
+ErrorCorrection — яку частину коду можна пошкодити чи закрити, щоб він усе ще сканувався: від 7% (Low) до 30% (High), і що її більше, то більший код; використаний рівень підвищується понад запитаний, якщо це вміщується в той самий розмір. Border — тиха зона навколо коду в модулях, сканери очікують 4. Кольори задаються як #rgb або #rrggbb, і найкраще сканується темний колір на світлому.
+
+SVG — це повний документ, у якому viewBox має одну одиницю на модуль, тож він масштабується до будь-якого розміру без розмиття. З корекцією Low вміщується до 2 953 байтів тексту, з більшою — менше.</value>
+  </data>
+  <data name="Tools.QrCode.Args.Text.Name" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Tools.QrCode.Args.Text.Description" xml:space="preserve">
+    <value>Текст для кодування, наприклад URL; для Wi-Fi — назва мережі (SSID)</value>
+  </data>
+  <data name="Tools.QrCode.Args.Content.Name" xml:space="preserve">
+    <value>Вміст</value>
+  </data>
+  <data name="Tools.QrCode.Args.Content.Description" xml:space="preserve">
+    <value>Що містить код: сам текст або мережу Wi-Fi для підключення</value>
+  </data>
+  <data name="Tools.QrCode.Args.ErrorCorrection.Name" xml:space="preserve">
+    <value>Корекція помилок</value>
+  </data>
+  <data name="Tools.QrCode.Args.ErrorCorrection.Description" xml:space="preserve">
+    <value>Скільки пошкоджень витримує код; більше робить його більшим</value>
+  </data>
+  <data name="Tools.QrCode.Args.Border.Name" xml:space="preserve">
+    <value>Рамка</value>
+  </data>
+  <data name="Tools.QrCode.Args.Border.Description" xml:space="preserve">
+    <value>Тиха зона навколо коду в модулях; сканери очікують 4. Обмежується від 0 до 20</value>
+  </data>
+  <data name="Tools.QrCode.Args.DarkColor.Name" xml:space="preserve">
+    <value>Темний колір</value>
+  </data>
+  <data name="Tools.QrCode.Args.DarkColor.Description" xml:space="preserve">
+    <value>Колір темних модулів у форматі #rgb або #rrggbb</value>
+  </data>
+  <data name="Tools.QrCode.Args.LightColor.Name" xml:space="preserve">
+    <value>Світлий колір</value>
+  </data>
+  <data name="Tools.QrCode.Args.LightColor.Description" xml:space="preserve">
+    <value>Колір світлих модулів і рамки у форматі #rgb або #rrggbb</value>
+  </data>
+  <data name="Tools.QrCode.Args.Password.Name" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Tools.QrCode.Args.Password.Description" xml:space="preserve">
+    <value>Лише для Wi-Fi: пароль мережі; для відкритої мережі не потрібен</value>
+  </data>
+  <data name="Tools.QrCode.Args.Security.Name" xml:space="preserve">
+    <value>Захист</value>
+  </data>
+  <data name="Tools.QrCode.Args.Security.Description" xml:space="preserve">
+    <value>Лише для Wi-Fi: як захищено мережу</value>
+  </data>
+  <data name="Tools.QrCode.Args.HiddenNetwork.Name" xml:space="preserve">
+    <value>Прихована мережа</value>
+  </data>
+  <data name="Tools.QrCode.Args.HiddenNetwork.Description" xml:space="preserve">
+    <value>Лише для Wi-Fi: чи мережа не транслює свою назву</value>
+  </data>
+  <data name="Tools.QrCode.Result.Svg.Name" xml:space="preserve">
+    <value>SVG</value>
+  </data>
+  <data name="Tools.QrCode.Result.Svg.Description" xml:space="preserve">
+    <value>QR-код як повний документ SVG, одна одиниця viewBox на модуль</value>
+  </data>
+  <data name="Tools.QrCode.Result.Payload.Name" xml:space="preserve">
+    <value>Закодований текст</value>
+  </data>
+  <data name="Tools.QrCode.Result.Payload.Description" xml:space="preserve">
+    <value>Точний текст, який містить код: вхідні дані або рядок WIFI:, складений із даних мережі</value>
+  </data>
+  <data name="Tools.QrCode.Result.Version.Name" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="Tools.QrCode.Result.Version.Description" xml:space="preserve">
+    <value>Версія QR-коду від 1 до 40; кожна версія додає по 4 модулі до сторони</value>
+  </data>
+  <data name="Tools.QrCode.Result.Size.Name" xml:space="preserve">
+    <value>Розмір</value>
+  </data>
+  <data name="Tools.QrCode.Result.Size.Description" xml:space="preserve">
+    <value>Кількість модулів уздовж однієї сторони, без рамки</value>
+  </data>
+  <data name="Tools.QrCode.Result.ErrorCorrection.Name" xml:space="preserve">
+    <value>Корекція помилок</value>
+  </data>
+  <data name="Tools.QrCode.Result.ErrorCorrection.Description" xml:space="preserve">
+    <value>Використана корекція помилок, яка може бути вищою за запитаний рівень</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrContent.Text" xml:space="preserve">
+    <value>Будь-який текст, наприклад URL</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrContent.WiFi" xml:space="preserve">
+    <value>Мережа Wi-Fi для підключення</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrErrorCorrection.Low" xml:space="preserve">
+    <value>Low: витримує 7% пошкоджень</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrErrorCorrection.Medium" xml:space="preserve">
+    <value>Medium: витримує 15% пошкоджень</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrErrorCorrection.Quartile" xml:space="preserve">
+    <value>Quartile: витримує 25% пошкоджень</value>
+  </data>
+  <data name="Tools.QrCode.Enums.QrErrorCorrection.High" xml:space="preserve">
+    <value>High: витримує 30% пошкоджень</value>
+  </data>
+  <data name="Tools.QrCode.Enums.WifiSecurity.Wpa" xml:space="preserve">
+    <value>WPA, WPA2 або WPA3, з паролем</value>
+  </data>
+  <data name="Tools.QrCode.Enums.WifiSecurity.Wep" xml:space="preserve">
+    <value>WEP, з паролем</value>
+  </data>
+  <data name="Tools.QrCode.Enums.WifiSecurity.None" xml:space="preserve">
+    <value>Відкрита мережа без пароля</value>
   </data>
 </root>

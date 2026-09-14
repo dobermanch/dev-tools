@@ -765,4 +765,43 @@
     <data name="Page.ColorConverterToolPage.TextField.Name.Label" xml:space="preserve">
         <value>Назва в CSS</value>
     </data>
+    <data name="Page.QrCodeToolPage.Select.Content.Label" xml:space="preserve">
+        <value>Вміст</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Text.Text.Label" xml:space="preserve">
+        <value>Текст або URL</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Text.WiFi.Label" xml:space="preserve">
+        <value>Назва мережі (SSID)</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Select.Security.Label" xml:space="preserve">
+        <value>Захист</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Password.Label" xml:space="preserve">
+        <value>Пароль</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Switch.Hidden.Label" xml:space="preserve">
+        <value>Прихована мережа</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Select.ErrorCorrection.Label" xml:space="preserve">
+        <value>Корекція помилок</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Slider.Border.Label" xml:space="preserve">
+        <value>Рамка, модулі</value>
+    </data>
+    <data name="Page.QrCodeToolPage.ColorPicker.Dark.Label" xml:space="preserve">
+        <value>Темний колір</value>
+    </data>
+    <data name="Page.QrCodeToolPage.ColorPicker.Light.Label" xml:space="preserve">
+        <value>Світлий колір</value>
+    </data>
+    <data name="Page.QrCodeToolPage.Text.Details" xml:space="preserve">
+        <value>Версія {0}, {1}×{1} модулів</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Payload.Label" xml:space="preserve">
+        <value>Закодований текст</value>
+    </data>
+    <data name="Page.QrCodeToolPage.TextField.Svg.Label" xml:space="preserve">
+        <value>SVG</value>
+    </data>
 </root>

@@ -77,5 +77,8 @@ public enum Keyword
 
     Diff,
 
-    Color
+    Color,
+
+    [Description("QR Code")]
+    Qr
 }
