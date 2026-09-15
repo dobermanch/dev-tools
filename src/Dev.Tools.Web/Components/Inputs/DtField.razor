@@ -1,0 +1,41 @@
+@*
+    The shape every option control shares: a mono label above, the control itself, and one line below it
+    for an error or a hint. Controls sit in a grid of these on a tool page, so the wrapper owns no
+    width of its own.
+*@
+
+<div class="dt-field @Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="dt-field-label" for="@For">@Label</label>
+    }
+
+    @ChildContent
+
+    @if (Error && !string.IsNullOrEmpty(ErrorText))
+    {
+        <div class="dt-field-error">@ErrorText</div>
+    }
+    else if (!string.IsNullOrEmpty(Hint))
+    {
+        <div class="dt-field-hint">@Hint</div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+
+    /// <summary>Id of the control the label belongs to.</summary>
+    [Parameter] public string? For { get; set; }
+
+    /// <summary>Guidance under the control. An error replaces it while one is showing.</summary>
+    [Parameter] public string? Hint { get; set; }
+
+    [Parameter] public bool Error { get; set; }
+
+    [Parameter] public string? ErrorText { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

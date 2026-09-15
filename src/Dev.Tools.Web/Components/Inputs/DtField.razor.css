@@ -1,0 +1,29 @@
+.dt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.dt-field-label {
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dt-text-faint);
+}
+
+.dt-field-error,
+.dt-field-hint {
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    line-height: 1.4;
+}
+
+.dt-field-error {
+    color: var(--dt-error);
+}
+
+.dt-field-hint {
+    color: var(--dt-text-faint);
+}
