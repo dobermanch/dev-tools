@@ -10,6 +10,7 @@ public partial class MainLayout
 {
     private MudThemeProvider _themeProvider = null!;
     private IStringLocalizer _localizer = null!;
+    private bool? _appliedDarkMode;
 
     [Inject]
     private WebContext Context { get; set; } = null!;
@@ -48,12 +49,20 @@ public partial class MainLayout
             await Context.Layout.InitAsync(await _themeProvider.GetSystemDarkModeAsync());
             await _themeProvider.WatchSystemDarkModeAsync(Context.Layout.SetSystemModeAsync);
         }
+
+        // MudBlazor themes its own components; the design tokens in tokens.css follow [data-theme]
+        // on <html>, so the page around them changes with the theme too.
+        if (_appliedDarkMode != IsDarkMode)
+        {
+            _appliedDarkMode = IsDarkMode;
+            await Context.JsService.SetThemeAsync(IsDarkMode);
+        }
     }
 
-    private async Task DrawerToggle() 
+    private async Task DrawerToggle()
         => await Context.Layout.ToggleDrawerAsync();
 
-    private async Task ChangeThemeModeAsync() 
+    private async Task ChangeThemeModeAsync()
         => await Context.Layout.ToggleDarkModeAsync();
 
     private void HandlerUpdateRequest(LayoutChangedNotification _) 

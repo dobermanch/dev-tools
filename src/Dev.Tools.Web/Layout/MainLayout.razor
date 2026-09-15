@@ -1,7 +1,8 @@
 ﻿@using System.Globalization
+@using Dev.Tools.Web.Theme
 @inherits LayoutComponentBase
 
-<MudThemeProvider @ref="_themeProvider" IsDarkMode="@IsDarkMode" ObserveSystemThemeChange="@ObserveSystemThemeChange" />
+<MudThemeProvider @ref="_themeProvider" Theme="@DevToolsTheme.Theme" IsDarkMode="@IsDarkMode" ObserveSystemThemeChange="@ObserveSystemThemeChange" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -32,7 +33,7 @@
                            Color="Color.Inherit"
                            OnClick="@OpenSearchDialogAsync"/>
         }
-        
+
         <MudIconButton Icon="@LightModeIcon" OnClick="@ChangeThemeModeAsync" />
         <MudIconButton Icon="@Icons.Material.Outlined.Settings" Edge="Edge.End" Href="settings" />
     </MudAppBar>

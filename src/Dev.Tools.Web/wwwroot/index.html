@@ -8,12 +8,32 @@
     <base href="/" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="Dev.Tools.Web.styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <script>
+        // The saved theme, applied before the first paint - the .NET runtime takes seconds to start, and
+        // without this a light-theme visitor would stare at the dark page until it does. ThemeMode:
+        // 0 system, 1 light, 2 dark (Services/Layout/ThemeMode.cs), stored by PreferencesService.
+        (function () {
+            var dark = true;
+            try {
+                var saved = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+                var layout = saved.Layout || saved.layout || {};
+                var mode = layout.ThemeMode !== undefined ? layout.ThemeMode : layout.themeMode;
+                if (mode === 1 || mode === 'Light') {
+                    dark = false;
+                } else if (mode === 0 || mode === 'System') {
+                    dark = !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches;
+                }
+            } catch (e) { /* no storage, or nothing saved yet: keep the design's dark default */ }
+            document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        })();
+    </script>
 </head>
 
 <body>

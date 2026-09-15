@@ -1,0 +1,129 @@
+/* Design tokens of the redesign (design handoff README, "Design Tokens").
+
+   Dark is the design's own palette and the default here; light is defined under [data-theme="light"],
+   which site.js stamps on <html> from the user's theme preference.
+
+   Two accents, because light needs them apart: --dt-accent is the readable one for text, icons and
+   labels, --dt-accent-fill the bright one for filled surfaces (buttons, switch tracks, selection), and
+   --dt-accent-fill-contrast the text on that fill. In dark both accents are the same lime.
+
+   MudBlazor computes shades from its palette in C#, so the colours it needs are repeated in
+   Theme/DevToolsTheme.cs - change a value in both places. */
+
+:root {
+    color-scheme: dark;
+
+    /* Surfaces */
+    --dt-bg: #0c0d0b;
+    --dt-bg-dot: #1a1d16;
+    --dt-surface: #111309;
+    --dt-surface-raised: #14160f;
+    --dt-surface-hover: #14170d;
+    --dt-surface-active: #16180f;
+    --dt-surface-tag: #181b11;
+
+    /* Borders */
+    --dt-border: #22251e;
+    --dt-border-subtle: #1a1d15;
+    --dt-border-pane: #1e2118;
+    --dt-border-field: #23261d;
+    --dt-border-control: #2a2e23;
+    --dt-border-kbd: #2f3427;
+    --dt-border-hover: #4a5138;
+    --dt-border-accent: #2f3a11;
+
+    /* Accent, from the logo */
+    --dt-accent: #beee0c;
+    --dt-accent-hover: #d4ff2b;
+    --dt-accent-fill: #beee0c;
+    --dt-accent-fill-contrast: #0c0d0b;
+    --dt-olive: #7b8a0c;
+    --dt-olive-muted: #6d7a2a;
+
+    /* Text, brightest to faintest */
+    --dt-text: #e8ebe3;
+    --dt-text-mono: #dfe4d6;
+    --dt-text-tertiary: #b5bca8;
+    --dt-text-secondary: #9aa189;
+    --dt-text-muted: #8d947f;
+    --dt-text-subtle: #7f8672;
+    --dt-text-faint: #6f7563;
+    --dt-text-fainter: #5c6350;
+    --dt-text-faintest: #4d5343;
+
+    /* Status */
+    --dt-error: #e08a5a;
+    --dt-warning: #e0b85a;
+    --dt-success: #9cc93a;
+    --dt-info: #8aa4b8;
+
+    /* Type */
+    --dt-font-sans: 'Space Grotesk', 'Onest', Helvetica, Arial, sans-serif;
+    --dt-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* Shape - no shadows anywhere: depth is 1px borders and surface steps */
+    --dt-radius-tag: 5px;
+    --dt-radius-control: 8px;
+    --dt-radius-box: 10px;
+    --dt-radius-card: 12px;
+    --dt-radius-pill: 999px;
+    --dt-control-height: 36px;
+    --dt-transition: 0.2s ease;
+
+    accent-color: var(--dt-accent-fill);
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+
+    --dt-bg: #f6f7f1;
+    --dt-bg-dot: #e3e7d8;
+    --dt-surface: #ffffff;
+    --dt-surface-raised: #f1f3e8;
+    --dt-surface-hover: #f2f6e2;
+    --dt-surface-active: #eaf2cd;
+    --dt-surface-tag: #f1f3e8;
+
+    --dt-border: #dce1cf;
+    --dt-border-subtle: #e7ebdc;
+    --dt-border-pane: #e7ebdc;
+    --dt-border-field: #e7ebdc;
+    --dt-border-control: #d3d9c3;
+    --dt-border-kbd: #d3d9c3;
+    --dt-border-hover: #a6b845;
+    --dt-border-accent: #c5e825;
+
+    --dt-accent: #55670a;
+    --dt-accent-hover: #3f4d05;
+    --dt-accent-fill: #c5e825;
+    --dt-accent-fill-contrast: #15180f;
+    --dt-olive: #a6b845;
+    --dt-olive-muted: #8d9581;
+
+    --dt-text: #15180f;
+    --dt-text-mono: #15180f;
+    --dt-text-tertiary: #3f4636;
+    --dt-text-secondary: #5a6149;
+    --dt-text-muted: #5d6550;
+    --dt-text-subtle: #5d6550;
+    --dt-text-faint: #6b7360;
+    --dt-text-fainter: #8d9581;
+    --dt-text-faintest: #a9b09c;
+
+    --dt-error: #a3450d;
+    --dt-warning: #8a5a00;
+    --dt-success: #4f7a12;
+    --dt-info: #2f6f8f;
+}
+
+body {
+    background-color: var(--dt-bg);
+    color: var(--dt-text);
+    font-family: var(--dt-font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--dt-accent-fill);
+    color: var(--dt-accent-fill-contrast);
+}

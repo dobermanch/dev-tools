@@ -44,6 +44,9 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
     {
         ThemeMode = mode;
         await StoreUserPreferencesAsync(cancellationToken);
+        // The layout has to hear about it: the setting can be changed from the Settings page, which
+        // cannot re-render the layout around it.
+        await NotifyMajorUpdateOccurredAsync(cancellationToken);
     }
 
     public async Task ToggleDrawerAsync(CancellationToken cancellationToken)
@@ -54,7 +57,8 @@ internal sealed class LayoutService(IMessenger messenger, IPreferencesService pr
 
     private Task ApplyUserPreferencesAsync(CancellationToken cancellationToken)
     {
-        ThemeMode = preferencesService.Preferences.Layout.ThemeMode ?? ThemeMode.System;
+        // The design is dark-first, so an unset preference means dark rather than the system setting.
+        ThemeMode = preferencesService.Preferences.Layout.ThemeMode ?? ThemeMode.Dark;
         IsDrawerOpen = preferencesService.Preferences.Layout.IsDrawerOpen ?? true;
         return Task.CompletedTask;
     }

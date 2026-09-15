@@ -1,4 +1,13 @@
 window.devTools = {
+    // The design tokens in css/tokens.css are dark by default and light under [data-theme="light"].
+    // index.html stamps this before the first paint; the app calls it again whenever the theme changes.
+    setTheme: function (isDarkMode) {
+        try {
+            document.documentElement.dataset.theme = isDarkMode ? 'dark' : 'light';
+        } catch (e) {
+            console.warn('setTheme failed', e);
+        }
+    },
     scrollToId: function (id, offset) {
         try {
             var el = document.getElementById(id);

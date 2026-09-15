@@ -63,3 +63,5 @@ _ReSharper*/
 
 # Test run reports (dotnet test / Microsoft.Testing.Platform)
 [Tt]est[Rr]esults/
+
+design/
