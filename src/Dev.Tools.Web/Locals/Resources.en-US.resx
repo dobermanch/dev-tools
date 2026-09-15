@@ -389,6 +389,9 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtTextField.Button.Copy.Tooltip" xml:space="preserve">
+        <value>Copy to clipboard</value>
+    </data>
     <data name="Component.FavoriteButton.Tooltip.Add" xml:space="preserve">
         <value>Add to favorites</value>
     </data>

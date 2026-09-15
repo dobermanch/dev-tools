@@ -1,3 +1,4 @@
+using System.Globalization;
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -6,8 +7,10 @@ using MudBlazor;
 
 namespace Dev.Tools.Web.Components.Inputs;
 
-public partial class DtTextField<T> : ComponentBase
+public partial class DtTextField<T> : ComponentBase, IDisposable
 {
+    private readonly string _id = $"dt-input-{Guid.NewGuid():N}";
+
     [Inject]
     private WebContext Context { get; set; } = null!;
 
@@ -56,6 +59,10 @@ public partial class DtTextField<T> : ComponentBase
     [Parameter]
     public int Lines { get; set; } = 1;
 
+    /// <summary>
+    /// Marks the field when the value is not acceptable. A value that cannot be judged - because the
+    /// predicate throws on it, as an empty string does for a numeric one - counts as not acceptable.
+    /// </summary>
     [Parameter]
     public Func<T, bool>? Validation { get; set; }
 
@@ -82,11 +89,124 @@ public partial class DtTextField<T> : ComponentBase
     private string? _fileError;
     private string? _loadedFile;
 
+    // What the input shows. Kept apart from Value so that typing is never undone by a re-render, and so
+    // that a value the field cannot parse leaves the last good one in place.
+    private string? _text;
+    private T? _lastKnownValue;
+    private bool _isValid = true;
+    private CancellationTokenSource? _debounce;
+
+    /// <summary>Multi-line fields still render through MudBlazor; B4 turns them into panes.</summary>
+    private bool IsMultiline => Lines > 1;
+
+    private bool HasError => Error || _fileError is not null || !_isValid;
+
+    private string HtmlInputType => InputType switch
+    {
+        InputType.Number => "number",
+        InputType.Password => "password",
+        InputType.Email => "email",
+        InputType.Telephone => "tel",
+        InputType.Url => "url",
+        InputType.Search => "search",
+        InputType.Date => "date",
+        InputType.DateTimeLocal => "datetime-local",
+        InputType.Month => "month",
+        InputType.Time => "time",
+        InputType.Week => "week",
+        InputType.Color => "color",
+        _ => "text"
+    };
+
     protected override void OnInitialized()
     {
         // Scoped by name rather than through ComponentLocalizer<T>: the generic type's name is DtTextField`1.
         _localizer = Context.Localization.CreateScopedLocalizer("Component.DtTextField");
         base.OnInitialized();
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Follow the value when the page changes it, but leave what is being typed alone.
+        if (_text is null || !EqualityComparer<T?>.Default.Equals(Value, _lastKnownValue))
+        {
+            _lastKnownValue = Value;
+            _text = FormatValue(Value);
+            _isValid = Validate(Value);
+        }
+
+        base.OnParametersSet();
+    }
+
+    private string? FormatValue(T? value)
+        => value switch
+        {
+            null => string.Empty,
+            // A Format is only ever given for a date; BindConverter's own format overloads are not generic.
+            IFormattable formattable when !string.IsNullOrEmpty(Format) => formattable.ToString(Format, CultureInfo.InvariantCulture),
+            _ => BindConverter.FormatValue(value, CultureInfo.InvariantCulture)?.ToString()
+        };
+
+    private bool Validate(T? value)
+    {
+        if (Validation is null || value is null)
+        {
+            return true;
+        }
+
+        try
+        {
+            return Validation(value);
+        }
+        catch
+        {
+            // A predicate that throws on this value - int.Parse on "" - means it is not usable.
+            return false;
+        }
+    }
+
+    private async Task OnInputAsync(ChangeEventArgs args)
+    {
+        var text = args.Value as string ?? string.Empty;
+        _text = text;
+
+        if (BindConverter.TryConvertTo<T>(text, CultureInfo.InvariantCulture, out var parsed) && Validate(parsed))
+        {
+            _isValid = true;
+            _lastKnownValue = parsed;
+            await ValueChanged.InvokeAsync(parsed);
+        }
+        else
+        {
+            // Keep the last value the page was given: a half-typed number is not a value.
+            _isValid = false;
+        }
+
+        await DebounceAsync(text);
+    }
+
+    private async Task DebounceAsync(string text)
+    {
+        var previous = _debounce;
+        if (previous is not null)
+        {
+            await previous.CancelAsync();
+            previous.Dispose();
+        }
+
+        var cancellation = new CancellationTokenSource();
+        _debounce = cancellation;
+
+        try
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(DebounceInterval), cancellation.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        await OnTextChangedAsync(text);
     }
 
     private async Task OnTextChangedAsync(string text)
@@ -131,6 +251,9 @@ public partial class DtTextField<T> : ComponentBase
         var text = await content.ReadAllTextAsync(CancellationToken.None);
         if (text is T value)
         {
+            _text = text;
+            _lastKnownValue = value;
+            _isValid = Validate(value);
             await ValueChanged.InvokeAsync(value);
         }
 
@@ -146,5 +269,10 @@ public partial class DtTextField<T> : ComponentBase
         {
             await Context.JsService.CopyToClipboardAsync(Value.ToString()!);
         }
+    }
+
+    public void Dispose()
+    {
+        _debounce?.Dispose();
     }
 }

@@ -396,6 +396,9 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtTextField.Button.Copy.Tooltip" xml:space="preserve">
+        <value>Копіювати в буфер обміну</value>
+    </data>
     <data name="Component.FavoriteButton.Tooltip.Add" xml:space="preserve">
         <value>Додати до обраного</value>
     </data>

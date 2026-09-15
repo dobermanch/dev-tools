@@ -1,53 +1,96 @@
 @using Microsoft.AspNetCore.Components.Forms
 @typeparam T
 
-<MudGrid Class="align-center">
-    @if (LabelPosition == LabelPositionType.Left)
-    {
-        <MudItem xs="4">
-            <MudText Typo="Typo.body1">@Label</MudText>
-        </MudItem>
-    }
+@if (IsMultiline)
+{
+    @* Multi-line fields become input and output panes in B4; until then they stay as they were. *@
+    <MudGrid Class="align-center">
+        @if (LabelPosition == LabelPositionType.Left)
+        {
+            <MudItem xs="4">
+                <MudText Typo="Typo.body1">@Label</MudText>
+            </MudItem>
+        }
 
-    <MudItem xs="@(LabelPosition == LabelPositionType.Left ? 8 : 12)">
-        <div class="d-flex align-start gap-1">
-            <MudTextField
-                Class="flex-grow-1"
-                T="@T"
-                ShrinkLabel="true"
-                Label="@(LabelPosition == LabelPositionType.Inline ? Label : null)"
-                Value="@Value"
-                ValueChanged="@ValueChanged"
-                MaxLength="@MaxLength"
-                DebounceInterval="@DebounceInterval"
-                OnDebounceIntervalElapsed="@OnTextChangedAsync"
-                Error="@(Error || _fileError is not null)"
-                ErrorText="@(_fileError ?? ErrorText)"
-                HelperText="@_loadedFile"
-                ReadOnly="@ReadOnly"
-                Variant="Variant.Outlined"
-                Margin="Margin.Dense"
-                Format="@Format"
-                InputType="@InputType"
-                Lines="@Lines"
-                AutoGrow="@(Lines > 1)"
-                Validation="@Validation"
-                MaxLines="@Lines"
-                Adornment="@(ShowCopyButton ? Adornment.End : Adornment.None)"
-                IconSize="Size.Small"
-                AdornmentIcon="@Icons.Material.Outlined.CopyAll"
-                OnAdornmentClick="async () => await OnCopyToClipboardAsync()"/>
+        <MudItem xs="@(LabelPosition == LabelPositionType.Left ? 8 : 12)">
+            <div class="d-flex align-start gap-1">
+                <MudTextField
+                    Class="flex-grow-1"
+                    T="@T"
+                    ShrinkLabel="true"
+                    Label="@(LabelPosition == LabelPositionType.Inline ? Label : null)"
+                    Value="@Value"
+                    ValueChanged="@ValueChanged"
+                    MaxLength="@MaxLength"
+                    DebounceInterval="@DebounceInterval"
+                    OnDebounceIntervalElapsed="@OnTextChangedAsync"
+                    Error="@(Error || _fileError is not null)"
+                    ErrorText="@(_fileError ?? ErrorText)"
+                    HelperText="@_loadedFile"
+                    ReadOnly="@ReadOnly"
+                    Variant="Variant.Outlined"
+                    Margin="Margin.Dense"
+                    Format="@Format"
+                    InputType="@InputType"
+                    Lines="@Lines"
+                    AutoGrow="true"
+                    Validation="@Validation"
+                    MaxLines="@Lines"
+                    Adornment="@(ShowCopyButton ? Adornment.End : Adornment.None)"
+                    IconSize="Size.Small"
+                    AdornmentIcon="@Icons.Material.Outlined.CopyAll"
+                    OnAdornmentClick="async () => await OnCopyToClipboardAsync()"/>
+
+                @if (AllowFileInput && !ReadOnly)
+                {
+                    <MudFileUpload T="IBrowserFile" FilesChanged="OnFileSelectedAsync" Class="mt-1">
+                        <ActivatorContent>
+                            <MudTooltip Text="@_localizer["Button.LoadFile.Tooltip"]">
+                                <MudIconButton Icon="@Icons.Material.Outlined.FileOpen" Color="Color.Primary"/>
+                            </MudTooltip>
+                        </ActivatorContent>
+                    </MudFileUpload>
+                }
+            </div>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <DtField Label="@Label"
+             For="@_id"
+             Error="@HasError"
+             ErrorText="@(_fileError ?? ErrorText)"
+             Hint="@_loadedFile"
+             Class="@Class">
+        <div class="dt-input-row">
+            <input id="@_id"
+                   class="dt-input @(HasError ? "dt-input-error" : null)"
+                   type="@HtmlInputType"
+                   value="@_text"
+                   maxlength="@MaxLength"
+                   readonly="@ReadOnly"
+                   spellcheck="false"
+                   @oninput="OnInputAsync" />
+
+            @if (ShowCopyButton)
+            {
+                <DtIconButton Icon="@Icons.Material.Outlined.CopyAll"
+                              Size="DtControlSize.Small"
+                              Tooltip="@_localizer["Button.Copy.Tooltip"]"
+                              OnClick="@OnCopyToClipboardAsync"/>
+            }
 
             @if (AllowFileInput && !ReadOnly)
             {
-                <MudFileUpload T="IBrowserFile" FilesChanged="OnFileSelectedAsync" Class="mt-1">
+                <MudFileUpload T="IBrowserFile" FilesChanged="OnFileSelectedAsync">
                     <ActivatorContent>
-                        <MudTooltip Text="@_localizer["Button.LoadFile.Tooltip"]">
-                            <MudIconButton Icon="@Icons.Material.Outlined.FileOpen" Color="Color.Primary"/>
-                        </MudTooltip>
+                        <DtIconButton Icon="@Icons.Material.Outlined.FileOpen"
+                                      Size="DtControlSize.Small"
+                                      Tooltip="@_localizer["Button.LoadFile.Tooltip"]"/>
                     </ActivatorContent>
                 </MudFileUpload>
             }
         </div>
-    </MudItem>
-</MudGrid>
+    </DtField>
+}
