@@ -12,6 +12,7 @@
     <link href="Dev.Tools.Web.styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/boot.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -39,11 +40,43 @@
 
 <body>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <!-- Shown while the WebAssembly runtime downloads, then replaced by the app. Plain markup on
+             purpose: it has to paint before .NET exists. Driven by js/boot.js, styled by css/boot.css. -->
+        <div class="dt-boot" id="dt-boot">
+            <div class="dt-boot-mark">
+                <svg class="dt-boot-rings" viewBox="0 0 132 132" aria-hidden="true">
+                    <circle class="dt-boot-track" cx="66" cy="66" r="60" />
+                    <circle class="dt-boot-arc" id="dt-boot-arc" cx="66" cy="66" r="60" />
+                </svg>
+                <svg class="dt-boot-dashes" viewBox="0 0 132 132" aria-hidden="true">
+                    <circle cx="66" cy="66" r="52" />
+                </svg>
+                <img class="dt-boot-logo" src="logo.svg" width="74" height="74" alt="" />
+            </div>
+
+            <div class="dt-boot-brand">
+                <div class="dt-boot-wordmark">DEV.TOOLS</div>
+                <div class="dt-boot-tagline">the swiss army knife for developers</div>
+            </div>
+
+            <div class="dt-boot-progress" role="progressbar" aria-label="Loading Dev Tools">
+                <div class="dt-boot-bar">
+                    <div class="dt-boot-fill" id="dt-boot-fill"></div>
+                    <div class="dt-boot-sheen"></div>
+                </div>
+                <div class="dt-boot-status">
+                    <span class="dt-boot-pct" id="dt-boot-pct">0%</span>
+                    <span class="dt-boot-phase" id="dt-boot-phase">starting</span>
+                    <span class="dt-boot-size" id="dt-boot-size"></span>
+                </div>
+            </div>
+
+            <div class="dt-boot-log" id="dt-boot-log"></div>
+
+            <div class="dt-boot-note">
+                <span class="dt-boot-dot"></span>first load only · cached afterwards
+            </div>
+        </div>
     </div>
 
     <div id="blazor-error-ui">
@@ -65,31 +98,17 @@
             }
         })();
     </script>
-    <script src="_framework/blazor.webassembly.js" autostart="true"></script>
+    <script src="js/boot.js"></script>
+    <script>devToolsBoot.start();</script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
     <script src="js/site.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script type="module">
-        import { BrotliDecode } from './decode.min.js';
-        Blazor.start({
-            loadBootResource: function (type, name, defaultUri, integrity) {
-                if (type !== 'dotnetjs' && location.hostname !== 'localhost' && type !== 'configuration') {
-                    return (async function () {
-                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
-                        if (!response.ok) {
-                            throw new Error(response.statusText);
-                        }
-                        const originalResponseBuffer = await response.arrayBuffer();
-                        const originalResponseArray = new Int8Array(originalResponseBuffer);
-                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
-                        const contentType = type ===
-                        'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
-                        return new Response(decompressedResponseArray,
-                            { headers: { 'content-type': contentType } });
-                    })();
-                }
-            }
-        });
+    <script>
+        // Started by hand so the boot screen can name each resource as it loads. The hook only reports:
+        // it returns nothing, and Blazor fetches every resource its own way.
+        Blazor.start({ loadBootResource: devToolsBoot.onResource })
+            .then(devToolsBoot.done, devToolsBoot.fail);
     </script>
 </body>
 

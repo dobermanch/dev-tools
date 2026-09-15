@@ -1,0 +1,255 @@
+/* The boot screen shown while the WebAssembly runtime downloads. It has to paint before .NET exists,
+   so it is plain markup in index.html driven by js/boot.js - no Blazor component, and its text cannot be
+   localized. Colours come from the design tokens, so it follows the theme like everything else. */
+
+.dt-boot {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: var(--dt-bg);
+    background-image: radial-gradient(var(--dt-bg-dot) 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: var(--dt-text);
+    font-family: var(--dt-font-sans);
+}
+
+.dt-boot[hidden] {
+    display: none;
+}
+
+/* Logo lockup: progress arc, a slowly turning dashed ring, and the mark itself. */
+.dt-boot-mark {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dt-boot-rings,
+.dt-boot-dashes {
+    position: absolute;
+    inset: 0;
+    width: 132px;
+    height: 132px;
+}
+
+.dt-boot-rings {
+    transform: rotate(-90deg);
+}
+
+.dt-boot-track {
+    fill: none;
+    stroke: var(--dt-border-pane);
+    stroke-width: 2;
+}
+
+.dt-boot-arc {
+    fill: none;
+    stroke: var(--dt-accent-fill);
+    stroke-width: 2;
+    stroke-linecap: round;
+    /* Circumference of r=60; js/boot.js moves the first number. */
+    stroke-dasharray: 0 376.99;
+    transition: stroke-dasharray 0.3s linear;
+}
+
+.dt-boot-dashes {
+    animation: dt-boot-spin 2.6s linear infinite;
+}
+
+.dt-boot-dashes circle {
+    fill: none;
+    stroke: var(--dt-olive);
+    stroke-width: 1;
+    stroke-dasharray: 3 14;
+    opacity: 0.7;
+}
+
+.dt-boot-logo {
+    display: block;
+    width: 74px;
+    height: 74px;
+}
+
+.dt-boot-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.dt-boot-wordmark {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+}
+
+.dt-boot-tagline {
+    font-family: var(--dt-font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--dt-text-subtle);
+}
+
+.dt-boot-progress {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dt-boot-bar {
+    position: relative;
+    height: 4px;
+    border-radius: 3px;
+    background: var(--dt-border-subtle);
+    overflow: hidden;
+}
+
+.dt-boot-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    border-radius: 3px;
+    background: var(--dt-accent-fill);
+    transition: width 0.3s linear;
+}
+
+.dt-boot-sheen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, rgba(190, 238, 12, 0.35), transparent);
+    animation: dt-boot-sheen 1.6s linear infinite;
+}
+
+.dt-boot-status {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--dt-font-mono);
+    font-size: 11.5px;
+}
+
+.dt-boot-pct {
+    color: var(--dt-accent);
+}
+
+.dt-boot-phase {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--dt-text-secondary);
+}
+
+.dt-boot-size {
+    color: var(--dt-text-faint);
+}
+
+/* The log keeps its full height from the start: growing it line by line would push the logo and bar
+   upwards, which reads as a jump mid-load. */
+.dt-boot-log {
+    width: 100%;
+    max-width: 420px;
+    height: 87px;
+    flex: 0 0 87px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+    overflow: hidden;
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    line-height: 13px;
+    color: var(--dt-text-fainter);
+}
+
+.dt-boot-line {
+    display: flex;
+    gap: 9px;
+    animation: dt-boot-rise 0.25s ease both;
+}
+
+.dt-boot-line span:last-child {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dt-boot-mark-done {
+    color: var(--dt-olive-muted);
+}
+
+.dt-boot-line-current {
+    color: var(--dt-text-secondary);
+}
+
+.dt-boot-line-current .dt-boot-mark-done {
+    color: var(--dt-accent);
+}
+
+.dt-boot-note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    color: var(--dt-text-fainter);
+}
+
+.dt-boot-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--dt-accent-fill);
+    animation: dt-boot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes dt-boot-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes dt-boot-sheen {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(300%); }
+}
+
+@keyframes dt-boot-pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+}
+
+@keyframes dt-boot-rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dt-boot-dashes,
+    .dt-boot-sheen,
+    .dt-boot-dot,
+    .dt-boot-line {
+        animation: none;
+    }
+
+    .dt-boot-arc,
+    .dt-boot-fill {
+        transition: none;
+    }
+}
