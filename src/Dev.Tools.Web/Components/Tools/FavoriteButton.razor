@@ -1,6 +1,7 @@
-<MudIconButton
+<DtIconButton
     Class="@Class"
     Icon="@(_isFavorite ? Icons.Material.Outlined.Star : Icons.Material.Outlined.StarBorder)"
-    Size="Size.Small"
-    Color="Color.Default"
+    Size="DtControlSize.Small"
+    Active="@_isFavorite"
+    Tooltip="@(_isFavorite ? _localizer["Tooltip.Remove"] : _localizer["Tooltip.Add"])"
     OnClick="@OnToggleFavoriteAsync"/>

@@ -1,5 +1,6 @@
 using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Components.Tools;
 
@@ -7,6 +8,7 @@ public partial class FavoriteButton : ComponentBase, IDisposable
 {
     private bool _isFavorite;
     private IDisposable? _subscription;
+    private IStringLocalizer _localizer = null!;
 
     [Inject]
     private WebContext Context { get; set; } = null!;
@@ -24,6 +26,7 @@ public partial class FavoriteButton : ComponentBase, IDisposable
 
     protected override void OnInitialized()
     {
+        _localizer = Context.Localization.CreateScopedLocalizer("Component.FavoriteButton");
         _subscription?.Dispose();
         _subscription = Context.Messenger.Subscribe<FavoritesChangedNotification>(OnFavoriteChanged);
         _isFavorite = Context.Preferences.Preferences.Favorite.Tools.Contains(ToolDefinition.Name);

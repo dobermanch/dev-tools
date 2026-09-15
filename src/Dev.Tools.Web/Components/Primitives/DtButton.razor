@@ -1,0 +1,36 @@
+@*
+    A button in the two shapes the design uses: filled accent for the action a screen is about, outlined
+    for everything else. Loading swaps the leading icon for a spinner and blocks further clicks.
+*@
+
+<button type="button"
+        class="dt-button dt-button-@Variant.ToString().ToLowerInvariant() @Class"
+        disabled="@(Disabled || Loading)"
+        @onclick="OnClick">
+    @if (Loading)
+    {
+        <span class="dt-button-spinner" aria-hidden="true"></span>
+    }
+    else if (!string.IsNullOrEmpty(StartIcon))
+    {
+        <MudIcon Icon="@StartIcon" Style="width:18px;height:18px" />
+    }
+
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public DtButtonVariant Variant { get; set; } = DtButtonVariant.Accent;
+
+    [Parameter] public string? StartIcon { get; set; }
+
+    [Parameter] public bool Loading { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

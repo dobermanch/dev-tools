@@ -1,0 +1,42 @@
+@*
+    An icon button: plain by default, or in a bordered square where the design frames it (a tool page
+    header). Active draws it in the accent - a favourited tool, the current view.
+*@
+
+<button type="button"
+        class="dt-icon-button dt-icon-button-@Size.ToString().ToLowerInvariant() @(Bordered ? "dt-icon-button-bordered" : null) @(Active ? "dt-icon-button-active" : null) @Class"
+        title="@Tooltip"
+        aria-label="@(AriaLabel ?? Tooltip)"
+        aria-pressed="@(Active ? "true" : null)"
+        disabled="@Disabled"
+        @onclick="OnClick">
+    <MudIcon Icon="@Icon" Style="@IconStyle" />
+</button>
+
+@code {
+    [Parameter, EditorRequired] public string Icon { get; set; } = null!;
+
+    [Parameter] public DtControlSize Size { get; set; } = DtControlSize.Medium;
+
+    /// <summary>Frames the button in a 1px square, as on a tool page header.</summary>
+    [Parameter] public bool Bordered { get; set; }
+
+    [Parameter] public bool Active { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+
+    [Parameter] public string? Tooltip { get; set; }
+
+    [Parameter] public string? AriaLabel { get; set; }
+
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    private string IconStyle => Size switch
+    {
+        DtControlSize.Small => "width:17px;height:17px",
+        DtControlSize.Large => "width:20px;height:20px",
+        _ => "width:19px;height:19px"
+    };
+}

@@ -1,0 +1,29 @@
+@*
+    A keyword tag: mono, tinted fill, 5px radius. Used for a tool's keywords and for the short facts on
+    a page header.
+*@
+
+<span class="dt-tag @(Accent ? "dt-tag-accent" : null) @(Truncate ? "dt-tag-truncate" : null) @Class">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        @Text
+    }
+</span>
+
+@code {
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Draws it in the accent, for a tag that stands for more than itself, such as "+3".</summary>
+    [Parameter] public bool Accent { get; set; }
+
+    /// <summary>Caps the width and ellipsises, for a row that must stay on one line.</summary>
+    [Parameter] public bool Truncate { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

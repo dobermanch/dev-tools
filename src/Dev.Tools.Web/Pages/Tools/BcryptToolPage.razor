@@ -54,13 +54,9 @@
                     </MudItem>
                 }
                 <MudItem xs="12">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@_running" OnClick="@RunAsync">
-                        @if (_running)
-                        {
-                            <MudProgressCircular Class="mr-2" Size="Size.Small" Indeterminate="true"/>
-                        }
+                    <DtButton Loading="@_running" OnClick="@RunAsync">
                         @_localizer[$"Button.{_operation}.Label"]
-                    </MudButton>
+                    </DtButton>
                 </MudItem>
             </MudGrid>
         </DtSection>

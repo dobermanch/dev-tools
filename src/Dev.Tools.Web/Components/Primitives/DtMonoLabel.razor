@@ -1,0 +1,31 @@
+@*
+    The mono uppercase microlabel of the design - OPTIONS, INPUT · JSON, CONNECTION - with an optional
+    count after it, as in a section header's "12 tools".
+*@
+
+<span class="dt-mono-label @Class">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        @Text
+    }
+
+    @if (!string.IsNullOrEmpty(Count))
+    {
+        <span class="dt-mono-label-count">@Count</span>
+    }
+</span>
+
+@code {
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Shown after the label in a fainter tone, not uppercased.</summary>
+    [Parameter] public string? Count { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

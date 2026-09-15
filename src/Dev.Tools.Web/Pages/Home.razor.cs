@@ -1,5 +1,6 @@
 using Dev.Tools.Localization;
 using Dev.Tools.Providers;
+using Dev.Tools.Web.Components.Primitives;
 using Dev.Tools.Web.Components.Tools;
 using Dev.Tools.Web.Core.Messaging;
 using Dev.Tools.Web.Notifications;
@@ -7,11 +8,24 @@ using Dev.Tools.Web.Services;
 using Dev.Tools.Web.Services.Layout;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using MudBlazor;
 
 namespace Dev.Tools.Web.Pages;
 
 public partial class Home : ComponentBase, IDisposable
 {
+    private static readonly IReadOnlyList<DtToggleGroup<ViewMode>.Option> ViewModeOptions =
+    [
+        new(ViewMode.Cards, Icons.Material.Outlined.Apps, "Card view"),
+        new(ViewMode.List, Icons.Material.Outlined.ViewList, "List view")
+    ];
+
+    private static readonly IReadOnlyList<DtToggleGroup<bool>.Option> GroupingOptions =
+    [
+        new(true, Icons.Material.Outlined.Category, "Group by category"),
+        new(false, Icons.Material.Outlined.List, "Show all")
+    ];
+
     [Inject] private WebContext Context { get; set; } = default!;
     [Inject] private IToolsProvider ToolsProvider { get; set; } = default!;
 

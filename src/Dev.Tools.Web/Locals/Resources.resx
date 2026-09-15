@@ -315,6 +315,12 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.FavoriteButton.Tooltip.Add" xml:space="preserve">
+        <value>Add to favorites</value>
+    </data>
+    <data name="Component.FavoriteButton.Tooltip.Remove" xml:space="preserve">
+        <value>Remove from favorites</value>
+    </data>
     <data name="Component.DtTextField.Button.LoadFile.Tooltip" xml:space="preserve">
         <value>Load from a file</value>
     </data>

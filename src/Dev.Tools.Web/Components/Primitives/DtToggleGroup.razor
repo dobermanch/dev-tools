@@ -1,0 +1,44 @@
+@*
+    The segmented control of the design: icons in one bordered group, one of them current.
+*@
+@typeparam T
+
+<div class="dt-toggle-group @Class" role="group">
+    @foreach (var option in Options)
+    {
+        var isSelected = EqualityComparer<T>.Default.Equals(option.Value, Value);
+        <button type="button"
+                class="dt-toggle @(isSelected ? "dt-toggle-active" : null)"
+                title="@option.Label"
+                aria-label="@option.Label"
+                aria-pressed="@(isSelected ? "true" : "false")"
+                @onclick="@(() => SelectAsync(option.Value))">
+            <MudIcon Icon="@option.Icon" Style="width:18px;height:18px" />
+        </button>
+    }
+</div>
+
+@code {
+    /// <param name="Value">The value this segment selects.</param>
+    /// <param name="Icon">A Material icon, as <c>ToolIconProvider</c> returns them.</param>
+    /// <param name="Label">Tooltip and accessible name.</param>
+    public sealed record Option(T Value, string Icon, string? Label = null);
+
+    [Parameter, EditorRequired] public IReadOnlyList<Option> Options { get; set; } = [];
+
+    [Parameter] public T? Value { get; set; }
+
+    [Parameter] public EventCallback<T> ValueChanged { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    private async Task SelectAsync(T value)
+    {
+        if (EqualityComparer<T>.Default.Equals(value, Value!))
+        {
+            return;
+        }
+
+        await ValueChanged.InvokeAsync(value);
+    }
+}

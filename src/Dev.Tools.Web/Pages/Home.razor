@@ -56,25 +56,11 @@
     <MudText Typo="Typo.h6">@_localizer["Section.AllTools"]</MudText>
     <MudSpacer />
     
-    <MudToggleGroup T="ViewMode" Value="@_viewMode" ValueChanged="OnViewModeChangedAsync"
-                    Outlined="true" Delimiters="true" Size="Size.Small" Color="Color.Primary" Class="mr-2">
-        <MudToggleItem Value="@ViewMode.Cards" aria-label="Card view">
-            <MudIcon Icon="@Icons.Material.Outlined.Apps" />
-        </MudToggleItem>
-        <MudToggleItem Value="@ViewMode.List" aria-label="List view">
-            <MudIcon Icon="@Icons.Material.Outlined.ViewList" />
-        </MudToggleItem>
-    </MudToggleGroup>
-    
-    <MudToggleGroup T="bool" Value="@_groupByCategory" ValueChanged="OnGroupByCategoryChangedAsync"
-                    Outlined="true" Delimiters="true" Size="Size.Small" Color="Color.Tertiary">
-        <MudToggleItem Value="true" aria-label="Group by category">
-            <MudIcon Icon="@Icons.Material.Outlined.Category" />
-        </MudToggleItem>
-        <MudToggleItem Value="false" aria-label="Show all">
-            <MudIcon Icon="@Icons.Material.Outlined.List" />
-        </MudToggleItem>
-    </MudToggleGroup>
+    <DtToggleGroup T="ViewMode" Value="@_viewMode" ValueChanged="OnViewModeChangedAsync"
+                   Options="@ViewModeOptions" Class="mr-2" />
+
+    <DtToggleGroup T="bool" Value="@_groupByCategory" ValueChanged="OnGroupByCategoryChangedAsync"
+                   Options="@GroupingOptions" />
 </MudToolBar>
 
 @if (_groupByCategory)

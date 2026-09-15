@@ -1,0 +1,17 @@
+.dt-mono-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dt-text-faint);
+}
+
+.dt-mono-label-count {
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--dt-text-fainter);
+}

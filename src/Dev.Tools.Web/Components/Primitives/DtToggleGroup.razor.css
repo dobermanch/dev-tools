@@ -1,0 +1,37 @@
+.dt-toggle-group {
+    display: inline-flex;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-control);
+    overflow: hidden;
+}
+
+.dt-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 11px;
+    border: 0;
+    background: transparent;
+    color: var(--dt-text-tertiary);
+    cursor: pointer;
+    transition: color var(--dt-transition), background-color var(--dt-transition);
+}
+
+.dt-toggle + .dt-toggle {
+    border-left: 1px solid var(--dt-border-control);
+}
+
+.dt-toggle:hover {
+    background: var(--dt-surface-active);
+    color: var(--dt-accent);
+}
+
+.dt-toggle:focus-visible {
+    outline: 1px solid var(--dt-accent);
+    outline-offset: -1px;
+}
+
+.dt-toggle-active {
+    background: var(--dt-surface-active);
+    color: var(--dt-accent);
+}

@@ -1,0 +1,24 @@
+.dt-tag {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 3px 7px;
+    border: 1px solid var(--dt-border-field);
+    border-radius: var(--dt-radius-tag);
+    background: var(--dt-surface-tag);
+    color: var(--dt-text-muted);
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.dt-tag-accent {
+    border-color: var(--dt-border-accent);
+    color: var(--dt-accent);
+}
+
+.dt-tag-truncate {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
