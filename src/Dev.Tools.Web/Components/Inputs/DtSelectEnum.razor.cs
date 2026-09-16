@@ -20,12 +20,6 @@ public partial class DtSelectEnum<T> : ComponentBase
     [Parameter]
     public EventCallback<T> ValueChanged { get; set; }
 
-    /// <summary>
-    /// Kept while Settings still lays its own label out; the control always draws its label above.
-    /// </summary>
-    [Parameter]
-    public LabelPositionType LabelPosition { get; set; }
-
     [Parameter]
     public string? Hint { get; set; }
 

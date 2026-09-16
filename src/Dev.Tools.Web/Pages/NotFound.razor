@@ -1,6 +1,23 @@
-﻿@page "/notfound"
+@page "/notfound"
 
-<PageTitle>Not found</PageTitle>
-<LayoutView Layout="@typeof(MainLayout)">
-    <p role="alert">Sorry, there's nothing at this address.</p>
-</LayoutView>
+<PageTitle>@_localizer["Caption"]</PageTitle>
+
+<DtPageHeader Caption="@_localizer["Caption"]" Description="@_localizer["Description"]"/>
+
+<div class="dt-notfound">
+    <DtButton OnClick="@GoHome">@_localizer["Button.Home.Label"]</DtButton>
+</div>
+
+@code {
+    [Inject] private WebContext Context { get; set; } = null!;
+
+    private Microsoft.Extensions.Localization.IStringLocalizer _localizer = null!;
+
+    protected override void OnInitialized()
+    {
+        _localizer = Context.Localization.PageLocalizer<NotFound>();
+        base.OnInitialized();
+    }
+
+    private void GoHome() => Context.Navigation.NavigateTo("./");
+}

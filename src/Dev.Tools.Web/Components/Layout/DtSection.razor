@@ -27,20 +27,6 @@
     [Parameter]
     public string? Class { get; set; }
 
-    /// <summary>
-    /// Accepted and ignored: a section is separated by its own heading and spacing now. The pages still
-    /// passing it lose it as they move onto the new layout in phase D.
-    /// </summary>
-    [Parameter]
-    public bool ShowDivider { get; set; }
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    [CascadingParameter] public DtSectionList? List { get; set; }
-
-    protected override void OnInitialized()
-    {
-        List?.Register(this);
-    }
 }

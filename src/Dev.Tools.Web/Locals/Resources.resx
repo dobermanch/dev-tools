@@ -255,6 +255,15 @@
     <data name="Page.XmlFormatterToolPage.TextField.Result.Label" xml:space="preserve">
         <value>Formatted XML</value>
     </data>
+    <data name="Page.NotFound.Caption" xml:space="preserve">
+        <value>Page not found</value>
+    </data>
+    <data name="Page.NotFound.Description" xml:space="preserve">
+        <value>There is nothing at this address. The tool may have been renamed, or the link may be wrong.</value>
+    </data>
+    <data name="Page.NotFound.Button.Home.Label" xml:space="preserve">
+        <value>Back to all tools</value>
+    </data>
     <data name="Page.Settings.Caption" xml:space="preserve">
         <value>Settings</value>
     </data>
@@ -297,17 +306,8 @@
     <data name="Page.Home.Empty.Description" xml:space="preserve">
         <value>Try another word, or clear the filter.</value>
     </data>
-    <data name="Page.Home.Hero.Subtitle" xml:space="preserve">
-        <value>The Swiss Army Knife for Developers</value>
-    </data>
-    <data name="Page.Home.Hero.ToolCount" xml:space="preserve">
-        <value>{0} tools across {1} categories</value>
-    </data>
     <data name="Page.Home.Section.Favorites" xml:space="preserve">
         <value>Favorites</value>
-    </data>
-    <data name="Page.Home.Section.AllTools" xml:space="preserve">
-        <value>All Tools</value>
     </data>
     <data name="Page.Home.Search.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
@@ -326,12 +326,6 @@
     </data>
     <data name="Layout.MainLayout.Button.Repository.Tooltip" xml:space="preserve">
         <value>Source on GitHub</value>
-    </data>
-    <data name="Layout.MainLayout.Subtitle" xml:space="preserve">
-        <value>The Swiss Army Knife for Developers</value>
-    </data>
-    <data name="Layout.NavMenu.Home" xml:space="preserve">
-        <value>Home</value>
     </data>
     <data name="Layout.NavMenu.Recent" xml:space="preserve">
         <value>Recent</value>
@@ -356,9 +350,6 @@
     </data>
     <data name="Layout.NavMenu.Favorites" xml:space="preserve">
         <value>Favorites</value>
-    </data>
-    <data name="Layout.NavMenu.Settings" xml:space="preserve">
-        <value>Settings</value>
     </data>
     <data name="Locals.en-US.Name" xml:space="preserve">
         <value>English</value>
@@ -438,23 +429,11 @@
     <data name="Component.DtSwitch.State.Off" xml:space="preserve">
         <value>off</value>
     </data>
-    <data name="Component.DtTextField.Button.Copy.Tooltip" xml:space="preserve">
-        <value>Copy to clipboard</value>
-    </data>
     <data name="Component.FavoriteButton.Tooltip.Add" xml:space="preserve">
         <value>Add to favorites</value>
     </data>
     <data name="Component.FavoriteButton.Tooltip.Remove" xml:space="preserve">
         <value>Remove from favorites</value>
-    </data>
-    <data name="Component.DtTextField.Button.LoadFile.Tooltip" xml:space="preserve">
-        <value>Load from a file</value>
-    </data>
-    <data name="Component.DtTextField.Error.FileTooLarge" xml:space="preserve">
-        <value>The file is larger than {0}</value>
-    </data>
-    <data name="Component.DtTextField.Text.LoadedFile" xml:space="preserve">
-        <value>Loaded from {0}</value>
     </data>
     <data name="Page.CharacterViewerPage.Select.ViewType.Label" xml:space="preserve">
         <value>View Type</value>

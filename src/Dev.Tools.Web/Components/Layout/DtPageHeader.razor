@@ -1,45 +1,26 @@
-<MudGrid Class="mt-4 mb-2" Spacing="0">
-    <MudItem xs="12">
-        <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
-                @if (ShowBackButton)
-                {
-                    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Size="Size.Medium" OnClick="@NavigateToPreviousPage"/>
-                }
-                <MudText Typo="Typo.h4">@Caption</MudText>
-            </MudStack>
-            @Actions
-        </MudStack>
-    </MudItem>
-    
-    @if (Content != null)
+@*
+    The head of a page that is not a tool - Settings, Not found. The tool pages have their own header,
+    which adds the breadcrumb, the icon and the per-tool actions.
+*@
+
+<header class="dt-page-header">
+    <h1 class="dt-page-title">@Caption</h1>
+
+    @if (!string.IsNullOrEmpty(Description))
     {
-        <MudItem xs="12" Class="mud-card-content">
-            @Content
-        </MudItem>
+        <p class="dt-page-description">@Description</p>
     }
 
-</MudGrid>
+    @if (Actions is not null)
+    {
+        <div class="dt-page-header-actions">@Actions</div>
+    }
+</header>
 
 @code {
-    [Parameter]
-    public required string Caption { get; set; }
+    [Parameter, EditorRequired] public required string Caption { get; set; }
 
-    [Inject]
-    private WebContext Context { get; set; } = null!;
+    [Parameter] public string? Description { get; set; }
 
-    [Parameter]
-    public bool ShowBackButton { get; set; } = true;
-    
-    [Parameter]
-    public RenderFragment? Actions { get; set; }
-    
-    [Parameter]
-    public RenderFragment? Content { get; set; }
-
-
-    private void NavigateToPreviousPage()
-    {
-        Context.Navigation.NavigateTo(Context.Navigation.BaseUri);
-    }
+    [Parameter] public RenderFragment? Actions { get; set; }
 }

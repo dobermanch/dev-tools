@@ -6,11 +6,30 @@ namespace Dev.Tools.Web.Components.Inputs;
 
 public partial class LanguageSelector : ComponentBase
 {
-    [Inject]
-    WebContext Context { get; set; } = null!;
+    private readonly string _id = $"dt-language-{Guid.NewGuid():N}";
 
-    private async Task OnLanguageChangedAsync(CultureInfo culture)
+    [Inject]
+    private WebContext Context { get; set; } = null!;
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    private async Task OnLanguageChangedAsync(ChangeEventArgs args)
     {
-        await Context.Localization.SetCurrentCultureInfo(culture, true, CancellationToken.None);
+        if (args.Value is not string name)
+        {
+            return;
+        }
+
+        var culture = Context.Localization.SupportedCultures
+            .FirstOrDefault(it => string.Equals(it.Name, name, StringComparison.OrdinalIgnoreCase));
+
+        if (culture is not null)
+        {
+            await Context.Localization.SetCurrentCultureInfo(culture, true, CancellationToken.None);
+        }
     }
 }

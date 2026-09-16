@@ -2,56 +2,16 @@
 
 @using Dev.Tools.Localization
 
-<DtPageHeader Caption="@_localizer["Caption"]" ShowBackButton="false"/>
+<DtPageHeader Caption="@_localizer["Caption"]"/>
 
-<DtStatus Severity="DtStatusSeverity.Info" Class="my-2">@_localizer["Note.BrowserStorage"]</DtStatus>
+<DtStatus Severity="DtStatusSeverity.Info" Class="dt-settings-note">@_localizer["Note.BrowserStorage"]</DtStatus>
 
-<MudCard Class="my-2">
-    <MudGrid Spacing="3">
-        <MudItem xs="12" sm="3" Class="d-none d-sm-block">
-            <div class="floating-panel" style="padding-top: 40px;">
-                <MudList T="string" Dense="true" Class="mx-4">
-                    @if (_sectionListRef is not null)
-                    {
-                        @foreach (var item in _sectionListRef.Sections)
-                        {
-                            <MudListItem T="string" OnClick="@(async () => await ScrollTo(item.Id))">@item.Caption</MudListItem>
-                        }
-                    }
-                </MudList>
-            </div>
-        </MudItem>
+<DtOptions Label="@_localizer["Section.General.Label"]">
+    <DtSelectEnum
+        T="Dev.Tools.Web.Services.Layout.ThemeMode"
+        Label="@_localizer["Section.General.Theme.Label"]"
+        Value="@Context.Layout.ThemeMode"
+        ValueChanged="@(async mode => await OnThemeChangedAsync(mode))"/>
 
-        <MudItem xs="12" sm="9" Class="pa-4">
-            <DtSectionList @ref="_sectionListRef">
-                <DtSection Id="localization" Caption="@_localizer["Section.General.Label"]">
-                    <MudGrid Class="align-center">
-                        <MudItem xs="3">
-                            <MudText Typo="Typo.body1">@_localizer["Section.General.Theme.Label"]</MudText>
-                        </MudItem>
-                        <MudItem xs="9">
-                            <DtSelectEnum
-                                T="Dev.Tools.Web.Services.Layout.ThemeMode"
-                                LabelPosition="LabelPositionType.Inline"
-                                Value="@Context.Layout.ThemeMode"
-                                ValueChanged="@(async mode => await OnThemeChangedAsync(mode))"
-                            />
-                        </MudItem>
-
-                    </MudGrid>
-
-                    <MudGrid Class="align-center">
-                        <MudItem xs="3">
-                            <MudText Typo="Typo.body1">@_localizer["Section.General.Language.Label"]</MudText>
-                        </MudItem>
-                        <MudItem xs="9">
-                            <LanguageSelector/>
-                        </MudItem>
-                    </MudGrid>
-                </DtSection>
-            </DtSectionList>
-        </MudItem>
-    </MudGrid>
-</MudCard>
-
- 
+    <LanguageSelector Label="@_localizer["Section.General.Language.Label"]"/>
+</DtOptions>

@@ -102,7 +102,7 @@ For **parser-style** tools (many output fields), use a non-positional `Result` r
 
 **Cancellation**: a tool with work worth stopping part way overrides `Execute(Args, CancellationToken)` instead of `Execute(Args)` and passes the token on - to `ParallelOptions` for a `Parallel.For`.
 
-**Files and binary input**: a tool does not care where its input came from. Every frontend offers a file for the `[PipeInput]` argument in its own way - the CLI through stdin (`dev-tools hash < file.iso`), the API at `POST /tools/{name}/file` (multipart/form-data), the Web UI through a load-file button on the field (`AllowFileInput="true"` on its `DtTextField`), on the pages where a file makes sense - so most tools need nothing for it. A tool whose input is a text document takes `string` and receives the file's text. A tool that needs the raw bytes, or input too big to hold in memory, takes `ToolContent` instead: override `ExecuteAsync`, read it with `ReadAllBytesAsync`/`ReadAllTextAsync` or stream it with `OpenRead()`, and report content that turns out to be empty as `TextEmpty`. A string converts to `ToolContent` implicitly, so callers and tests pass text unchanged. `ToolContent` is only allowed on the `[PipeInput]` argument (`DT1013`), and there are no content results yet. MCP takes text only - never file paths.
+**Files and binary input**: a tool does not care where its input came from. Every frontend offers a file for the `[PipeInput]` argument in its own way - the CLI through stdin (`dev-tools hash < file.iso`), the API at `POST /tools/{name}/file` (multipart/form-data), the Web UI through a load-file button on the input pane (`AllowFileInput="true"` on its `DtInputPane`), on the pages where a file makes sense - so most tools need nothing for it. A tool whose input is a text document takes `string` and receives the file's text. A tool that needs the raw bytes, or input too big to hold in memory, takes `ToolContent` instead: override `ExecuteAsync`, read it with `ReadAllBytesAsync`/`ReadAllTextAsync` or stream it with `OpenRead()`, and report content that turns out to be empty as `TextEmpty`. A string converts to `ToolContent` implicitly, so callers and tests pass text unchanged. `ToolContent` is only allowed on the `[PipeInput]` argument (`DT1013`), and there are no content results yet. MCP takes text only - never file paths.
 
 ### Tool Text
 
@@ -144,7 +144,7 @@ That is the whole tool as far as the CLI, the API and the MCP server are concern
 **Web UI** — a tool with no page still appears in search and navigation, but its route 404s, so add one:
 
 - Create `src/Dev.Tools.Web/Pages/Tools/YourNameToolPage.razor` + `.razor.cs`
-- If the `[PipeInput]` argument is something a user would have in a file - a document, encoded or encrypted data - put `AllowFileInput="true"` on the `DtTextField` bound to it; add `OnFileLoaded` when the tool takes `ToolContent`, and the page receives the file's bytes instead of its text (`HashTextToolPage`, `BaseEncodingToolPage`). Short values (a number, a URL, a date, a token) get no file button
+- If the `[PipeInput]` argument is something a user would have in a file - a document, encoded or encrypted data - put `AllowFileInput="true"` on the `DtInputPane` bound to it; add `OnFileLoaded` when the tool takes `ToolContent`, and the page receives the file's bytes instead of its text (`HashTextToolPage`, `BaseEncodingToolPage`). Short values (a number, a URL, a date, a token) get no file button
 - Add icon to `src/Dev.Tools.Web/Services/ToolIconProvider.cs`
 - Add web page labels to `Dev.Tools.Web/Locals/Resources.resx` (the neutral English fallback), `Resources.en-US.resx` and `Resources.uk-UA.resx` - every culture carries the neutral file's keys
 - Key prefix for page labels: `Page.YourNameToolPage.*`
@@ -194,10 +194,19 @@ Tools can be instantiated directly (no DI required for unit tests).
 
 ### Blazor Web UI Patterns
 
+Every tool page is assembled from the same few components, so writing one is mostly a layout decision. Do not reach for MudBlazor's own layout components (`MudCard`, `MudGrid`, `MudSelect`) — no page uses them any more:
+
+- **`DtToolPageHeader`** — title, description and categories, all read from the `ToolDefinition`. Every page opens with it
+- **`DtOptions`** — the grid the short controls live in: `DtSelectEnum`, `DtSwitch`, `DtSlider`, `DtToggleGroup`, and `DtTextField` for a value that fits on one line
+- **`DtPanes`** — the input/output pair: `DtInputPane` (mono textarea, load-file and clear, char and line count, debounce) beside `DtOutputPane` (copy, download, an `ok`-or-error status line). Anything the user pastes belongs in a pane; anything they type a word into belongs in the options grid
+- **`DtFieldList`/`DtFieldValue`** inside an output pane when a parser tool returns many named values, and **`DtTable`** when it returns rows
+
 Two page styles exist — reference these when creating pages:
 
 - **Generator style** (config → auto-updating output): `TokenGeneratorToolPage`, `LoremIpsumGeneratorToolPage`
-- **Parser style** (input field → conditional output sections): `JwtParserToolPage`, `UrlParserToolPage`
+- **Parser style** (input → conditional output fields): `JwtParserToolPage`, `UrlParserToolPage`
+
+**Styling.** Design tokens are CSS custom properties (`--dt-*`) defined in `wwwroot/css/tokens.css`; never hard-code a colour, radius or font. Scoped CSS (`.razor.css`) cannot be shared between components, so anything two components both need — the focus ring (`.dt-focus-ring`), the mono microlabel (`.dt-label-mono`), the bordered control box (`.dt-box`) — is a class in `wwwroot/css/app.css` and is authoritative there. A control that looks like a bordered box *is* `.dt-box`, which is what keeps copy buttons, inputs and selects aligned with each other.
 
 Code-behind injects via `WebContext`:
 ```csharp

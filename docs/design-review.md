@@ -392,6 +392,8 @@ Each phase is independently shippable.
 
 **Phase 6 — generic Web page + dependency-light core.** Metadata-driven `ToolPage` with per-tool UI hints and hand-written escape hatch; `Icon` in `[ToolDefinition]`; strip `Microsoft.Extensions.*` from core and move DI wiring to its own package — the precondition for VS Code / browser-extension targets.
 
+*Note 2026-09-15.* The web redesign has already done most of the "shared page" half of this, by hand rather than by metadata: all 32 tool pages now open with `DtToolPageHeader` and are built from the same `DtOptions` / `DtPanes` / `DtFieldList` / `DtTable` set, with no `MudCard`, `MudGrid` or `MudSelect` left anywhere. A page is now little more than a declaration of which controls a tool has, which is the shape a generated page would need — so what remains here is deciding whether that declaration moves into `[ToolDefinition]` metadata at all, not building the component vocabulary. The dependency-light-core half is untouched.
+
 ---
 
 ## 9. Verification (per phase)

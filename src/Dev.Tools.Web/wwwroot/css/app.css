@@ -197,6 +197,16 @@
     font-size: 13.5px;
 }
 
+/* A select's chevron, where a copy button would sit. Shared by the enum select and the culture one. */
+.dt-select-chevron {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    margin-right: 5px;
+    color: var(--dt-text-subtle);
+    pointer-events: none;
+}
+
 /* A result: not editable, so it wraps rather than scrolling sideways. */
 .dt-box-value {
     flex: 1;
