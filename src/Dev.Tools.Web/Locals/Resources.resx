@@ -315,6 +315,15 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtToolPageHeader.Button.Share.Tooltip" xml:space="preserve">
+        <value>Share this tool</value>
+    </data>
+    <data name="Component.DtToolPageHeader.Button.Share.Copied" xml:space="preserve">
+        <value>Link copied</value>
+    </data>
+    <data name="Component.DtOptions.Label" xml:space="preserve">
+        <value>Options</value>
+    </data>
     <data name="Component.DtTable.Text.Rows" xml:space="preserve">
         <value>{0} rows</value>
     </data>

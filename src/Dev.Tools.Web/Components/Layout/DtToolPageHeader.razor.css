@@ -1,0 +1,74 @@
+.dt-tool-header {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--dt-border);
+}
+
+.dt-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--dt-font-mono);
+    font-size: 11.5px;
+    color: var(--dt-text-faint);
+}
+
+.dt-breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--dt-transition);
+}
+
+.dt-breadcrumb a:hover {
+    color: var(--dt-accent);
+}
+
+.dt-breadcrumb-current {
+    color: var(--dt-text-secondary);
+}
+
+.dt-tool-header-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.dt-tool-icon {
+    display: flex;
+    margin-top: 4px;
+    color: var(--dt-accent);
+}
+
+.dt-tool-header-text {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dt-tool-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--dt-text);
+    text-wrap: pretty;
+}
+
+.dt-tool-description {
+    margin: 0;
+    max-width: 68ch;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--dt-text-secondary);
+    text-wrap: pretty;
+}
+
+.dt-tool-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}

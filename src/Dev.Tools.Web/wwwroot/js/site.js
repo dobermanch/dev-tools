@@ -18,6 +18,25 @@ window.devTools = {
             console.warn('scrollToId failed', e);
         }
     },
+    // Returns what happened, so the caller knows whether to say "copied": 'shared' when the system sheet
+    // took it, 'cancelled' when the person dismissed that sheet, 'copied' or 'failed' otherwise.
+    share: async function (title, url) {
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: title, url: url });
+                return 'shared';
+            } catch (e) {
+                if (e && e.name === 'AbortError') return 'cancelled';
+            }
+        }
+        try {
+            await navigator.clipboard.writeText(url);
+            return 'copied';
+        } catch (e) {
+            console.warn('share failed', e);
+            return 'failed';
+        }
+    },
     downloadFile: function (fileName, text, contentType) {
         try {
             var blob = new Blob([text], { type: contentType || 'text/plain;charset=utf-8' });

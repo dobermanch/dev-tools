@@ -6,6 +6,12 @@ public interface IJsServices
     
     ValueTask ScrollToIdAsync(string id, int offset = 0, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Offers the link through the system share sheet where there is one, and copies it otherwise.
+    /// Answers with what happened: "shared", "cancelled", "copied" or "failed".
+    /// </summary>
+    ValueTask<string> ShareAsync(string title, string url, CancellationToken cancellationToken = default);
+
     /// <summary>Hands the text to the browser as a file to save.</summary>
     ValueTask DownloadAsync(string fileName, string text, string? contentType = null, CancellationToken cancellationToken = default);
 

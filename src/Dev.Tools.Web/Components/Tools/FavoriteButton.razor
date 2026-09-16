@@ -1,7 +1,8 @@
 <DtIconButton
     Class="@Class"
     Icon="@(_isFavorite ? Icons.Material.Outlined.Star : Icons.Material.Outlined.StarBorder)"
-    Size="DtControlSize.Small"
+    Size="@(Bordered ? DtControlSize.Medium : DtControlSize.Small)"
+    Bordered="@Bordered"
     Active="@_isFavorite"
     Tooltip="@(_isFavorite ? _localizer["Tooltip.Remove"] : _localizer["Tooltip.Add"])"
     OnClick="@OnToggleFavoriteAsync"/>

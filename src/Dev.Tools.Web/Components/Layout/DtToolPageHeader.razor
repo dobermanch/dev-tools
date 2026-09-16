@@ -1,24 +1,33 @@
-<DtPageHeader Caption="@Context.Localization.GetToolTitle(ToolDefinition)" ShowBackButton="true">
-    <Actions>
-        <FavoriteButton Class="mr-2" ToolDefinition="@ToolDefinition"/>
-    </Actions>
-    <Content>
-        <MudGrid>
-            <MudItem xs="12" Class="mud-card-content">
-                <KeywordChips ToolDefinition="@ToolDefinition"/>
-            </MudItem>
+@*
+    The head of every tool page: where you are, what the tool is, and the two things you can do with the
+    page itself. Every page picks this up without being touched.
+*@
 
-            <MudItem xs="12" Class="mud-card-content">
-                <MudText Typo="Typo.body2">@Context.Localization.GetToolDescription(ToolDefinition)</MudText>
-            </MudItem>
-        </MudGrid>
-    </Content>
-</DtPageHeader>
+<header class="dt-tool-header">
+    <nav class="dt-breadcrumb" aria-label="breadcrumb">
+        <a href="./">/tools</a>
+        <span>/</span>
+        <span class="dt-breadcrumb-current">@ToolDefinition.Name</span>
+    </nav>
 
-@code {
-    [Inject]
-    private WebContext Context { get; set; } = null!;
-    
-    [Parameter] 
-    public ToolDefinition ToolDefinition { get; set; } = null!;
-}
+    <div class="dt-tool-header-row">
+        <span class="dt-tool-icon">
+            <MudIcon Icon="@ToolIconProvider.GetToolIcon(ToolDefinition)" Style="width:26px;height:26px"/>
+        </span>
+
+        <div class="dt-tool-header-text">
+            <h1 class="dt-tool-title">@Context.Localization.GetToolTitle(ToolDefinition)</h1>
+            <p class="dt-tool-description">@Context.Localization.GetToolDescription(ToolDefinition)</p>
+            <KeywordChips ToolDefinition="@ToolDefinition"/>
+        </div>
+
+        <div class="dt-tool-actions">
+            <FavoriteButton ToolDefinition="@ToolDefinition" Bordered="true"/>
+            <DtIconButton Icon="@(_shared ? Icons.Material.Outlined.Check : Icons.Material.Outlined.Share)"
+                          Bordered="true"
+                          Active="@_shared"
+                          Tooltip="@(_shared ? _localizer["Button.Share.Copied"] : _localizer["Button.Share.Tooltip"])"
+                          OnClick="@ShareAsync"/>
+        </div>
+    </div>
+</header>

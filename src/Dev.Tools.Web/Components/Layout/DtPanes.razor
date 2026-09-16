@@ -1,0 +1,14 @@
+@*
+    The pane row. One pane fills the width, two split it, three fit where there is room - and all of them
+    fall into a single column when there is not.
+*@
+
+<div class="dt-panes @Class">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

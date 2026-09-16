@@ -396,6 +396,15 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtToolPageHeader.Button.Share.Tooltip" xml:space="preserve">
+        <value>Поділитися інструментом</value>
+    </data>
+    <data name="Component.DtToolPageHeader.Button.Share.Copied" xml:space="preserve">
+        <value>Посилання скопійовано</value>
+    </data>
+    <data name="Component.DtOptions.Label" xml:space="preserve">
+        <value>Параметри</value>
+    </data>
     <data name="Component.DtTable.Text.Rows" xml:space="preserve">
         <value>{0} рядків</value>
     </data>

@@ -2,71 +2,52 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="JsonFormatterTool.SortDirection"
-                        Label="@_localizer["Select.SortKeys.Label"]"
-                        Value="@_sortKeys"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnSortKeysChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="JsonFormatterTool.TextCase"
-                        Label="@_localizer["Select.KeyFormat.Label"]"
-                        Value="@_keyFormat"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnKeyFormatChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.IndentSize.Label"]"
-                        Value="@_indentSize"
-                        MinValue="0"
-                        MaxValue="8"
-                        ValueChanged="@OnIndentSizeChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_excludeEmpty"
-                        Label="@_localizer["Switch.ExcludeEmpty.Label"]"
-                        ValueChanged="OnExcludeEmptyChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_compact"
-                        Label="@_localizer["Switch.Compact.Label"]"
-                        ValueChanged="OnCompactChangedAsync"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSelectEnum
+        T="JsonFormatterTool.SortDirection"
+        Label="@_localizer["Select.SortKeys.Label"]"
+        Value="@_sortKeys"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnSortKeysChangedAsync"/>
 
-        <DtSection Id="io" ShowDivider="true">
-            <MudGrid Class="align-stretch" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtInputPane
-                        Label="@_localizer["TextField.Input.Label"]"
-                        AllowFileInput="true"
-                        Value="@_json"
-                        ValueChanged="@(value => { _json = value; })"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtOutputPane
-                        Label="@_localizer["TextField.Result.Label"]"
-                        Text="@(_result?.Json ?? string.Empty)"
-                        DownloadFileName="json-formatter.json"
-                        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
-                        StatusIsError="@(_result?.HasErrors ?? false)"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtSelectEnum
+        T="JsonFormatterTool.TextCase"
+        Label="@_localizer["Select.KeyFormat.Label"]"
+        Value="@_keyFormat"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnKeyFormatChangedAsync"/>
+
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.IndentSize.Label"]"
+        Value="@_indentSize"
+        MinValue="0"
+        MaxValue="8"
+        ValueChanged="@OnIndentSizeChangedAsync"/>
+
+    <DtSwitch
+        Value="@_excludeEmpty"
+        Label="@_localizer["Switch.ExcludeEmpty.Label"]"
+        ValueChanged="OnExcludeEmptyChangedAsync"/>
+
+    <DtSwitch
+        Value="@_compact"
+        Label="@_localizer["Switch.Compact.Label"]"
+        ValueChanged="OnCompactChangedAsync"/>
+</DtOptions>
+
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_json"
+        ValueChanged="@(value => { _json = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@(_result?.Json ?? string.Empty)"
+        DownloadFileName="json-formatter.json"
+        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
+        StatusIsError="@(_result?.HasErrors ?? false)"/>
+</DtPanes>

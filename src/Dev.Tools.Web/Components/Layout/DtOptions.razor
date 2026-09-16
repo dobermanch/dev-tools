@@ -1,0 +1,29 @@
+@*
+    A tool's options: one grid that fills the width with 210px-wide controls. A control can take two
+    columns with Class="dt-span-2", or the whole row with Class="dt-span-all".
+*@
+
+<section class="dt-options @Class">
+    <span class="dt-options-label">@(Label ?? _localizer["Label"])</span>
+    <div class="dt-options-grid">
+        @ChildContent
+    </div>
+</section>
+
+@code {
+    [Inject] private WebContext Context { get; set; } = null!;
+
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    private Microsoft.Extensions.Localization.IStringLocalizer _localizer = null!;
+
+    protected override void OnInitialized()
+    {
+        _localizer = Context.Localization.CreateScopedLocalizer("Component.DtOptions");
+        base.OnInitialized();
+    }
+}

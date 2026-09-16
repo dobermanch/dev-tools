@@ -14,6 +14,9 @@ internal sealed class JsServices(IJSRuntime jsRuntime) : IJsServices
             ? ValueTask.CompletedTask
             : jsRuntime.InvokeVoidAsync("devTools.scrollToId", cancellationToken, id, offset);
 
+    public ValueTask<string> ShareAsync(string title, string url, CancellationToken cancellationToken = default)
+        => jsRuntime.InvokeAsync<string>("devTools.share", cancellationToken, title, url);
+
     public ValueTask DownloadAsync(string fileName, string text, string? contentType = null, CancellationToken cancellationToken = default)
         => string.IsNullOrEmpty(text)
             ? default

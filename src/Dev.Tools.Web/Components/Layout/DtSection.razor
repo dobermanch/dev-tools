@@ -1,14 +1,15 @@
-<section id="@Id" class="@(Class ?? "mt-6")">
+<section id="@Id" class="dt-section @Class">
     @if (Caption is not null)
     {
-        <MudText Typo="Typo.h6">@Caption</MudText>
+        <div class="dt-section-heading">
+            <h2 class="dt-section-title">@Caption</h2>
+            @if (!string.IsNullOrEmpty(Count))
+            {
+                <span class="dt-section-count">@Count</span>
+            }
+        </div>
     }
-    @if (Caption is not null || ShowDivider)
-    {
-        <MudDivider
-            Class="mt-2 mb-4"
-            DividerType="DividerType.FullWidth"/>
-    }
+
     @ChildContent
 </section>
 
@@ -18,16 +19,24 @@
 
     [Parameter]
     public string? Caption { get; set; }
-    
+
+    /// <summary>A mono note beside the caption, such as a row count.</summary>
+    [Parameter]
+    public string? Count { get; set; }
+
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Accepted and ignored: a section is separated by its own heading and spacing now. The pages still
+    /// passing it lose it as they move onto the new layout in phase D.
+    /// </summary>
     [Parameter]
     public bool ShowDivider { get; set; }
-    
+
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-    
+
     [CascadingParameter] public DtSectionList? List { get; set; }
 
     protected override void OnInitialized()

@@ -16,8 +16,12 @@ public partial class FavoriteButton : ComponentBase, IDisposable
     [Parameter]
     public string Class { get; set; } = null!;
 
-    [Parameter] 
+    [Parameter]
     public ToolDefinition ToolDefinition { get; set; } = null!;
+
+    /// <summary>In a bordered square, as on a tool page header.</summary>
+    [Parameter]
+    public bool Bordered { get; set; }
 
     public void Dispose()
     {

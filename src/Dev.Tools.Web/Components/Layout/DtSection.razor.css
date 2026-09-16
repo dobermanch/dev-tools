@@ -1,0 +1,28 @@
+.dt-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px 0 0;
+}
+
+.dt-section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dt-border);
+}
+
+.dt-section-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--dt-text);
+}
+
+.dt-section-count {
+    font-family: var(--dt-font-mono);
+    font-size: 11.5px;
+    color: var(--dt-text-faint);
+}

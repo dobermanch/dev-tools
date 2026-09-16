@@ -1,0 +1,7 @@
+.dt-panes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+    padding: 22px 0 0;
+    align-items: start;
+}
