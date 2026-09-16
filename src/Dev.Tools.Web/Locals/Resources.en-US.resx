@@ -389,6 +389,39 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtPane.Button.LoadFile.Tooltip" xml:space="preserve">
+        <value>Load from a file</value>
+    </data>
+    <data name="Component.DtPane.Button.Clear.Tooltip" xml:space="preserve">
+        <value>Clear</value>
+    </data>
+    <data name="Component.DtPane.Button.Copy.Tooltip" xml:space="preserve">
+        <value>Copy to clipboard</value>
+    </data>
+    <data name="Component.DtPane.Button.Copied.Tooltip" xml:space="preserve">
+        <value>Copied</value>
+    </data>
+    <data name="Component.DtPane.Button.Download.Tooltip" xml:space="preserve">
+        <value>Download</value>
+    </data>
+    <data name="Component.DtPane.Button.Refresh.Tooltip" xml:space="preserve">
+        <value>Generate again</value>
+    </data>
+    <data name="Component.DtPane.Text.Chars" xml:space="preserve">
+        <value>{0} chars</value>
+    </data>
+    <data name="Component.DtPane.Text.Lines" xml:space="preserve">
+        <value>{0} lines</value>
+    </data>
+    <data name="Component.DtPane.Text.LoadedFile" xml:space="preserve">
+        <value>Loaded {0}</value>
+    </data>
+    <data name="Component.DtPane.Text.Ok" xml:space="preserve">
+        <value>ok</value>
+    </data>
+    <data name="Component.DtPane.Error.FileTooLarge" xml:space="preserve">
+        <value>The file is larger than {0}.</value>
+    </data>
     <data name="Component.DtSwitch.State.On" xml:space="preserve">
         <value>on</value>
     </data>

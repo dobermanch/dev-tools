@@ -1,0 +1,46 @@
+@*
+    Where a tool's result comes out. Either a block of text or whatever the page puts inside - labelled
+    fields, an SVG, a diff - with copy, download, and a refresh for the tools that generate.
+*@
+
+<DtPane Label="@Label" Accent="true" Class="@Class">
+    <Actions>
+        @if (OnRefresh.HasDelegate)
+        {
+            <DtIconButton Icon="@Icons.Material.Outlined.Refresh"
+                          Size="DtControlSize.Small"
+                          Tooltip="@_localizer["Button.Refresh.Tooltip"]"
+                          OnClick="@OnRefresh"/>
+        }
+
+        <DtIconButton Icon="@(_copied ? Icons.Material.Outlined.Check : Icons.Material.Outlined.CopyAll)"
+                      Size="DtControlSize.Small"
+                      Active="@_copied"
+                      Disabled="@string.IsNullOrEmpty(Text)"
+                      Tooltip="@(_copied ? _localizer["Button.Copied.Tooltip"] : _localizer["Button.Copy.Tooltip"])"
+                      OnClick="@CopyAsync"/>
+
+        <DtIconButton Icon="@Icons.Material.Outlined.Download"
+                      Size="DtControlSize.Small"
+                      Disabled="@string.IsNullOrEmpty(Text)"
+                      Tooltip="@_localizer["Button.Download.Tooltip"]"
+                      OnClick="@DownloadAsync"/>
+    </Actions>
+
+    <ChildContent>
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            <pre class="dt-pane-output">@Text</pre>
+        }
+    </ChildContent>
+
+    <Footer>
+        <span class="@(StatusIsError ? "dt-pane-status-error" : "dt-pane-status")">
+            @(Status ?? _localizer["Text.Ok"])
+        </span>
+    </Footer>
+</DtPane>

@@ -1,0 +1,21 @@
+.dt-pane-input {
+    flex: 1;
+    min-height: 300px;
+    padding: 14px;
+    border: 0;
+    outline: none;
+    resize: vertical;
+    background: transparent;
+    color: var(--dt-text-mono);
+    font-family: var(--dt-font-mono);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.dt-pane-input::placeholder {
+    color: var(--dt-text-faint);
+}
+
+.dt-pane-input-error {
+    color: var(--dt-error);
+}

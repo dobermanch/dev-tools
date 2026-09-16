@@ -14,6 +14,11 @@ internal sealed class JsServices(IJSRuntime jsRuntime) : IJsServices
             ? ValueTask.CompletedTask
             : jsRuntime.InvokeVoidAsync("devTools.scrollToId", cancellationToken, id, offset);
 
+    public ValueTask DownloadAsync(string fileName, string text, string? contentType = null, CancellationToken cancellationToken = default)
+        => string.IsNullOrEmpty(text)
+            ? default
+            : jsRuntime.InvokeVoidAsync("devTools.downloadFile", cancellationToken, fileName, text, contentType);
+
     public ValueTask SetThemeAsync(bool isDarkMode, CancellationToken cancellationToken = default)
         => jsRuntime.InvokeVoidAsync("devTools.setTheme", cancellationToken, isDarkMode);
 

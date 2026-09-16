@@ -396,6 +396,39 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtPane.Button.LoadFile.Tooltip" xml:space="preserve">
+        <value>Завантажити з файлу</value>
+    </data>
+    <data name="Component.DtPane.Button.Clear.Tooltip" xml:space="preserve">
+        <value>Очистити</value>
+    </data>
+    <data name="Component.DtPane.Button.Copy.Tooltip" xml:space="preserve">
+        <value>Копіювати в буфер обміну</value>
+    </data>
+    <data name="Component.DtPane.Button.Copied.Tooltip" xml:space="preserve">
+        <value>Скопійовано</value>
+    </data>
+    <data name="Component.DtPane.Button.Download.Tooltip" xml:space="preserve">
+        <value>Зберегти файл</value>
+    </data>
+    <data name="Component.DtPane.Button.Refresh.Tooltip" xml:space="preserve">
+        <value>Згенерувати знову</value>
+    </data>
+    <data name="Component.DtPane.Text.Chars" xml:space="preserve">
+        <value>{0} символів</value>
+    </data>
+    <data name="Component.DtPane.Text.Lines" xml:space="preserve">
+        <value>{0} рядків</value>
+    </data>
+    <data name="Component.DtPane.Text.LoadedFile" xml:space="preserve">
+        <value>Завантажено {0}</value>
+    </data>
+    <data name="Component.DtPane.Text.Ok" xml:space="preserve">
+        <value>готово</value>
+    </data>
+    <data name="Component.DtPane.Error.FileTooLarge" xml:space="preserve">
+        <value>Файл більший за {0}.</value>
+    </data>
     <data name="Component.DtSwitch.State.On" xml:space="preserve">
         <value>увімк</value>
     </data>

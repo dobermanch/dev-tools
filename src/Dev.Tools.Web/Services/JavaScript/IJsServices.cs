@@ -6,6 +6,9 @@ public interface IJsServices
     
     ValueTask ScrollToIdAsync(string id, int offset = 0, CancellationToken cancellationToken = default);
 
+    /// <summary>Hands the text to the browser as a file to save.</summary>
+    ValueTask DownloadAsync(string fileName, string text, string? contentType = null, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Stamps the theme on the document, so the design tokens in tokens.css match MudBlazor's own theme.
     /// </summary>

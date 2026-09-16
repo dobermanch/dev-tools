@@ -228,16 +228,11 @@ public partial class DtTextField<T> : ComponentBase, IDisposable
         var limit = asContent ? MaxFileSize : MaxLength;
         if (file.Size > limit)
         {
-            _fileError = _localizer["Error.FileTooLarge", FormatSize(limit)];
+            _fileError = _localizer["Error.FileTooLarge", FileInput.FormatSize(limit)];
             return;
         }
 
-        // The browser hands a file over once. Holding its bytes lets a page run the tool as often as it
-        // likes - again when an option changes, or once per algorithm.
-        await using var stream = file.OpenReadStream(limit);
-        using var buffer = new MemoryStream();
-        await stream.CopyToAsync(buffer);
-        var content = ToolContent.FromBytes(buffer.ToArray());
+        var content = await FileInput.ReadAsync(file, limit);
 
         _fileError = null;
         _loadedFile = _localizer["Text.LoadedFile", file.Name];
@@ -259,9 +254,6 @@ public partial class DtTextField<T> : ComponentBase, IDisposable
 
         await OnDebounceIntervalElapsed.InvokeAsync(text);
     }
-
-    private static string FormatSize(long bytes)
-        => bytes >= 1024 * 1024 ? $"{bytes / (1024 * 1024)} MB" : $"{bytes / 1024} KB";
 
     private async Task OnCopyToClipboardAsync()
     {

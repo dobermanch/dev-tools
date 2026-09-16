@@ -49,25 +49,22 @@
         </DtSection>
 
         <DtSection Id="io" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
+            <MudGrid Class="align-stretch" Spacing="4">
                 <MudItem xs="12" md="6">
-                    <DtTextField
-                        AllowFileInput="true"
-                        T="string"
+                    <DtInputPane
                         Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_json"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        LabelPosition="LabelPositionType.Inline"
-                        Lines="15"/>
+                        AllowFileInput="true"
+                        Value="@_json"
+                        ValueChanged="@(value => { _json = value; })"
+                        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Value="@(_result?.Json ?? string.Empty)"
+                    <DtOutputPane
                         Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="15"
-                        LabelPosition="LabelPositionType.Inline"/>
+                        Text="@(_result?.Json ?? string.Empty)"
+                        DownloadFileName="json-formatter.json"
+                        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
+                        StatusIsError="@(_result?.HasErrors ?? false)"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

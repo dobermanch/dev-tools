@@ -1,0 +1,47 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<DtPane Label="@Label" Class="@Class">
+    <Actions>
+        @if (AllowFileInput)
+        {
+            <MudFileUpload T="IBrowserFile" FilesChanged="OnFileSelectedAsync">
+                <ActivatorContent>
+                    <DtIconButton Icon="@Icons.Material.Outlined.FileOpen"
+                                  Size="DtControlSize.Small"
+                                  Tooltip="@_localizer["Button.LoadFile.Tooltip"]"/>
+                </ActivatorContent>
+            </MudFileUpload>
+        }
+
+        <DtIconButton Icon="@Icons.Material.Outlined.DeleteOutline"
+                      Size="DtControlSize.Small"
+                      Disabled="@string.IsNullOrEmpty(_text)"
+                      Tooltip="@_localizer["Button.Clear.Tooltip"]"
+                      OnClick="@ClearAsync"/>
+    </Actions>
+
+    <ChildContent>
+        <textarea class="dt-pane-input"
+                  value="@_text"
+                  placeholder="@Placeholder"
+                  maxlength="@MaxLength"
+                  spellcheck="false"
+                  @oninput="OnInputAsync"></textarea>
+    </ChildContent>
+
+    <Footer>
+        @if (_fileError is not null)
+        {
+            <span class="dt-pane-input-error">@_fileError</span>
+        }
+        else
+        {
+            <span>@_localizer["Text.Chars", CharCount]</span>
+            <span>@_localizer["Text.Lines", LineCount]</span>
+            @if (_loadedFile is not null)
+            {
+                <span>@_loadedFile</span>
+            }
+        }
+    </Footer>
+</DtPane>
