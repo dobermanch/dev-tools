@@ -1,6 +1,7 @@
-﻿@using System.Globalization
+@using System.Globalization
 @using Dev.Tools.Web.Theme
 @inherits LayoutComponentBase
+@implements IAsyncDisposable
 
 <MudThemeProvider @ref="_themeProvider" Theme="@DevToolsTheme.Theme" IsDarkMode="@IsDarkMode" ObserveSystemThemeChange="@ObserveSystemThemeChange" />
 <MudPopoverProvider />
@@ -8,8 +9,7 @@
 <MudSnackbarProvider />
 
 <MudLayout @key="CultureInfo.CurrentUICulture.Name">
-    <MudAppBar Elevation="0" Dense="true"
-               Style="background-color: var(--mud-palette-background)">
+    <MudAppBar Elevation="0" Dense="true" Class="dt-appbar">
         <MudIconButton
             Icon="@Icons.Material.Outlined.Menu"
             Size="Size.Medium"
@@ -18,24 +18,42 @@
             Edge="Edge.Start"
             OnClick="@DrawerToggle"/>
 
-        @if (!IsDrawerOpen)
-        {
-            <MudLink Underline="Underline.None" Href="./">
-                <MudText Typo="Typo.h6" Color="Color.Primary">@Context.AppDetails.Name.ToUpper()</MudText>
-            </MudLink>
-        }
+        <a href="./" class="dt-brand">
+            <img src="logo.svg" width="30" height="30" alt="" />
+            <span class="dt-brand-lines">
+                <span class="dt-wordmark">DEV.TOOLS</span>
+                <span class="dt-brand-sub">@BrandLine</span>
+            </span>
+        </a>
 
         <MudSpacer />
 
-        @if (!Context.Navigation.Uri.EndsWith("/"))
-        {
-            <MudIconButton Icon="@Icons.Material.Outlined.Search"
-                           Color="Color.Inherit"
-                           OnClick="@OpenSearchDialogAsync"/>
-        }
+        <button type="button" class="dt-search-button" @onclick="@OpenSearchDialogAsync">
+            <MudIcon Icon="@Icons.Material.Outlined.Search" Style="width:16px;height:16px" />
+            <span class="dt-search-label">@_localizer["Button.Search.Label"]</span>
+            <span class="dt-kbd">@ShortcutLabel</span>
+        </button>
 
-        <MudIconButton Icon="@LightModeIcon" OnClick="@ChangeThemeModeAsync" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Settings" Edge="Edge.End" Href="settings" />
+        <span class="dt-appbar-actions">
+            <DtIconButton Icon="@LightModeIcon"
+                          Size="DtControlSize.Large"
+                          Tooltip="@_localizer["Button.Theme.Tooltip"]"
+                          OnClick="@ChangeThemeModeAsync"/>
+
+            <DtIconButton Icon="@Icons.Material.Outlined.Settings"
+                          Size="DtControlSize.Large"
+                          Tooltip="@_localizer["Button.Settings.Tooltip"]"
+                          OnClick="@(() => Context.Navigation.NavigateTo("settings"))"/>
+
+            <a class="dt-appbar-link"
+               href="https://github.com/dobermanch/dev-tools"
+               target="_blank"
+               rel="noreferrer"
+               title="@_localizer["Button.Repository.Tooltip"]"
+               aria-label="@_localizer["Button.Repository.Tooltip"]">
+                <MudIcon Icon="@Icons.Custom.Brands.GitHub" Style="width:20px;height:20px" />
+            </a>
+        </span>
     </MudAppBar>
 
     <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">
@@ -49,7 +67,7 @@
         </MudDrawerHeader>
         <MudDrawerContainer Class="mt-4" Style="flex-grow: 1; overflow-y: auto;">
             <NavMenu/>
-            
+
             <MudStack Class="mt-10">
                 <AppDetails/>
             </MudStack>
@@ -57,8 +75,8 @@
     </MudDrawer>
 
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large">
+        <div class="dt-main">
             @Body
-        </MudContainer>
+        </div>
     </MudMainContent>
 </MudLayout>

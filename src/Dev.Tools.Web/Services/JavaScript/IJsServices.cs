@@ -1,3 +1,5 @@
+using Microsoft.JSInterop;
+
 namespace Dev.Tools.Web.Services.JavaScript;
 
 public interface IJsServices
@@ -5,6 +7,15 @@ public interface IJsServices
     ValueTask CopyToClipboardAsync(string text, CancellationToken cancellationToken = default);
     
     ValueTask ScrollToIdAsync(string id, int offset = 0, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Calls the named method on <paramref name="reference"/> when Ctrl+K or Cmd+K is pressed, and
+    /// answers whether this is a Mac, so the shortcut can be labelled the way that keyboard has it.
+    /// </summary>
+    ValueTask<bool> RegisterCommandShortcutAsync<T>(DotNetObjectReference<T> reference, string methodName, CancellationToken cancellationToken = default)
+        where T : class;
+
+    ValueTask UnregisterCommandShortcutAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Offers the link through the system share sheet where there is one, and copies it otherwise.

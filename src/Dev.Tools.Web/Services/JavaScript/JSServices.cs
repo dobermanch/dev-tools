@@ -14,6 +14,13 @@ internal sealed class JsServices(IJSRuntime jsRuntime) : IJsServices
             ? ValueTask.CompletedTask
             : jsRuntime.InvokeVoidAsync("devTools.scrollToId", cancellationToken, id, offset);
 
+    public ValueTask<bool> RegisterCommandShortcutAsync<T>(DotNetObjectReference<T> reference, string methodName, CancellationToken cancellationToken = default)
+        where T : class
+        => jsRuntime.InvokeAsync<bool>("devTools.registerCommandShortcut", cancellationToken, reference, methodName);
+
+    public ValueTask UnregisterCommandShortcutAsync(CancellationToken cancellationToken = default)
+        => jsRuntime.InvokeVoidAsync("devTools.unregisterCommandShortcut", cancellationToken);
+
     public ValueTask<string> ShareAsync(string title, string url, CancellationToken cancellationToken = default)
         => jsRuntime.InvokeAsync<string>("devTools.share", cancellationToken, title, url);
 

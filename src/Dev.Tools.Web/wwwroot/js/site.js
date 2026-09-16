@@ -18,6 +18,26 @@ window.devTools = {
             console.warn('scrollToId failed', e);
         }
     },
+    // Ctrl+K, or Cmd+K on a Mac, wherever you are in the app. Registered once by the layout; the browser's
+    // own use of the combination is suppressed, since this is the app's search.
+    registerCommandShortcut: function (dotNetRef, methodName) {
+        window.devTools.unregisterCommandShortcut();
+        window.devTools._commandHandler = function (e) {
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+                e.preventDefault();
+                dotNetRef.invokeMethodAsync(methodName);
+            }
+        };
+        document.addEventListener('keydown', window.devTools._commandHandler);
+        // Answers whether to label the shortcut Cmd or Ctrl.
+        return /mac|iphone|ipad/.test((navigator.userAgentData && navigator.userAgentData.platform || navigator.platform || '').toLowerCase());
+    },
+    unregisterCommandShortcut: function () {
+        if (window.devTools._commandHandler) {
+            document.removeEventListener('keydown', window.devTools._commandHandler);
+            window.devTools._commandHandler = null;
+        }
+    },
     // Returns what happened, so the caller knows whether to say "copied": 'shared' when the system sheet
     // took it, 'cancelled' when the person dismissed that sheet, 'copied' or 'failed' otherwise.
     share: async function (title, url) {

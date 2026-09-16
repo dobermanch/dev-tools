@@ -29,6 +29,125 @@
     top:0;
 }
 
+/* ===== The shell =====
+   These live here rather than in MainLayout.razor.css because the layout is built from MudBlazor
+   components, and scoped CSS does not reach a child component's own element. */
+
+.dt-main {
+    min-height: 100vh;
+    padding: 0 40px 64px;
+    background-color: var(--dt-bg);
+    background-image: radial-gradient(var(--dt-bg-dot) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.dt-appbar {
+    background-color: rgba(12, 13, 11, 0.92) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--dt-border);
+}
+
+:root[data-theme="light"] .dt-appbar {
+    background-color: rgba(246, 247, 241, 0.92) !important;
+}
+
+.dt-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    text-decoration: none;
+    color: var(--dt-text);
+}
+
+.dt-brand img {
+    display: block;
+    border-radius: 9px;
+}
+
+.dt-brand-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.dt-wordmark {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.dt-brand-sub {
+    font-family: var(--dt-font-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--dt-text-subtle);
+}
+
+.dt-search-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 34px;
+    padding: 0 10px 0 12px;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-control);
+    background: var(--dt-surface-raised);
+    color: var(--dt-text-muted);
+    font-family: var(--dt-font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: color var(--dt-transition), border-color var(--dt-transition);
+}
+
+.dt-search-button:hover {
+    border-color: var(--dt-border-hover);
+    color: var(--dt-text-tertiary);
+}
+
+.dt-kbd {
+    padding: 2px 6px;
+    border: 1px solid var(--dt-border-kbd);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--dt-text-faint);
+    white-space: nowrap;
+}
+
+.dt-appbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 6px;
+}
+
+.dt-appbar-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: var(--dt-radius-control);
+    color: var(--dt-text-muted);
+    transition: color var(--dt-transition), background-color var(--dt-transition);
+}
+
+.dt-appbar-link:hover {
+    background: var(--dt-surface-active);
+    color: var(--dt-accent);
+}
+
+@media (max-width: 720px) {
+    .dt-main {
+        padding: 0 16px 48px;
+    }
+
+    .dt-search-label,
+    .dt-brand-sub {
+        display: none;
+    }
+}
+
 /* Custom scrollbar styles */
 * {
     scrollbar-width: thin !important;

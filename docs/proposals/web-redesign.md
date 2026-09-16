@@ -57,7 +57,7 @@ Each step builds or restyles components and swaps their existing uses one for on
 
 ### Phase C - App layout and home
 
-- [ ] **C1. App bar and frame.** Dot-grid background, sticky blurred bar, logo + wordmark + `v{AppDetails.Version}`, search button with Ctrl/⌘K opening the restyled `SearchDialog`, Settings and GitHub icon buttons.
+- [x] **C1. App bar and frame.** Dot-grid background and 40px gutters (the `MudContainer` width cap is gone), sticky blurred bar with the logo, wordmark and a mono line beneath - the version when a build has one, `offline-first` either way. A search button carrying the shortcut chip, labelled `⌘K` or `Ctrl K` by what the browser reports, opens the `SearchDialog`; the key listener lives in `site.js` and calls back into the layout, and is unregistered when the layout goes away. Theme, Settings and a GitHub link sit beside it, the last moved up from the drawer footer. The shell's CSS lives in `app.css`, not a `.razor.css`: the layout is built from MudBlazor components, and scoped CSS does not reach a child component's own element.
 - [ ] **C2. Home.** Hero with counts from the tool provider and live search; filter chips, group-by-category toggle, grid/list toggle; category sections; `ToolCard` / `ToolListView` rewritten; reads `?category=` and `?view=`. Adds the missing `xml-formatter` icon.
 - [ ] **C3. Sidebar.** NAVIGATE (All tools, Favorites + count, Recent), CATEGORIES with counts, the "runs locally" card - reworded, since IP Details calls `api.ipify.org`. Active row follows the route; temporary drawer below `Md`.
 - [ ] **C4. Recent tools.** A bounded list in preferences, recorded when a tool page opens; sidebar count and the `?view=recent` filter.

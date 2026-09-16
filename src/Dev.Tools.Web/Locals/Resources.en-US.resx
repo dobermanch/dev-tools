@@ -359,6 +359,21 @@
     <data name="Page.Home.Search.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Layout.MainLayout.Text.Tagline" xml:space="preserve">
+        <value>offline-first</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Search.Label" xml:space="preserve">
+        <value>search tools</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Theme.Tooltip" xml:space="preserve">
+        <value>Switch theme</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Settings.Tooltip" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Repository.Tooltip" xml:space="preserve">
+        <value>Source on GitHub</value>
+    </data>
     <data name="Layout.MainLayout.Subtitle" xml:space="preserve">
         <value>The Swiss Army Knife for Developers</value>
     </data>

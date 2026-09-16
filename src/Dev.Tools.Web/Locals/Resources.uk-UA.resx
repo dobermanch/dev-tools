@@ -366,6 +366,21 @@
     <data name="Page.Home.Search.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Layout.MainLayout.Text.Tagline" xml:space="preserve">
+        <value>працює офлайн</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Search.Label" xml:space="preserve">
+        <value>пошук інструментів</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Theme.Tooltip" xml:space="preserve">
+        <value>Змінити тему</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Settings.Tooltip" xml:space="preserve">
+        <value>Налаштування</value>
+    </data>
+    <data name="Layout.MainLayout.Button.Repository.Tooltip" xml:space="preserve">
+        <value>Код на GitHub</value>
+    </data>
     <data name="Layout.MainLayout.Subtitle" xml:space="preserve">
         <value>Швейцарський ніж для розробників</value>
     </data>
