@@ -58,7 +58,7 @@
     --dt-info: #8aa4b8;
 
     /* Type */
-    --dt-font-sans: 'Space Grotesk', 'Onest', Helvetica, Arial, sans-serif;
+    --dt-font-sans: 'Space Grotesk', 'Onest', 'Golos Text', Helvetica, Arial, sans-serif;
     --dt-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
     /* Shape - no shadows anywhere: depth is 1px borders and surface steps */
@@ -77,38 +77,38 @@
     color-scheme: light;
 
     --dt-bg: #f6f7f1;
-    --dt-bg-dot: #e3e7d8;
+    --dt-bg-dot: #dfe4d0;
     --dt-surface: #ffffff;
     --dt-surface-raised: #f1f3e8;
     --dt-surface-hover: #f2f6e2;
     --dt-surface-active: #eaf2cd;
-    --dt-surface-tag: #f1f3e8;
+    --dt-surface-tag: #eef2df;
 
     --dt-border: #dce1cf;
     --dt-border-subtle: #e7ebdc;
-    --dt-border-pane: #e7ebdc;
-    --dt-border-field: #e7ebdc;
+    --dt-border-pane: #e4e8d8;
+    --dt-border-field: #dee3d0;
     --dt-border-control: #d3d9c3;
-    --dt-border-kbd: #d3d9c3;
-    --dt-border-hover: #a6b845;
-    --dt-border-accent: #c5e825;
+    --dt-border-kbd: #cfd6bd;
+    --dt-border-hover: #9aab6c;
+    --dt-border-accent: #b6cc63;
 
     --dt-accent: #55670a;
     --dt-accent-hover: #3f4d05;
     --dt-accent-fill: #c5e825;
     --dt-accent-fill-contrast: #15180f;
     --dt-olive: #a6b845;
-    --dt-olive-muted: #8d9581;
+    --dt-olive-muted: #7d8d2f;
 
     --dt-text: #15180f;
-    --dt-text-mono: #15180f;
+    --dt-text-mono: #23281a;
     --dt-text-tertiary: #3f4636;
     --dt-text-secondary: #5a6149;
     --dt-text-muted: #5d6550;
-    --dt-text-subtle: #5d6550;
+    --dt-text-subtle: #6b7360;
     --dt-text-faint: #6b7360;
-    --dt-text-fainter: #8d9581;
-    --dt-text-faintest: #a9b09c;
+    --dt-text-fainter: #767e6a;
+    --dt-text-faintest: #8d9581;
 
     --dt-error: #a3450d;
     --dt-warning: #8a5a00;

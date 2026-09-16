@@ -333,6 +333,21 @@
     <data name="Layout.NavMenu.Home" xml:space="preserve">
         <value>Home</value>
     </data>
+    <data name="Layout.NavMenu.Group.Navigate" xml:space="preserve">
+        <value>Navigate</value>
+    </data>
+    <data name="Layout.NavMenu.Group.Categories" xml:space="preserve">
+        <value>Categories</value>
+    </data>
+    <data name="Layout.NavMenu.AllTools" xml:space="preserve">
+        <value>All tools</value>
+    </data>
+    <data name="Layout.NavMenu.RunsLocally.Title" xml:space="preserve">
+        <value>Runs locally</value>
+    </data>
+    <data name="Layout.NavMenu.RunsLocally.Text" xml:space="preserve">
+        <value>Every tool runs in your browser. Nothing you paste is uploaded — except IP Details, which asks a lookup service for your address.</value>
+    </data>
     <data name="Layout.NavMenu.Favorites" xml:space="preserve">
         <value>Favorites</value>
     </data>

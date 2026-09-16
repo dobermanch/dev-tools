@@ -56,22 +56,18 @@
         </span>
     </MudAppBar>
 
-    <MudDrawer Elevation="2" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Never" Open="@IsDrawerOpen" Style="display: flex; flex-direction: column;">
-        <MudDrawerHeader Style="flex-shrink: 0;">
-                <MudStack>
-                    <MudLink Href="./" Underline="Underline.None" Style="width: 100%;">
-                        <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">DEV TOOLS</MudText>
-                    </MudLink>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Default">@_localizer["Subtitle"]</MudText>
-                </MudStack>
-        </MudDrawerHeader>
-        <MudDrawerContainer Class="mt-4" Style="flex-grow: 1; overflow-y: auto;">
-            <NavMenu/>
-
-            <MudStack Class="mt-10">
-                <AppDetails/>
-            </MudStack>
-        </MudDrawerContainer>
+    @* Mini: the hamburger collapses the panel to a 64px rail rather than hiding it, and below Md the
+       same state opens it as a temporary drawer. IsDrawerOpen already persists, so the rail does too.
+       The wordmark and the version live in the app bar now, so the panel starts at NAVIGATE. *@
+    <MudDrawer Elevation="0"
+               Breakpoint="Breakpoint.Md"
+               ClipMode="DrawerClipMode.Never"
+               Variant="DrawerVariant.Mini"
+               MiniWidth="64px"
+               Width="236px"
+               Open="@IsDrawerOpen"
+               Class="dt-drawer">
+        <NavMenu Collapsed="@(!IsDrawerOpen)"/>
     </MudDrawer>
 
     <MudMainContent>

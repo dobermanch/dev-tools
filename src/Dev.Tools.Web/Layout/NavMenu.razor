@@ -1,101 +1,67 @@
-@using Dev.Tools.Providers
-@using Dev.Tools.Web.Core.Messaging
-@using Dev.Tools.Web.Notifications
+@using Dev.Tools.Web.Services
 
-<MudNavMenu>
-    <MudNavLink Href="./"
-                Icon="@Icons.Material.Outlined.Home"
-                IconColor="Color.Primary"
-                Match="NavLinkMatch.All">
-        @_localizer["Home"]
-    </MudNavLink>
+<nav class="dt-nav @(Collapsed ? "dt-nav-rail" : null)">
+    <div class="dt-nav-group">
+        @if (!Collapsed)
+        {
+            <span class="dt-nav-group-label">@_localizer["Group.Navigate"]</span>
+        }
 
-    @if (_favoriteTools.Any())
-    {
-        <MudNavGroup Title="@_localizer["Favorites"]"
-                     Icon="@Icons.Material.Outlined.Star"
-                     IconColor="Color.Warning"
-                     Expanded="true">
-            @foreach (var tool in _favoriteTools)
+        <a class="dt-nav-row @(IsAllToolsActive ? "dt-nav-row-active" : null)"
+           href="./"
+           title="@_localizer["AllTools"]">
+            <span class="dt-nav-icon">
+                <MudIcon Icon="@Icons.Material.Outlined.GridView" Style="width:18px;height:18px" />
+            </span>
+            @if (!Collapsed)
             {
-                <MudNavLink
-                    Icon="@ToolIconProvider.GetToolIcon(tool)"
-                    IconColor="Color.Primary"
-                    Href="@($"tools/{tool.Name}")"
-                    Match="NavLinkMatch.Prefix">
-                    @Context.Localization.GetToolTitle(tool)
-                </MudNavLink>
+                <span class="dt-nav-text">@_localizer["AllTools"]</span>
             }
-        </MudNavGroup>
-    }
+        </a>
 
-    <MudDivider Class="my-2" />
-
-    @foreach (var group in _tools)
-    {
-        <MudNavGroup Title="@Context.Localization.GetCategory(group.Key)"
-                     Icon="@ToolIconProvider.GetCategoryIcon(group.Key)"
-                     Expanded="false">
-            @foreach (var tool in group)
+        <a class="dt-nav-row @(IsFavoritesActive ? "dt-nav-row-active" : null)"
+           href="./?view=favorites"
+           title="@_localizer["Favorites"]">
+            <span class="dt-nav-icon">
+                <MudIcon Icon="@Icons.Material.Outlined.StarBorder" Style="width:18px;height:18px" />
+            </span>
+            @if (!Collapsed)
             {
-                <MudNavLink
-                    Icon="@ToolIconProvider.GetToolIcon(tool.Item2)"
-                    IconColor="Color.Primary"
-                    Href="@($"tools/{tool.Item2.Name}")"
-                    Match="NavLinkMatch.Prefix">
-                    @Context.Localization.GetToolTitle(tool.Item2)
-                </MudNavLink>
+                <span class="dt-nav-text">@_localizer["Favorites"]</span>
+                <span class="dt-nav-count">@_favoriteCount</span>
             }
-        </MudNavGroup>
-    }
+        </a>
+    </div>
 
-    <MudDivider Class="my-2" />
+    <div class="dt-nav-group">
+        @if (!Collapsed)
+        {
+            <span class="dt-nav-group-label">@_localizer["Group.Categories"]</span>
+        }
 
-    <MudNavLink Href="settings" Icon="@Icons.Material.Outlined.Settings" Match="NavLinkMatch.Prefix">
-        @_localizer["Settings"]
-    </MudNavLink>
-</MudNavMenu>
+        @foreach (var category in _categories)
+        {
+            var name = Context.Localization.GetCategory(category);
+            <a class="dt-nav-row @(_activeCategory == category ? "dt-nav-row-active" : null)"
+               href="@($"./?category={category}")"
+               title="@name">
+                <span class="dt-nav-icon">
+                    <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(category)" Style="width:18px;height:18px" />
+                </span>
+                @if (!Collapsed)
+                {
+                    <span class="dt-nav-text">@name</span>
+                    <span class="dt-nav-count">@CountFor(category)</span>
+                }
+            </a>
+        }
+    </div>
 
-@code {
-    [Inject] private IToolsProvider ToolsProvider { get; set; } = null!;
-    [Inject] private WebContext Context { get; set; } = null!;
-
-    private Microsoft.Extensions.Localization.IStringLocalizer _localizer = null!;
-    private GroupedList<Category, (Category, ToolDefinition)> _tools = GroupedList<Category, (Category, ToolDefinition)>.Empty;
-    private IReadOnlyList<ToolDefinition> _favoriteTools = [];
-    private IDisposable? _subscription;
-
-    protected override void OnInitialized()
+    @if (!Collapsed)
     {
-        _localizer = Context.Localization.CreateScopedLocalizer("Layout.NavMenu");
-        var tools = ToolsProvider.GetToolDefinitions();
-
-        (Category category, ToolDefinition tools)[] grouped =
-            tools
-                .SelectMany(it => it.Categories.Select(x => (category: x, tools: it)))
-                .ToArray();
-
-        _tools = new GroupedList<Category, (Category, ToolDefinition)>(it => it.Item1, grouped);
-
-        LoadFavorites(tools);
-
-        _subscription = Context.Messenger.Subscribe<FavoritesChangedNotification>(OnFavoritesChanged);
-
-        base.OnInitialized();
+        <div class="dt-nav-footer">
+            <span class="dt-nav-footer-title">@_localizer["RunsLocally.Title"]</span>
+            <span class="dt-nav-footer-text">@_localizer["RunsLocally.Text"]</span>
+        </div>
     }
-
-    private void LoadFavorites(IReadOnlyCollection<ToolDefinition>? allTools = null)
-    {
-        allTools ??= ToolsProvider.GetToolDefinitions();
-        var favoriteNames = Context.Preferences.Preferences.Favorite.Tools;
-        _favoriteTools = allTools
-            .Where(t => favoriteNames.Contains(t.Name))
-            .ToList();
-    }
-
-    private void OnFavoritesChanged(FavoritesChangedNotification _)
-    {
-        LoadFavorites();
-        InvokeAsync(StateHasChanged);
-    }
-}
+</nav>

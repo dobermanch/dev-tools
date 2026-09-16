@@ -8,8 +8,9 @@ namespace Dev.Tools.Web.Theme;
 /// </summary>
 public static class DevToolsTheme
 {
-    // Space Grotesk has no Cyrillic; Onest covers those glyphs (see wwwroot/css/fonts.css).
-    private static readonly string[] Sans = ["Space Grotesk", "Onest", "Helvetica", "Arial", "sans-serif"];
+    // Space Grotesk has no Cyrillic; Onest is self-hosted for those glyphs (see wwwroot/css/fonts.css),
+    // and Golos Text is the designer's further fallback for anyone who happens to have it.
+    private static readonly string[] Sans = ["Space Grotesk", "Onest", "Golos Text", "Helvetica", "Arial", "sans-serif"];
     private static readonly string[] Mono = ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"];
 
     public static MudTheme Theme { get; } = new()
