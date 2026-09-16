@@ -2,44 +2,36 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_inputValue"
-                        InputType="InputType.Number"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="IntegerBaseConverterTool.BaseType"
-                        Label="@_localizer["Select.InputBase.Label"]"
-                        Value="@_inputBase"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnInputBaseValueChangedAsync"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSelectEnum
+        T="IntegerBaseConverterTool.BaseType"
+        Label="@_localizer["Select.InputBase.Label"]"
+        Value="@_inputBase"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnInputBaseValueChangedAsync"/>
+</DtOptions>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                @foreach (var result in _results)
-                {
-                    <MudItem xs="12">
-                        <DtTextField
-                            T="string"
-                            Value="@result.Value?.Data"
-                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
-                            ReadOnly="true"/>
-                    </MudItem>
-                }
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+@* The input is not a number field: hexadecimal and binary values are typed as text. *@
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Value="@_inputValue"
+        ValueChanged="@(value => { _inputValue = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllBases"
+        DownloadFileName="int-base-converter.txt"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)">
+        <DtFieldList>
+            @foreach (var result in _results)
+            {
+                <DtFieldValue
+                    Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                    Value="@result.Value?.Data"/>
+            }
+        </DtFieldList>
+    </DtOutputPane>
+</DtPanes>

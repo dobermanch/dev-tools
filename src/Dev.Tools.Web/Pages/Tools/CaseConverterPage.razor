@@ -2,38 +2,28 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@_args.Text"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"
-                        Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.Errors).Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        LabelPosition="LabelPositionType.Inline"
-                        Lines="5"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+@* No options: this tool answers with every case at once. *@
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_args.Text"
+        ValueChanged="@(value => { _args.Text = value; })"
+        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                @foreach (var result in _results)
-                {
-                    <MudItem xs="12">
-                        <DtTextField
-                            T="string"
-                            Value="@result.Value?.Text"
-                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
-                            ReadOnly="true"/>
-                    </MudItem>
-                }
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllCases"
+        DownloadFileName="case-converter.txt"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)">
+        <DtFieldList>
+            @foreach (var result in _results)
+            {
+                <DtFieldValue
+                    Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                    Value="@result.Value?.Text"/>
+            }
+        </DtFieldList>
+    </DtOutputPane>
+</DtPanes>
