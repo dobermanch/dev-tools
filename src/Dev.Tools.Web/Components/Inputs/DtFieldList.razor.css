@@ -1,0 +1,10 @@
+.dt-field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-height: 300px;
+    padding: 14px;
+    box-sizing: border-box;
+    overflow: auto;
+}

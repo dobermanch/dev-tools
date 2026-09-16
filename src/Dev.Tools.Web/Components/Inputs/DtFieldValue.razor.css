@@ -1,0 +1,34 @@
+.dt-field-value {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.dt-field-value-label {
+    font-family: var(--dt-font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dt-text-faint);
+}
+
+.dt-field-value-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border: 1px solid var(--dt-border-field);
+    border-radius: var(--dt-radius-control);
+    background: var(--dt-surface-raised);
+}
+
+.dt-field-value-text {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--dt-font-mono);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--dt-text-mono);
+    word-break: break-all;
+}

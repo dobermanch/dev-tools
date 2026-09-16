@@ -1,0 +1,13 @@
+@*
+    A stack of read-only results, as the body of an output pane.
+*@
+
+<div class="dt-field-list @Class">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

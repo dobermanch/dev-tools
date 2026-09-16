@@ -1,0 +1,24 @@
+@*
+    The thin accent bar: how much of something is left, such as the seconds on a one-time code.
+*@
+
+<div class="dt-progress @Class"
+     role="progressbar"
+     aria-valuenow="@Value.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)"
+     aria-valuemin="0"
+     aria-valuemax="@Max.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)"
+     aria-label="@AriaLabel">
+    <div class="dt-progress-fill" style="width: @Percent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%"></div>
+</div>
+
+@code {
+    [Parameter] public double Value { get; set; }
+
+    [Parameter] public double Max { get; set; } = 100;
+
+    [Parameter] public string? AriaLabel { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    private double Percent => Max <= 0 ? 0 : Math.Clamp(Value / Max * 100, 0, 100);
+}

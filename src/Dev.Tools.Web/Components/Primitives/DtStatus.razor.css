@@ -1,0 +1,36 @@
+.dt-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid var(--dt-border);
+    border-radius: var(--dt-radius-control);
+    background: var(--dt-surface-raised);
+    color: var(--dt-text);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.dt-status-text {
+    min-width: 0;
+}
+
+.dt-status-success {
+    border-color: var(--dt-success);
+    color: var(--dt-success);
+}
+
+.dt-status-info {
+    border-color: var(--dt-info);
+    color: var(--dt-info);
+}
+
+.dt-status-warning {
+    border-color: var(--dt-warning);
+    color: var(--dt-warning);
+}
+
+.dt-status-error {
+    border-color: var(--dt-error);
+    color: var(--dt-error);
+}

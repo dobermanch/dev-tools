@@ -1,0 +1,20 @@
+.dt-progress {
+    position: relative;
+    height: 4px;
+    border-radius: 3px;
+    background: var(--dt-border-subtle);
+    overflow: hidden;
+}
+
+.dt-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--dt-accent-fill);
+    transition: width var(--dt-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dt-progress-fill {
+        transition: none;
+    }
+}

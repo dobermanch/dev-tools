@@ -396,6 +396,9 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Page.HashTextToolPage.Pane.Output.Label" xml:space="preserve">
+        <value>Хеші</value>
+    </data>
     <data name="Component.DtPane.Button.LoadFile.Tooltip" xml:space="preserve">
         <value>Завантажити з файлу</value>
     </data>

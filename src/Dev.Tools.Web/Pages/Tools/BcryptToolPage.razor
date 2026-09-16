@@ -68,9 +68,9 @@
                     @if (_result.Matches is { } matches)
                     {
                         <MudItem xs="12">
-                            <MudAlert Severity="@(matches ? Severity.Success : Severity.Error)" Dense="true">
+                            <DtStatus Severity="@(matches ? DtStatusSeverity.Success : DtStatusSeverity.Error)">
                                 @_localizer[matches ? "Text.Matches" : "Text.NoMatch"]
-                            </MudAlert>
+                            </DtStatus>
                         </MudItem>
                     }
                     else
@@ -95,7 +95,7 @@
                     @if (_result.PasswordTruncated)
                     {
                         <MudItem xs="12">
-                            <MudAlert Severity="Severity.Warning" Dense="true">@_localizer["Text.Truncated"]</MudAlert>
+                            <DtStatus Severity="DtStatusSeverity.Warning">@_localizer["Text.Truncated"]</DtStatus>
                         </MudItem>
                     }
                 </MudGrid>

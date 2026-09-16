@@ -116,8 +116,8 @@
                     @if (_result.SecondsRemaining is { } remaining)
                     {
                         <MudItem xs="12">
-                            <MudText Typo="Typo.body2">@_localizer["Text.SecondsRemaining", remaining]</MudText>
-                            <MudProgressLinear Color="Color.Primary" Value="@(100.0 * remaining / _period)"/>
+                            <MudText Typo="Typo.body2" Class="mb-2">@_localizer["Text.SecondsRemaining", remaining]</MudText>
+                            <DtProgress Value="@remaining" Max="@_period"/>
                         </MudItem>
                     }
                     <MudItem xs="12" md="6">
@@ -146,13 +146,13 @@
                     <MudItem xs="12" md="6">
                         @if (_result.IsValid == true)
                         {
-                            <MudAlert Severity="Severity.Success" Dense="true">
+                            <DtStatus Severity="DtStatusSeverity.Success">
                                 @(_result.MatchOffset == 0 ? _localizer["Text.Valid"] : _localizer["Text.ValidAtOffset", _result.MatchOffset!])
-                            </MudAlert>
+                            </DtStatus>
                         }
                         else if (_result.IsValid == false)
                         {
-                            <MudAlert Severity="Severity.Error" Dense="true">@_localizer["Text.Invalid"]</MudAlert>
+                            <DtStatus Severity="DtStatusSeverity.Error">@_localizer["Text.Invalid"]</DtStatus>
                         }
                     </MudItem>
                 </MudGrid>

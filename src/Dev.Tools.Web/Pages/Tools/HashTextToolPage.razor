@@ -4,46 +4,46 @@
 
 <MudCard Class="my-4">
     <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
+        <DtSection Id="options" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@_args.Text"
-                        AllowFileInput="true"
-                        OnFileLoaded="OnFileLoadedAsync"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"
-                        Error="@(_results.Any(it => it.Value?.HasErrors ?? false))"
-                        ErrorText="@_results.Where(it => it.Value != null).SelectMany(it => it.Value!.Errors).Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        LabelPosition="LabelPositionType.Inline"
-                        Lines="5"
-                    />
-                </MudItem>
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
                     <DtTextField
                         T="string"
                         Value="@_key"
                         OnDebounceIntervalElapsed="OnKeyChangedAsync"
-                        Label="@_localizer["TextField.Key.Label"]"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
+                        Label="@_localizer["TextField.Key.Label"]"/>
                 </MudItem>
             </MudGrid>
         </DtSection>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                @foreach (var result in _results)
-                {
-                    <MudItem xs="12">
-                        <DtTextField
-                            T="string"
-                            Value="@result.Value?.Data"
-                            Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
-                            ReadOnly="true"/>
-                    </MudItem>
-                }
+        <DtSection Id="io" ShowDivider="true">
+            <MudGrid Class="align-stretch" Spacing="4">
+                <MudItem xs="12" md="6">
+                    <DtInputPane
+                        Label="@_localizer["TextField.Input.Label"]"
+                        AllowFileInput="true"
+                        OnFileLoaded="OnFileLoadedAsync"
+                        Value="@_args.Text"
+                        ValueChanged="@(value => { _args.Text = value; })"
+                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <DtOutputPane
+                        Label="@_localizer["Pane.Output.Label"]"
+                        Text="@AllDigests"
+                        DownloadFileName="hash.txt"
+                        Status="@FirstErrorText"
+                        StatusIsError="@(FirstErrorText is not null)">
+                        <DtFieldList>
+                            @foreach (var result in _results)
+                            {
+                                <DtFieldValue
+                                    Label="@Context.Localization.GetToolEnum(_toolDefinition, result.Key)"
+                                    Value="@result.Value?.Data"/>
+                            }
+                        </DtFieldList>
+                    </DtOutputPane>
+                </MudItem>
             </MudGrid>
         </DtSection>
     </MudCardContent>

@@ -19,6 +19,18 @@ public partial class HashTextToolPage : ComponentBase
 
     [Inject] private WebContext Context { get; set; } = null!;
 
+    // What copy and download act on: every digest, labelled, in one block.
+    private string AllDigests => string.Join(
+        Environment.NewLine,
+        _results.Where(it => !string.IsNullOrEmpty(it.Value?.Data))
+            .Select(it => $"{Context.Localization.GetToolEnum(_toolDefinition, it.Key)}: {it.Value!.Data}"));
+
+    private string? FirstErrorText => _results.Values
+        .Where(it => it?.HasErrors ?? false)
+        .SelectMany(it => it!.Errors)
+        .Select(it => Context.Localization.GetErrorCode(it.Code))
+        .FirstOrDefault();
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<HashTextToolPage>();

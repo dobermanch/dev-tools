@@ -1,0 +1,21 @@
+@*
+    One read-only result: a mono microlabel over a tinted row that wraps however long the value is, with
+    a copy action that ticks like the pane's.
+*@
+
+<div class="dt-field-value @Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <span class="dt-field-value-label">@Label</span>
+    }
+
+    <div class="dt-field-value-row">
+        <span class="dt-field-value-text">@Value</span>
+        <DtIconButton Icon="@(_copied ? Icons.Material.Outlined.Check : Icons.Material.Outlined.CopyAll)"
+                      Size="DtControlSize.Small"
+                      Active="@_copied"
+                      Disabled="@string.IsNullOrEmpty(Value)"
+                      Tooltip="@(_copied ? _localizer["Button.Copied.Tooltip"] : _localizer["Button.Copy.Tooltip"])"
+                      OnClick="@CopyAsync"/>
+    </div>
+</div>

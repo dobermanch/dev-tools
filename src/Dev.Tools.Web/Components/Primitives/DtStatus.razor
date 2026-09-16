@@ -1,0 +1,36 @@
+@*
+    An answer a tool gives that is not a value - a password matches, a code is valid, a password was
+    truncated. Bordered rather than a bare line of text, so it reads as a result.
+*@
+
+<div class="dt-status dt-status-@Severity.ToString().ToLowerInvariant() @Class" role="status">
+    <MudIcon Icon="@Icon" Style="width:17px;height:17px" />
+    <span class="dt-status-text">
+        @if (ChildContent is not null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Text
+        }
+    </span>
+</div>
+
+@code {
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public DtStatusSeverity Severity { get; set; } = DtStatusSeverity.Info;
+
+    [Parameter] public string? Class { get; set; }
+
+    private string Icon => Severity switch
+    {
+        DtStatusSeverity.Success => Icons.Material.Outlined.CheckCircle,
+        DtStatusSeverity.Warning => Icons.Material.Outlined.WarningAmber,
+        DtStatusSeverity.Error => Icons.Material.Outlined.ErrorOutline,
+        _ => Icons.Material.Outlined.Info
+    };
+}

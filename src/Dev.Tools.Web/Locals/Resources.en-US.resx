@@ -389,6 +389,9 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Page.HashTextToolPage.Pane.Output.Label" xml:space="preserve">
+        <value>Digests</value>
+    </data>
     <data name="Component.DtPane.Button.LoadFile.Tooltip" xml:space="preserve">
         <value>Load from a file</value>
     </data>
