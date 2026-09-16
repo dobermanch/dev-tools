@@ -19,6 +19,19 @@ public partial class TextDiffToolPage : ComponentBase
 
     [Inject] private WebContext Context { get; set; } = null!;
 
+    private string? FirstErrorText => _result?.Errors
+        .Select(it => Context.Localization.GetErrorCode(it.Code))
+        .FirstOrDefault();
+
+    /// <summary>The error, the tally of what changed, or that nothing did.</summary>
+    private string? DiffStatus => _result switch
+    {
+        null => null,
+        { HasErrors: true } => FirstErrorText,
+        { HasChanges: true } => _localizer["Text.Summary", _result.AddedLines, _result.RemovedLines],
+        _ => _localizer["Text.NoChanges"]
+    };
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<TextDiffToolPage>();

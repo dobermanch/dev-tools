@@ -2,17 +2,15 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="output" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <MudStack Row="true" Spacing="5">
-                        <MudText Typo="Typo.body1">@_localizer["Label.YourIp"]</MudText>
-                        <MudText Typo="Typo.body1">@_result.IpV4</MudText>
-                    </MudStack>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+@* No input: the tool answers about the machine it runs on. See docs/known-issues.md - resolving this
+   tool currently throws, which is a DI lifetime fault rather than anything on this page. *@
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["Label.YourIp"]"
+        Text="@(_result.IpV4 ?? string.Empty)"
+        DownloadFileName="ip-details.txt">
+        <DtFieldList>
+            <DtFieldValue Label="@_localizer["Label.YourIp"]" Value="@_result.IpV4"/>
+        </DtFieldList>
+    </DtOutputPane>
+</DtPanes>

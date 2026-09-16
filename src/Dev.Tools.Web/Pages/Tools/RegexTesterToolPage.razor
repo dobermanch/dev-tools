@@ -2,120 +2,74 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="pattern" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Pattern.Label"]"
-                        @bind-Value="@_pattern"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(PatternError is not null)"
-                        ErrorText="@PatternError"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Replacement.Label"]"
-                        @bind-Value="@_replacement"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_ignoreCase"
-                        Label="@_localizer["Switch.IgnoreCase.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_multiline"
-                        Label="@_localizer["Switch.Multiline.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _multiline = value))"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_singleline"
-                        Label="@_localizer["Switch.Singleline.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _singleline = value))"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_ignorePatternWhitespace"
-                        Label="@_localizer["Switch.IgnorePatternWhitespace.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _ignorePatternWhitespace = value))"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Pattern.Label"]"
+        @bind-Value="@_pattern"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+        Error="@(PatternError is not null)"
+        ErrorText="@PatternError"/>
 
-        <DtSection Id="text" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        AllowFileInput="true"
-                        Label="@_localizer["TextField.Text.Label"]"
-                        @bind-Value="@_text"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(TextError is not null)"
-                        ErrorText="@TextError"
-                        Lines="10"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Replacement.Label"]"
+        @bind-Value="@_replacement"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 
+    <DtSwitch Value="@_ignoreCase" Label="@_localizer["Switch.IgnoreCase.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
+    <DtSwitch Value="@_multiline" Label="@_localizer["Switch.Multiline.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _multiline = value))"/>
+    <DtSwitch Value="@_singleline" Label="@_localizer["Switch.Singleline.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _singleline = value))"/>
+    <DtSwitch Value="@_ignorePatternWhitespace" Label="@_localizer["Switch.IgnorePatternWhitespace.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _ignorePatternWhitespace = value))"/>
+</DtOptions>
+
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Text.Label"]"
+        AllowFileInput="true"
+        Value="@_text"
+        ValueChanged="@(value => { _text = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["Section.Matches.Title"]"
+        Text="@(_result?.Output ?? string.Empty)"
+        DownloadFileName="regex-tester.txt"
+        Status="@(PatternError ?? TextError)"
+        StatusIsError="@(PatternError is not null || TextError is not null)">
         @if (_result is { HasErrors: false })
         {
-            <DtSection Id="output" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12" md="3">
-                        <DtTextField
-                            T="int"
-                            Value="@_result.MatchCount"
-                            Label="@_localizer["TextField.MatchCount.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    @if (!string.IsNullOrEmpty(_replacement))
-                    {
-                        <MudItem xs="12">
-                            <DtTextField
-                                T="string"
-                                Value="@_result.Output"
-                                Label="@_localizer["TextField.Result.Label"]"
-                                ReadOnly="true"
-                                Lines="10"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (_result.Matches.Count > 0)
-                    {
-                        <MudItem xs="12">
-                            <DtTable Items="@_result.Matches" Title="@_localizer["Section.Matches.Title"]" MaxHeight="600">
-                                <HeaderContent>
-                                    <th>@_localizer["Table.Header.Position"]</th>
-                                    <th>@_localizer["Table.Header.Index"]</th>
-                                    <th>@_localizer["Table.Header.Value"]</th>
-                                    <th>@_localizer["Table.Header.Groups"]</th>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <td>@($"{context.Line}:{context.Column}")</td>
-                                    <td>@context.Index</td>
-                                    <td>@context.Value</td>
-                                    <td>@DescribeGroups(context)</td>
-                                </RowTemplate>
-                            </DtTable>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
+            <DtFieldList>
+                <DtFieldValue Label="@_localizer["TextField.MatchCount.Label"]" Value="@_result.MatchCount.ToString()"/>
+                @if (!string.IsNullOrEmpty(_replacement))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Result.Label"]" Value="@_result.Output"/>
+                }
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>
+
+@if (_result?.Matches.Count > 0)
+{
+    <DtTable Items="@_result.Matches" Title="@_localizer["Section.Matches.Title"]" MaxHeight="600">
+        <HeaderContent>
+            <th>@_localizer["Table.Header.Position"]</th>
+            <th>@_localizer["Table.Header.Index"]</th>
+            <th>@_localizer["Table.Header.Value"]</th>
+            <th>@_localizer["Table.Header.Groups"]</th>
+        </HeaderContent>
+        <RowTemplate>
+            <td>@($"{context.Line}:{context.Column}")</td>
+            <td>@context.Index</td>
+            <td>@context.Value</td>
+            <td>@DescribeGroups(context)</td>
+        </RowTemplate>
+    </DtTable>
+}

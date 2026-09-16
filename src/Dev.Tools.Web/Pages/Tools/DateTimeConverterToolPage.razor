@@ -2,6 +2,7 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition" />
 
+@* Left empty, the date follows the clock once a second; typing anything stops it. *@
 <DtOptions>
     <DtSelectEnum
         T="DateTimeConverterTool.DateFormatType"
@@ -9,16 +10,16 @@
         Value="@_args.From"
         ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
         ValueChanged="OnFromFormatSelectedAsync"/>
-</DtOptions>
 
-@* Left empty, the input follows the clock once a second; typing anything stops it. *@
-<DtPanes>
-    <DtInputPane
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
         Label="@_localizer["TextField.Input.Label"]"
         Value="@_args.Date"
-        ValueChanged="@(value => { _args.Date = value; })"
         OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+</DtOptions>
 
+<DtPanes>
     <DtOutputPane
         Label="@_localizer["TextField.Input.Label"]"
         Text="@AllFormats"

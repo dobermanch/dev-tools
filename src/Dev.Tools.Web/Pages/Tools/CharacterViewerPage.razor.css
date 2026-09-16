@@ -1,0 +1,13 @@
+.dt-char-view {
+    flex: 1;
+    min-height: 300px;
+    margin: 0;
+    padding: 14px;
+    overflow: auto;
+    color: var(--dt-text-mono);
+    font-family: var(--dt-font-mono);
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

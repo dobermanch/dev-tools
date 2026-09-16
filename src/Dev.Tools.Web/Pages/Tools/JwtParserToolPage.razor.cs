@@ -13,8 +13,17 @@ public partial class JwtParserToolPage : ComponentBase
 
     private string _token = string.Empty;
 
-    [Inject] 
+    [Inject]
     private WebContext Context { get; set; } = null!;
+
+    private string? FirstErrorText => _result?.Errors
+        .Select(it => Context.Localization.GetErrorCode(it.Code))
+        .FirstOrDefault();
+
+    // What copy and download act on: every claim the token carries, as it was decoded.
+    private string AllClaims => _result is null or { HasErrors: true }
+        ? string.Empty
+        : string.Join(Environment.NewLine, _result.Claims?.Select(it => $"{it.Key}: {it.Value}") ?? []);
 
     protected override async Task OnInitializedAsync()
     {

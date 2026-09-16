@@ -2,63 +2,43 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.TokenCount.Label"]"
-                        Value="@_args.Count"
-                        MinValue="1"
-                        MaxValue="100"
-                        ValueChanged="@OnCountValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="UlidGeneratorTool.UlidType"
-                        Label="@_localizer["Select.Type.Label"]"
-                        Value="@_args.Type"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnTypeValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="UlidGeneratorTool.UlidCase"
-                        Label="@_localizer["Select.Case.Label"]"
-                        Value="@_args.Case"
-                        ValueToDisplay="@(c => Context.Localization.GetToolEnum(_toolDefinition, c))"
-                        ValueChanged="OnCaseValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="UlidGeneratorTool.UlidBrackets"
-                        Label="@_localizer["Select.Brackets.Label"]"
-                        Value="@_args.Brackets"
-                        ValueToDisplay="@(b => Context.Localization.GetToolEnum(_toolDefinition, b))"
-                        ValueChanged="OnBracketsValueChangedAsync"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.TokenCount.Label"]"
+        Value="@_args.Count"
+        MinValue="1"
+        MaxValue="100"
+        ValueChanged="@OnCountValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@GetUlids()"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="10"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtSelectEnum
+        T="UlidGeneratorTool.UlidType"
+        Label="@_localizer["Select.Type.Label"]"
+        Value="@_args.Type"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnTypeValueChangedAsync"/>
+
+    <DtSelectEnum
+        T="UlidGeneratorTool.UlidCase"
+        Label="@_localizer["Select.Case.Label"]"
+        Value="@_args.Case"
+        ValueToDisplay="@(c => Context.Localization.GetToolEnum(_toolDefinition, c))"
+        ValueChanged="OnCaseValueChangedAsync"/>
+
+    <DtSelectEnum
+        T="UlidGeneratorTool.UlidBrackets"
+        Label="@_localizer["Select.Brackets.Label"]"
+        Value="@_args.Brackets"
+        ValueToDisplay="@(b => Context.Localization.GetToolEnum(_toolDefinition, b))"
+        ValueChanged="OnBracketsValueChangedAsync"/>
+</DtOptions>
+
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@GetUlids()"
+        DownloadFileName="ulid-generator.txt"
+        OnRefresh="OnValueChangedAsync"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)"/>
+</DtPanes>

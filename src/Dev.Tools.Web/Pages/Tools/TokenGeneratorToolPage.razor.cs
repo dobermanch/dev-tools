@@ -13,6 +13,11 @@ public partial class TokenGeneratorToolPage : ComponentBase
     private IStringLocalizer _localizer = null!;
 
     [Inject] private WebContext Context { get; set; } = null!;
+
+    private string? FirstErrorText => _result?.Errors
+        .Select(it => Context.Localization.GetErrorCode(it.Code))
+        .FirstOrDefault();
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<TokenGeneratorToolPage>();

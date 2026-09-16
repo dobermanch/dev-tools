@@ -1,6 +1,5 @@
 .dt-pane-output {
     flex: 1;
-    min-height: 300px;
     margin: 0;
     padding: 14px;
     overflow: auto;

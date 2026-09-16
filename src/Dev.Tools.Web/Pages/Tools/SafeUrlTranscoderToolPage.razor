@@ -12,9 +12,11 @@
 </DtOptions>
 
 <DtPanes>
+    @* A URL is one line, but can be a very long one: a short box that wraps, not a 300px field. *@
     <DtInputPane
         Label="@_localizer["TextField.Input.Label"]"
         AllowFileInput="true"
+        MinHeight="140"
         Value="@_url"
         ValueChanged="@(value => { _url = value; })"
         OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
@@ -22,6 +24,7 @@
     <DtOutputPane
         Label="@_localizer["TextField.Result.Label"]"
         Text="@(_result?.Url ?? string.Empty)"
+        MinHeight="140"
         DownloadFileName="url-transcoder.txt"
         Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
         StatusIsError="@(_result?.HasErrors ?? false)"/>

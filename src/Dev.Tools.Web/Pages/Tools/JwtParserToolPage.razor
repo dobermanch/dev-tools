@@ -2,182 +2,91 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_token"
-                        Error="@(_result != null && _result.HasErrors)"
-                        ErrorText="@(_result?.Errors.Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault(""))"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="5"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtPanes>
+    @* A token is one long line: a short box that wraps. *@
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        MinHeight="140"
+        Value="@_token"
+        ValueChanged="@(value => { _token = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 
-        @if (_result != null && !_result.HasErrors)
+    <DtOutputPane
+        Label="@_localizer["Section.Claims.Title"]"
+        Text="@AllClaims"
+        DownloadFileName="jwt-parser.txt"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)">
+        @if (_result is { HasErrors: false })
         {
-            <DtSection Id="header" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    @if (!string.IsNullOrEmpty(_result.Algorithm))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Algorithm ?? string.Empty)"
-                                Label="@_localizer["TextField.Algorithm.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.TokenType))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.TokenType ?? string.Empty)"
-                                Label="@_localizer["TextField.TokenType.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
-
-            <DtSection Id="claims" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    @if (!string.IsNullOrEmpty(_result.Issuer))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Issuer ?? string.Empty)"
-                                Label="@_localizer["TextField.Issuer.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.Subject))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Subject ?? string.Empty)"
-                                Label="@_localizer["TextField.Subject.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.Audience))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Audience ?? string.Empty)"
-                                Label="@_localizer["TextField.Audience.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.IssuedAt))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.IssuedAt ?? string.Empty)"
-                                Label="@_localizer["TextField.IssuedAt.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.NotBefore))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.NotBefore ?? string.Empty)"
-                                Label="@_localizer["TextField.NotBefore.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.ExpiresAt))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.ExpiresAt ?? string.Empty)"
-                                Label="@_localizer["TextField.ExpiresAt.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.JwtId))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.JwtId ?? string.Empty)"
-                                Label="@_localizer["TextField.JwtId.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
-
-            <DtSection Id="raw" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.HeaderJson ?? string.Empty)"
-                            Label="@_localizer["TextField.HeaderJson.Label"]"
-                            ReadOnly="true"
-                            Lines="8"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.PayloadJson ?? string.Empty)"
-                            Label="@_localizer["TextField.PayloadJson.Label"]"
-                            ReadOnly="true"
-                            Lines="8"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.Signature ?? string.Empty)"
-                            Label="@_localizer["TextField.Signature.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                </MudGrid>
-            </DtSection>
-
-            @if (_result.Claims?.Count > 0)
-            {
-                <DtSection Id="claimsTable" ShowDivider="true">
-                    <DtTable Items="@_result.Claims" Title="@_localizer["Section.Claims.Title"]">
-                        <HeaderContent>
-                            <th>@_localizer["Table.Header.Claim"]</th>
-                            <th>@_localizer["Table.Header.Value"]</th>
-                        </HeaderContent>
-                        <RowTemplate>
-                            <td>@context.Key</td>
-                            <td>@context.Value</td>
-                        </RowTemplate>
-                    </DtTable>
-                </DtSection>
-            }
+            <DtFieldList>
+                @if (!string.IsNullOrEmpty(_result.Algorithm))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Algorithm.Label"]" Value="@_result.Algorithm"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.TokenType))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.TokenType.Label"]" Value="@_result.TokenType"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.Issuer))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Issuer.Label"]" Value="@_result.Issuer"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.Subject))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Subject.Label"]" Value="@_result.Subject"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.Audience))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Audience.Label"]" Value="@_result.Audience"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.IssuedAt))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.IssuedAt.Label"]" Value="@_result.IssuedAt"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.NotBefore))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.NotBefore.Label"]" Value="@_result.NotBefore"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.ExpiresAt))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.ExpiresAt.Label"]" Value="@_result.ExpiresAt"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.JwtId))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.JwtId.Label"]" Value="@_result.JwtId"/>
+                }
+                <DtFieldValue Label="@_localizer["TextField.Signature.Label"]" Value="@_result.Signature"/>
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>
+
+@if (_result is { HasErrors: false })
+{
+    <DtPanes>
+        <DtOutputPane
+            Label="@_localizer["TextField.HeaderJson.Label"]"
+            Text="@(_result.HeaderJson ?? string.Empty)"
+            DownloadFileName="jwt-header.json"/>
+
+        <DtOutputPane
+            Label="@_localizer["TextField.PayloadJson.Label"]"
+            Text="@(_result.PayloadJson ?? string.Empty)"
+            DownloadFileName="jwt-payload.json"/>
+    </DtPanes>
+}
+
+@if (_result?.Claims?.Count > 0)
+{
+    <DtTable Items="@_result.Claims" Title="@_localizer["Section.Claims.Title"]">
+        <HeaderContent>
+            <th>@_localizer["Table.Header.Claim"]</th>
+            <th>@_localizer["Table.Header.Value"]</th>
+        </HeaderContent>
+        <RowTemplate>
+            <td>@context.Key</td>
+            <td>@context.Value</td>
+        </RowTemplate>
+    </DtTable>
+}

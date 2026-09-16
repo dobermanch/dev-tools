@@ -101,6 +101,87 @@
     background-color: rgba(246, 247, 241, 0.92) !important;
 }
 
+/* ===== The value box =====
+   One shell for every value the app shows: an editable field, a select, a read-only result. It owns the
+   border, the height, the focus ring and any trailing buttons, so a copy action sits inside the box
+   wherever it appears. Global rather than scoped because three components share it. */
+
+.dt-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: var(--dt-control-height);
+    padding: 0 6px 0 11px;
+    box-sizing: border-box;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-control);
+    background: var(--dt-surface-raised);
+    transition: border-color var(--dt-transition);
+}
+
+.dt-box:hover {
+    border-color: var(--dt-border-hover);
+}
+
+.dt-box:focus-within {
+    border-color: var(--dt-accent);
+}
+
+.dt-box-readonly,
+.dt-box-readonly:hover {
+    border-color: var(--dt-border-field);
+}
+
+.dt-box-error,
+.dt-box-error:hover {
+    border-color: var(--dt-error);
+}
+
+.dt-box > input,
+.dt-box > select {
+    flex: 1;
+    min-width: 0;
+    height: calc(var(--dt-control-height) - 2px);
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--dt-text);
+    font-family: var(--dt-font-mono);
+    font-size: 13px;
+}
+
+.dt-box > input::placeholder {
+    color: var(--dt-text-faint);
+}
+
+.dt-box > select {
+    appearance: none;
+    cursor: pointer;
+    font-family: var(--dt-font-sans);
+    font-size: 13.5px;
+}
+
+/* A result: not editable, so it wraps rather than scrolling sideways. */
+.dt-box-value {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 0;
+    font-family: var(--dt-font-mono);
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--dt-text-mono);
+    word-break: break-all;
+}
+
+/* An action that runs the tool sits under its options, not in a cell beside a switch. */
+.dt-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 0 0;
+}
+
 /* MudDrawer's own element, so it cannot be reached from NavMenu's scoped CSS. */
 .dt-drawer {
     background-color: var(--dt-bg) !important;

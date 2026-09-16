@@ -1,8 +1,9 @@
 @typeparam T
 
 <DtField Label="@Label" For="@_id" Hint="@Hint" Error="@Error" ErrorText="@ErrorText" Class="@Class">
-    <div class="dt-select-wrap">
-        <select id="@_id" class="dt-select" value="@Value.ToString()" @onchange="OnChangedAsync">
+    @* The same box as an editable field, with the chevron where a copy button would sit. *@
+    <div class="dt-box @(Error ? "dt-box-error" : null)">
+        <select id="@_id" value="@Value.ToString()" @onchange="OnChangedAsync">
             @foreach (var value in GetEnumValues())
             {
                 <option value="@value.ToString()" selected="@(EqualityComparer<T>.Default.Equals(value, Value))">

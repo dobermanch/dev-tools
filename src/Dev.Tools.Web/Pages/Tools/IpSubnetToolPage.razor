@@ -2,87 +2,51 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_input"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(InputError is not null)"
-                        ErrorText="@InputError"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+@* A CIDR block is one line. *@
+<DtOptions>
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Input.Label"]"
+        @bind-Value="@_input"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+        Error="@(InputError is not null)"
+        ErrorText="@InputError"/>
+</DtOptions>
 
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllValues"
+        DownloadFileName="ip-subnet.txt"
+        Status="@InputError"
+        StatusIsError="@(InputError is not null)">
         @if (_result is { HasErrors: false })
         {
-            <DtSection Id="output" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.Network" Label="@_localizer["TextField.Network.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.NetworkAddress" Label="@_localizer["TextField.NetworkAddress.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.SubnetMask" Label="@_localizer["TextField.SubnetMask.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@($"/{_result.PrefixLength}")" Label="@_localizer["TextField.PrefixLength.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.WildcardMask" Label="@_localizer["TextField.WildcardMask.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.AddressCount" Label="@_localizer["TextField.AddressCount.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.FirstHost" Label="@_localizer["TextField.FirstHost.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.LastHost" Label="@_localizer["TextField.LastHost.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.HostCount" Label="@_localizer["TextField.HostCount.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    @if (_result.BroadcastAddress is not null)
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField T="string" Value="@_result.BroadcastAddress" Label="@_localizer["TextField.BroadcastAddress.Label"]"
-                                         ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (_result.IpClass is not null)
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField T="string" Value="@_result.IpClass" Label="@_localizer["TextField.IpClass.Label"]"
-                                         ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (_result.Blocks.Count > 1)
-                    {
-                        <MudItem xs="12">
-                            <DtTextField T="string" Value="@string.Join('\n', _result.Blocks)" Label="@_localizer["TextField.Blocks.Label"]"
-                                         ReadOnly="true" Lines="@Math.Min(_result.Blocks.Count, 15)" LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
+            <DtFieldList>
+                <DtFieldValue Label="@_localizer["TextField.Network.Label"]" Value="@_result.Network"/>
+                <DtFieldValue Label="@_localizer["TextField.NetworkAddress.Label"]" Value="@_result.NetworkAddress"/>
+                <DtFieldValue Label="@_localizer["TextField.SubnetMask.Label"]" Value="@_result.SubnetMask"/>
+                <DtFieldValue Label="@_localizer["TextField.PrefixLength.Label"]" Value="@($"/{_result.PrefixLength}")"/>
+                <DtFieldValue Label="@_localizer["TextField.WildcardMask.Label"]" Value="@_result.WildcardMask"/>
+                <DtFieldValue Label="@_localizer["TextField.AddressCount.Label"]" Value="@_result.AddressCount"/>
+                <DtFieldValue Label="@_localizer["TextField.FirstHost.Label"]" Value="@_result.FirstHost"/>
+                <DtFieldValue Label="@_localizer["TextField.LastHost.Label"]" Value="@_result.LastHost"/>
+                <DtFieldValue Label="@_localizer["TextField.HostCount.Label"]" Value="@_result.HostCount"/>
+
+                @if (_result.BroadcastAddress is not null)
+                {
+                    <DtFieldValue Label="@_localizer["TextField.BroadcastAddress.Label"]" Value="@_result.BroadcastAddress"/>
+                }
+                @if (_result.IpClass is not null)
+                {
+                    <DtFieldValue Label="@_localizer["TextField.IpClass.Label"]" Value="@_result.IpClass"/>
+                }
+                @if (_result.Blocks.Count > 1)
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Blocks.Label"]" Value="@string.Join(", ", _result.Blocks)"/>
+                }
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>

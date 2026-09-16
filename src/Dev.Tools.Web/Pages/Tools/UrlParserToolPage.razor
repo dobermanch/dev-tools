@@ -2,111 +2,56 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_url"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="5"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtPanes>
+    @* One line in principle, long in practice: a short box that wraps. *@
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        MinHeight="140"
+        Value="@_url"
+        ValueChanged="@(value => { _url = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 
-        @if (_result != null)
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllParts"
+        DownloadFileName="url-parser.txt"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)">
+        @if (_result is { HasErrors: false })
         {
-            <DtSection Id="output" ShowDivider="true">
+            <DtFieldList>
+                <DtFieldValue Label="@_localizer["TextField.Schema.Label"]" Value="@_result.Schema"/>
+                <DtFieldValue Label="@_localizer["TextField.Hostname.Label"]" Value="@_result.Hostname"/>
+                <DtFieldValue Label="@_localizer["TextField.Port.Label"]" Value="@_result.Port?.ToString()"/>
+                <DtFieldValue Label="@_localizer["TextField.Path.Label"]" Value="@_result.Path"/>
 
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.Schema ?? string.Empty)"
-                            Label="@_localizer["TextField.Schema.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.Hostname ?? string.Empty)"
-                            Label="@_localizer["TextField.Hostname.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.Port?.ToString() ?? string.Empty)"
-                            Label="@_localizer["TextField.Port.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField
-                            T="string"
-                            Value="@(_result.Path ?? string.Empty)"
-                            Label="@_localizer["TextField.Path.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    @if (!string.IsNullOrEmpty(_result.Username))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Username ?? string.Empty)"
-                                Label="@_localizer["TextField.Username.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.Password))
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Password ?? string.Empty)"
-                                Label="@_localizer["TextField.Password.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (!string.IsNullOrEmpty(_result.Query))
-                    {
-                        <MudItem xs="12">
-                            <DtTextField
-                                T="string"
-                                Value="@(_result.Query ?? string.Empty)"
-                                Label="@_localizer["TextField.Query.Label"]"
-                                ReadOnly="true"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    @if (_result.Parameters?.Count > 0)
-                    {
-                        <MudItem xs="12">
-                            <DtTable Items="@_result.Parameters" Title="@_localizer["Section.Parameters.Title"]" MaxHeight="600">
-                                <HeaderContent>
-                                    <th>@_localizer["Table.Header.Key"]</th>
-                                    <th>@_localizer["Table.Header.Value"]</th>
-                                </HeaderContent>
-
-                                <RowTemplate>
-                                    <td>@context.Key</td>
-                                    <td>@context.Value</td>
-                                </RowTemplate>
-                            </DtTable>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
+                @if (!string.IsNullOrEmpty(_result.Username))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Username.Label"]" Value="@_result.Username"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.Password))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Password.Label"]" Value="@_result.Password"/>
+                }
+                @if (!string.IsNullOrEmpty(_result.Query))
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Query.Label"]" Value="@_result.Query"/>
+                }
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>
+
+@if (_result?.Parameters?.Count > 0)
+{
+    <DtTable Items="@_result.Parameters" Title="@_localizer["Section.Parameters.Title"]" MaxHeight="600">
+        <HeaderContent>
+            <th>@_localizer["Table.Header.Key"]</th>
+            <th>@_localizer["Table.Header.Value"]</th>
+        </HeaderContent>
+        <RowTemplate>
+            <td>@context.Key</td>
+            <td>@context.Value</td>
+        </RowTemplate>
+    </DtTable>
+}

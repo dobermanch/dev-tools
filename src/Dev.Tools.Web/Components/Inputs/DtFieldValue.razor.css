@@ -1,7 +1,8 @@
+/* The box itself lives in app.css, shared with the editable field and the select. */
 .dt-field-value {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     min-width: 0;
 }
 
@@ -13,22 +14,6 @@
     color: var(--dt-text-faint);
 }
 
-.dt-field-value-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 11px;
-    border: 1px solid var(--dt-border-field);
-    border-radius: var(--dt-radius-control);
-    background: var(--dt-surface-raised);
-}
-
-.dt-field-value-text {
-    flex: 1;
-    min-width: 0;
-    font-family: var(--dt-font-mono);
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: var(--dt-text-mono);
-    word-break: break-all;
+.dt-box ::deep .dt-icon-button {
+    padding: 4px;
 }

@@ -1,0 +1,13 @@
+.dt-qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 300px;
+    padding: 14px;
+}
+
+.dt-qr ::deep svg {
+    max-width: 320px;
+    border-radius: var(--dt-radius-control);
+}

@@ -2,6 +2,7 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
+@* A number and a numeral are each one line, so they belong here rather than in a pane. *@
 <DtOptions>
     <DtSelectEnum
         T="IntegerToRomanConverterTool.TranscodingType"
@@ -9,20 +10,20 @@
         Value="@_transcoding"
         ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
         ValueChanged="OnTranscodingValueChangedAsync"/>
+
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Input.Label"]"
+        @bind-Value="@_number"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 </DtOptions>
 
-@* The range check the field used to carry lives in the tool, which reports it as an error; the status
-   line under the result is where the design shows that. *@
 <DtPanes>
-    <DtInputPane
-        Label="@_localizer["TextField.Input.Label"]"
-        Value="@_number"
-        ValueChanged="@(value => { _number = value; })"
-        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
-
     <DtOutputPane
         Label="@_localizer["TextField.Result.Label"]"
         Text="@(_result?.Number ?? string.Empty)"
+        MinHeight="120"
         DownloadFileName="roman-converter.txt"
         Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
         StatusIsError="@(_result?.HasErrors ?? false)"/>

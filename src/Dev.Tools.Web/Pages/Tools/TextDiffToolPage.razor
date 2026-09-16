@@ -2,100 +2,57 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_ignoreWhitespace"
-                        Label="@_localizer["Switch.IgnoreWhitespace.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreWhitespace = value))"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_ignoreCase"
-                        Label="@_localizer["Switch.IgnoreCase.Label"]"
-                        ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.ContextLines.Label"]"
-                        Value="@_contextLines"
-                        MinValue="0"
-                        MaxValue="20"
-                        ValueChanged="@((int value) => SetOptionAsync(() => _contextLines = value))"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSwitch Value="@_ignoreWhitespace" Label="@_localizer["Switch.IgnoreWhitespace.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreWhitespace = value))"/>
+    <DtSwitch Value="@_ignoreCase" Label="@_localizer["Switch.IgnoreCase.Label"]"
+              ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.ContextLines.Label"]"
+        Value="@_contextLines"
+        MinValue="0"
+        MaxValue="20"
+        ValueChanged="@((int value) => SetOptionAsync(() => _contextLines = value))"/>
+</DtOptions>
 
-        <DtSection Id="io" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        AllowFileInput="true"
-                        Label="@_localizer["TextField.Original.Label"]"
-                        @bind-Value="@_original"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="12"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        AllowFileInput="true"
-                        Label="@_localizer["TextField.Modified.Label"]"
-                        @bind-Value="@_modified"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="12"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+@* Two inputs, which is what the pane grid is for. *@
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Original.Label"]"
+        AllowFileInput="true"
+        Value="@_original"
+        ValueChanged="@(value => { _original = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 
-        @if (_result is { HasErrors: false })
+    <DtInputPane
+        Label="@_localizer["TextField.Modified.Label"]"
+        AllowFileInput="true"
+        Value="@_modified"
+        ValueChanged="@(value => { _modified = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+</DtPanes>
+
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Diff.Label"]"
+        Text="@(_result?.Diff ?? string.Empty)"
+        DownloadFileName="text-diff.diff"
+        Status="@DiffStatus"
+        StatusIsError="@(FirstErrorText is not null)">
+        @if (_result is { HasErrors: false, HasChanges: true })
         {
-            <DtSection Id="output" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12">
-                        @if (_result.HasChanges)
-                        {
-                            <MudText Typo="Typo.body2" Class="mb-2">@_localizer["Text.Summary", _result.AddedLines, _result.RemovedLines]</MudText>
-                            <div style="font-family: monospace; font-size: 0.875rem; overflow-x: auto; border: 1px solid var(--mud-palette-lines-default); border-radius: 4px;">
-                                @foreach (var line in _result.Lines)
-                                {
-                                    <div style="display: flex; white-space: pre; @LineStyle(line.Kind)">
-                                        <span style="min-width: 3.5em; text-align: right; padding-right: 0.5em; opacity: 0.6; user-select: none;">@line.OriginalLine</span>
-                                        <span style="min-width: 3.5em; text-align: right; padding-right: 0.5em; opacity: 0.6; user-select: none;">@line.ModifiedLine</span>
-                                        <span style="min-width: 1.5em; user-select: none;">@Marker(line.Kind)</span>
-                                        <span>@line.Text</span>
-                                    </div>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <MudText Typo="Typo.body2">@_localizer["Text.NoChanges"]</MudText>
-                        }
-                    </MudItem>
-                    @if (_result.HasChanges)
-                    {
-                        <MudItem xs="12">
-                            <DtTextField
-                                T="string"
-                                Value="@_result.Diff"
-                                Label="@_localizer["TextField.Diff.Label"]"
-                                ReadOnly="true"
-                                Lines="12"
-                                LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </DtSection>
+            <div class="dt-diff">
+                @foreach (var line in _result.Lines)
+                {
+                    <div class="dt-diff-line" style="@LineStyle(line.Kind)">
+                        <span class="dt-diff-number">@line.OriginalLine</span>
+                        <span class="dt-diff-number">@line.ModifiedLine</span>
+                        <span class="dt-diff-marker">@Marker(line.Kind)</span>
+                        <span class="dt-diff-text">@line.Text</span>
+                    </div>
+                }
+            </div>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>

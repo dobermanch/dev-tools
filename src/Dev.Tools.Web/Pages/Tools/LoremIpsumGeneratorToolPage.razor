@@ -2,59 +2,43 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.Paragraphs.Label"]"
-                        Value="@_args.Paragraphs"
-                        MinValue="1"
-                        MaxValue="10"
-                        ValueChanged="OnParagraphsValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.SentencesPerParagraph.Label"]"
-                        Value="@_args.SentencesPerParagraph"
-                        MinValue="1"
-                        MaxValue="20"
-                        ValueChanged="OnSentencesValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.WordsPerSentence.Label"]"
-                        Value="@_args.WordsPerSentence"
-                        MinValue="3"
-                        MaxValue="30"
-                        ValueChanged="OnWordsValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSwitch
-                        Value="@_args.StartWithLoremIpsum"
-                        Label="@_localizer["Switch.StartWithLoremIpsum.Label"]"
-                        ValueChanged="OnStartWithLoremIpsumValueChangedAsync"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.Paragraphs.Label"]"
+        Value="@_args.Paragraphs"
+        MinValue="1"
+        MaxValue="10"
+        ValueChanged="OnParagraphsValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@GetText()"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="15"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.SentencesPerParagraph.Label"]"
+        Value="@_args.SentencesPerParagraph"
+        MinValue="1"
+        MaxValue="20"
+        ValueChanged="OnSentencesValueChangedAsync"/>
+
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.WordsPerSentence.Label"]"
+        Value="@_args.WordsPerSentence"
+        MinValue="3"
+        MaxValue="30"
+        ValueChanged="OnWordsValueChangedAsync"/>
+
+    <DtSwitch
+        Value="@_args.StartWithLoremIpsum"
+        Label="@_localizer["Switch.StartWithLoremIpsum.Label"]"
+        ValueChanged="OnStartWithLoremIpsumValueChangedAsync"/>
+</DtOptions>
+
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@GetText()"
+        DownloadFileName="lorem-ipsum.txt"
+        OnRefresh="OnValueChangedAsync"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)"/>
+</DtPanes>

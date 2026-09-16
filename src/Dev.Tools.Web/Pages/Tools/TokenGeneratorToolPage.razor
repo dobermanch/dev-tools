@@ -2,84 +2,50 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.TokenLength.Label"]"
-                        Value="@_args.TokenLength"
-                        MinValue="1"
-                        MaxValue="512"
-                        ValueChanged="OnTokenLengthValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Alphabet.Label"]"
-                        @bind-Value="@_args.Alphabet"
-                        ShowCopyButton="false"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.TokenCount.Label"]"
-                        Value="@_args.TokenCount"
-                        MinValue="1"
-                        MaxValue="100"
-                        ValueChanged="OnTokenCountValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.ExcludeSymbols.Label"]"
-                        @bind-Value="@_args.ExcludeSymbols"
-                        ShowCopyButton="false"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_args.Lowercase"
-                        Label="@_localizer["Switch.Lowercase.Label"]"
-                        ValueChanged="OnLowercaseValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_args.Uppercase"
-                        Label="@_localizer["Switch.Uppercase.Label"]"
-                        ValueChanged="OnUppercaseValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_args.Numbers"
-                        Label="@_localizer["Switch.Numbers.Label"]"
-                        ValueChanged="OnNumbersValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtSwitch
-                        Value="@_args.Symbols"
-                        Label="@_localizer["Switch.Symbols.Label"]"
-                        ValueChanged="OnSymbolsValueChangedAsync"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.TokenLength.Label"]"
+        Value="@_args.TokenLength"
+        MinValue="1"
+        MaxValue="512"
+        ValueChanged="OnTokenLengthValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@GetTokens()"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="10"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.TokenCount.Label"]"
+        Value="@_args.TokenCount"
+        MinValue="1"
+        MaxValue="100"
+        ValueChanged="OnTokenCountValueChangedAsync"/>
+
+    <DtTextField
+        T="string"
+        Label="@_localizer["TextField.Alphabet.Label"]"
+        @bind-Value="@_args.Alphabet"
+        ShowCopyButton="false"
+        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+
+    <DtTextField
+        T="string"
+        Label="@_localizer["TextField.ExcludeSymbols.Label"]"
+        @bind-Value="@_args.ExcludeSymbols"
+        ShowCopyButton="false"
+        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+
+    <DtSwitch Value="@_args.Lowercase" Label="@_localizer["Switch.Lowercase.Label"]" ValueChanged="OnLowercaseValueChangedAsync"/>
+    <DtSwitch Value="@_args.Uppercase" Label="@_localizer["Switch.Uppercase.Label"]" ValueChanged="OnUppercaseValueChangedAsync"/>
+    <DtSwitch Value="@_args.Numbers" Label="@_localizer["Switch.Numbers.Label"]" ValueChanged="OnNumbersValueChangedAsync"/>
+    <DtSwitch Value="@_args.Symbols" Label="@_localizer["Switch.Symbols.Label"]" ValueChanged="OnSymbolsValueChangedAsync"/>
+</DtOptions>
+
+@* A generator has no input pane; refresh draws a new set with the same options. *@
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@GetTokens()"
+        DownloadFileName="token-generator.txt"
+        OnRefresh="OnValueChangedAsync"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)"/>
+</DtPanes>

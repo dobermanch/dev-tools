@@ -19,6 +19,19 @@ public partial class IpConverterToolPage : ComponentBase
         .Select(it => Context.Localization.GetErrorCode(it.Code))
         .FirstOrDefault();
 
+    // What copy and download act on: every representation at once, labelled.
+    private string AllRepresentations => _result is null or { HasErrors: true }
+        ? string.Empty
+        : string.Join(Environment.NewLine, new[]
+        {
+            _result.Ipv4 is null ? null : $"{_localizer["TextField.Ipv4.Label"]}: {_result.Ipv4}",
+            $"{_localizer["TextField.Decimal.Label"]}: {_result.Decimal}",
+            $"{_localizer["TextField.Hexadecimal.Label"]}: {_result.Hexadecimal}",
+            $"{_localizer["TextField.Binary.Label"]}: {_result.Binary}",
+            $"{_localizer["TextField.Ipv6.Label"]}: {_result.Ipv6}",
+            $"{_localizer["TextField.Ipv6Expanded.Label"]}: {_result.Ipv6Expanded}"
+        }.Where(line => line is not null));
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<IpConverterToolPage>();

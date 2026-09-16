@@ -27,6 +27,10 @@ public partial class DtOutputPane : ComponentBase
     [Parameter]
     public EventCallback OnRefresh { get; set; }
 
+    /// <summary>How tall a text result starts. A field list sizes itself to what it holds.</summary>
+    [Parameter]
+    public int MinHeight { get; set; } = 300;
+
     /// <summary>What a download is called. The extension says what the result is.</summary>
     [Parameter]
     public string DownloadFileName { get; set; } = "output.txt";

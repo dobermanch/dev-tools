@@ -36,6 +36,13 @@ public partial class DtInputPane : ComponentBase, IDisposable
     [Parameter]
     public string? Placeholder { get; set; }
 
+    /// <summary>
+    /// How tall the box starts. A value someone pastes wants the full height; a URL or a token needs a
+    /// line or two, and a value that is one line by nature belongs in the options grid instead.
+    /// </summary>
+    [Parameter]
+    public int MinHeight { get; set; } = 300;
+
     [Parameter]
     public int MaxLength { get; set; } = 524288;
 

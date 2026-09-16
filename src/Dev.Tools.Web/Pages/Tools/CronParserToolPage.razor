@@ -3,77 +3,60 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Expression.Label"]"
-                        @bind-Value="@_expression"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(ExpressionError is not null)"
-                        ErrorText="@ExpressionError"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.TimeZone.Label"]"
-                        @bind-Value="@_timeZone"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(TimeZoneError is not null)"
-                        ErrorText="@TimeZoneError"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.Count.Label"]"
-                        Value="@_count"
-                        MinValue="1"
-                        MaxValue="100"
-                        ValueChanged="OnCountChangedAsync"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Expression.Label"]"
+        @bind-Value="@_expression"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+        Error="@(ExpressionError is not null)"
+        ErrorText="@ExpressionError"/>
 
+    <DtTextField
+        T="string"
+        Label="@_localizer["TextField.TimeZone.Label"]"
+        @bind-Value="@_timeZone"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+        Error="@(TimeZoneError is not null)"
+        ErrorText="@TimeZoneError"/>
+
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.Count.Label"]"
+        Value="@_count"
+        MinValue="1"
+        MaxValue="100"
+        ValueChanged="OnCountChangedAsync"/>
+</DtOptions>
+
+@* No input pane: the expression is the input, and it belongs with the options. *@
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Description.Label"]"
+        Text="@(_result?.Description ?? string.Empty)"
+        DownloadFileName="cron-parser.txt"
+        Status="@(ExpressionError ?? TimeZoneError)"
+        StatusIsError="@(ExpressionError is not null || TimeZoneError is not null)">
         @if (_result is { HasErrors: false })
         {
-            <DtSection Id="output" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    <MudItem xs="12">
-                        <DtTextField
-                            T="string"
-                            Value="@_result.Description"
-                            Label="@_localizer["TextField.Description.Label"]"
-                            ReadOnly="true"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12">
-                        @if (_result.NextRuns.Count > 0)
-                        {
-                            <DtTable Items="@_result.NextRuns" Title="@_localizer["Section.NextRuns.Title"]" MaxHeight="600">
-                                <HeaderContent>
-                                    <th>@_localizer["Table.Header.Time"]</th>
-                                    <th>@_localizer["Table.Header.DayOfWeek"]</th>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <td>@context.ToString("yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture)</td>
-                                    <td>@context.ToString("dddd", CultureInfo.CurrentUICulture)</td>
-                                </RowTemplate>
-                            </DtTable>
-                        }
-                        else
-                        {
-                            <MudText>@_localizer["Text.NoRuns"]</MudText>
-                        }
-                    </MudItem>
-                </MudGrid>
-            </DtSection>
+            <DtFieldList>
+                <DtFieldValue Label="@_localizer["TextField.Description.Label"]" Value="@_result.Description"/>
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>
+
+@if (_result is { HasErrors: false } && _result.NextRuns.Count > 0)
+{
+    <DtTable Items="@_result.NextRuns" Title="@_localizer["Section.NextRuns.Title"]" MaxHeight="600">
+        <HeaderContent>
+            <th>@_localizer["Table.Header.Time"]</th>
+            <th>@_localizer["Table.Header.DayOfWeek"]</th>
+        </HeaderContent>
+        <RowTemplate>
+            <td>@context.ToString("yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture)</td>
+            <td>@context.ToString("dddd", CultureInfo.CurrentUICulture)</td>
+        </RowTemplate>
+    </DtTable>
+}

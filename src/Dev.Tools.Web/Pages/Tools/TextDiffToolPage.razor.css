@@ -1,0 +1,33 @@
+.dt-diff {
+    flex: 1;
+    min-height: 300px;
+    padding: 14px 0;
+    overflow: auto;
+    font-family: var(--dt-font-mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+}
+
+.dt-diff-line {
+    display: flex;
+    gap: 8px;
+    padding: 0 14px;
+    white-space: pre;
+}
+
+.dt-diff-number {
+    min-width: 3.5em;
+    text-align: right;
+    color: var(--dt-text-faint);
+    user-select: none;
+}
+
+.dt-diff-marker {
+    min-width: 1.2em;
+    color: var(--dt-text-muted);
+    user-select: none;
+}
+
+.dt-diff-text {
+    color: var(--dt-text-mono);
+}

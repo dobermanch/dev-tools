@@ -22,6 +22,10 @@ public partial class CharacterViewerPage : ComponentBase
 
     [Inject] private WebContext Context { get; set; } = null!;
 
+    private string? FirstErrorText => _result.Errors
+        .Select(it => Context.Localization.GetErrorCode(it.Code))
+        .FirstOrDefault();
+
     protected override void OnInitialized()
     {
         _localizer = Context.Localization.PageLocalizer<CharacterViewerPage>();
@@ -147,10 +151,10 @@ public partial class CharacterViewerPage : ComponentBase
 
         if (char.IsControl(c) || IsNonStandard(c))
         {
-            return "background-color: var(--mud-palette-warning-lighten); color: var(--mud-palette-error-darken); padding: 0 2px; border-radius: 2px; font-weight: bold;";
+            return "background-color: var(--dt-surface-active); color: var(--dt-error); padding: 0 2px; border-radius: 2px; font-weight: bold;";
         }
 
-        return c == ' ' ? "color: var(--mud-palette-text-disabled);" : null;
+        return c == ' ' ? "color: var(--dt-text-faint);" : null;
     }
 
     sealed record Args

@@ -2,65 +2,45 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.WordCount.Label"]"
-                        Value="@_args.WordCount"
-                        MinValue="1"
-                        MaxValue="20"
-                        ValueChanged="OnWordCountValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="char?"
-                        Label="@_localizer["TextField.Separator.Label"]"
-                        @bind-Value="@_args.Separator"
-                        MaxLength="1"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtSlider
-                        T="int"
-                        Label="@_localizer["Slider.PhraseCount.Label"]"
-                        Value="@_args.PhraseCount"
-                        MinValue="1"
-                        MaxValue="100"
-                        ValueChanged="OnPhraseCountValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Salt.Label"]"
-                        @bind-Value="@_args.Salt"
-                        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="6">
-                    <DtSwitch
-                        Value="@_args.Capitalize"
-                        Label="@_localizer["Switch.Capitalize.Label"]"
-                        ValueChanged="OnCapitalValueChangedAsync"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.WordCount.Label"]"
+        Value="@_args.WordCount"
+        MinValue="1"
+        MaxValue="20"
+        ValueChanged="OnWordCountValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Value="@GetPassphrase()"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="10"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtSlider
+        T="int"
+        Label="@_localizer["Slider.PhraseCount.Label"]"
+        Value="@_args.PhraseCount"
+        MinValue="1"
+        MaxValue="100"
+        ValueChanged="OnPhraseCountValueChangedAsync"/>
+
+    <DtTextField
+        T="char?"
+        Label="@_localizer["TextField.Separator.Label"]"
+        @bind-Value="@_args.Separator"
+        MaxLength="1"
+        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+
+    <DtTextField
+        T="string"
+        Label="@_localizer["TextField.Salt.Label"]"
+        @bind-Value="@_args.Salt"
+        OnDebounceIntervalElapsed="OnValueChangedAsync"/>
+
+    <DtSwitch Value="@_args.Capitalize" Label="@_localizer["Switch.Capitalize.Label"]" ValueChanged="OnCapitalValueChangedAsync"/>
+</DtOptions>
+
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@GetPassphrase()"
+        DownloadFileName="passphrase-generator.txt"
+        OnRefresh="OnValueChangedAsync"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)"/>
+</DtPanes>

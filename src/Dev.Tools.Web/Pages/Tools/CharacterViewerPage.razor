@@ -2,80 +2,61 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="config" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="CharacterViewerTool.ViewType"
-                        Label="@_localizer["Select.ViewType.Label"]"
-                        Value="@_args.ViewType"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnViewTypeChangedAsync"
-                    />
-                </MudItem>
+<DtOptions>
+    <DtSelectEnum
+        T="CharacterViewerTool.ViewType"
+        Label="@_localizer["Select.ViewType.Label"]"
+        Value="@_args.ViewType"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnViewTypeChangedAsync"/>
 
-                @if (HideSymbolsOptions)
-                {
-                    <MudItem xs="12" md="6">
-                        <DtSwitch @bind-Value="@_showSymbols" Label="@_localizer["Switch.ShowSymbols.Label"]"/>
-                    </MudItem>
-                }
-            </MudGrid>
-        </DtSection>
+    @if (HideSymbolsOptions)
+    {
+        <DtSwitch @bind-Value="@_showSymbols" Label="@_localizer["Switch.ShowSymbols.Label"]"/>
+    }
+</DtOptions>
 
-        <DtSection Id="io" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        Value="@_args.Text"
-                        Error="@_result.HasErrors"
-                        ErrorText="@_result.Errors.Select(it => Context.Localization.GetErrorCode(it.Code)).FirstOrDefault("")"
-                        LabelPosition="LabelPositionType.Inline"
-                        Lines="15"
-                        OnDebounceIntervalElapsed="OnTextValueChangedAsync"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtHtmlField
-                        Label="@_localizer["TextField.Output.Label"]"
-                        FormattedValue="@FormatText(_result.Text)"
-                        Value="@_result.Text"
-                        Lines="15"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_args.Text"
+        ValueChanged="@(value => { _args.Text = value; })"
+        OnDebounceIntervalElapsed="OnTextValueChangedAsync"/>
 
-        @if (_result.CharInfos.Count > 0)
-        {
-            <DtSection Id="output" ShowDivider="true">
-                <DtTable Items="@_result.CharInfos" Title="@_localizer["Section.CharacterInfo.Title"]" MaxHeight="600">
-                    <HeaderContent>
-                        <th>@_localizer["Table.Header.Char"]</th>
-                        <th>@_localizer["Table.Header.Category"]</th>
-                        <th>@_localizer["Table.Header.Printable"]</th>
-                        <th>@_localizer["Table.Header.Hex"]</th>
-                        <th>@_localizer["Table.Header.Unicode"]</th>
-                        <th>@_localizer["Table.Header.ASCII"]</th>
-                        <th>@_localizer["Table.Header.HTML"]</th>
-                        <th>@_localizer["Table.Header.URL"]</th>
-                    </HeaderContent>
+    @* The body is the marked-up text, where every odd character is highlighted and titled. *@
+    <DtOutputPane
+        Label="@_localizer["TextField.Output.Label"]"
+        Text="@_result.Text"
+        DownloadFileName="char-viewer.txt"
+        Status="@FirstErrorText"
+        StatusIsError="@(FirstErrorText is not null)">
+        <pre class="dt-char-view">@FormatText(_result.Text)</pre>
+    </DtOutputPane>
+</DtPanes>
 
-                    <RowTemplate>
-                        <td>@context.Char</td>
-                        <td>@context.UnicodeCategory</td>
-                        <td>@CharToDisplay(context.Char)</td>
-                        <td>@context.HexCode</td>
-                        <td>@context.UnicodeDisplayString</td>
-                        <td>@context.AsciiCode</td>
-                        <td>@context.HtmlString</td>
-                        <td>@context.UrlString</td>
-                    </RowTemplate>
-                </DtTable>
-            </DtSection>
-        }
-    </MudCardContent>
-</MudCard>
+@if (_result.CharInfos.Count > 0)
+{
+    <DtTable Items="@_result.CharInfos" Title="@_localizer["Section.CharacterInfo.Title"]" MaxHeight="600">
+        <HeaderContent>
+            <th>@_localizer["Table.Header.Char"]</th>
+            <th>@_localizer["Table.Header.Category"]</th>
+            <th>@_localizer["Table.Header.Printable"]</th>
+            <th>@_localizer["Table.Header.Hex"]</th>
+            <th>@_localizer["Table.Header.Unicode"]</th>
+            <th>@_localizer["Table.Header.ASCII"]</th>
+            <th>@_localizer["Table.Header.HTML"]</th>
+            <th>@_localizer["Table.Header.URL"]</th>
+        </HeaderContent>
+        <RowTemplate>
+            <td>@context.Char</td>
+            <td>@context.UnicodeCategory</td>
+            <td>@CharToDisplay(context.Char)</td>
+            <td>@context.HexCode</td>
+            <td>@context.UnicodeDisplayString</td>
+            <td>@context.AsciiCode</td>
+            <td>@context.HtmlString</td>
+            <td>@context.UrlString</td>
+        </RowTemplate>
+    </DtTable>
+}

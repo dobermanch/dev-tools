@@ -63,9 +63,9 @@ else
              ErrorText="@(_fileError ?? ErrorText)"
              Hint="@_loadedFile"
              Class="@Class">
-        <div class="dt-input-row">
+        @* The actions live inside the box, as they do on a result row. *@
+        <div class="dt-box @(HasError ? "dt-box-error" : null) @(ReadOnly ? "dt-box-readonly" : null)">
             <input id="@_id"
-                   class="dt-input @(HasError ? "dt-input-error" : null)"
                    type="@HtmlInputType"
                    value="@_text"
                    maxlength="@MaxLength"

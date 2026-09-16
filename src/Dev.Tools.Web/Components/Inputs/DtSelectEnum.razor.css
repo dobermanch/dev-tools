@@ -1,42 +1,10 @@
-.dt-select-wrap {
-    position: relative;
-    display: block;
-    min-width: 0;
-}
-
-.dt-select {
-    appearance: none;
-    width: 100%;
-    height: var(--dt-control-height);
-    box-sizing: border-box;
-    padding: 0 34px 0 11px;
-    border: 1px solid var(--dt-border-control);
-    border-radius: var(--dt-radius-control);
-    background: var(--dt-surface-raised);
-    color: var(--dt-text);
-    font-family: var(--dt-font-sans);
-    font-size: 13.5px;
-    cursor: pointer;
-    transition: border-color var(--dt-transition);
-}
-
-.dt-select:hover {
-    border-color: var(--dt-border-hover);
-}
-
-.dt-select:focus-visible {
-    outline: 1px solid var(--dt-accent);
-    outline-offset: 1px;
-}
-
-/* The list itself is drawn by the browser; color-scheme on :root keeps it in the right theme. */
+/* The box itself lives in app.css, shared with the editable field and the result row.
+   The list is drawn by the browser; color-scheme on :root keeps it in the right theme. */
 .dt-select-chevron {
-    position: absolute;
-    top: 50%;
-    right: 10px;
     width: 17px;
     height: 17px;
-    transform: translateY(-50%);
+    flex-shrink: 0;
+    margin-right: 5px;
     color: var(--dt-text-subtle);
     pointer-events: none;
 }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Dev.Tools.Web.Pages.Tools;
 
-public partial class OtpToolPage : ComponentBase
+public partial class OtpToolPage : ComponentBase, IDisposable
 {
     private ToolDefinition _toolDefinition = null!;
     private OtpTool _tool = null!;

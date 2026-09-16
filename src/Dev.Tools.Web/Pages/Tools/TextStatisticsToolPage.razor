@@ -2,83 +2,26 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        AllowFileInput="true"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_text"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="10"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_text"
+        ValueChanged="@(value => { _text = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Characters"
-                        Label="@_localizer["TextField.Characters.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.NonWhitespaceCharacters"
-                        Label="@_localizer["TextField.NonWhitespaceCharacters.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Words"
-                        Label="@_localizer["TextField.Words.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Lines"
-                        Label="@_localizer["TextField.Lines.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Paragraphs"
-                        Label="@_localizer["TextField.Paragraphs.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Utf8Bytes"
-                        Label="@_localizer["TextField.Utf8Bytes.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <DtTextField
-                        T="int"
-                        Value="@_result.Utf16Length"
-                        Label="@_localizer["TextField.Utf16Length.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllStatistics"
+        DownloadFileName="text-statistics.txt">
+        <DtFieldList>
+            <DtFieldValue Label="@_localizer["TextField.Characters.Label"]" Value="@_result.Characters.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.NonWhitespaceCharacters.Label"]" Value="@_result.NonWhitespaceCharacters.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.Words.Label"]" Value="@_result.Words.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.Lines.Label"]" Value="@_result.Lines.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.Paragraphs.Label"]" Value="@_result.Paragraphs.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.Utf8Bytes.Label"]" Value="@_result.Utf8Bytes.ToString()"/>
+            <DtFieldValue Label="@_localizer["TextField.Utf16Length.Label"]" Value="@_result.Utf16Length.ToString()"/>
+        </DtFieldList>
+    </DtOutputPane>
+</DtPanes>

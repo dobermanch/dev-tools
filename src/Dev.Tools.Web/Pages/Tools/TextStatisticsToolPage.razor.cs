@@ -15,6 +15,16 @@ public partial class TextStatisticsToolPage : ComponentBase
 
     [Inject] private WebContext Context { get; set; } = null!;
 
+    // What copy and download act on: every count at once, labelled.
+    private string AllStatistics => string.Join(Environment.NewLine,
+        $"{_localizer["TextField.Characters.Label"]}: {_result.Characters}",
+        $"{_localizer["TextField.NonWhitespaceCharacters.Label"]}: {_result.NonWhitespaceCharacters}",
+        $"{_localizer["TextField.Words.Label"]}: {_result.Words}",
+        $"{_localizer["TextField.Lines.Label"]}: {_result.Lines}",
+        $"{_localizer["TextField.Paragraphs.Label"]}: {_result.Paragraphs}",
+        $"{_localizer["TextField.Utf8Bytes.Label"]}: {_result.Utf8Bytes}",
+        $"{_localizer["TextField.Utf16Length.Label"]}: {_result.Utf16Length}");
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<TextStatisticsToolPage>();

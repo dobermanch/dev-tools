@@ -2,57 +2,38 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_input"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Error="@(InputError is not null)"
-                        ErrorText="@InputError"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+@* An address is one line. *@
+<DtOptions>
+    <DtTextField
+        T="string"
+        Class="dt-span-2"
+        Label="@_localizer["TextField.Input.Label"]"
+        @bind-Value="@_input"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"
+        Error="@(InputError is not null)"
+        ErrorText="@InputError"/>
+</DtOptions>
 
+<DtPanes>
+    <DtOutputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Text="@AllRepresentations"
+        DownloadFileName="ip-converter.txt"
+        Status="@InputError"
+        StatusIsError="@(InputError is not null)">
         @if (_result is { HasErrors: false })
         {
-            <DtSection Id="output" ShowDivider="true">
-                <MudGrid Class="align-center" Spacing="4">
-                    @if (_result.Ipv4 is not null)
-                    {
-                        <MudItem xs="12" md="6">
-                            <DtTextField T="string" Value="@_result.Ipv4" Label="@_localizer["TextField.Ipv4.Label"]"
-                                         ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                        </MudItem>
-                    }
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.Decimal" Label="@_localizer["TextField.Decimal.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.Hexadecimal" Label="@_localizer["TextField.Hexadecimal.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12">
-                        <DtTextField T="string" Value="@_result.Binary" Label="@_localizer["TextField.Binary.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.Ipv6" Label="@_localizer["TextField.Ipv6.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                    <MudItem xs="12" md="6">
-                        <DtTextField T="string" Value="@_result.Ipv6Expanded" Label="@_localizer["TextField.Ipv6Expanded.Label"]"
-                                     ReadOnly="true" LabelPosition="LabelPositionType.Inline"/>
-                    </MudItem>
-                </MudGrid>
-            </DtSection>
+            <DtFieldList>
+                @if (_result.Ipv4 is not null)
+                {
+                    <DtFieldValue Label="@_localizer["TextField.Ipv4.Label"]" Value="@_result.Ipv4"/>
+                }
+                <DtFieldValue Label="@_localizer["TextField.Decimal.Label"]" Value="@_result.Decimal"/>
+                <DtFieldValue Label="@_localizer["TextField.Hexadecimal.Label"]" Value="@_result.Hexadecimal"/>
+                <DtFieldValue Label="@_localizer["TextField.Binary.Label"]" Value="@_result.Binary"/>
+                <DtFieldValue Label="@_localizer["TextField.Ipv6.Label"]" Value="@_result.Ipv6"/>
+                <DtFieldValue Label="@_localizer["TextField.Ipv6Expanded.Label"]" Value="@_result.Ipv6Expanded"/>
+            </DtFieldList>
         }
-    </MudCardContent>
-</MudCard>
+    </DtOutputPane>
+</DtPanes>

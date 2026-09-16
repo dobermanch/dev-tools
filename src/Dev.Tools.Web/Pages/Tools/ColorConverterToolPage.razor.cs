@@ -23,6 +23,19 @@ public partial class ColorConverterToolPage : ComponentBase
         .Select(it => Context.Localization.GetErrorCode(it.Code))
         .FirstOrDefault();
 
+    // What copy and download act on: the colour in every notation at once.
+    private string AllFormats => _result is null or { HasErrors: true }
+        ? string.Empty
+        : string.Join(Environment.NewLine, new[]
+        {
+            $"{_localizer["TextField.Hex.Label"]}: {_result.Hex}",
+            $"{_localizer["TextField.Rgb.Label"]}: {_result.Rgb}",
+            $"{_localizer["TextField.Hsl.Label"]}: {_result.Hsl}",
+            $"{_localizer["TextField.Hwb.Label"]}: {_result.Hwb}",
+            $"{_localizer["TextField.Cmyk.Label"]}: {_result.Cmyk}",
+            _result.Name is null ? null : $"{_localizer["TextField.Name.Label"]}: {_result.Name}"
+        }.Where(line => line is not null));
+
     protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.PageLocalizer<ColorConverterToolPage>();

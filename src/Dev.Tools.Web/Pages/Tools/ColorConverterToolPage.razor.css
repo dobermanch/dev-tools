@@ -1,0 +1,5 @@
+.dt-color-swatch {
+    height: 64px;
+    border: 1px solid var(--dt-border-field);
+    border-radius: var(--dt-radius-control);
+}
