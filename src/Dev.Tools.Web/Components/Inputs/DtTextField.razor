@@ -75,10 +75,7 @@ else
 
             @if (ShowCopyButton)
             {
-                <DtIconButton Icon="@Icons.Material.Outlined.CopyAll"
-                              Size="DtControlSize.Small"
-                              Tooltip="@_localizer["Button.Copy.Tooltip"]"
-                              OnClick="@OnCopyToClipboardAsync"/>
+                <DtCopyButton Text="@_text" />
             }
 
             @if (AllowFileInput && !ReadOnly)

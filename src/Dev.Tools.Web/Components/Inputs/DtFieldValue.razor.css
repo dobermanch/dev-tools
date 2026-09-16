@@ -1,17 +1,9 @@
-/* The box itself lives in app.css, shared with the editable field and the select. */
+/* The box lives in app.css, the label's type too; only the stack is this component's own. */
 .dt-field-value {
     display: flex;
     flex-direction: column;
     gap: 4px;
     min-width: 0;
-}
-
-.dt-field-value-label {
-    font-family: var(--dt-font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--dt-text-faint);
 }
 
 .dt-box ::deep .dt-icon-button {

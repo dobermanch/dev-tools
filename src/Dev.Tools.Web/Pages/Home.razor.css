@@ -86,14 +86,7 @@
     padding: 28px 0 0;
 }
 
-.dt-filter-label {
-    font-family: var(--dt-font-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dt-text-faint);
-}
-
+/* The filter label's type is .dt-label-mono in app.css. */
 .dt-filter-chips {
     display: flex;
     flex: 1;

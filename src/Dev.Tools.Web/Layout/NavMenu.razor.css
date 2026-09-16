@@ -13,13 +13,9 @@
     gap: 2px;
 }
 
+/* The type is .dt-label-mono in app.css; only the inset is the sidebar's. */
 .dt-nav-group-label {
     padding: 0 10px 8px;
-    font-family: var(--dt-font-mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dt-text-faint);
 }
 
 .dt-nav-row {

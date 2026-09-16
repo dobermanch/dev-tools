@@ -1,7 +1,7 @@
 <div class="dt-tool-card" @onclick="NavigateToToolPage">
     <div class="dt-tool-card-head">
         <span class="dt-tool-card-icon">
-            <MudIcon Icon="@ToolIconProvider.GetToolIcon(Tool)" Style="width:20px;height:20px" />
+            <DtIcon Icon="@ToolIconProvider.GetToolIcon(Tool)" Size="DtControlSize.Large" />
         </span>
         <span class="dt-tool-card-title">@Context.Localization.GetToolTitle(Tool)</span>
         @* Starring a tool is not opening it. *@

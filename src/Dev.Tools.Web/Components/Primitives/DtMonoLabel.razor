@@ -1,9 +1,9 @@
 @*
-    The mono uppercase microlabel of the design - OPTIONS, INPUT · JSON, CONNECTION - with an optional
-    count after it, as in a section header's "12 tools".
+    The mono microlabel. The recipe itself is .dt-label-mono in app.css, shared with the labels that
+    components draw inside their own markup; this is the standalone form.
 *@
 
-<span class="dt-mono-label @Class">
+<span class="dt-label-mono @(Section ? "dt-label-mono-section" : null) dt-mono-label @Class">
     @if (ChildContent is not null)
     {
         @ChildContent
@@ -23,6 +23,9 @@
     [Parameter] public string? Text { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Heading a section, with the wider tracking that goes with it.</summary>
+    [Parameter] public bool Section { get; set; }
 
     /// <summary>Shown after the label in a fainter tone, not uppercased.</summary>
     [Parameter] public string? Count { get; set; }

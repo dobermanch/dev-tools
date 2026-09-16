@@ -1,3 +1,4 @@
+/* The label's type is .dt-label-mono in app.css; only its colour and truncation are the pane's. */
 .dt-pane {
     display: flex;
     flex-direction: column;
@@ -26,10 +27,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: var(--dt-font-mono);
     font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--dt-text-muted);
 }
 

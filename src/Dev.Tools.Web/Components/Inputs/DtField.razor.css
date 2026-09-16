@@ -1,16 +1,9 @@
+/* The label's type is .dt-label-mono in app.css, shared with every other label. */
 .dt-field {
     display: flex;
     flex-direction: column;
     gap: 8px;
     min-width: 0;
-}
-
-.dt-field-label {
-    font-family: var(--dt-font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--dt-text-faint);
 }
 
 .dt-field-error,

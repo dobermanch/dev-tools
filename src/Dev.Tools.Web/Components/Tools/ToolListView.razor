@@ -5,7 +5,7 @@
     {
         <div class="dt-tool-row" @onclick="@(() => NavigateTo(tool))">
             <span class="dt-tool-row-icon">
-                <MudIcon Icon="@ToolIconProvider.GetToolIcon(tool)" Style="width:19px;height:19px" />
+                <DtIcon Icon="@ToolIconProvider.GetToolIcon(tool)" />
             </span>
             <span class="dt-tool-row-title">@Context.Localization.GetToolTitle(tool)</span>
             <span class="dt-tool-row-slug">@tool.Name</span>

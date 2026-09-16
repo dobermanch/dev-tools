@@ -8,12 +8,12 @@
     {
         var isSelected = EqualityComparer<T>.Default.Equals(option.Value, Value);
         <button type="button"
-                class="dt-toggle @(isSelected ? "dt-toggle-active" : null)"
+                class="dt-toggle dt-focus-ring dt-focus-ring-inset @(isSelected ? "dt-toggle-active" : null)"
                 title="@option.Label"
                 aria-label="@option.Label"
                 aria-pressed="@(isSelected ? "true" : "false")"
                 @onclick="@(() => SelectAsync(option.Value))">
-            <MudIcon Icon="@option.Icon" Style="width:18px;height:18px" />
+            <DtIcon Icon="@option.Icon" Size="DtControlSize.Small" />
         </button>
     }
 </div>

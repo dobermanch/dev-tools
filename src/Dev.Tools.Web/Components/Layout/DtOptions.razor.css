@@ -1,17 +1,10 @@
+/* The label's type is .dt-label-mono in app.css. */
 .dt-options {
     display: flex;
     flex-direction: column;
     gap: 14px;
     padding: 22px 0;
     border-bottom: 1px solid var(--dt-border);
-}
-
-.dt-options-label {
-    font-family: var(--dt-font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dt-text-faint);
 }
 
 .dt-options-grid {

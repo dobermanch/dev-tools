@@ -13,12 +13,7 @@
                           OnClick="@OnRefresh"/>
         }
 
-        <DtIconButton Icon="@(_copied ? Icons.Material.Outlined.Check : Icons.Material.Outlined.CopyAll)"
-                      Size="DtControlSize.Small"
-                      Active="@_copied"
-                      Disabled="@string.IsNullOrEmpty(Text)"
-                      Tooltip="@(_copied ? _localizer["Button.Copied.Tooltip"] : _localizer["Button.Copy.Tooltip"])"
-                      OnClick="@CopyAsync"/>
+        <DtCopyButton Text="@Text" />
 
         <DtIconButton Icon="@Icons.Material.Outlined.Download"
                       Size="DtControlSize.Small"

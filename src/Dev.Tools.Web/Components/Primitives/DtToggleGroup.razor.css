@@ -26,11 +26,7 @@
     color: var(--dt-accent);
 }
 
-.dt-toggle:focus-visible {
-    outline: 1px solid var(--dt-accent);
-    outline-offset: -1px;
-}
-
+/* The focus ring is .dt-focus-ring in app.css. */
 .dt-toggle-active {
     background: var(--dt-surface-active);
     color: var(--dt-accent);

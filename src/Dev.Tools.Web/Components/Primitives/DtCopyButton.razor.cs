@@ -2,9 +2,9 @@ using Dev.Tools.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
-namespace Dev.Tools.Web.Components.Inputs;
+namespace Dev.Tools.Web.Components.Primitives;
 
-public partial class DtFieldValue : ComponentBase
+public partial class DtCopyButton : ComponentBase
 {
     private IStringLocalizer _localizer = null!;
     private bool _copied;
@@ -12,30 +12,34 @@ public partial class DtFieldValue : ComponentBase
     [Inject]
     private WebContext Context { get; set; } = null!;
 
+    /// <summary>What lands on the clipboard. Nothing to copy disables the button.</summary>
     [Parameter]
-    public string? Label { get; set; }
+    public string? Text { get; set; }
 
     [Parameter]
-    public string? Value { get; set; }
+    public DtControlSize Size { get; set; } = DtControlSize.Small;
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     [Parameter]
     public string? Class { get; set; }
 
     protected override void OnInitialized()
     {
-        // The same two words the panes use, rather than a second pair saying the same thing.
+        // One pair of words for copying, wherever the button appears.
         _localizer = Context.Localization.CreateScopedLocalizer("Component.DtPane");
         base.OnInitialized();
     }
 
     private async Task CopyAsync()
     {
-        if (string.IsNullOrEmpty(Value))
+        if (string.IsNullOrEmpty(Text))
         {
             return;
         }
 
-        await Context.JsService.CopyToClipboardAsync(Value);
+        await Context.JsService.CopyToClipboardAsync(Text);
 
         _copied = true;
         StateHasChanged();

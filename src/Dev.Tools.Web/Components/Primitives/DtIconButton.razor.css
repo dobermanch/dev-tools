@@ -1,3 +1,4 @@
+/* The focus ring is .dt-focus-ring in app.css, shared with every other control. */
 .dt-icon-button {
     display: inline-flex;
     align-items: center;
@@ -18,11 +19,6 @@
 .dt-icon-button:hover:not(:disabled) {
     background: var(--dt-surface-active);
     color: var(--dt-accent);
-}
-
-.dt-icon-button:focus-visible {
-    outline: 1px solid var(--dt-accent);
-    outline-offset: 1px;
 }
 
 .dt-icon-button-bordered {

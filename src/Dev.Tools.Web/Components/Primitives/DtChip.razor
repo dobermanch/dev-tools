@@ -3,12 +3,12 @@
 *@
 
 <button type="button"
-        class="dt-chip @(Selected ? "dt-chip-selected" : null) @Class"
+        class="dt-chip dt-focus-ring @(Selected ? "dt-chip-selected" : null) @Class"
         aria-pressed="@(Selected ? "true" : "false")"
         @onclick="OnClick">
     @if (!string.IsNullOrEmpty(Icon))
     {
-        <MudIcon Icon="@Icon" Style="width:15px;height:15px" />
+        <DtIcon Icon="@Icon" Size="DtControlSize.Small" />
     }
     @Text
     @if (!string.IsNullOrEmpty(Count))

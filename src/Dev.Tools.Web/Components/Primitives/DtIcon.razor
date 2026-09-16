@@ -1,0 +1,27 @@
+@*
+    An icon at one of the named sizes, so a pixel value is not repeated at every call site. Pixels is
+    the escape hatch for the two places the design sizes an icon on its own - a page header, an empty
+    state - rather than an invitation to pick a number.
+*@
+
+<MudIcon Icon="@Icon" Class="@Class" Style="@Style" />
+
+@code {
+    [Parameter, EditorRequired] public string Icon { get; set; } = null!;
+
+    [Parameter] public DtControlSize Size { get; set; } = DtControlSize.Medium;
+
+    /// <summary>Overrides <see cref="Size"/> where the design calls for its own dimension.</summary>
+    [Parameter] public int? Pixels { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    private int Dimension => Pixels ?? Size switch
+    {
+        DtControlSize.Small => 17,
+        DtControlSize.Large => 20,
+        _ => 19
+    };
+
+    private string Style => $"width:{Dimension}px;height:{Dimension}px";
+}

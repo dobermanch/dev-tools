@@ -17,7 +17,7 @@
     <p class="dt-hero-text">@_localizer["Hero.Description"]</p>
 
     <div class="dt-hero-search">
-        <MudIcon Icon="@Icons.Material.Outlined.Search" Style="width:20px;height:20px" />
+        <DtIcon Icon="@Icons.Material.Outlined.Search" Size="DtControlSize.Large" />
         <input type="search"
                value="@_query"
                placeholder="@_localizer["Search.Placeholder"]"
@@ -27,7 +27,7 @@
 </section>
 
 <section class="dt-filter-row">
-    <span class="dt-filter-label">@_localizer["Filter.Label"]</span>
+    <span class="dt-label-mono dt-label-mono-section">@_localizer["Filter.Label"]</span>
 
     <div class="dt-filter-chips">
         <DtChip Text="@_localizer["Filter.All"]"
@@ -62,7 +62,7 @@
 else if (_visibleTools.Count == 0)
 {
     <div class="dt-empty">
-        <MudIcon Icon="@Icons.Material.Outlined.SearchOff" Style="width:24px;height:24px" />
+        <DtIcon Icon="@Icons.Material.Outlined.SearchOff" Pixels="24" />
         <span class="dt-empty-title">@_localizer["Empty.Title"]</span>
         <span class="dt-empty-text">@_localizer["Empty.Description"]</span>
     </div>
@@ -74,7 +74,7 @@ else if (_groupByCategory)
         <section class="dt-category">
             <div class="dt-category-head">
                 <span class="dt-category-icon">
-                    <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(group.Key)" Style="width:18px;height:18px" />
+                    <DtIcon Icon="@ToolIconProvider.GetCategoryIcon(group.Key)" />
                 </span>
                 <h2 class="dt-category-name">@Context.Localization.GetCategory(group.Key)</h2>
                 <span class="dt-category-count">@string.Format(_localizer["Section.ToolCount"], group.Data.Count)</span>

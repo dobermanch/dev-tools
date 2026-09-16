@@ -29,7 +29,7 @@
         <MudSpacer />
 
         <button type="button" class="dt-search-button" @onclick="@OpenSearchDialogAsync">
-            <MudIcon Icon="@Icons.Material.Outlined.Search" Style="width:16px;height:16px" />
+            <DtIcon Icon="@Icons.Material.Outlined.Search" Size="DtControlSize.Small" />
             <span class="dt-search-label">@_localizer["Button.Search.Label"]</span>
             <span class="dt-kbd">@ShortcutLabel</span>
         </button>
@@ -51,7 +51,7 @@
                rel="noreferrer"
                title="@_localizer["Button.Repository.Tooltip"]"
                aria-label="@_localizer["Button.Repository.Tooltip"]">
-                <MudIcon Icon="@Icons.Custom.Brands.GitHub" Style="width:20px;height:20px" />
+                <DtIcon Icon="@Icons.Custom.Brands.GitHub" Size="DtControlSize.Large" />
             </a>
         </span>
     </MudAppBar>

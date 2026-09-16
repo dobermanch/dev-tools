@@ -7,7 +7,6 @@ namespace Dev.Tools.Web.Components.Inputs;
 public partial class DtOutputPane : ComponentBase
 {
     private IStringLocalizer _localizer = null!;
-    private bool _copied;
 
     [Inject]
     private WebContext Context { get; set; } = null!;
@@ -49,22 +48,6 @@ public partial class DtOutputPane : ComponentBase
     {
         _localizer = Context.Localization.CreateScopedLocalizer("Component.DtPane");
         base.OnInitialized();
-    }
-
-    private async Task CopyAsync()
-    {
-        if (string.IsNullOrEmpty(Text))
-        {
-            return;
-        }
-
-        await Context.JsService.CopyToClipboardAsync(Text);
-
-        // The icon becomes a tick for a moment: enough to show it worked, without a toast to dismiss.
-        _copied = true;
-        StateHasChanged();
-        await Task.Delay(TimeSpan.FromSeconds(1.5));
-        _copied = false;
     }
 
     private async Task DownloadAsync()

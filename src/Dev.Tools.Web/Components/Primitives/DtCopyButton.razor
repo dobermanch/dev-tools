@@ -1,0 +1,12 @@
+@*
+    Copy, and say so. The icon becomes a tick for a moment rather than raising a toast. One component,
+    because a field, a result row and a pane header all do exactly this.
+*@
+
+<DtIconButton Icon="@(_copied ? Icons.Material.Outlined.Check : Icons.Material.Outlined.CopyAll)"
+              Size="@Size"
+              Active="@_copied"
+              Disabled="@(Disabled || string.IsNullOrEmpty(Text))"
+              Tooltip="@(_copied ? _localizer["Button.Copied.Tooltip"] : _localizer["Button.Copy.Tooltip"])"
+              Class="@Class"
+              OnClick="@CopyAsync"/>

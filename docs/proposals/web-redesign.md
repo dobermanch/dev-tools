@@ -84,6 +84,13 @@ Each step builds or restyles components and swaps their existing uses one for on
   - **An action sat in a grid cell beside a switch.** Bcrypt's run and OTP's regenerate moved to their own row under the options (`.dt-page-actions`).
   Stretching panes to equal height was considered and rejected: forcing a paste box to match a list of results looks contrived. The density change closes most of the gap on its own.
 
+- [x] **D14. One definition per idea, across the primitives.** An audit after D13 found the same fault three more times, so all four were fixed together:
+  - **The focus ring was declared six times** (`DtSwitch`, `DtSlider`, `DtIconButton`, `DtChip`, `DtToggleGroup`, `DtButton`), already differing in offset. Now `.dt-focus-ring` in `app.css`, with a `-inset` modifier for a control inside a bordered group.
+  - **The mono microlabel was declared eight times** at three sizes and two letter-spacings, despite `DtMonoLabel` existing for it. Now `.dt-label-mono` with `-sm` and `-section` modifiers; `DtMonoLabel` is the standalone form of the same class, and `DtField`, `DtFieldValue`, `DtPane`, `DtOptions`, the sidebar and the index all use it.
+  - **Copy-with-tick was implemented twice** (`DtFieldValue`, `DtOutputPane`), each with its own `_copied` flag and 1.5s delay. Now `DtCopyButton`, used by both and by `DtTextField`; `DtFieldValue` lost its code-behind entirely.
+  - **Icon sizes were inlined 16 times** across eight pixel values, despite `DtControlSize` naming three. Now `DtIcon`, with a `Pixels` escape hatch for the two places the design sizes an icon on its own (a page header at 26, an empty state at 24).
+  The sweep after the change finds one focus ring, one label recipe, one copy implementation and no inline icon sizes.
+
 - [x] **D13. One box for every value.** The density pass exposed a deeper fault: `DtTextField` drew its border around the `<input>` and hung the copy button outside as a sibling, while `DtFieldValue` drew the border around a row with the button inside - two components inventing the same thing twice, which is what phase B existed to prevent. There is now one `.dt-box` in `app.css`, owning the border, height, padding, hover, focus ring and any trailing buttons, and the editable field, the select and the result row are all bare children of it. Global rather than scoped, because scoped CSS cannot be shared between components. Each of the three keeps only a `::deep` rule for the buttons it nests. A copy action now sits inside the box wherever it appears, and the focus ring is on the box rather than the control inside it.
 
 ### Phase E - Cleanup

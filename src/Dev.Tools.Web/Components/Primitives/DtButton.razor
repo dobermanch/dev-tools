@@ -4,7 +4,7 @@
 *@
 
 <button type="button"
-        class="dt-button dt-button-@Variant.ToString().ToLowerInvariant() @Class"
+        class="dt-button dt-focus-ring dt-button-@Variant.ToString().ToLowerInvariant() @Class"
         disabled="@(Disabled || Loading)"
         @onclick="OnClick">
     @if (Loading)
@@ -13,7 +13,7 @@
     }
     else if (!string.IsNullOrEmpty(StartIcon))
     {
-        <MudIcon Icon="@StartIcon" Style="width:18px;height:18px" />
+        <DtIcon Icon="@StartIcon" Size="DtControlSize.Small" />
     }
 
     @ChildContent

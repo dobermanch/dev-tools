@@ -4,14 +4,14 @@
     <div class="dt-nav-group">
         @if (!Collapsed)
         {
-            <span class="dt-nav-group-label">@_localizer["Group.Navigate"]</span>
+            <span class="dt-label-mono dt-label-mono-section dt-nav-group-label">@_localizer["Group.Navigate"]</span>
         }
 
         <a class="dt-nav-row @(IsAllToolsActive ? "dt-nav-row-active" : null)"
            href="./"
            title="@_localizer["AllTools"]">
             <span class="dt-nav-icon">
-                <MudIcon Icon="@Icons.Material.Outlined.GridView" Style="width:18px;height:18px" />
+                <DtIcon Icon="@Icons.Material.Outlined.GridView" />
             </span>
             @if (!Collapsed)
             {
@@ -23,7 +23,7 @@
            href="./?view=favorites"
            title="@_localizer["Favorites"]">
             <span class="dt-nav-icon">
-                <MudIcon Icon="@Icons.Material.Outlined.StarBorder" Style="width:18px;height:18px" />
+                <DtIcon Icon="@Icons.Material.Outlined.StarBorder" />
             </span>
             @if (!Collapsed)
             {
@@ -36,7 +36,7 @@
            href="./?view=recent"
            title="@_localizer["Recent"]">
             <span class="dt-nav-icon">
-                <MudIcon Icon="@Icons.Material.Outlined.History" Style="width:18px;height:18px" />
+                <DtIcon Icon="@Icons.Material.Outlined.History" />
             </span>
             @if (!Collapsed)
             {
@@ -49,7 +49,7 @@
     <div class="dt-nav-group">
         @if (!Collapsed)
         {
-            <span class="dt-nav-group-label">@_localizer["Group.Categories"]</span>
+            <span class="dt-label-mono dt-label-mono-section dt-nav-group-label">@_localizer["Group.Categories"]</span>
         }
 
         @foreach (var category in _categories)
@@ -59,7 +59,7 @@
                href="@($"./?category={category}")"
                title="@name">
                 <span class="dt-nav-icon">
-                    <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(category)" Style="width:18px;height:18px" />
+                    <DtIcon Icon="@ToolIconProvider.GetCategoryIcon(category)" />
                 </span>
                 @if (!Collapsed)
                 {

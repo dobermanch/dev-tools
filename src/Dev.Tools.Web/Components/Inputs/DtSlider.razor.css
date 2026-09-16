@@ -13,7 +13,4 @@
     cursor: pointer;
 }
 
-.dt-slider:focus-visible {
-    outline: 1px solid var(--dt-accent);
-    outline-offset: 4px;
-}
+/* The focus ring is .dt-focus-ring in app.css. */

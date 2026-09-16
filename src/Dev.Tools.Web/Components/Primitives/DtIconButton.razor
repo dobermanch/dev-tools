@@ -4,13 +4,13 @@
 *@
 
 <button type="button"
-        class="dt-icon-button dt-icon-button-@Size.ToString().ToLowerInvariant() @(Bordered ? "dt-icon-button-bordered" : null) @(Active ? "dt-icon-button-active" : null) @Class"
+        class="dt-icon-button dt-focus-ring dt-icon-button-@Size.ToString().ToLowerInvariant() @(Bordered ? "dt-icon-button-bordered" : null) @(Active ? "dt-icon-button-active" : null) @Class"
         title="@Tooltip"
         aria-label="@(AriaLabel ?? Tooltip)"
         aria-pressed="@(Active ? "true" : null)"
         disabled="@Disabled"
         @onclick="OnClick">
-    <MudIcon Icon="@Icon" Style="@IconStyle" />
+    <DtIcon Icon="@Icon" Size="@Size" />
 </button>
 
 @code {
@@ -32,11 +32,4 @@
     [Parameter] public EventCallback OnClick { get; set; }
 
     [Parameter] public string? Class { get; set; }
-
-    private string IconStyle => Size switch
-    {
-        DtControlSize.Small => "width:17px;height:17px",
-        DtControlSize.Large => "width:20px;height:20px",
-        _ => "width:19px;height:19px"
-    };
 }
