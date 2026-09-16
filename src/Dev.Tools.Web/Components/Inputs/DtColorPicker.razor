@@ -1,0 +1,31 @@
+@using MudBlazor.Utilities
+@*
+    MudBlazor's colour picker in the shared field shell: rebuilding a picker with alpha and a palette
+    would buy nothing, so only the trigger is restyled to match the other 36px controls.
+*@
+
+<DtField Label="@Label" Hint="@Hint" Class="@Class">
+    <div class="dt-color-picker">
+        <MudColorPicker Value="@Value"
+                        ValueChanged="@ValueChanged"
+                        ShowAlpha="@ShowAlpha"
+                        PickerVariant="PickerVariant.Inline"
+                        Variant="Variant.Outlined"
+                        Margin="Margin.Dense"
+                        DisableToolbar="false"/>
+    </div>
+</DtField>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public MudColor? Value { get; set; }
+
+    [Parameter] public EventCallback<MudColor> ValueChanged { get; set; }
+
+    [Parameter] public bool ShowAlpha { get; set; }
+
+    [Parameter] public string? Hint { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

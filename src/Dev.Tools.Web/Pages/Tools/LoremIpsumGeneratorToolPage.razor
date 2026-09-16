@@ -34,11 +34,9 @@
                         ValueChanged="OnWordsValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.StartWithLoremIpsum"
                         Label="@_localizer["Switch.StartWithLoremIpsum.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnStartWithLoremIpsumValueChangedAsync"/>
                 </MudItem>
             </MudGrid>

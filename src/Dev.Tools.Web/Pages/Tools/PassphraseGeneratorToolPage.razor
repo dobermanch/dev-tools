@@ -40,11 +40,9 @@
                         OnDebounceIntervalElapsed="OnValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="6">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.Capitalize"
                         Label="@_localizer["Switch.Capitalize.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnCapitalValueChangedAsync"/>
                 </MudItem>
             </MudGrid>

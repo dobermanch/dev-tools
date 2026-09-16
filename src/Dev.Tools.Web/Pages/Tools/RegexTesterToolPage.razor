@@ -27,35 +27,27 @@
                     />
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_ignoreCase"
                         Label="@_localizer["Switch.IgnoreCase.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_multiline"
                         Label="@_localizer["Switch.Multiline.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _multiline = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_singleline"
                         Label="@_localizer["Switch.Singleline.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _singleline = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_ignorePatternWhitespace"
                         Label="@_localizer["Switch.IgnorePatternWhitespace.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _ignorePatternWhitespace = value))"/>
                 </MudItem>
             </MudGrid>

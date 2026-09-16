@@ -41,35 +41,27 @@
                         OnDebounceIntervalElapsed="OnValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.Lowercase"
                         Label="@_localizer["Switch.Lowercase.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnLowercaseValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.Uppercase"
                         Label="@_localizer["Switch.Uppercase.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnUppercaseValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.Numbers"
                         Label="@_localizer["Switch.Numbers.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnNumbersValueChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_args.Symbols"
                         Label="@_localizer["Switch.Symbols.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnSymbolsValueChangedAsync"/>
                 </MudItem>
             </MudGrid>

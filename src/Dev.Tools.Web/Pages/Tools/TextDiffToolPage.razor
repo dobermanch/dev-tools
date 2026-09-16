@@ -7,19 +7,15 @@
         <DtSection Id="config" Class="mt-0">
             <MudGrid Class="align-center" Spacing="4">
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_ignoreWhitespace"
                         Label="@_localizer["Switch.IgnoreWhitespace.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreWhitespace = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_ignoreCase"
                         Label="@_localizer["Switch.IgnoreCase.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="@((bool value) => SetOptionAsync(() => _ignoreCase = value))"/>
                 </MudItem>
                 <MudItem xs="12" md="6">

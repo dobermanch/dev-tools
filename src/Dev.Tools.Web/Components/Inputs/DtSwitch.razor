@@ -1,0 +1,21 @@
+@*
+    The design's on/off pill, with the state spelled out beside it. A button with role="switch" rather
+    than a styled checkbox, so it is reachable by keyboard and announced as a switch.
+*@
+
+<DtField Label="@Label" For="@_id" Hint="@Hint" Class="@Class">
+    <div class="dt-switch-row">
+        <button id="@_id"
+                type="button"
+                role="switch"
+                class="dt-switch @(Value ? "dt-switch-on" : null)"
+                aria-checked="@(Value ? "true" : "false")"
+                disabled="@Disabled"
+                @onclick="ToggleAsync">
+            <span class="dt-switch-knob"></span>
+        </button>
+        <span class="dt-switch-state @(Value ? "dt-switch-state-on" : null)">
+            @(Value ? _localizer["State.On"] : _localizer["State.Off"])
+        </span>
+    </div>
+</DtField>

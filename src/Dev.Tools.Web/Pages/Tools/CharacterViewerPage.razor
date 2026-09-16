@@ -19,8 +19,7 @@
                 @if (HideSymbolsOptions)
                 {
                     <MudItem xs="12" md="6">
-                        <MudSwitch T="bool" @bind-Value="@_showSymbols" Label="@_localizer["Switch.ShowSymbols.Label"]"
-                                   Color="Color.Primary"/>
+                        <DtSwitch @bind-Value="@_showSymbols" Label="@_localizer["Switch.ShowSymbols.Label"]"/>
                     </MudItem>
                 }
             </MudGrid>

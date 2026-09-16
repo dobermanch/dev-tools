@@ -75,11 +75,10 @@
                     />
                 </MudItem>
                 <MudItem xs="12" md="4">
-                    <MudSwitch 
-                        Value="@_args.Hyphens" 
-                        Label="@_localizer["Switch.Hyphens.Label"]" 
-                        Color="Color.Primary" T="bool" 
-                        ValueChanged="OnHyphensValueChangedAsync" />
+                    <DtSwitch
+                        Value="@_args.Hyphens"
+                        Label="@_localizer["Switch.Hyphens.Label"]"
+                        ValueChanged="OnHyphensValueChangedAsync"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

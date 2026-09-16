@@ -34,19 +34,15 @@
                         ValueChanged="@OnIndentSizeChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_excludeEmpty"
                         Label="@_localizer["Switch.ExcludeEmpty.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnExcludeEmptyChangedAsync"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_compact"
                         Label="@_localizer["Switch.Compact.Label"]"
-                        Color="Color.Primary"
                         ValueChanged="OnCompactChangedAsync"/>
                 </MudItem>
             </MudGrid>

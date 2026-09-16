@@ -1,0 +1,16 @@
+/* ::deep, because the markup below belongs to MudColorPicker rather than to this component. */
+.dt-color-picker ::deep .mud-input {
+    height: var(--dt-control-height);
+    border-radius: var(--dt-radius-control);
+    background: var(--dt-surface-raised);
+    font-family: var(--dt-font-mono);
+    font-size: 13px;
+}
+
+.dt-color-picker ::deep .mud-input > input {
+    color: var(--dt-text);
+}
+
+.dt-color-picker ::deep .mud-input-label {
+    display: none;
+}

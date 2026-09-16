@@ -55,11 +55,9 @@
                         }
                     </MudItem>
                     <MudItem xs="12" md="4">
-                        <MudSwitch
-                            T="bool"
+                        <DtSwitch
                             Value="@_hidden"
                             Label="@_localizer["Switch.Hidden.Label"]"
-                            Color="Color.Primary"
                             ValueChanged="@((bool value) => SetOptionAsync(() => _hidden = value))"/>
                     </MudItem>
                 }
@@ -87,18 +85,16 @@
                         ValueChanged="@((int value) => SetOptionAsync(() => _border = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudColorPicker
+                    <DtColorPicker
                         Label="@_localizer["ColorPicker.Dark.Label"]"
                         Value="@_dark"
-                        ValueChanged="@((MudColor value) => SetOptionAsync(() => _dark = value))"
-                        PickerVariant="PickerVariant.Inline"/>
+                        ValueChanged="@((MudColor value) => SetOptionAsync(() => _dark = value))"/>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudColorPicker
+                    <DtColorPicker
                         Label="@_localizer["ColorPicker.Light.Label"]"
                         Value="@_light"
-                        ValueChanged="@((MudColor value) => SetOptionAsync(() => _light = value))"
-                        PickerVariant="PickerVariant.Inline"/>
+                        ValueChanged="@((MudColor value) => SetOptionAsync(() => _light = value))"/>
                 </MudItem>
             </MudGrid>
         </DtSection>

@@ -389,6 +389,12 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtSwitch.State.On" xml:space="preserve">
+        <value>on</value>
+    </data>
+    <data name="Component.DtSwitch.State.Off" xml:space="preserve">
+        <value>off</value>
+    </data>
     <data name="Component.DtTextField.Button.Copy.Tooltip" xml:space="preserve">
         <value>Copy to clipboard</value>
     </data>

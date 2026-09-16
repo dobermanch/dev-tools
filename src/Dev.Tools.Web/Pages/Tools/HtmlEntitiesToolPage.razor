@@ -16,11 +16,9 @@
                     />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudSwitch
-                        T="bool"
+                    <DtSwitch
                         Value="@_encodeNonAscii"
                         Label="@_localizer["Switch.EncodeNonAscii.Label"]"
-                        Color="Color.Primary"
                         Disabled="@(_transcoding == HtmlEntitiesTool.TranscodingType.Decode)"
                         ValueChanged="OnEncodeNonAsciiChangedAsync"/>
                 </MudItem>
