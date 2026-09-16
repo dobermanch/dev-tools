@@ -333,6 +333,12 @@
     <data name="Layout.NavMenu.Home" xml:space="preserve">
         <value>Home</value>
     </data>
+    <data name="Layout.NavMenu.Recent" xml:space="preserve">
+        <value>Recent</value>
+    </data>
+    <data name="Page.Home.Section.Recent" xml:space="preserve">
+        <value>Recent</value>
+    </data>
     <data name="Layout.NavMenu.Group.Navigate" xml:space="preserve">
         <value>Navigate</value>
     </data>

@@ -50,9 +50,12 @@
                    Options="@ViewModeOptions"/>
 </section>
 
-@if (_favoritesOnly)
+@if (_favoritesOnly || _recentOnly)
 {
-    <DtSection Id="favorites" Caption="@_localizer["Section.Favorites"]" Count="@_visibleTools.Count.ToString()">
+    @* One list, in the order the view implies - starred tools by category, recent ones by when. *@
+    <DtSection Id="view"
+               Caption="@(_recentOnly ? _localizer["Section.Recent"] : _localizer["Section.Favorites"])"
+               Count="@_visibleTools.Count.ToString()">
         @ToolsView(_visibleTools)
     </DtSection>
 }

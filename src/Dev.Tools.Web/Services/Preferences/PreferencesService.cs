@@ -46,6 +46,16 @@ internal sealed class PreferencesService(IStorageProvider storageProvider) : IPr
         await UpdatePreferencesAsync(preferences, cancellationToken);
     }
 
+    public async Task UpdateRecentAsync(UserPreferences.RecentDetails recent, CancellationToken cancellationToken)
+    {
+        var preferences = Preferences with
+        {
+            Recent = recent
+        };
+
+        await UpdatePreferencesAsync(preferences, cancellationToken);
+    }
+
     public Task ResetAsync(CancellationToken cancellationToken)
     {
         return UpdatePreferencesAsync(new UserPreferences(), cancellationToken);

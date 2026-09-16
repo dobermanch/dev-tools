@@ -33,7 +33,7 @@ public partial class Home : ComponentBase, IDisposable
     [SupplyParameterFromQuery(Name = "category")]
     private string? CategoryQuery { get; set; }
 
-    /// <summary>"favorites" narrows the index to the starred tools.</summary>
+    /// <summary>"favorites" or "recent" narrows the index to those tools.</summary>
     [SupplyParameterFromQuery(Name = "view")]
     private string? ViewQuery { get; set; }
 
@@ -43,6 +43,7 @@ public partial class Home : ComponentBase, IDisposable
     private string _query = string.Empty;
     private Category? _category;
     private bool _favoritesOnly;
+    private bool _recentOnly;
 
     private IReadOnlyList<ToolDefinition> _allTools = [];
     private IReadOnlyList<ToolDefinition> _visibleTools = [];
@@ -69,6 +70,7 @@ public partial class Home : ComponentBase, IDisposable
     {
         _category = Enum.TryParse<Category>(CategoryQuery, ignoreCase: true, out var category) ? category : null;
         _favoritesOnly = string.Equals(ViewQuery, "favorites", StringComparison.OrdinalIgnoreCase);
+        _recentOnly = string.Equals(ViewQuery, "recent", StringComparison.OrdinalIgnoreCase);
         ApplyFilters();
         base.OnParametersSet();
     }
@@ -96,6 +98,16 @@ public partial class Home : ComponentBase, IDisposable
         {
             var favorites = Context.Preferences.Preferences.Favorite.Tools;
             tools = tools.Where(tool => favorites.Contains(tool.Name));
+        }
+
+        if (_recentOnly)
+        {
+            // The saved order is the answer here, not the catalogue's: most recently opened first.
+            var recent = Context.Preferences.Preferences.Recent.Tools;
+            tools = recent
+                .Select(name => _allTools.FirstOrDefault(tool => string.Equals(tool.Name, name, StringComparison.Ordinal)))
+                .Where(tool => tool is not null)
+                .Select(tool => tool!);
         }
 
         if (_category is { } category)

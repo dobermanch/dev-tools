@@ -13,4 +13,6 @@ public interface IPreferencesService
     Task UpdateLayoutAsync(UserPreferences.LayoutSettings settings, CancellationToken cancellationToken = default);
     
     Task UpdateFavoriteAsync(UserPreferences.FavoriteDetails favorites, CancellationToken cancellationToken);
+
+    Task UpdateRecentAsync(UserPreferences.RecentDetails recent, CancellationToken cancellationToken = default);
 }

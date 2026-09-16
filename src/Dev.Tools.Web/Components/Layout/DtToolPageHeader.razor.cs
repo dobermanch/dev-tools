@@ -1,4 +1,7 @@
+using Dev.Tools.Web.Core.Messaging;
+using Dev.Tools.Web.Notifications;
 using Dev.Tools.Web.Services;
+using Dev.Tools.Web.Services.Preferences;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 
@@ -15,10 +18,32 @@ public partial class DtToolPageHeader : ComponentBase
     [Parameter]
     public ToolDefinition ToolDefinition { get; set; } = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         _localizer = Context.Localization.CreateScopedLocalizer("Component.DtToolPageHeader");
-        base.OnInitialized();
+        await RecordVisitAsync();
+        await base.OnInitializedAsync();
+    }
+
+    /// <summary>
+    /// Every tool page goes through this header, so opening one is recorded here rather than in each of
+    /// them. Most recent first, and opening a tool again moves it back to the front.
+    /// </summary>
+    private async Task RecordVisitAsync()
+    {
+        var tools = Context.Preferences.Preferences.Recent.Tools;
+        if (tools.Count > 0 && string.Equals(tools[0], ToolDefinition.Name, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        var recent = new List<string> { ToolDefinition.Name };
+        recent.AddRange(tools
+            .Where(name => !string.Equals(name, ToolDefinition.Name, StringComparison.Ordinal))
+            .Take(UserPreferences.RecentDetails.Capacity - 1));
+
+        await Context.Preferences.UpdateRecentAsync(new UserPreferences.RecentDetails { Tools = recent });
+        await Context.Messenger.Publish(new RecentChangedNotification(ToolDefinition.Name));
     }
 
     private async Task ShareAsync()

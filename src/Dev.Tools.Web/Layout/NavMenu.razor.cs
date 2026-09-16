@@ -14,10 +14,13 @@ public partial class NavMenu : ComponentBase, IDisposable
     private IReadOnlyList<Category> _categories = [];
     private Dictionary<Category, int> _categoryCounts = [];
     private int _favoriteCount;
+    private int _recentCount;
     private Category? _activeCategory;
     private bool _isFavoritesView;
+    private bool _isRecentView;
     private bool _isIndex;
     private IDisposable? _subscription;
+    private IDisposable? _recentSubscription;
 
     [Inject] private WebContext Context { get; set; } = null!;
     [Inject] private IToolsProvider ToolsProvider { get; set; } = null!;
@@ -30,6 +33,8 @@ public partial class NavMenu : ComponentBase, IDisposable
 
     private bool IsFavoritesActive => _isIndex && _isFavoritesView;
 
+    private bool IsRecentActive => _isIndex && _isRecentView;
+
     protected override void OnInitialized()
     {
         _localizer = Context.Localization.CreateScopedLocalizer("Layout.NavMenu");
@@ -41,8 +46,9 @@ public partial class NavMenu : ComponentBase, IDisposable
             .ToDictionary(group => group.Key, group => group.Count());
         _categories = [.. _categoryCounts.Keys.OrderBy(category => category)];
 
-        LoadFavoriteCount();
+        LoadCounts();
         _subscription = Context.Messenger.Subscribe<FavoritesChangedNotification>(OnFavoritesChanged);
+        _recentSubscription = Context.Messenger.Subscribe<RecentChangedNotification>(OnRecentChanged);
 
         // The active row is read off the URL, so it follows the chips on the index as well as these links.
         Context.Navigation.LocationChanged += OnLocationChanged;
@@ -51,8 +57,11 @@ public partial class NavMenu : ComponentBase, IDisposable
         base.OnInitialized();
     }
 
-    private void LoadFavoriteCount()
-        => _favoriteCount = Context.Preferences.Preferences.Favorite.Tools.Count;
+    private void LoadCounts()
+    {
+        _favoriteCount = Context.Preferences.Preferences.Favorite.Tools.Count;
+        _recentCount = Context.Preferences.Preferences.Recent.Tools.Count;
+    }
 
     private string CountFor(Category category)
         => _categoryCounts.TryGetValue(category, out var count) ? count.ToString() : "0";
@@ -75,7 +84,9 @@ public partial class NavMenu : ComponentBase, IDisposable
         _activeCategory = Enum.TryParse<Category>(query.GetValueOrDefault("category"), ignoreCase: true, out var category)
             ? category
             : null;
-        _isFavoritesView = string.Equals(query.GetValueOrDefault("view"), "favorites", StringComparison.OrdinalIgnoreCase);
+        var view = query.GetValueOrDefault("view");
+        _isFavoritesView = string.Equals(view, "favorites", StringComparison.OrdinalIgnoreCase);
+        _isRecentView = string.Equals(view, "recent", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -100,7 +111,13 @@ public partial class NavMenu : ComponentBase, IDisposable
 
     private void OnFavoritesChanged(FavoritesChangedNotification _)
     {
-        LoadFavoriteCount();
+        LoadCounts();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnRecentChanged(RecentChangedNotification _)
+    {
+        LoadCounts();
         InvokeAsync(StateHasChanged);
     }
 
@@ -108,5 +125,6 @@ public partial class NavMenu : ComponentBase, IDisposable
     {
         Context.Navigation.LocationChanged -= OnLocationChanged;
         _subscription?.Dispose();
+        _recentSubscription?.Dispose();
     }
 }

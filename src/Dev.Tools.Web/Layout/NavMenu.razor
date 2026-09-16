@@ -31,6 +31,19 @@
                 <span class="dt-nav-count">@_favoriteCount</span>
             }
         </a>
+
+        <a class="dt-nav-row @(IsRecentActive ? "dt-nav-row-active" : null)"
+           href="./?view=recent"
+           title="@_localizer["Recent"]">
+            <span class="dt-nav-icon">
+                <MudIcon Icon="@Icons.Material.Outlined.History" Style="width:18px;height:18px" />
+            </span>
+            @if (!Collapsed)
+            {
+                <span class="dt-nav-text">@_localizer["Recent"]</span>
+                <span class="dt-nav-count">@_recentCount</span>
+            }
+        </a>
     </div>
 
     <div class="dt-nav-group">
