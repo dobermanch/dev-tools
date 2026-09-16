@@ -9,6 +9,9 @@
     <base href="/" />
     <link rel="icon" type="image/svg+xml" href="icon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <!-- MudBlazor first, ours after it: MudBlazor styles plain ids of its own - #blazor-error-ui among
+         them - and whichever sheet comes last wins at equal specificity. -->
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link href="Dev.Tools.Web.styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/tokens.css" />
@@ -16,7 +19,6 @@
     <link rel="stylesheet" href="css/app.css" />
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <script>
         // The saved theme, applied before the first paint - the .NET runtime takes seconds to start, and
         // without this a light-theme visitor would stare at the dark page until it does. ThemeMode:
@@ -79,10 +81,17 @@
         </div>
     </div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+    <!-- Blazor reveals this by setting style.display = 'block' on it, so the row itself is an inner
+         element: a flex rule here would be overwritten the moment it matters. -->
+    <div id="blazor-error-ui" role="alert">
+        <div class="dt-error-inner">
+            <svg class="dt-error-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 2 1 21h22L12 2Zm0 5 7.5 13h-15L12 7Zm-1 4v4h2v-4h-2Zm0 6v2h2v-2h-2Z" />
+            </svg>
+            <span class="dt-error-text">Something went wrong, and the app needs to be reloaded.</span>
+            <a href="" class="reload">Reload</a>
+            <a class="dismiss" aria-label="Dismiss">✕</a>
+        </div>
     </div>
     <script>
         // Restore path encoded by 404.html (GitHub Pages SPA routing).

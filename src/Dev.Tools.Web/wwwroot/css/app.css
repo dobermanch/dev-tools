@@ -1,27 +1,77 @@
+/* The unhandled-error bar. Blazor toggles it with style.display, so only the inner row is laid out.
+   MudBlazor styles this same id - a red full-width strip with the dismiss pinned to the corner - so the
+   properties it sets are reset here rather than merely not mentioned. */
 #blazor-error-ui {
-    background: var(--dt-surface-raised);
-    border-top: 1px solid var(--dt-error);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    display: none;
+    padding: 0 16px 16px;
+    background-color: transparent;
+    box-shadow: none;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.dt-error-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 12px 14px;
+    border: 1px solid var(--dt-error);
+    border-radius: var(--dt-radius-card);
+    background: var(--dt-surface);
     color: var(--dt-text);
     font-family: var(--dt-font-sans);
     font-size: 13px;
-    bottom: 0;
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
+    line-height: 1.5;
+    pointer-events: auto;
 }
 
-#blazor-error-ui a {
+.dt-error-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--dt-error);
+}
+
+.dt-error-text {
+    flex: 1;
+    min-width: 0;
+}
+
+#blazor-error-ui .reload {
+    padding: 5px 12px;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-control);
+    color: var(--dt-text-tertiary);
+    text-decoration: none;
+    font-size: 12.5px;
+    white-space: nowrap;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+#blazor-error-ui .reload:hover {
+    border-color: var(--dt-border-hover);
     color: var(--dt-accent);
 }
 
 #blazor-error-ui .dismiss {
+    position: static;
+    padding: 2px 6px;
+    color: var(--dt-text-faint);
+    font-size: 14px;
+    line-height: 1;
     cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+#blazor-error-ui .dismiss:hover {
+    color: var(--dt-text);
 }
 
 .floating-panel {

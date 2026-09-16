@@ -344,6 +344,33 @@
     <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
         <value>All settings are stored locally in your browser.</value>
     </data>
+    <data name="Page.Home.Hero.Badge" xml:space="preserve">
+        <value>{0} tools · {1} categories</value>
+    </data>
+    <data name="Page.Home.Hero.Title.Line1" xml:space="preserve">
+        <value>The Swiss Army knife</value>
+    </data>
+    <data name="Page.Home.Hero.Title.Line2" xml:space="preserve">
+        <value>for developers.</value>
+    </data>
+    <data name="Page.Home.Hero.Description" xml:space="preserve">
+        <value>Encode, hash, parse, format and generate — without a build step, an account, or a request to anyone's server.</value>
+    </data>
+    <data name="Page.Home.Filter.Label" xml:space="preserve">
+        <value>Filter</value>
+    </data>
+    <data name="Page.Home.Filter.All" xml:space="preserve">
+        <value>all</value>
+    </data>
+    <data name="Page.Home.Section.ToolCount" xml:space="preserve">
+        <value>{0} tools</value>
+    </data>
+    <data name="Page.Home.Empty.Title" xml:space="preserve">
+        <value>Nothing matches</value>
+    </data>
+    <data name="Page.Home.Empty.Description" xml:space="preserve">
+        <value>Try another word, or clear the filter.</value>
+    </data>
     <data name="Page.Home.Hero.Subtitle" xml:space="preserve">
         <value>The Swiss Army Knife for Developers</value>
     </data>

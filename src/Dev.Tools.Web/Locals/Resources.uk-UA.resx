@@ -351,6 +351,33 @@
     <data name="Page.Settings.Note.BrowserStorage" xml:space="preserve">
         <value>Всі налаштування зберігаються локально у вашому браузері.</value>
     </data>
+    <data name="Page.Home.Hero.Badge" xml:space="preserve">
+        <value>{0} інструментів · {1} категорій</value>
+    </data>
+    <data name="Page.Home.Hero.Title.Line1" xml:space="preserve">
+        <value>Швейцарський ніж</value>
+    </data>
+    <data name="Page.Home.Hero.Title.Line2" xml:space="preserve">
+        <value>для розробників.</value>
+    </data>
+    <data name="Page.Home.Hero.Description" xml:space="preserve">
+        <value>Кодуйте, хешуйте, розбирайте, форматуйте та генеруйте — без збірки, без акаунта і без запитів на чужий сервер.</value>
+    </data>
+    <data name="Page.Home.Filter.Label" xml:space="preserve">
+        <value>Фільтр</value>
+    </data>
+    <data name="Page.Home.Filter.All" xml:space="preserve">
+        <value>усі</value>
+    </data>
+    <data name="Page.Home.Section.ToolCount" xml:space="preserve">
+        <value>{0} інструментів</value>
+    </data>
+    <data name="Page.Home.Empty.Title" xml:space="preserve">
+        <value>Нічого не знайдено</value>
+    </data>
+    <data name="Page.Home.Empty.Description" xml:space="preserve">
+        <value>Спробуйте інше слово або очистіть фільтр.</value>
+    </data>
     <data name="Page.Home.Hero.Subtitle" xml:space="preserve">
         <value>Швейцарський ніж для розробників</value>
     </data>

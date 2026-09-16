@@ -29,15 +29,31 @@ public partial class Home : ComponentBase, IDisposable
     [Inject] private WebContext Context { get; set; } = default!;
     [Inject] private IToolsProvider ToolsProvider { get; set; } = default!;
 
+    /// <summary>Set by the sidebar and the category chips, so a filtered index is a link.</summary>
+    [SupplyParameterFromQuery(Name = "category")]
+    private string? CategoryQuery { get; set; }
+
+    /// <summary>"favorites" narrows the index to the starred tools.</summary>
+    [SupplyParameterFromQuery(Name = "view")]
+    private string? ViewQuery { get; set; }
+
     private IStringLocalizer _localizer = null!;
     private ViewMode _viewMode;
     private bool _groupByCategory;
+    private string _query = string.Empty;
+    private Category? _category;
+    private bool _favoritesOnly;
+
     private IReadOnlyList<ToolDefinition> _allTools = [];
-    private IReadOnlyList<ToolDefinition> _favoriteTools = [];
-    private GroupedList<Category, ToolDefinition> _toolsByCategory = GroupedList<Category, ToolDefinition>.Empty;
+    private IReadOnlyList<ToolDefinition> _visibleTools = [];
+    private IReadOnlyList<Category> _categories = [];
+    private Dictionary<Category, int> _categoryCounts = [];
+    private GroupedList<Category, ToolDefinition> _visibleGroups = GroupedList<Category, ToolDefinition>.Empty;
     private int _toolCount;
     private int _categoryCount;
+
     private IDisposable? _subscription;
+    private CancellationTokenSource? _debounce;
 
     protected override void OnInitialized()
     {
@@ -49,29 +65,116 @@ public partial class Home : ComponentBase, IDisposable
         base.OnInitialized();
     }
 
+    protected override void OnParametersSet()
+    {
+        _category = Enum.TryParse<Category>(CategoryQuery, ignoreCase: true, out var category) ? category : null;
+        _favoritesOnly = string.Equals(ViewQuery, "favorites", StringComparison.OrdinalIgnoreCase);
+        ApplyFilters();
+        base.OnParametersSet();
+    }
+
     private void LoadTools()
     {
         var allTools = ToolsProvider.GetToolDefinitions();
         _allTools = allTools as IReadOnlyList<ToolDefinition> ?? [.. allTools];
-        _toolCount = allTools.Count;
+        _toolCount = _allTools.Count;
 
-        var favoriteNames = Context.Preferences.Preferences.Favorite.Tools;
-        _favoriteTools = allTools
-            .Where(t => favoriteNames.Contains(t.Name))
-            .ToList();
+        _categoryCounts = _allTools
+            .SelectMany(tool => tool.Categories)
+            .GroupBy(category => category)
+            .ToDictionary(group => group.Key, group => group.Count());
 
-        var grouped = allTools
-            .SelectMany(t => t.Categories.Select(c => (category: c, tool: t)))
-            .GroupBy(x => x.category)
-            .Select(g => new GroupedItem<Category, ToolDefinition>
+        _categories = [.. _categoryCounts.Keys.OrderBy(category => category)];
+        _categoryCount = _categories.Count;
+    }
+
+    private void ApplyFilters()
+    {
+        IEnumerable<ToolDefinition> tools = _allTools;
+
+        if (_favoritesOnly)
+        {
+            var favorites = Context.Preferences.Preferences.Favorite.Tools;
+            tools = tools.Where(tool => favorites.Contains(tool.Name));
+        }
+
+        if (_category is { } category)
+        {
+            tools = tools.Where(tool => tool.Categories.Contains(category));
+        }
+
+        if (!string.IsNullOrWhiteSpace(_query))
+        {
+            var query = _query.Trim();
+            tools = tools.Where(tool => Matches(tool, query));
+        }
+
+        _visibleTools = [.. tools];
+
+        // A tool in two categories shows under both, and a category with nothing left does not show.
+        var grouped = _visibleTools
+            .SelectMany(tool => tool.Categories.Select(category => (category, tool)))
+            .GroupBy(pair => pair.category)
+            .OrderBy(group => group.Key)
+            .Select(group => new GroupedItem<Category, ToolDefinition>
             {
-                Key = g.Key,
-                Data = g.Select(x => x.tool).ToArray()
+                Key = group.Key,
+                Data = [.. group.Select(pair => pair.tool)]
             })
             .ToList();
 
-        _toolsByCategory = new GroupedList<Category, ToolDefinition>(grouped);
-        _categoryCount = grouped.Count;
+        _visibleGroups = new GroupedList<Category, ToolDefinition>(grouped);
+    }
+
+    /// <summary>Matches what someone would type: the name they see, the slug, or a keyword.</summary>
+    private bool Matches(ToolDefinition tool, string query)
+        => Context.Localization.GetToolTitle(tool).Contains(query, StringComparison.OrdinalIgnoreCase)
+           || tool.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+           || tool.Keywords.Any(keyword =>
+               keyword.ToString().Contains(query, StringComparison.OrdinalIgnoreCase)
+               || Context.Localization.GetKeyword(keyword).Contains(query, StringComparison.OrdinalIgnoreCase));
+
+    private string CountFor(Category category)
+        => _categoryCounts.TryGetValue(category, out var count) ? count.ToString() : "0";
+
+    private async Task OnQueryChangedAsync(ChangeEventArgs args)
+    {
+        _query = args.Value as string ?? string.Empty;
+
+        var previous = _debounce;
+        if (previous is not null)
+        {
+            await previous.CancelAsync();
+            previous.Dispose();
+        }
+
+        var cancellation = new CancellationTokenSource();
+        _debounce = cancellation;
+
+        try
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(300), cancellation.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        ApplyFilters();
+        StateHasChanged();
+    }
+
+    private Task SelectCategoryAsync(Category? category)
+    {
+        // Through the URL, so the filter can be linked to and the back button undoes it.
+        var uri = Context.Navigation.GetUriWithQueryParameters(new Dictionary<string, object?>
+        {
+            ["category"] = category?.ToString(),
+            ["view"] = null
+        });
+
+        Context.Navigation.NavigateTo(uri);
+        return Task.CompletedTask;
     }
 
     private async Task OnViewModeChangedAsync(ViewMode mode)
@@ -90,12 +193,13 @@ public partial class Home : ComponentBase, IDisposable
 
     private void OnFavoritesChanged(FavoritesChangedNotification _)
     {
-        LoadTools();
+        ApplyFilters();
         InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
     {
         _subscription?.Dispose();
+        _debounce?.Dispose();
     }
 }

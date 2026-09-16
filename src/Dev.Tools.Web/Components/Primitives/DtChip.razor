@@ -1,0 +1,32 @@
+@*
+    A filter pill: the index's categories, and the "all" that clears them.
+*@
+
+<button type="button"
+        class="dt-chip @(Selected ? "dt-chip-selected" : null) @Class"
+        aria-pressed="@(Selected ? "true" : "false")"
+        @onclick="OnClick">
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <MudIcon Icon="@Icon" Style="width:15px;height:15px" />
+    }
+    @Text
+    @if (!string.IsNullOrEmpty(Count))
+    {
+        <span class="dt-chip-count">@Count</span>
+    }
+</button>
+
+@code {
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public string? Icon { get; set; }
+
+    [Parameter] public string? Count { get; set; }
+
+    [Parameter] public bool Selected { get; set; }
+
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}

@@ -3,114 +3,106 @@
 
 <PageTitle>@Context.AppDetails.Name</PageTitle>
 
-@* ===== HERO SECTION ===== *@
-<MudPaper Class="pa-6 mt-4 mb-6 rounded-lg" Elevation="0"
-          Style="background: linear-gradient(135deg, var(--mud-palette-primary) 0%, var(--mud-palette-primary-darken) 100%);">
-    <MudStack AlignItems="AlignItems.Center" Spacing="3">
-        <MudText Typo="Typo.h4" Align="Align.Center"
-                 Style="color: var(--mud-palette-primary-text);">
-            @Context.AppDetails.Name.ToUpper()
-        </MudText>
-        <MudText Typo="Typo.body1" Align="Align.Center"
-                 Style="color: var(--mud-palette-primary-text); opacity: 0.85;">
-            @_localizer["Hero.Subtitle"]
-        </MudText>
-        <MudPaper Class="pa-0 rounded-lg" Elevation="4" Style="width: 100%; max-width: 560px;">
-            <SearchBar/>
-        </MudPaper>
-        <MudText Typo="Typo.caption" Align="Align.Center"
-                 Style="color: var(--mud-palette-primary-text); opacity: 0.6;">
-            @string.Format(_localizer["Hero.ToolCount"], _toolCount, _categoryCount)
-        </MudText>
-    </MudStack>
-</MudPaper>
+<section class="dt-hero">
+    <span class="dt-hero-badge">
+        <span class="dt-hero-dot"></span>
+        @string.Format(_localizer["Hero.Badge"], _toolCount, _categoryCount)
+    </span>
 
-@* ===== FAVORITES SECTION ===== *@
-@if (_favoriteTools.Any())
-{
-    <MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-2" Spacing="2">
-        <MudIcon Icon="@Icons.Material.Outlined.Star" Size="Size.Small" Color="Color.Warning" />
-        <MudText Typo="Typo.h6">@_localizer["Section.Favorites"]</MudText>
-    </MudStack>
-    <MudDivider Class="mb-4" />
+    <h1 class="dt-hero-title">
+        @_localizer["Hero.Title.Line1"]<br />
+        <span class="dt-hero-accent">@_localizer["Hero.Title.Line2"]</span>
+    </h1>
 
-    @if (_viewMode == ViewMode.Cards)
-    {
-        <MudGrid Spacing="4" Class="mb-6">
-            @foreach (var tool in _favoriteTools)
-            {
-                <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
-                    <ToolCard Tool="@tool" />
-                </MudItem>
-            }
-        </MudGrid>
-    }
-    else
-    {
-        <ToolListView Tools="@_favoriteTools" Class="mb-6" />
-    }
-}
+    <p class="dt-hero-text">@_localizer["Hero.Description"]</p>
 
-@* ===== ALL TOOLS SECTION ===== *@
-<MudToolBar Dense="true" Class="mb-4">
-    <MudText Typo="Typo.h6">@_localizer["Section.AllTools"]</MudText>
-    <MudSpacer />
-    
-    <DtToggleGroup T="ViewMode" Value="@_viewMode" ValueChanged="OnViewModeChangedAsync"
-                   Options="@ViewModeOptions" Class="mr-2" />
+    <div class="dt-hero-search">
+        <MudIcon Icon="@Icons.Material.Outlined.Search" Style="width:20px;height:20px" />
+        <input type="search"
+               value="@_query"
+               placeholder="@_localizer["Search.Placeholder"]"
+               aria-label="@_localizer["Search.Placeholder"]"
+               @oninput="OnQueryChangedAsync" />
+    </div>
+</section>
+
+<section class="dt-filter-row">
+    <span class="dt-filter-label">@_localizer["Filter.Label"]</span>
+
+    <div class="dt-filter-chips">
+        <DtChip Text="@_localizer["Filter.All"]"
+                Selected="@(_category is null && !_favoritesOnly)"
+                OnClick="@(() => SelectCategoryAsync(null))"/>
+
+        @foreach (var category in _categories)
+        {
+            <DtChip Text="@Context.Localization.GetCategory(category)"
+                    Count="@CountFor(category)"
+                    Selected="@(_category == category)"
+                    OnClick="@(() => SelectCategoryAsync(category))"/>
+        }
+    </div>
 
     <DtToggleGroup T="bool" Value="@_groupByCategory" ValueChanged="OnGroupByCategoryChangedAsync"
-                   Options="@GroupingOptions" />
-</MudToolBar>
+                   Options="@GroupingOptions"/>
 
-@if (_groupByCategory)
+    <DtToggleGroup T="ViewMode" Value="@_viewMode" ValueChanged="OnViewModeChangedAsync"
+                   Options="@ViewModeOptions"/>
+</section>
+
+@if (_favoritesOnly)
 {
-    @foreach (var group in _toolsByCategory)
+    <DtSection Id="favorites" Caption="@_localizer["Section.Favorites"]" Count="@_visibleTools.Count.ToString()">
+        @ToolsView(_visibleTools)
+    </DtSection>
+}
+else if (_visibleTools.Count == 0)
+{
+    <div class="dt-empty">
+        <MudIcon Icon="@Icons.Material.Outlined.SearchOff" Style="width:24px;height:24px" />
+        <span class="dt-empty-title">@_localizer["Empty.Title"]</span>
+        <span class="dt-empty-text">@_localizer["Empty.Description"]</span>
+    </div>
+}
+else if (_groupByCategory)
+{
+    @foreach (var group in _visibleGroups)
     {
-        <MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-4 mb-2" Spacing="2">
-            <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(group.Key)"
-                     Color="Color.Primary" Size="Size.Small" />
-            <MudText Typo="Typo.subtitle1" Color="Color.Primary">
-                @Context.Localization.GetCategory(group.Key)
-            </MudText>
-            <MudText Typo="Typo.caption" Color="Color.Tertiary">
-                (@group.Data.Count)
-            </MudText>
-        </MudStack>
-        <MudDivider Class="mb-3" />
+        <section class="dt-category">
+            <div class="dt-category-head">
+                <span class="dt-category-icon">
+                    <MudIcon Icon="@ToolIconProvider.GetCategoryIcon(group.Key)" Style="width:18px;height:18px" />
+                </span>
+                <h2 class="dt-category-name">@Context.Localization.GetCategory(group.Key)</h2>
+                <span class="dt-category-count">@string.Format(_localizer["Section.ToolCount"], group.Data.Count)</span>
+            </div>
 
-        @if (_viewMode == ViewMode.Cards)
-        {
-            <MudGrid Spacing="4" Class="mb-4">
-                @foreach (var tool in group)
-                {
-                    <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
-                        <ToolCard Tool="@tool" />
-                    </MudItem>
-                }
-            </MudGrid>
-        }
-        else
-        {
-            <ToolListView Tools="@group.Data" Class="mb-4" />
-        }
+            @ToolsView(group.Data)
+        </section>
     }
 }
 else
 {
-    @if (_viewMode == ViewMode.Cards)
-    {
-        <MudGrid Spacing="4" Class="mb-4">
-            @foreach (var tool in _allTools)
-            {
-                <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex align-stretch">
+    <section class="dt-category">
+        @ToolsView(_visibleTools)
+    </section>
+}
+
+@* One place deciding cards or rows, whatever the section. *@
+@code {
+    private RenderFragment ToolsView(IEnumerable<ToolDefinition> tools) => @<text>
+        @if (_viewMode == ViewMode.Cards)
+        {
+            <div class="dt-card-grid">
+                @foreach (var tool in tools)
+                {
                     <ToolCard Tool="@tool" />
-                </MudItem>
-            }
-        </MudGrid>
-    }
-    else
-    {
-        <ToolListView Tools="@_allTools" Class="mb-4" />
-    }
+                }
+            </div>
+        }
+        else
+        {
+            <ToolListView Tools="@tools" />
+        }
+    </text>;
 }

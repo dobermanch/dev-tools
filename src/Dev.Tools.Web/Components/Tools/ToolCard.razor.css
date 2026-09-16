@@ -1,0 +1,58 @@
+.dt-tool-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--dt-border);
+    border-radius: var(--dt-radius-card);
+    background: var(--dt-surface);
+    cursor: pointer;
+    transition: border-color var(--dt-transition), background-color var(--dt-transition);
+}
+
+.dt-tool-card:hover {
+    border-color: var(--dt-border-hover);
+    background: var(--dt-surface-hover);
+}
+
+.dt-tool-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dt-tool-card-icon {
+    display: flex;
+    color: var(--dt-accent);
+}
+
+.dt-tool-card-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    color: var(--dt-text);
+}
+
+.dt-tool-card-slug {
+    font-family: var(--dt-font-mono);
+    font-size: 10.5px;
+    color: var(--dt-text-faint);
+}
+
+/* Three lines at most: a long description must not make its card taller than the ones beside it. */
+.dt-tool-card-description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--dt-text-secondary);
+    text-wrap: pretty;
+}

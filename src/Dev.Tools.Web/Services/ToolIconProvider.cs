@@ -19,6 +19,7 @@ public static class ToolIconProvider
             "roman-converter" => Icons.Material.Outlined.FormatListNumbered,
             "ip-details" => Icons.Material.Outlined.Lan,
             "json-formatter" => Icons.Material.Outlined.Code,
+            "xml-formatter" => Icons.Material.Outlined.DataObject,
             "passphrase-generator" => Icons.Material.Outlined.VpnKey,
             "url-transcoder" => Icons.Material.Outlined.Link,
             "nato" => Icons.Material.Outlined.RecordVoiceOver,

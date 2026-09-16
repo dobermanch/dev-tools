@@ -1,33 +1,18 @@
-<MudCard @onclick="NavigateToToolPage" Elevation="1" Class="tool-card">
-    <MudCardHeader Class="pb-0">
-        <CardHeaderAvatar>
-            <MudIcon Class="mt-1" Color="Color.Primary" Icon="@ToolIconProvider.GetToolIcon(Tool)" Size="Size.Large" />
-        </CardHeaderAvatar>
-        <CardHeaderContent>
-            <MudText Typo="Typo.body1">@Context.Localization.GetToolTitle(Tool)</MudText>
-        </CardHeaderContent>
-        <CardHeaderActions>
+<div class="dt-tool-card" @onclick="NavigateToToolPage">
+    <div class="dt-tool-card-head">
+        <span class="dt-tool-card-icon">
+            <MudIcon Icon="@ToolIconProvider.GetToolIcon(Tool)" Style="width:20px;height:20px" />
+        </span>
+        <span class="dt-tool-card-title">@Context.Localization.GetToolTitle(Tool)</span>
+        @* Starring a tool is not opening it. *@
+        <span @onclick:stopPropagation="true">
             <FavoriteButton ToolDefinition="@Tool" />
-        </CardHeaderActions>
-    </MudCardHeader>
-    <MudCardContent Class="d-flex align-content-space-between flex-wrap flex-grow-1">
-        <MudText
-            GutterBottom="true"
-            Typo="Typo.body2"
-            Style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.5;">
-            @Context.Localization.GetToolDescription(Tool)
-        </MudText>
-        <KeywordChips ToolDefinition="@Tool" SingleLine="true" Class="ml-n1"/>
-    </MudCardContent>
-</MudCard>
+        </span>
+    </div>
 
-<style>
-    .tool-card {
-        border: 1px solid transparent;
-        transition: border-color 0.2s ease;
-    }
+    <div class="dt-tool-card-slug">@Tool.Name</div>
 
-    .tool-card:hover {
-        border-color: var(--mud-palette-primary);
-    }
-</style>
+    <div class="dt-tool-card-description">@Context.Localization.GetToolDescription(Tool)</div>
+
+    <KeywordChips ToolDefinition="@Tool" SingleLine="true" />
+</div>

@@ -1,0 +1,38 @@
+.dt-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-pill);
+    background: transparent;
+    color: var(--dt-text-tertiary);
+    font-family: var(--dt-font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: color var(--dt-transition), border-color var(--dt-transition), background-color var(--dt-transition);
+}
+
+.dt-chip:hover {
+    border-color: var(--dt-border-hover);
+    color: var(--dt-text);
+}
+
+.dt-chip:focus-visible {
+    outline: 1px solid var(--dt-accent);
+    outline-offset: 1px;
+}
+
+.dt-chip-selected {
+    border-color: var(--dt-border-accent);
+    background: var(--dt-surface-active);
+    color: var(--dt-accent);
+}
+
+.dt-chip-count {
+    color: var(--dt-text-faint);
+}
+
+.dt-chip-selected .dt-chip-count {
+    color: inherit;
+}
