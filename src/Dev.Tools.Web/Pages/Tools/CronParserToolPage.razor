@@ -56,17 +56,16 @@
                     <MudItem xs="12">
                         @if (_result.NextRuns.Count > 0)
                         {
-                            <MudTable Items="@_result.NextRuns" Elevation="0" Dense="true" Hover="true" Bordered="true"
-                                      Striped="false" Height="600" HorizontalScrollbar="true">
+                            <DtTable Items="@_result.NextRuns" Title="@_localizer["Section.NextRuns.Title"]" MaxHeight="600">
                                 <HeaderContent>
-                                    <MudTh>@_localizer["Table.Header.Time"]</MudTh>
-                                    <MudTh>@_localizer["Table.Header.DayOfWeek"]</MudTh>
+                                    <th>@_localizer["Table.Header.Time"]</th>
+                                    <th>@_localizer["Table.Header.DayOfWeek"]</th>
                                 </HeaderContent>
                                 <RowTemplate>
-                                    <MudTd>@context.ToString("yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture)</MudTd>
-                                    <MudTd>@context.ToString("dddd", CultureInfo.CurrentUICulture)</MudTd>
+                                    <td>@context.ToString("yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture)</td>
+                                    <td>@context.ToString("dddd", CultureInfo.CurrentUICulture)</td>
                                 </RowTemplate>
-                            </MudTable>
+                            </DtTable>
                         }
                         else
                         {

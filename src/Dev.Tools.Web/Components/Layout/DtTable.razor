@@ -1,0 +1,32 @@
+@typeparam T
+@*
+    The mono table of the design. Pages write plain <th> and <td> in the two templates; the styling
+    reaches them through ::deep, so a call site stays as short as the markup it describes.
+*@
+
+@if (_items.Count > 0)
+{
+    <div class="dt-table-block @Class">
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <div class="dt-table-heading">
+                <h2 class="dt-table-title">@Title</h2>
+                <span class="dt-table-count">@_localizer["Text.Rows", _items.Count]</span>
+            </div>
+        }
+
+        <div class="dt-table-scroll @(MaxHeight is null ? null : "dt-table-scroll-capped")" style="@MaxHeightStyle">
+            <table class="dt-table">
+                <thead>
+                    <tr>@HeaderContent</tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in _items)
+                    {
+                        <tr>@RowTemplate(item)</tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

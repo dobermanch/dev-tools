@@ -1,0 +1,73 @@
+.dt-table-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.dt-table-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dt-border);
+}
+
+.dt-table-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--dt-text);
+}
+
+.dt-table-count {
+    font-family: var(--dt-font-mono);
+    font-size: 11px;
+    color: var(--dt-text-faint);
+}
+
+.dt-table-scroll {
+    margin-top: 12px;
+    overflow-x: auto;
+    border: 1px solid var(--dt-border);
+    border-radius: var(--dt-radius-card);
+}
+
+.dt-table-scroll-capped {
+    overflow-y: auto;
+}
+
+.dt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--dt-font-mono);
+    font-size: 12.5px;
+}
+
+/* ::deep, because the cells come from the page's own templates. */
+.dt-table ::deep th {
+    position: sticky;
+    top: 0;
+    padding: 10px 14px;
+    background: var(--dt-surface);
+    border-bottom: 1px solid var(--dt-border);
+    color: var(--dt-text-muted);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.dt-table ::deep td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--dt-border-subtle);
+    color: var(--dt-text-mono);
+    white-space: nowrap;
+}
+
+.dt-table ::deep tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.dt-table ::deep tbody tr:hover td {
+    background: var(--dt-surface-hover);
+}

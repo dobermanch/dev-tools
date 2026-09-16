@@ -92,20 +92,17 @@
                     @if (_result.Parameters?.Count > 0)
                     {
                         <MudItem xs="12">
-                            <MudText Typo="Typo.h6">@_localizer["Section.Parameters.Title"]</MudText>
-                            <MudTable Items="@_result.Parameters" Elevation="0" Dense="true" Hover="true"
-                                      Bordered="true"
-                                      Striped="false" Height="600" HorizontalScrollbar="true">
+                            <DtTable Items="@_result.Parameters" Title="@_localizer["Section.Parameters.Title"]" MaxHeight="600">
                                 <HeaderContent>
-                                    <MudTh>@_localizer["Table.Header.Key"]</MudTh>
-                                    <MudTh>@_localizer["Table.Header.Value"]</MudTh>
+                                    <th>@_localizer["Table.Header.Key"]</th>
+                                    <th>@_localizer["Table.Header.Value"]</th>
                                 </HeaderContent>
 
                                 <RowTemplate>
-                                    <MudTd>@context.Key</MudTd>
-                                    <MudTd>@context.Value</MudTd>
+                                    <td>@context.Key</td>
+                                    <td>@context.Value</td>
                                 </RowTemplate>
-                            </MudTable>
+                            </DtTable>
                         </MudItem>
                     }
                 </MudGrid>

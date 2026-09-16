@@ -396,6 +396,15 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Пошук інструментів... (напр. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtTable.Text.Rows" xml:space="preserve">
+        <value>{0} рядків</value>
+    </data>
+    <data name="Page.CronParserToolPage.Section.NextRuns.Title" xml:space="preserve">
+        <value>Наступні запуски</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Section.Matches.Title" xml:space="preserve">
+        <value>Збіги</value>
+    </data>
     <data name="Page.HashTextToolPage.Pane.Output.Label" xml:space="preserve">
         <value>Хеші</value>
     </data>

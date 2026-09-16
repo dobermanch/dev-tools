@@ -166,19 +166,16 @@
             @if (_result.Claims?.Count > 0)
             {
                 <DtSection Id="claimsTable" ShowDivider="true">
-                    <MudText Typo="Typo.h6">@_localizer["Section.Claims.Title"]</MudText>
-                    <MudTable Items="@_result.Claims" Elevation="0" Dense="true" Hover="true"
-                              Bordered="true"
-                              Striped="false" HorizontalScrollbar="true">
+                    <DtTable Items="@_result.Claims" Title="@_localizer["Section.Claims.Title"]">
                         <HeaderContent>
-                            <MudTh>@_localizer["Table.Header.Claim"]</MudTh>
-                            <MudTh>@_localizer["Table.Header.Value"]</MudTh>
+                            <th>@_localizer["Table.Header.Claim"]</th>
+                            <th>@_localizer["Table.Header.Value"]</th>
                         </HeaderContent>
                         <RowTemplate>
-                            <MudTd>@context.Key</MudTd>
-                            <MudTd>@context.Value</MudTd>
+                            <td>@context.Key</td>
+                            <td>@context.Value</td>
                         </RowTemplate>
-                    </MudTable>
+                    </DtTable>
                 </DtSection>
             }
         }

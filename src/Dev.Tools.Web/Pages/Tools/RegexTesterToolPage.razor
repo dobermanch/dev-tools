@@ -98,21 +98,20 @@
                     @if (_result.Matches.Count > 0)
                     {
                         <MudItem xs="12">
-                            <MudTable Items="@_result.Matches" Elevation="0" Dense="true" Hover="true" Bordered="true"
-                                      Striped="false" Height="600" HorizontalScrollbar="true">
+                            <DtTable Items="@_result.Matches" Title="@_localizer["Section.Matches.Title"]" MaxHeight="600">
                                 <HeaderContent>
-                                    <MudTh>@_localizer["Table.Header.Position"]</MudTh>
-                                    <MudTh>@_localizer["Table.Header.Index"]</MudTh>
-                                    <MudTh>@_localizer["Table.Header.Value"]</MudTh>
-                                    <MudTh>@_localizer["Table.Header.Groups"]</MudTh>
+                                    <th>@_localizer["Table.Header.Position"]</th>
+                                    <th>@_localizer["Table.Header.Index"]</th>
+                                    <th>@_localizer["Table.Header.Value"]</th>
+                                    <th>@_localizer["Table.Header.Groups"]</th>
                                 </HeaderContent>
                                 <RowTemplate>
-                                    <MudTd>@($"{context.Line}:{context.Column}")</MudTd>
-                                    <MudTd>@context.Index</MudTd>
-                                    <MudTd>@context.Value</MudTd>
-                                    <MudTd>@DescribeGroups(context)</MudTd>
+                                    <td>@($"{context.Line}:{context.Column}")</td>
+                                    <td>@context.Index</td>
+                                    <td>@context.Value</td>
+                                    <td>@DescribeGroups(context)</td>
                                 </RowTemplate>
-                            </MudTable>
+                            </DtTable>
                         </MudItem>
                     }
                 </MudGrid>

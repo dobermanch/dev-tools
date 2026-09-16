@@ -315,6 +315,15 @@
     <data name="Component.SearchBar.Placeholder" xml:space="preserve">
         <value>Search tools... (e.g. JSON, Base64, UUID)</value>
     </data>
+    <data name="Component.DtTable.Text.Rows" xml:space="preserve">
+        <value>{0} rows</value>
+    </data>
+    <data name="Page.CronParserToolPage.Section.NextRuns.Title" xml:space="preserve">
+        <value>Next runs</value>
+    </data>
+    <data name="Page.RegexTesterToolPage.Section.Matches.Title" xml:space="preserve">
+        <value>Matches</value>
+    </data>
     <data name="Page.HashTextToolPage.Pane.Output.Label" xml:space="preserve">
         <value>Digests</value>
     </data>
