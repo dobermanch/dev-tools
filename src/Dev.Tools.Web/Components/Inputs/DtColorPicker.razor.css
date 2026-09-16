@@ -1,16 +1,42 @@
-/* ::deep, because the markup below belongs to MudColorPicker rather than to this component. */
+/* ::deep, because the markup below belongs to MudColorPicker rather than to this component.
+
+   MudBlazor draws its own frame rather than a border on the input: .mud-input-outlined-border is an
+   overlay carrying Mud's radius and line colour, and it grows to 2px in the theme's primary on
+   focus. Restyling .mud-input never reached it, so the picker sat in a different box from the
+   fields beside it in the options grid. The box is .dt-box now, shared with every other control,
+   and everything Mud draws inside it is flattened onto that. */
+
+.dt-color-picker ::deep .mud-input-control,
 .dt-color-picker ::deep .mud-input {
-    height: var(--dt-control-height);
-    border-radius: var(--dt-radius-control);
-    background: var(--dt-surface-raised);
+    width: 100%;
+    height: calc(var(--dt-control-height) - 2px);
+    margin: 0;
+    background: transparent;
     font-family: var(--dt-font-mono);
     font-size: 13px;
 }
 
-.dt-color-picker ::deep .mud-input > input {
+/* Mud's frames: the outlined overlay, and the underline the text variant draws with pseudo-elements. */
+.dt-color-picker ::deep .mud-input-outlined-border,
+.dt-color-picker ::deep .mud-input::before,
+.dt-color-picker ::deep .mud-input::after {
+    display: none;
+}
+
+.dt-color-picker ::deep .mud-input-slot,
+.dt-color-picker ::deep .mud-input-root {
+    height: 100%;
+    min-height: 0;
+    padding: 0;
     color: var(--dt-text);
 }
 
+/* The floating label has a mono one above the box instead, from DtField. */
 .dt-color-picker ::deep .mud-input-label {
     display: none;
+}
+
+/* The swatch Mud puts at the end of the input sits where a copy button would. */
+.dt-color-picker ::deep .mud-input-adornment-end {
+    margin-right: -2px;
 }

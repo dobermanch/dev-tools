@@ -1,18 +1,19 @@
 @using MudBlazor.Utilities
 @*
-    MudBlazor's colour picker in the shared field shell: rebuilding a picker with alpha and a palette
-    would buy nothing, so only the trigger is restyled to match the other 36px controls.
+    MudBlazor's colour picker in the shared box: rebuilding a picker with alpha and a palette would
+    buy nothing, so the picker stays and only the frame it draws is taken away. The box is .dt-box,
+    the same one the fields and the select sit in, which is what keeps an options grid aligned.
 *@
 
 <DtField Label="@Label" Hint="@Hint" Class="@Class">
-    <div class="dt-color-picker">
+    <div class="dt-box dt-color-picker">
         <MudColorPicker Value="@Value"
                         ValueChanged="@ValueChanged"
                         ShowAlpha="@ShowAlpha"
                         PickerVariant="PickerVariant.Inline"
-                        Variant="Variant.Outlined"
-                        Margin="Margin.Dense"
-                        DisableToolbar="false"/>
+                        Variant="Variant.Text"
+                        Underline="false"
+                        Margin="Margin.None"/>
     </div>
 </DtField>
 

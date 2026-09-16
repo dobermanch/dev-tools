@@ -1,0 +1,50 @@
+@typeparam TValue
+
+@*
+    The list is ours rather than the browser's. A native <select> popup is drawn by the operating
+    system: it cannot take the design's surface, radius or accent, and it anchors itself to the
+    selected row instead of to the control. The trigger is the same .dt-box every other control
+    uses, so a select stays aligned with the text fields beside it.
+*@
+
+<DtField Label="@Label" For="@_id" Hint="@Hint" Error="@Error" ErrorText="@ErrorText" Class="@Class">
+    <div class="dt-box @(Error ? "dt-box-error" : null)">
+        <button id="@_id"
+                type="button"
+                class="dt-select-trigger"
+                role="combobox"
+                aria-haspopup="listbox"
+                aria-expanded="@(_open ? "true" : "false")"
+                aria-activedescendant="@(_open ? OptionId(_highlighted) : null)"
+                @onclick="Toggle"
+                @onkeydown="OnKeyDownAsync">
+            <span class="dt-select-value">@Display(Value)</span>
+        </button>
+
+        <svg class="dt-select-chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" fill="currentColor"/>
+        </svg>
+
+        @if (_open)
+        {
+            @* Catches a click anywhere else on the page; invisible, and under the popup. *@
+            <div class="dt-select-backdrop" @onclick="Close"></div>
+
+            <div class="dt-select-popup" role="listbox">
+                @for (var index = 0; index < Items.Count; index++)
+                {
+                    var item = Items[index];
+                    var selected = IsSelected(item);
+
+                    <div id="@OptionId(index)"
+                         role="option"
+                         class="dt-select-option @(selected ? "dt-select-option-selected" : null) @(index == _highlighted ? "dt-select-option-highlighted" : null)"
+                         aria-selected="@(selected ? "true" : "false")"
+                         @onclick="@(() => SelectAsync(item))">
+                        @Display(item)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</DtField>

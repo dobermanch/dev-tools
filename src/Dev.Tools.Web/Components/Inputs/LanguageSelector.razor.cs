@@ -6,7 +6,8 @@ namespace Dev.Tools.Web.Components.Inputs;
 
 public partial class LanguageSelector : ComponentBase
 {
-    private readonly string _id = $"dt-language-{Guid.NewGuid():N}";
+    /// <summary>The supported cultures as a list, which is what the select takes.</summary>
+    private CultureInfo[] _cultures = [];
 
     [Inject]
     private WebContext Context { get; set; } = null!;
@@ -17,19 +18,8 @@ public partial class LanguageSelector : ComponentBase
     [Parameter]
     public string? Class { get; set; }
 
-    private async Task OnLanguageChangedAsync(ChangeEventArgs args)
-    {
-        if (args.Value is not string name)
-        {
-            return;
-        }
+    protected override void OnInitialized() => _cultures = [.. Context.Localization.SupportedCultures];
 
-        var culture = Context.Localization.SupportedCultures
-            .FirstOrDefault(it => string.Equals(it.Name, name, StringComparison.OrdinalIgnoreCase));
-
-        if (culture is not null)
-        {
-            await Context.Localization.SetCurrentCultureInfo(culture, true, CancellationToken.None);
-        }
-    }
+    private async Task OnCultureChangedAsync(CultureInfo culture) =>
+        await Context.Localization.SetCurrentCultureInfo(culture, true, CancellationToken.None);
 }

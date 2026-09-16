@@ -6,7 +6,7 @@ namespace Dev.Tools.Web.Components.Inputs;
 public partial class DtSelectEnum<T> : ComponentBase
     where T: struct, Enum
 {
-    private readonly string _id = $"dt-select-{Guid.NewGuid():N}";
+    private static readonly T[] EnumValues = Enum.GetValues<T>();
 
     [Inject]
     private WebContext Context { get; set; } = null!;
@@ -35,13 +35,5 @@ public partial class DtSelectEnum<T> : ComponentBase
     [Parameter]
     public Func<T, string>? ValueToDisplay { get; set; }
 
-    private static T[] GetEnumValues() => Enum.GetValues<T>();
-
-    private async Task OnChangedAsync(ChangeEventArgs args)
-    {
-        if (args.Value is string text && Enum.TryParse<T>(text, out var value))
-        {
-            await ValueChanged.InvokeAsync(value);
-        }
-    }
+    private string Display(T value) => ValueToDisplay?.Invoke(value) ?? Context.Localization.GetEnum(value);
 }

@@ -142,6 +142,7 @@
    wherever it appears. Global rather than scoped because three components share it. */
 
 .dt-box {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -173,7 +174,7 @@
 }
 
 .dt-box > input,
-.dt-box > select {
+.dt-box > .dt-select-trigger {
     flex: 1;
     min-width: 0;
     height: calc(var(--dt-control-height) - 2px);
@@ -190,19 +191,79 @@
     color: var(--dt-text-faint);
 }
 
-.dt-box > select {
-    appearance: none;
-    cursor: pointer;
+/* The trigger is a button, so the whole control opens the list - including under the chevron,
+   which is laid over it. Room on the right is left for that chevron. */
+.dt-box > .dt-select-trigger {
+    margin: 0;
+    padding-right: 18px;
     font-family: var(--dt-font-sans);
     font-size: 13.5px;
+    text-align: left;
+    cursor: pointer;
 }
 
-/* A select's chevron, where a copy button would sit. Shared by the enum select and the culture one. */
+.dt-select-value {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ===== The select's list =====
+   Drawn here rather than by the browser: a native list takes none of the tokens below, and it
+   positions itself against the selected row instead of the control. */
+
+/* Closes the list on a click anywhere else. Invisible, and beneath the list itself. */
+.dt-select-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+}
+
+.dt-select-popup {
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 4px);
+    right: -1px;
+    left: -1px;
+    max-height: 264px;
+    overflow-y: auto;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid var(--dt-border-control);
+    border-radius: var(--dt-radius-box);
+    background: var(--dt-surface);
+}
+
+.dt-select-option {
+    padding: 8px 10px;
+    border-radius: 7px;
+    color: var(--dt-text-tertiary);
+    font-size: 13.5px;
+    line-height: 1.3;
+    cursor: pointer;
+}
+
+.dt-select-option:hover,
+.dt-select-option-highlighted {
+    background: var(--dt-surface-hover);
+    color: var(--dt-text);
+}
+
+.dt-select-option-selected {
+    color: var(--dt-accent);
+}
+
+/* A select's chevron, where a copy button would sit. Shared by the enum select and the culture one.
+   Laid over the box rather than beside it: as a flex sibling it took its own column, and being
+   click-through the clicks landed on the box instead of the select, so the arrow did nothing. */
 .dt-select-chevron {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
     width: 17px;
     height: 17px;
-    flex-shrink: 0;
-    margin-right: 5px;
     color: var(--dt-text-subtle);
     pointer-events: none;
 }

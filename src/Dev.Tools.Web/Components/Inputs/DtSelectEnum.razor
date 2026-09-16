@@ -1,18 +1,14 @@
 @typeparam T
 
-<DtField Label="@Label" For="@_id" Hint="@Hint" Error="@Error" ErrorText="@ErrorText" Class="@Class">
-    @* The same box as an editable field, with the chevron where a copy button would sit. *@
-    <div class="dt-box @(Error ? "dt-box-error" : null)">
-        <select id="@_id" value="@Value.ToString()" @onchange="OnChangedAsync">
-            @foreach (var value in GetEnumValues())
-            {
-                <option value="@value.ToString()" selected="@(EqualityComparer<T>.Default.Equals(value, Value))">
-                    @(ValueToDisplay?.Invoke(value) ?? Context.Localization.GetEnum(value))
-                </option>
-            }
-        </select>
-        <svg class="dt-select-chevron" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" fill="currentColor" />
-        </svg>
-    </div>
-</DtField>
+@* An enum's members in the shared select; the label comes from the tool's own translations. *@
+
+<DtSelect TValue="T"
+          Label="@Label"
+          Value="@Value"
+          ValueChanged="@ValueChanged"
+          Items="@EnumValues"
+          ItemToDisplay="@Display"
+          Hint="@Hint"
+          Error="@Error"
+          ErrorText="@ErrorText"
+          Class="@Class"/>

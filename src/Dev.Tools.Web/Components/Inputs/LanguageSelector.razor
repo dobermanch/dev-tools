@@ -1,20 +1,11 @@
 @using System.Globalization
-@*
-    The same box and chevron as DtSelectEnum; only the values differ, being cultures rather than an enum.
-*@
 
-<DtField Label="@Label" For="@_id" Class="@Class">
-    <div class="dt-box">
-        <select id="@_id" value="@Context.Localization.CurrentCulture.Name" @onchange="OnLanguageChangedAsync">
-            @foreach (var culture in Context.Localization.SupportedCultures)
-            {
-                <option value="@culture.Name" selected="@(culture.Name == Context.Localization.CurrentCulture.Name)">
-                    @Context.Localization.GetLocal(culture)
-                </option>
-            }
-        </select>
-        <svg class="dt-select-chevron" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" fill="currentColor" />
-        </svg>
-    </div>
-</DtField>
+@* The supported cultures in the shared select; only the values differ from an enum's. *@
+
+<DtSelect TValue="CultureInfo"
+          Label="@Label"
+          Value="@Context.Localization.CurrentCulture"
+          ValueChanged="@OnCultureChangedAsync"
+          Items="@_cultures"
+          ItemToDisplay="@(culture => Context.Localization.GetLocal(culture))"
+          Class="@Class"/>
