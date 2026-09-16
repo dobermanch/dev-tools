@@ -2,44 +2,27 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="SafeUrlTranscoderTool.TranscodingType"
-                        Label="@_localizer["Select.Operation.Label"]"
-                        Value="@_transcoding"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnTranscodingValueChangedAsync"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSelectEnum
+        T="SafeUrlTranscoderTool.TranscodingType"
+        Label="@_localizer["Select.Operation.Label"]"
+        Value="@_transcoding"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnTranscodingValueChangedAsync"/>
+</DtOptions>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_url"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="5"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Value="@(_result?.Url ?? string.Empty)"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="5"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_url"
+        ValueChanged="@(value => { _url = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@(_result?.Url ?? string.Empty)"
+        DownloadFileName="url-transcoder.txt"
+        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
+        StatusIsError="@(_result?.HasErrors ?? false)"/>
+</DtPanes>

@@ -2,31 +2,19 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Label="@_localizer["TextField.Input.Label"]"
-                        @bind-Value="@_text"
-                        OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                        Lines="15"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-                
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Value="@GetNatoWords()"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        Lines="15"
-                        LabelPosition="LabelPositionType.Inline"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+@* No options: this tool spells whatever it is given. *@
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        AllowFileInput="true"
+        Value="@_text"
+        ValueChanged="@(value => { _text = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@GetNatoWords()"
+        DownloadFileName="nato.txt"
+        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
+        StatusIsError="@(_result?.HasErrors ?? false)"/>
+</DtPanes>

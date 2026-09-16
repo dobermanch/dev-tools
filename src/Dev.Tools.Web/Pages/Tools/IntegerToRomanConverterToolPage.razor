@@ -2,56 +2,28 @@
 
 <DtToolPageHeader ToolDefinition="@_toolDefinition"/>
 
-<MudCard Class="my-4">
-    <MudCardContent>
-        <DtSection Id="input" Class="mt-0">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    <DtSelectEnum
-                        T="IntegerToRomanConverterTool.TranscodingType"
-                        Label="@_localizer["Select.Direction.Label"]"
-                        Value="@_transcoding"
-                        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
-                        ValueChanged="OnTranscodingValueChangedAsync"
-                    />
-                </MudItem>
-            </MudGrid>
-        </DtSection>
+<DtOptions>
+    <DtSelectEnum
+        T="IntegerToRomanConverterTool.TranscodingType"
+        Label="@_localizer["Select.Direction.Label"]"
+        Value="@_transcoding"
+        ValueToDisplay="@(type => Context.Localization.GetToolEnum(_toolDefinition, type))"
+        ValueChanged="OnTranscodingValueChangedAsync"/>
+</DtOptions>
 
-        <DtSection Id="output" ShowDivider="true">
-            <MudGrid Class="align-center" Spacing="4">
-                <MudItem xs="12" md="6">
-                    @if (_transcoding == IntegerToRomanConverterTool.TranscodingType.Encode)
-                    {
-                        <DtTextField
-                            T="string"
-                            Label="@_localizer["TextField.Input.Label"]"
-                            @bind-Value="@_number"
-                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                            InputType="InputType.Number"
-                            Validation="@(s => 1 <= int.Parse(s) && int.Parse(s) <= 3999)"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    }
-                    else
-                    {
-                        <DtTextField
-                            T="string"
-                            Label="@_localizer["TextField.Input.Label"]"
-                            @bind-Value="@_number"
-                            OnDebounceIntervalElapsed="@OnValueChangedAsync"
-                            InputType="InputType.Text"
-                            LabelPosition="LabelPositionType.Inline"/>
-                    }
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <DtTextField
-                        T="string"
-                        Value="@(_result?.Number ?? string.Empty)"
-                        Label="@_localizer["TextField.Result.Label"]"
-                        ReadOnly="true"
-                        LabelPosition="LabelPositionType.Inline"/>
-                </MudItem>
-            </MudGrid>
-        </DtSection>
-    </MudCardContent>
-</MudCard>
+@* The range check the field used to carry lives in the tool, which reports it as an error; the status
+   line under the result is where the design shows that. *@
+<DtPanes>
+    <DtInputPane
+        Label="@_localizer["TextField.Input.Label"]"
+        Value="@_number"
+        ValueChanged="@(value => { _number = value; })"
+        OnDebounceIntervalElapsed="@OnValueChangedAsync"/>
+
+    <DtOutputPane
+        Label="@_localizer["TextField.Result.Label"]"
+        Text="@(_result?.Number ?? string.Empty)"
+        DownloadFileName="roman-converter.txt"
+        Status="@(_result is { HasErrors: true } ? Context.Localization.GetErrorCode(_result.Errors[0].Code) : null)"
+        StatusIsError="@(_result?.HasErrors ?? false)"/>
+</DtPanes>
