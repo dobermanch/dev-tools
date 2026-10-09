@@ -4,6 +4,14 @@ DOCKER_IMAGES := dev.tools dev.tools.api dev.tools.web dev.tools.mcp dev.tools.c
 .PHONY: all
 all: nuget tool mcp docker
 
+.PHONY: web
+web:
+	dotnet run --project src/Dev.Tools.Web/Dev.Tools.Web.csproj
+
+.PHONY: web-watch
+web-watch:
+	dotnet watch --project src/Dev.Tools.Web/Dev.Tools.Web.csproj run
+
 .PHONY: docker
 docker: docker-api docker-web docker-mcp docker-console docker-combine
 

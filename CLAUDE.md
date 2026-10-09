@@ -26,6 +26,9 @@ dotnet restore
 # Run a specific test class
 dotnet test --filter "ClassName=BaseEncodingToolTests"
 
+# Run the Web UI (add -watch for hot reload)
+make web
+
 # Pack NuGet library
 make nuget
 

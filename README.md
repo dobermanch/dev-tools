@@ -242,6 +242,8 @@ dotnet test --filter "ClassName=BaseEncodingToolTests"
 ### Make Targets
 
 ```bash
+make web       # Run the Blazor WASM UI locally
+make web-watch # Run it with hot reload
 make tool      # Pack and install Dev.Tools.Console globally
 make mcp       # Pack and install Dev.Tools.Mcp globally
 make nuget     # Pack the Dev.Tools NuGet package
