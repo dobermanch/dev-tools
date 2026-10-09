@@ -11,7 +11,8 @@
       "mounts": [
         "/var/run/docker.sock:/var/run/docker.sock"
       ]
-    }
+    },
+    "./idle-shutdown": {}
   },
   "customizations": {
     "vscode": {
@@ -43,5 +44,7 @@
     "source=${localEnv:USERPROFILE}${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
   ],
   "onCreateCommand": "bash .devcontainer/init.sh",
+  // Stop on last window close; ./idle-shutdown stops it after 30 idle minutes
+  "shutdownAction": "stopContainer",
   "remoteUser": "vscode"
 }
