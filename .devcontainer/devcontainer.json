@@ -12,25 +12,21 @@
         "/var/run/docker.sock:/var/run/docker.sock"
       ]
     },
-    "./idle-shutdown": {}
+    "ghcr.io/dobermanch/devcontainer-features/vscode-base:1": {},
+    "ghcr.io/dobermanch/devcontainer-features/host-ssh:1": {},
+    "ghcr.io/dobermanch/devcontainer-features/host-claude:1": {},
+    "ghcr.io/dobermanch/devcontainer-features/idle-shutdown:1": {}
   },
   "customizations": {
     "vscode": {
-      "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-      },
+      // Added to vscode-base's list
       "extensions": [
         "ms-dotnettools.csdevkit",
         "ms-dotnettools.csharp",
         "ms-azuretools.vscode-containers",
         "ms-vscode.makefile-tools",
-        "editorconfig.editorconfig",
-        "streetsidesoftware.code-spell-checker",
-        "redhat.vscode-yaml",
-        "github.vscode-github-actions",
         "davidanson.vscode-markdownlint",
-        "humao.rest-client",
-        "anthropic.claude-code"
+        "humao.rest-client"
       ]
     }
   },
@@ -39,12 +35,10 @@
       "type": "volume",
       "source": "x509stores",
       "target": "/home/vscode/.dotnet/corefx/cryptography/x509stores"
-    },
-    "source=${localEnv:USERPROFILE}${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly",
-    "source=${localEnv:USERPROFILE}${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
+    }
   ],
   "onCreateCommand": "bash .devcontainer/init.sh",
-  // Stop on last window close; ./idle-shutdown stops it after 30 idle minutes
+  // Stop on last window close; idle-shutdown stops it after 30 idle minutes
   "shutdownAction": "stopContainer",
   "remoteUser": "vscode"
 }

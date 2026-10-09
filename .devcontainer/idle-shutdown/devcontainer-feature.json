@@ -1,7 +1,0 @@
-{
-  "id": "idle-shutdown",
-  "version": "1.0.0",
-  "name": "Idle shutdown",
-  "description": "Stops the container once nobody has been connected to it for a while (VS Code, docker exec or SSH).",
-  "entrypoint": "/usr/local/share/idle-shutdown/entrypoint.sh"
-}
