@@ -8,3 +8,6 @@ sudo -E dotnet dev-certs https --export-path /usr/local/share/ca-certificates/do
 sudo update-ca-certificates
 
 sudo dotnet workload update
+
+# Language server for Claude Code's csharp-lsp plugin (.claude/settings.json)
+dotnet tool install --global csharp-ls
